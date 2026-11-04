@@ -1,4 +1,4 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=023";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
