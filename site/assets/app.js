@@ -16,6 +16,11 @@ const dateDisplay = iso => {
   return `${day}.${month}.${year}`;
 };
 const groupLabel = group => group === "stark" ? "Stark" : "Schwächer";
+const courtSummary = courts => {
+  if (courts.length <= 12) return courts.join(", ");
+  const consecutive = courts.every((court, i) => court === i + 1);
+  return consecutive ? `1–${courts.length}` : `${courts.length} ausgewählte Plätze`;
+};
 const count = t => {
   const present = t.participants.filter(p => p.present);
   return {
@@ -54,7 +59,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.1</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.2</span>
   </div></header>`;
 }
 
@@ -158,7 +163,7 @@ function overview(t) {
       ${stat("ANWESEND", c.present, `${c.total} insgesamt`, "bright")}
       ${stat("STARK", c.strong, "anwesende Spieler")}
       ${stat("SCHWÄCHER", c.weaker, "anwesende Spieler")}
-      ${stat("AKTIVE PLÄTZE", t.courts.length, t.courts.join(" · "))}
+      ${stat("AKTIVE PLÄTZE", t.courts.length, courtSummary(t.courts))}
     </div>
     ${readiness(t)}
     <div class="two-col">
@@ -168,7 +173,7 @@ function overview(t) {
           <div><dt>Spielzeit</dt><dd>${t.duration} Minuten</dd></div>
           <div><dt>Pause / Wechsel</dt><dd>${t.breakMinutes} Minuten</dd></div>
           <div><dt>Wertungsspiele je Spieler</dt><dd>${t.rounds}</dd></div>
-          <div><dt>Plätze</dt><dd>${t.courts.join(", ")}</dd></div>
+          <div><dt>Plätze</dt><dd>${courtSummary(t.courts)}</dd></div>
         </dl>
       </section>
       <section class="panel"><div class="panel-head"><h3>Als Nächstes</h3><span class="mini-tag">ROADMAP</span></div>
@@ -219,7 +224,7 @@ function settings(t) {
         <div><dt>Spieldauer</dt><dd>${t.duration} Minuten</dd></div>
         <div><dt>Wechselzeit</dt><dd>${t.breakMinutes} Minuten</dd></div>
         <div><dt>Vorrundenspiele pro Spieler</dt><dd>${t.rounds}</dd></div>
-        <div><dt>Aktive Plätze</dt><dd>${t.courts.join(", ")}</dd></div>
+        <div><dt>Aktive Plätze</dt><dd>${courtSummary(t.courts)}</dd></div>
       </dl>
     </section>
     <section class="panel danger-panel"><h3>Turnier entfernen</h3><p>Entfernt dieses Turnier samt Spielerlisten aus diesem Browser. Erstelle vorher bei Bedarf eine Sicherung.</p><button class="btn danger-outline" data-action="delete-tournament">${icon("trash")} Turnier löschen</button></section>
@@ -230,12 +235,12 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.1 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.2 · Private Testversion</footer>
     </main></div>`);
 }
 
 function settingsFields(t = {}) {
-  const courts = t.courts ?? [1,2,3,4,5,6];
+  const courtCount = t.courts?.length ?? 6;
   return `<div class="form-grid">
     <label class="field wide">Turniername<input name="name" required minlength="2" maxlength="90" value="${escapeHtml(t.name ?? "")}" placeholder="z. B. Sommer-Schleifchenturnier"></label>
     <label class="field">Datum<input name="date" type="date" required value="${escapeHtml(t.date ?? todayLocal())}"></label>
@@ -243,7 +248,7 @@ function settingsFields(t = {}) {
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
     <label class="field wide">Wertungsspiele je Spieler<input name="rounds" type="number" min="1" max="8" required value="${t.rounds ?? 4}"></label>
-    <fieldset class="court-field wide"><legend>Aktive Plätze</legend><div class="court-grid">${Array.from({length:7}, (_,i) => i+1).map(n => `<label><input type="checkbox" name="courts" value="${n}" ${courts.includes(n) ? "checked" : ""}><span>Platz ${n}</span></label>`).join("")}</div></fieldset>
+    <label class="field wide">Anzahl der Plätze<input name="courtCount" type="number" min="1" max="1000" step="1" inputmode="numeric" required value="${courtCount}"><span class="field-hint">Frei wählbar, auch mehr als 7. Bei neuen Turnieren werden die Plätze fortlaufend ab 1 nummeriert.</span></label>
   </div>`;
 }
 
@@ -274,8 +279,14 @@ function showPlayerDialog(t, p = null) {
 
 function readSettings(form) {
   const data = new FormData(form);
-  const courts = data.getAll("courts").map(Number);
-  if (!courts.length) throw new Error("Bitte mindestens einen Platz auswählen.");
+  const courtCount = Number(data.get("courtCount"));
+  if (!Number.isSafeInteger(courtCount) || courtCount < 1 || courtCount > 1000) {
+    throw new Error("Bitte eine ganze Zahl zwischen 1 und 1000 Plätzen eingeben.");
+  }
+  // Bei unveränderter Platzanzahl die bisherige Auswahl auch bei älteren Turnieren beibehalten.
+  const existing = form.dataset.form === "settings" ? store.active()?.courts : null;
+  const courts = existing?.length === courtCount
+    ? [...existing] : Array.from({length: courtCount}, (_, i) => i + 1);
   return {
     name: String(data.get("name") ?? "").trim(), date: String(data.get("date") ?? ""),
     startTime: String(data.get("startTime") ?? ""), duration: Number(data.get("duration")),
