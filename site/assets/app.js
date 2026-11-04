@@ -4,7 +4,7 @@ const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
 const dialogRoot = document.getElementById("dialog-root");
 const noticeRoot = document.getElementById("toast-region");
-let view = "overview";
+let view = "home";
 let search = "";
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -30,6 +30,7 @@ const count = t => {
 function icon(name) {
   const paths = {
     plus: '<path d="M12 5v14M5 12h14"/>',
+    home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
     users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
     settings: '<path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="2"/><circle cx="16" cy="17" r="2"/>',
     trophy: '<path d="M8 21h8M12 17v4M7 4h10v7a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v3a4 4 0 0 0 4 4M17 6h3v3a4 4 0 0 1-4 4"/>',
@@ -52,7 +53,7 @@ function icon(name) {
 
 function header() {
   return `<header class="shell-header"><div class="header-inner">
-    <a class="brand" href="https://tennis-schiri.de" target="_blank" rel="noopener">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></a>
+    <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
     <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2</span>
   </div></header>`;
 }
@@ -69,14 +70,25 @@ function run(callback) {
 }
 
 function intro() {
+  const tournaments = store.list();
+  const savedTournaments = tournaments.length ? `<section class="saved-tournaments" aria-labelledby="saved-tournaments-heading">
+    <div class="saved-tournaments-heading"><div><div class="eyebrow">HIER GEHT'S WEITER</div><h2 id="saved-tournaments-heading">Deine Turniere <span>(${tournaments.length})</span></h2></div></div>
+    <div class="saved-tournaments-grid">${tournaments.map(t => `<article class="saved-tournament">
+      <div class="saved-tournament-top"><span class="eyebrow">SCHLEIFCHENTURNIER</span><span class="mini-tag">${t.participants.length} Teilnehmende</span></div>
+      <h3>${escapeHtml(t.name)}</h3>
+      <p>${icon("calendar")} ${dateDisplay(t.date)} <span>·</span> ${t.courts.length} Plätze</p>
+      <button class="btn primary" data-action="open-tournament" data-id="${escapeHtml(t.id)}">Turnier öffnen ${icon("arrow")}</button>
+    </article>`).join("")}</div>
+  </section>` : "";
   return `<main class="wrap welcome">
     <div class="eyebrow">Tennis-Schiri / Digitale Turnierorganisation</div>
     <h1>Weniger Orga.<br><em>Mehr Tennis.</em></h1>
-    <p class="lead">Leg dein erstes Schleifchenturnier an, verwalte die Teilnehmenden und bereite die automatische Auslosung vor.</p>
+    <p class="lead">Organisiere deine Schleifchenturniere, verwalte Teilnehmende und behalte den Überblick. Öffne ein bestehendes Turnier oder lege ein neues an.</p>
     <div class="welcome-actions">
-      <button class="btn primary" data-action="new">${icon("plus")} Erstes Turnier anlegen</button>
+      <button class="btn primary" data-action="new">${icon("plus")} ${tournaments.length ? "Neues Turnier anlegen" : "Erstes Turnier anlegen"}</button>
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
     </div>
+    ${savedTournaments}
     <div class="format-grid">
       <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.2</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
@@ -99,6 +111,7 @@ function sidebar(t) {
       </select>
     </div>
     <nav class="nav-tabs" aria-label="Turnierbereich">
+      <button data-action="home">${icon("home")} Startseite</button>
       <button data-action="tab" data-tab="overview" class="${view === "overview" ? "selected" : ""}">${icon("trophy")} Übersicht</button>
       <button data-action="tab" data-tab="participants" class="${view === "participants" ? "selected" : ""}">${icon("users")} Teilnehmende</button>
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
@@ -215,7 +228,7 @@ function settings(t) {
 
 function render() {
   const t = store.active();
-  root.innerHTML = header() + (!t ? intro() : `<div class="app-layout">${sidebar(t)}
+  root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : overview(t)}
       ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2 · Private Testversion</footer>
     </main></div>`);
@@ -294,6 +307,8 @@ document.addEventListener("click", event => {
   if (!trigger || trigger.matches("input[type=checkbox]")) return;
   const action = trigger.dataset.action, t = store.active();
   if (action === "close-dialog") return closeDialog();
+  if (action === "home") { view = "home"; search = ""; render(); window.scrollTo?.(0, 0); return; }
+  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; render(); window.scrollTo?.(0, 0); });
   if (action === "tab") { view = trigger.dataset.tab; search = ""; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
