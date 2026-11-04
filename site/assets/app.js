@@ -16,10 +16,13 @@ const dateDisplay = iso => {
   return `${day}.${month}.${year}`;
 };
 const groupLabel = group => group === "stark" ? "Stark" : "Schwächer";
-const courtSummary = courts => {
-  if (courts.length <= 12) return courts.join(", ");
-  const consecutive = courts.every((court, i) => court === i + 1);
-  return consecutive ? `1–${courts.length}` : `${courts.length} ausgewählte Plätze`;
+const courtName = (t, number) => t.courtLabels?.[number] || `Platz ${number}`;
+const courtSummary = t => {
+  if (t.courts.length <= 4) return t.courts.map(number => courtName(t, number)).join(" · ");
+  const renamed = t.courts.filter(number => t.courtLabels?.[number]).length;
+  if (renamed) return `${t.courts.length} Plätze · ${renamed} individuell benannt`;
+  const consecutive = t.courts.every((number, index) => number === t.courts[0] + index);
+  return consecutive ? `Platz ${t.courts[0]}–${t.courts[t.courts.length - 1]}` : `${t.courts.length} Plätze`;
 };
 const count = t => {
   const present = t.participants.filter(p => p.present);
@@ -59,7 +62,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.2</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.3</span>
   </div></header>`;
 }
 
@@ -163,7 +166,7 @@ function overview(t) {
       ${stat("ANWESEND", c.present, `${c.total} insgesamt`, "bright")}
       ${stat("STARK", c.strong, "anwesende Spieler")}
       ${stat("SCHWÄCHER", c.weaker, "anwesende Spieler")}
-      ${stat("AKTIVE PLÄTZE", t.courts.length, courtSummary(t.courts))}
+      ${stat("AKTIVE PLÄTZE", t.courts.length, courtSummary(t))}
     </div>
     ${readiness(t)}
     <div class="two-col">
@@ -173,7 +176,7 @@ function overview(t) {
           <div><dt>Spielzeit</dt><dd>${t.duration} Minuten</dd></div>
           <div><dt>Pause / Wechsel</dt><dd>${t.breakMinutes} Minuten</dd></div>
           <div><dt>Wertungsspiele je Spieler</dt><dd>${t.rounds}</dd></div>
-          <div><dt>Plätze</dt><dd>${courtSummary(t.courts)}</dd></div>
+          <div><dt>Plätze</dt><dd>${courtSummary(t)}</dd></div>
         </dl>
       </section>
       <section class="panel"><div class="panel-head"><h3>Als Nächstes</h3><span class="mini-tag">ROADMAP</span></div>
@@ -224,8 +227,14 @@ function settings(t) {
         <div><dt>Spieldauer</dt><dd>${t.duration} Minuten</dd></div>
         <div><dt>Wechselzeit</dt><dd>${t.breakMinutes} Minuten</dd></div>
         <div><dt>Vorrundenspiele pro Spieler</dt><dd>${t.rounds}</dd></div>
-        <div><dt>Aktive Plätze</dt><dd>${courtSummary(t.courts)}</dd></div>
+        <div><dt>Aktive Plätze</dt><dd>${courtSummary(t)}</dd></div>
       </dl>
+    </section>
+    <section class="panel setting-panel court-panel">
+      <div class="panel-head court-panel-head"><div><h3>Platzbezeichnungen</h3><p>Standardmäßig Platz 1, Platz 2 usw. Die Namen kannst du beliebig anpassen.</p></div>
+        <button class="btn subtle small" data-action="edit-courts">${icon("edit")} Plätze benennen</button></div>
+      <div class="court-name-grid">${t.courts.slice(0, 30).map(number => `<div class="court-name-item"><span>#${number}</span><strong>${escapeHtml(courtName(t, number))}</strong></div>`).join("")}</div>
+      ${t.courts.length > 30 ? `<p class="court-more-note">Weitere ${t.courts.length - 30} Plätze kannst du über „Plätze benennen“ bearbeiten.</p>` : ""}
     </section>
     <section class="panel danger-panel"><h3>Turnier entfernen</h3><p>Entfernt dieses Turnier samt Spielerlisten aus diesem Browser. Erstelle vorher bei Bedarf eine Sicherung.</p><button class="btn danger-outline" data-action="delete-tournament">${icon("trash")} Turnier löschen</button></section>
   </section>`;
@@ -235,7 +244,7 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.2 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.3 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -266,6 +275,26 @@ function closeDialog() { dialogRoot.querySelector("dialog")?.close(); }
 function showTournamentDialog(existing = null) {
   showDialog({ eyebrow: existing ? "TURNIER ANPASSEN" : "NEUES TURNIER", title: existing ? "Einstellungen ändern" : "Schleifchenturnier anlegen",
     form: existing ? "settings" : "create", submit: existing ? "Änderungen speichern" : "Turnier anlegen", body: settingsFields(existing ?? {}) });
+}
+function showCourtNamesDialog(t) {
+  showDialog({ eyebrow: "INDIVIDUELLE PLATZNAMEN", title: "Plätze benennen", form: "court-names",
+    submit: "Platznamen speichern",
+    body: `<p class="court-editor-help">Die Nummer bleibt die interne Kennung des Platzes. Als sichtbaren Namen kannst du z. B. „Center Court“, „Halle 2“ oder „Platz 12“ eintragen. Leere Felder bekommen wieder den Standardnamen.</p>
+    <div class="court-editor">${t.courts.map(number => `<label class="court-editor-row"><span>Platz ${number}</span><input name="court-${number}" type="text" maxlength="60" value="${escapeHtml(courtName(t, number))}" placeholder="Platz ${number}" autocomplete="off"></label>`).join("")}</div>` });
+}
+function readCourtNames(form, t) {
+  const data = new FormData(form);
+  const labels = {};
+  const names = new Set();
+  for (const number of t.courts) {
+    const name = String(data.get(`court-${number}`) ?? "").trim() || `Platz ${number}`;
+    if (name.length > 60) throw new Error("Ein Platzname darf maximal 60 Zeichen haben.");
+    const key = name.toLocaleLowerCase("de-DE");
+    if (names.has(key)) throw new Error(`Der Platzname „${name}“ wurde mehrfach vergeben.`);
+    names.add(key);
+    if (name !== `Platz ${number}`) labels[number] = name;
+  }
+  return labels;
 }
 function showPlayerDialog(t, p = null) {
   showDialog({ eyebrow: p ? "TEILNEHMER BEARBEITEN" : "SPIELERLISTE ERWEITERN", title: p ? "Teilnehmer bearbeiten" : "Neuen Teilnehmer erfassen",
@@ -337,6 +366,7 @@ document.addEventListener("click", event => {
     return;
   }
   if (action === "settings" && t) return showTournamentDialog(t);
+  if (action === "edit-courts" && t) return showCourtNamesDialog(t);
   if (action === "delete-tournament" && t) {
     if (confirm(`Turnier „${t.name}“ samt allen Teilnehmenden unwiderruflich aus diesem Browser löschen?`)) run(() => {
       store.deleteTournament(t.id); view = "overview"; render(); flash("Turnier gelöscht.");
@@ -384,6 +414,11 @@ document.addEventListener("submit", event => {
       if (kind === "create") store.create(values);
       else store.editTournament(store.active().id, values);
       view = "overview";
+    } else if (kind === "court-names") {
+      const t = store.active();
+      if (!t) throw new Error("Turnier nicht gefunden.");
+      store.editTournament(t.id, { courtLabels: readCourtNames(form, t) });
+      view = "settings";
     } else if (kind === "add-player" || kind === "edit-player") {
       const data = new FormData(form), t = store.active();
       store.upsertParticipant(t.id, { name:data.get("name"), group:data.get("group"), present:data.has("present") }, kind === "edit-player" ? String(data.get("playerId")) : null);
