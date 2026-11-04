@@ -1,23 +1,40 @@
 # Tennis-Schiri · Turniermanager
 
-Private Entwicklungsablage für die Web-App unter https://app.tennis-schiri.de.
+Private Web-App für https://app.tennis-schiri.de (ALL-INKL Privat, passwortgeschützte Subdomain).
 
-## Stand
-- `site/index.html`: responsive Startseite (Platzhalter, noch kein fertiger Turniermanager).
-- Geplant: Schleifchenturnier, Doppelturnier, One Point Cup.
-- Hosting: ALL-INKL Privat mit SSL-Erweiterung; separates App-Verzeichnis.
-- Die bestehende WordPress-Seite unter tennis-schiri.de darf beim Deployment nicht verändert werden.
+## Version 0.2: Turniere & Teilnehmer
 
-## Nächste Schritte
-1. Separaten FTP-Zugang in ALL-INKL anlegen, dessen Zugriff auf den Ordner der Subdomain begrenzt ist.
-2. Verschlüsseltes **FTPS (explizites TLS)** für die Verbindung verwenden. SFTP/SSH gehört nicht zum Tarif Privat.
-3. Zugangsdaten nur als verschlüsselte GitHub-Actions-Secrets hinterlegen, niemals im Repository.
-4. Deployment-Workflow zunächst nur manuell und mit Pfad-Prüfung aktivieren.
-5. Testaufruf der Website und Verzeichnisschutz vor/nach Deployment überprüfen.
+- Mehrere Schleifchenturniere anlegen, auswählen, bearbeiten und löschen.
+- Turniername, Datum, Startzeit, Spieldauer, Wechselzeit, Spiele pro Spieler und aktive Plätze festlegen.
+- Teilnehmende hinzufügen, bearbeiten, löschen, Spielstärke (Stark/Schwächer) verwalten und Anwesenheit umschalten.
+- Dashboard mit Teilnehmerzahlen, Platzkapazität und Hinweisen zu Stärkegruppen.
+- Import und Export der Turnierdaten als JSON-Sicherung.
+- Responsive Bedienung auf Smartphone, Tablet und Desktop.
 
-## Deployment-Sicherheitsprinzipien
-- Nur Inhalt aus `site/` deployen.
-- Nie das WordPress-Verzeichnis berühren.
-- Nie auf dem Server synchronisierend löschen oder `.htaccess` überschreiben.
-- Keine automatischen Deployments, bevor der Zielpfad eindeutig verifiziert wurde.
-- Produktionspasswörter und Datenbank-Zugangsdaten niemals in Git speichern.
+**Wichtige Einschränkung:** Dies ist weiterhin eine **lokale Browser-Testversion**. Alle Turnier- und Teilnehmerdaten werden im lokalen Browser gespeichert (localStorage), nicht in einer gemeinsamen Serverdatenbank. Daten synchronisieren sich nicht zwischen Geräten. Zur Sicherung unbedingt den Button „Daten sichern“ verwenden. Keine echten sensiblen Spielerdaten zur Erprobung verwenden, bevor Datenschutz, Benutzerrollen und Backups umgesetzt sind.
+
+**Nicht enthalten:** Automatische Auslosung, Ergebnisse, Play-offs, Livetabelle, Login innerhalb der App, Vereinslizenzen, Live-Synchronisation.
+
+## Projektstruktur
+
+- `site/index.html` – statisches HTML-Grundgerüst
+- `site/assets/styles.css` – Layout, Design, responsives CSS
+- `site/assets/app.js` – Benutzeroberfläche und Interaktionen
+- `site/assets/storage.js` – austauschbarer Datenadapter / Speichermodell v1
+- `.github/workflows/deploy.yml` – manuelle Veröffentlichung per FTPS
+
+## Veröffentlichung
+
+1. In GitHub `Actions → Tennis-Schiri App manuell veröffentlichen` wählen.
+2. `Run workflow` auf Branch `main` manuell auslösen.
+3. Vier explizite Dateien werden via verschlüsseltes FTPS hochgeladen; keine Server-Dateien werden gelöscht.
+4. App nach Eingabe des Verzeichnispassworts unter **https://app.tennis-schiri.de/index.html** öffnen.
+5. Die ALL-INKL-Standarddatei `index.htm` bleibt zunächst bestehen. Daher bewusst die URL mit `/index.html` verwenden.
+
+GitHub-Secrets: `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`. Keine Zugangsdaten ins Repository speichern. Der FTP-Nutzer muss auf das korrekte App-Verzeichnis eingeschränkt sein. WordPress und `.htaccess` nicht überschreiben.
+
+## Roadmap
+
+- v0.3: Schleifchen-Auslosung aus dem vorhandenen Turnierregelwerk übernehmen und mit Tests absichern.
+- v0.4: Ergebnisse und Tabellen.
+- Backend: PHP/MariaDB mit Benutzerrollen, serverseitiger Validierung, Datenschutz und Backups. Der lokale Datenadapter kann dann durch einen API-Adapter ersetzt werden.
