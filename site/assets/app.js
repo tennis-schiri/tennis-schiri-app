@@ -54,7 +54,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.1</span>
   </div></header>`;
 }
 
@@ -230,7 +230,7 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.1 · Private Testversion</footer>
     </main></div>`);
 }
 
