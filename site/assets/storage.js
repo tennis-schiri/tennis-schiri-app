@@ -17,9 +17,10 @@ const integer = (v, min, max, fallback) => {
   const n = Number(v);
   return Number.isInteger(n) && n >= min && n <= max ? n : fallback;
 };
+const MAX_COURTS = 1000; // technische Sicherheitsgrenze, nicht die frühere 7-Plätze-Grenze
 const courtsOf = v => {
-  const list = Array.isArray(v) ? v : [];
-  const numbers = [...new Set(list.map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= 7))].sort((a,b) => a-b);
+  const list = Array.isArray(v) ? v.slice(0, MAX_COURTS) : [];
+  const numbers = [...new Set(list.map(Number).filter(n => Number.isSafeInteger(n) && n >= 1 && n <= MAX_COURTS))].sort((a,b) => a-b);
   return numbers.length ? numbers : [1, 2, 3, 4, 5, 6];
 };
 
