@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#092b35">
+  <title>Tennis-Schiri · Turniermanager (Entwicklung)</title>
+  <style>
+    :root{color-scheme:light;--navy:#092b35;--orange:#ef7044;--lime:#e4ff64;--paper:#f7f7ef;--muted:#47616a}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--navy);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    header{background:var(--navy);color:#fff;padding:22px max(22px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .brand{font-size:1.3rem;font-weight:900;letter-spacing:-.045em}.brand b{color:var(--orange)}
+    .pill{font-size:.76rem;border:1px solid #5b8089;border-radius:99px;padding:8px 12px}
+    main{max-width:1160px;margin:auto;padding:clamp(38px,7vw,90px) 22px 40px}
+    .eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.17em;color:#bb5337;text-transform:uppercase}
+    h1{margin:15px 0 20px;font-size:clamp(3rem,8vw,6.2rem);line-height:.99;letter-spacing:-.075em}
+    h1 em{font-style:normal;color:var(--orange)}
+    .lead{font-size:clamp(1.1rem,2vw,1.35rem);line-height:1.6;color:var(--muted);max-width:760px;margin:0 0 32px}
+    .flag{display:inline-block;padding:9px 14px;background:var(--lime);font-weight:900;transform:rotate(-2deg);text-transform:uppercase;font-size:.83rem}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:48px}
+    article{background:#fff;border:1px solid #d5dfda;border-radius:16px;padding:26px;box-shadow:4px 5px 0 #dde5de;min-height:222px;display:flex;flex-direction:column}
+    .num{color:#c25534;font-size:.8rem;font-weight:900;letter-spacing:.12em}
+    h2{font-size:1.52rem;margin:17px 0 8px;letter-spacing:-.035em}
+    article p{color:var(--muted);line-height:1.55;margin:0}
+    .status{margin-top:auto;padding-top:24px;font-weight:800;font-size:.78rem}
+    .notice{background:var(--navy);color:#fff;border-radius:16px;margin-top:38px;padding:26px;line-height:1.6}
+    footer{max-width:1160px;margin:0 auto;padding:14px 22px 30px;font-size:.83rem;color:#667e83}
+    @media(max-width:760px){.grid{grid-template-columns:1fr;margin-top:32px}article{min-height:170px}header{padding:20px 22px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">TENNIS<b>-SCHIRI</b> / TURNIERMANAGER</div>
+    <div class="pill">GESCHÜTZTE TESTVERSION</div>
+  </header>
+  <main>
+    <div class="eyebrow">Projektstart · Version 0.1</div>
+    <h1>Weniger Orga.<br><em>Mehr Tennis.</em></h1>
+    <p class="lead">Hier entsteht der digitale Turniermanager für Tennisvereine. Turniere anlegen, Begegnungen auslosen und Ergebnisse im Blick behalten – auf Smartphone, Tablet und Computer.</p>
+    <span class="flag">Wir entwickeln die erste Version</span>
+    <section class="grid" aria-label="Turnierformate">
+      <article><div class="num">01 / MODUL</div><h2>Schleifchenturnier</h2><p>Wechselnde Doppel, faire Paarungen und automatische Wertung.</p><div class="status">ALS ERSTES IN ENTWICKLUNG</div></article>
+      <article><div class="num">02 / MODUL</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><div class="status">GEPLANT</div></article>
+      <article><div class="num">03 / MODUL</div><h2>One Point Cup</h2><p>Kurze Duelle mit Auslosung und übersichtlichem K.-o.-Baum.</p><div class="status">GEPLANT</div></article>
+    </section>
+    <section class="notice"><strong>Interne Entwicklungsansicht</strong><div>Diese Seite ist ein Platzhalter. Spielerverwaltung, Auslosung und Live-Ergebnisse werden schrittweise entwickelt. Der Zugang bleibt bis zur Freigabe passwortgeschützt.</div></section>
+  </main>
+  <footer>© Tennis-Schiri · Entwicklungsstand · Keine öffentliche Freigabe</footer>
+</body>
+</html>
