@@ -24,7 +24,7 @@ jobs:
 
   deploy:
     if: github.event_name == 'workflow_dispatch'
-    name: index.html per FTPS hochladen
+    name: App-Dateien per FTPS hochladen
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -39,15 +39,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -f site/index.html
+          for file in site/index.html site/assets/styles.css site/assets/storage.js site/assets/app.js; do
+            test -f "$file"
+          done
           : "${FTP_HOST:?FTP_HOST ist nicht als GitHub Secret hinterlegt}"
           : "${FTP_USER:?FTP_USER ist nicht als GitHub Secret hinterlegt}"
           : "${FTP_PASSWORD:?FTP_PASSWORD ist nicht als GitHub Secret hinterlegt}"
-          # FTPS erzwingen und Zertifikat prüfen; nur EINE Datei übertragen.
-          # Der eingeschränkte FTP-Nutzer landet direkt im App-Verzeichnis.
-          # Keine Dateien löschen, insbesondere keine .htaccess ersetzen.
-          curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
-            --user "${FTP_USER}:${FTP_PASSWORD}" \
-            --upload-file site/index.html \
-            "ftp://${FTP_HOST}:21/index.html"
-          echo "Upload von site/index.html erfolgreich abgeschlossen."
+
+          # Der FTP-Nutzer ist auf das App-Verzeichnis beschränkt.
+          # Nur ausdrücklich zugelassene Dateien, KEINE Server-Dateien löschen.
+          # .htaccess, index.htm und WordPress bleiben unverändert.
+          for file in site/assets/styles.css site/assets/storage.js site/assets/app.js site/index.html; do
+            remote="${file#site/}"
+            echo "Übertrage $remote …"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --user "${FTP_USER}:${FTP_PASSWORD}" \
+              --upload-file "$file" \
+              "ftp://${FTP_HOST}:21/$remote"
+          done
+          echo "Alle vier App-Dateien wurden hochgeladen."
