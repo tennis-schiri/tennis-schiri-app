@@ -2,6 +2,9 @@ name: Tennis-Schiri App manuell veröffentlichen
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/deploy.yml'
 
 permissions:
   contents: read
@@ -11,7 +14,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  discover:
+    name: Workflow-Erkennung (kein Upload)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Registrierung bestätigen
+        run: echo 'Workflow wurde von GitHub erkannt. Kein FTP-Upload ausgeführt.'
+
   deploy:
+    if: github.event_name == 'workflow_dispatch'
     name: index.html per FTPS hochladen
     runs-on: ubuntu-latest
     timeout-minutes: 10
