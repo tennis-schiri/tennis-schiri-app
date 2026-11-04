@@ -23,8 +23,18 @@ const courtsOf = v => {
   const numbers = [...new Set(list.map(Number).filter(n => Number.isSafeInteger(n) && n >= 1 && n <= MAX_COURTS))].sort((a,b) => a-b);
   return numbers.length ? numbers : [1, 2, 3, 4, 5, 6];
 };
+const courtLabelsOf = (v, courts) => {
+  const labels = Object.create(null);
+  if (!v || typeof v !== "object" || Array.isArray(v)) return labels;
+  for (const number of courts) {
+    const name = text(v[number], 60);
+    if (name && name !== `Platz ${number}`) labels[number] = name;
+  }
+  return labels;
+};
 
 export function normalizeTournament(v) {
+  const courts = courtsOf(v.courts);
   return {
     id: text(v.id, 80) || uid(),
     name: text(v.name) || "Unbenanntes Turnier",
@@ -33,7 +43,8 @@ export function normalizeTournament(v) {
     duration: integer(v.duration, 10, 120, 20),
     breakMinutes: integer(v.breakMinutes, 0, 60, 10),
     rounds: integer(v.rounds, 1, 8, 4),
-    courts: courtsOf(v.courts),
+    courts,
+    courtLabels: courtLabelsOf(v.courtLabels, courts),
     participants: Array.isArray(v.participants) ? v.participants.slice(0, 500).map(p => ({
       id: text(p.id, 80) || uid(),
       name: text(p.name, 80),
@@ -47,7 +58,7 @@ export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
-    rounds: values.rounds, courts: values.courts, participants: []
+    rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels, participants: []
   });
 }
 
