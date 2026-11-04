@@ -2,11 +2,11 @@
 
 Private Web-App für https://app.tennis-schiri.de (ALL-INKL Privat, passwortgeschützte Subdomain).
 
-## Version 0.2.2: Turniere & Teilnehmer
+## Version 0.2.3: Turniere & Teilnehmer
 
 - Mehrere Schleifchenturniere anlegen, auswählen, bearbeiten und löschen.
 - Turniername, Datum, Startzeit, Spieldauer, Wechselzeit, Spiele pro Spieler und **freie Platzanzahl (1–1000 statt fester Grenze bei 7)** festlegen; die Platznummern werden bei neuen Turnieren fortlaufend vergeben.
-- Teilnehmende hinzufügen, bearbeiten, löschen, Spielstärke (Stark/Schwächer) verwalten und Anwesenheit umschalten.
+- In den Turniereinstellungen einzelne Plätze frei umbenennen (Standard: Platz 1, Platz 2 usw.); alte Turniere behalten ihre Plätze.\n- Teilnehmende hinzufügen, bearbeiten, löschen, Spielstärke (Stark/Schwächer) verwalten und Anwesenheit umschalten.
 - Dashboard mit Teilnehmerzahlen, Platzkapazität und Hinweisen zu Stärkegruppen.
 - Import und Export der Turnierdaten als JSON-Sicherung.
 - Responsive Bedienung auf Smartphone, Tablet und Desktop.
