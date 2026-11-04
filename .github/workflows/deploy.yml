@@ -1,0 +1,41 @@
+name: Tennis-Schiri App manuell veröffentlichen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennis-schiri-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: index.html per FTPS hochladen
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Quellcode abrufen
+        uses: actions/checkout@v4
+
+      - name: Startseite sicher in den App-FTP-Ordner laden
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f site/index.html
+          : "${FTP_HOST:?FTP_HOST ist nicht als GitHub Secret hinterlegt}"
+          : "${FTP_USER:?FTP_USER ist nicht als GitHub Secret hinterlegt}"
+          : "${FTP_PASSWORD:?FTP_PASSWORD ist nicht als GitHub Secret hinterlegt}"
+          # FTPS erzwingen und Zertifikat prüfen; nur EINE Datei übertragen.
+          # Der eingeschränkte FTP-Nutzer landet direkt im App-Verzeichnis.
+          # Keine Dateien löschen, insbesondere keine .htaccess ersetzen.
+          curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
+            --user "${FTP_USER}:${FTP_PASSWORD}" \
+            --upload-file site/index.html \
+            "ftp://${FTP_HOST}:21/index.html"
+          echo "Upload von site/index.html erfolgreich abgeschlossen."
