@@ -108,19 +108,20 @@ function intro() {
   const savedTournaments = tournaments.length ? `<section class="saved-tournaments" aria-labelledby="saved-tournaments-heading">
     <div class="saved-tournaments-heading"><div><div class="eyebrow">HIER GEHT'S WEITER</div><h2 id="saved-tournaments-heading">Deine Turniere <span>(${tournaments.length})</span></h2></div></div>
     <div class="saved-tournaments-grid">${tournaments.map(t => `<article class="saved-tournament">
-      <div class="saved-tournament-top"><span class="eyebrow">${t.type==="doubles"?"DOPPELTURNIER":"SCHLEIFCHENTURNIER"}</span><span class="mini-tag">${t.type==="doubles"?t.doubles.teams.length+" Teams":t.participants.length+" Teilnehmende"}</span></div>
+      <div class="saved-tournament-top"><span class="eyebrow">${t.type==="opc"?"ONE POINT CUP":t.type==="doubles"?"DOPPELTURNIER":"SCHLEIFCHENTURNIER"}</span><span class="mini-tag">${t.type==="opc"?t.opc.players.length+" Spieler":t.type==="doubles"?t.doubles.teams.length+" Teams":t.participants.length+" Teilnehmende"}</span></div>
       <h3>${escapeHtml(t.name)}</h3>
-      <p>${icon("calendar")} ${dateDisplay(t.date)} <span>·</span> ${t.courts.length} Plätze</p>
+      <p>${icon("calendar")} ${dateDisplay(t.date)} <span>·</span> ${t.type==="opc"?t.opc.fieldSize+"er Feld":t.courts.length+" Plätze"}</p>
       <button class="btn primary" data-action="open-tournament" data-id="${escapeHtml(t.id)}">Turnier öffnen ${icon("arrow")}</button>
     </article>`).join("")}</div>
   </section>` : "";
   return `<main class="wrap welcome">
     <div class="eyebrow">Tennis-Schiri / Digitale Turnierorganisation</div>
     <h1>Weniger Orga.<br><em>Mehr Tennis.</em></h1>
-    <p class="lead">Organisiere Schleifchenturniere oder Doppelturniere mit festen Teams, verwalte Teilnehmende und behalte den Überblick.</p>
+    <p class="lead">Organisiere Schleifchenturniere, Doppelturniere mit festen Teams oder einen One Point Cup – mit Auslosung, Ergebnissen und Kasse.</p>
     <div class="welcome-actions">
       <button class="btn primary" data-action="new">${icon("plus")} ${tournaments.length ? "Neues Turnier anlegen" : "Erstes Turnier anlegen"}</button>
       <button class="btn ghost" data-action="doppel-new">Doppelturnier anlegen</button>
+      <button class="btn ghost" data-action="opc-new">One Point Cup anlegen</button>
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
       <button class="btn ghost" data-action="demo-filler">Auffüllrunde testen</button>
     </div>
@@ -128,7 +129,7 @@ function intro() {
     <div class="format-grid">
       <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.6.1</span></article>
       <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.7.0</span></article>
-      <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
+      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.0</span></article>
     </div>
     ${browserNotice()}
   </main>`;
@@ -458,6 +459,7 @@ function drawPreview(t) {
 function render() {
   const t = store.active();
   if(t?.type==="doubles"&&view!=="home") {window.location.assign("./doppel.html");return;}
+  if(t?.type==="opc"&&view!=="home") {window.location.assign("./opc.html");return;}
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
       ${browserNotice()}<footer>© Tennis-Schiri · Version 0.7.0 · Private Testversion</footer>
@@ -651,8 +653,9 @@ document.addEventListener("click", event => {
   });
   if (action === "close-dialog") return closeDialog();
   if (action === "home") { view = "home"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); return; }
-  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); if(store.active()?.type==="doubles"){window.location.assign("./doppel.html");return;} view = "overview"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); });
+  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); if(store.active()?.type==="doubles"){window.location.assign("./doppel.html");return;} if(store.active()?.type==="opc"){window.location.assign("./opc.html");return;} view = "overview"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); });
   if (action === "doppel-new") {window.location.assign("./doppel.html#neu");return;}
+  if (action === "opc-new") {window.location.assign("./opc.html#neu");return;}
   if (action === "tab") { view = trigger.dataset.tab==="fees"?"participants":trigger.dataset.tab; search = ""; editingResult=null; editingFinal=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
@@ -812,7 +815,7 @@ document.addEventListener("click", event => {
 
 document.addEventListener("change", event => {
   const target = event.target, t = store.active();
-  if (target.id === "tournament-select") return run(() => { store.setActive(target.value); if(store.active()?.type==="doubles"){window.location.assign("./doppel.html");return;} search = ""; view = "overview"; editingFinal=null; render(); });
+  if (target.id === "tournament-select") return run(() => { store.setActive(target.value); if(store.active()?.type==="doubles"){window.location.assign("./doppel.html");return;} if(store.active()?.type==="opc"){window.location.assign("./opc.html");return;} search = ""; view = "overview"; editingFinal=null; render(); });
   if (target.matches("input[data-action='final-participation']") && t) return run(() => {
     if(t.draw?.finals)throw Error("Bitte zuerst die Endrunde zurücknehmen.");
     const id=target.dataset.id;
