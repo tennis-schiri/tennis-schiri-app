@@ -28,11 +28,11 @@ export function checkOnePointSetup(t) {
 }
 const winner=m=>m&&(m.winner===m.left||m.winner===m.right)?m.winner:null;
 const sameTeams=(m,left,right)=>m&&m.left===left&&m.right===right;
-const resolved=(left,right,old)=>({
+const resolved=(left,right,old,allowBye=false)=>({
   left,right,
-  winner:left&&!right?left:!left&&right?right:
+  winner:allowBye&&left&&!right?left:allowBye&&!left&&right?right:
     left&&right&&sameTeams(old,left,right)&&winner(old)?winner(old):null,
-  bye:!!((left&&!right)||(!left&&right))
+  bye:!!(allowBye&&((left&&!right)||(!left&&right)))
 });
 function rebuildRounds(first,previous=[]) {
   const rounds=[[...first]];
@@ -53,7 +53,7 @@ export function drawOnePointCup(t,{seed=Date.now()}={}) {
   if(!info.ok)throw Error(info.errors[0]);
   const ids=shuffled(t.opc.players.filter(p=>p.present).map(p=>p.id),seed);
   const half=info.fieldSize/2;
-  const first=Array.from({length:half},(_,i)=>resolved(ids[i],ids[half+i]||null,null));
+  const first=Array.from({length:half},(_,i)=>resolved(ids[i],ids[half+i]||null,null,true));
   return {format:"one-point-v1",signature:onePointSignature(t),seed:Number(seed)||1,
     rounds:rebuildRounds(first),createdAt:new Date().toISOString()};
 }
@@ -73,6 +73,8 @@ export function checkOnePointDraw(t,draw=t?.opc?.draw) {
     if(!m||typeof m!=="object")return {ok:false,errors:["Ungültige Begegnung."]};
     if(!m.left||!ids.has(m.left)||m.right&&!ids.has(m.right)||m.left===m.right)
       return {ok:false,errors:["Ungültige Spielerbegegnung."]};
+    if(!m.right&&m.winner!==m.left)
+      return {ok:false,errors:["Das Freilos muss den vorhandenen Spieler weiterlassen."]};
     for(const id of [m.left,m.right].filter(Boolean)){
       if(seen.has(id))return {ok:false,errors:["Ein Spieler ist mehrfach ausgelost."]};
       seen.add(id);
