@@ -294,7 +294,7 @@ function drawPreview(t) {
         const resultLabel=finished && result.score1!==null ? `${result.score1} : ${result.score2}` : "Sieg";
         return `<article class="draw-match ${finished?"draw-match-finished":""}">
           <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} ${finished?'<span class="draw-result-complete">Beendet</span>':''}</div>
-          <div class="draw-team ${finished?(result.winner===1?"is-winner":"is-loser"):""} ${m.fillerMask?.some(Boolean)?"has-filler":""}">
+          <div class="draw-team ${finished?(result.winner===1?"is-winner":"is-loser"):""}${m.fillerMask?.some(Boolean)?" has-filler":""}">
             <span>TEAM 1 ${result.winner===1?`<span class="draw-winner-pill">${icon("check")} Sieger</span>`:""}</span>
             <strong>${displaySlot(m,0)} <em>+</em> ${displaySlot(m,1)}</strong>
           </div>
@@ -302,7 +302,7 @@ function drawPreview(t) {
             ${finished ? result.score1!==null ? `<strong>${result.score1}<span>:</span>${result.score2}</strong><small>GAMES</small>`
              : `<strong class="draw-no-score">${icon("check")}</strong><small>SIEG</small>` : "VS"}
           </div>
-          <div class="draw-team ${finished?(result.winner===2?"is-winner":"is-loser"):""} ${m.fillerMask?.some(Boolean)?"has-filler":""}">
+          <div class="draw-team ${finished?(result.winner===2?"is-winner":"is-loser"):""}${m.fillerMask?.some(Boolean)?" has-filler":""}">
             <span>TEAM 2 ${result.winner===2?`<span class="draw-winner-pill">${icon("check")} Sieger</span>`:""}</span>
             <strong>${displaySlot(m,2)} <em>+</em> ${displaySlot(m,3)}</strong>
           </div>
