@@ -23,6 +23,23 @@ function card(m){
     <span class="live-side-label">${m.finished?"✓ Ergebnis erfasst":"● Spiel offen"}</span>
   </article>`;
 }
+function nextRoundPreview(next) {
+  if(!next||!Array.isArray(next.matches)||!next.matches.length)return "";
+  const upcoming=next.matches.map(match=>{
+    const team=names=>Array.isArray(names)?names.map(escapeLiveText).join(" + "):"";
+    return `<div class="live-next-match">
+      <span class="live-next-court">${escapeLiveText(match.court)}</span>
+      <span class="live-next-pairing"><strong>${team(match.left)}</strong>
+        <span class="live-next-versus">vs.</span><strong>${team(match.right)}</strong></span>
+    </div>`;
+  }).join("");
+  return `<section class="live-next-round" aria-label="Nächste ausgeloste Runde">
+    <div class="live-next-head"><h3>Nächste Runde: ${escapeLiveText(next.title)}</h3>
+      ${next.plannedStart?`<span>Start geplant: ${escapeLiveText(next.plannedStart)} Uhr</span>`:""}</div>
+    <div class="live-next-grid">${upcoming}</div>
+  </section>`;
+}
+
 export function renderLiveScreen(data) {
   if(!data||["missing","waiting","invalid"].includes(data.mode)){
     const title=data?.mode==="invalid"?"Spielplan prüfen":
@@ -59,7 +76,10 @@ export function renderLiveScreen(data) {
     </div>${timer}</div>
     ${champ}
     <div class="live-content">
-      <section class="live-matches" aria-label="Aktuelle Begegnungen">${data.matches.map(card).join("")}</section>
+      <div class="live-schedule">
+        <section class="live-matches ${data.matches.length>4?"live-matches-dense":""}" aria-label="Aktuelle Begegnungen">${data.matches.map(card).join("")}</section>
+        ${nextRoundPreview(data.nextRound)}
+      </div>
       ${standings}
     </div>
   </section>`;
