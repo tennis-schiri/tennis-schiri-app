@@ -29,7 +29,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - Node-20-Warnung beseitigt: `actions/checkout` und `actions/setup-node` von v4 auf v7 angehoben (interner Action-Runtime Node 24).
 - Beide Jobs zunächst auf `ubuntu-24.04` fixiert, um die laufende Migration von `ubuntu-latest` auf Ubuntu 26.04 nicht ungeprüft zu übernehmen.
 - `persist-credentials: false` für den Checkout; keine Git-Zugangsdaten müssen für den reinen FTPS-Upload persistiert werden.
-- Manueller Upload, Tests, FTP-Secrets und Dateiliste unverändert. Erster Lauf mit den neuen Action-Versionen steht noch aus.
+- Manueller Upload, Tests und FTP-Secrets unverändert; der Nutzer bestätigte nach einem erneuten Lauf, dass keine Warnungen mehr angezeigt wurden (Laufdetails nicht gesondert geprüft). Die für v0.3.1 später ergänzte Ergebnisdatei wird ebenfalls nur manuell veröffentlicht.
 
 ## [0.3.0] – normale Schleifchenturnier-Vorrunden
 
