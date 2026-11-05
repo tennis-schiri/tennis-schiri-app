@@ -12,7 +12,7 @@
 | `src/AccountPolicy.php` | Validierung, Passwort-Hashing, 256-Bit-Token/Hash, Rollen, Lizenzzeitraum |
 | `src/Database.php` | PDO-Anbindung mit extern bereitgestellten Umgebungsvariablen |
 | `bin/migrate.php` | **Nur CLI**, keine Webroute; Installation nur mit `--apply` und zusätzlicher Freigabe |
-| `tests/account-policy-test.php` | 12 Unit-Tests ohne Datenbank |
+| `tests/account-policy-test.php` | 13 Unit-Tests ohne Datenbank |
 | `tests/schema-integration.php` | Datenbankintegration, **nur gegen `tennilo_ci_test`** |
 | `../tests/backend-schema.test.mjs` | Statische Prüfung von Tabellen, Mandantentrennung und FTPS-Schutz |
 
