@@ -1,6 +1,6 @@
 // TENNILO v0.6.1 – explizit aktivierte Live-Übertragung zwischen Geräten.
 // Zugangsschlüssel separat vom Turnier/JSON-Backup im Browser speichern.
-import {buildLiveDisplay} from "./live-model.js?v=070";
+import {buildLiveDisplay} from "./live-model.js?v=071";
 
 const SHARE_PREFIX="tennilo-live-share-v1:";
 const CHANNEL=/^[a-f0-9]{48}$/;
