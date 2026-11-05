@@ -13,11 +13,15 @@ export function euroText(cents) {
   return (cents/100).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
 }
 export const euroInput=cents=>(cents/100).toFixed(2).replace(".",",");
-export const entryDue=(t,p)=>p?.feeOverrideCents==null ? (t?.entryFeeCents||0) : p.feeOverrideCents;
+export const feeTiers=t=>
+  Array.isArray(t?.feeCategories)&&t.feeCategories.length ?
+    t.feeCategories : [{id:"standard",name:"Standard",amountCents:t?.entryFeeCents||0}];
+export const playerTier=(t,p)=>feeTiers(t).find(x=>x.id===p?.feeTierId)||feeTiers(t)[0];
+export const entryDue=(t,p)=>p?.feeOverrideCents!=null ? p.feeOverrideCents : playerTier(t,p).amountCents;
 export function feesOverview(t) {
   const players=(t?.participants||[]).map(p=>{
     const due=entryDue(t,p),paid=p.feePaidCents||0;
-    return {id:p.id,name:p.name,present:p.present,due,paid,open:Math.max(0,due-paid),
+    return {id:p.id,name:p.name,present:p.present,tierId:playerTier(t,p).id,tierName:playerTier(t,p).name,custom:p.feeOverrideCents!=null,due,paid,open:Math.max(0,due-paid),
       extra:Math.max(0,paid-due),status:due===0&&paid===0?"frei":paid===0?"offen":
       paid<due?"teilweise":paid===due?"bezahlt":"überzahlung"};
   });
