@@ -134,6 +134,14 @@ $root = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) .
 if (!is_dir($root) && !@mkdir($root, 0700, true) && !is_dir($root)) {
     fail_live(503, 'Live-Speicherung ist auf diesem Server nicht verfügbar.');
 }
+// Keine Snapshot-Dateien unter dem öffentlich erreichbaren App-Verzeichnis.
+$serverRoot = realpath($root);
+$appRoot = realpath(__DIR__);
+if ($serverRoot === false || $appRoot === false ||
+    $serverRoot === $appRoot ||
+    str_starts_with($serverRoot, $appRoot . DIRECTORY_SEPARATOR)) {
+    fail_live(503, 'Privater Speicherort für die Live-Anzeige nicht verfügbar.');
+}
 if (!is_writable($root)) fail_live(503, 'Live-Speicherung ist nicht beschreibbar.');
 if (!is_dir($root)) fail_live(503, 'Live-Speicherung fehlt.');
 
