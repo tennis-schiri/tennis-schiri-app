@@ -5,9 +5,20 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [Backend B0.1] – Vereins- und Kontodatenmodell (noch keine App-Veröffentlichung)
+
+**2026-11-05:** Im privaten Repository umgesetzt; keine neuen Produktivdateien oder Registrierungsseiten veröffentlicht. **Noch keine echten Kundenkonten oder ALL-INKL-Datenbank angelegt.**
+
+- Erste MariaDB/MySQL-Migration mit zwölf Tabellen für Benutzer, Vereine, Mitgliedschaften, Einladungen, Bestätigung/Passwort-Reset, sichere Sessions, Lizenzpläne, organisationsbezogene Lizenzzuordnung und Audit.
+- PHP-Sicherheitsbasis mit Passwort-Hashing, kryptographisch zufälligen Hash-Tokens, UUIDs, Formularvalidierung, Rollenmatrix und zeitlicher Lizenzprüfung.
+- Privater PDO-Connector mit Umgebungsvariablen und ein CLI-only-Migrator mit ausdrücklicher Freigabe und SHA-256-Integritätsprüfung; **beides vom bestehenden FTPS-Upload ausgeschlossen**.
+- Erweiterter GitHub-Prüfworkflow: PHP-Syntax und 12 Kontoregeltests, 12 zusätzliche statische SQL-/Sicherheitsprüfungen sowie echte Installations-/Integritätsprüfung gegen eine temporäre MariaDB in CI; keine Produktionsdaten.
+- Dokumentation: [backend/README.md](backend/README.md), [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md), [PROJEKTSTATUS.md](PROJEKTSTATUS.md).
+- Folgend: B0.2 mit registrierten Benutzerkonten, E-Mail-Bestätigung, Login, Organisation anlegen und Einladungen. Rechnungen, Zahlungsanbieter und definitive Preise sind noch offen.
+
 ## [0.6.1] – Fernanzeige auf eigenständigem Laptop, Tablet und Smart-TV
 
-**Stand 2026-11-05:** In GitHub implementiert, PHP-Syntax und 116 JavaScript-/PHP-Tests erfolgreich ([GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880)). **FTPS-Veröffentlichung und tatsächlicher Webspace-/Zweitgeräte-Test fehlen noch.** Zuletzt bestätigt veröffentlicht: **v0.6.0** im manuellen [FTPS-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292).
+**Stand 2026-11-05:** v0.6.1 wurde nach grünem Code-Prüflauf ([42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880)) im manuellen [FTPS-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) erfolgreich hochgeladen. **Webhosting-Funktion und unabhängiger Smart-TV-/Zweitgeräte-Test sind noch nicht bestätigt.**
 
 ### Neu
 - Eigene, **serverbasierte, aber ausschließlich lesende Fernanzeige**: Anders als v0.6.0 kann der Zuschauer nun auf einem anderen Gerät im Internet sitzen. Keine gemeinsame Browser-Session erforderlich.
