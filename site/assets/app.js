@@ -100,6 +100,7 @@ function intro() {
     <div class="welcome-actions">
       <button class="btn primary" data-action="new">${icon("plus")} ${tournaments.length ? "Neues Turnier anlegen" : "Erstes Turnier anlegen"}</button>
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
+      <button class="btn ghost" data-action="demo-filler">Auffüllrunde testen</button>
     </div>
     ${savedTournaments}
     <div class="format-grid">
@@ -460,6 +461,17 @@ function showDemo() {
   view = "overview"; search = ""; render(); flash("Beispielturnier mit 16 Teilnehmenden angelegt.");
 }
 
+function showFillerDemo() {
+  const t=store.create({name:"Demo – Auffüllrunde",date:todayLocal(),startTime:"10:00",
+    duration:20,breakMinutes:10,rounds:3,courts:[1,2,3]});
+  for(let i=1;i<=5;i++){
+    store.upsertParticipant(t.id,{name:"Stark "+i,group:"stark",present:true});
+    store.upsertParticipant(t.id,{name:"Schwächer "+i,group:"schwaecher",present:true});
+  }
+  view="draw";drawOpenRound=0;editingResult=null;search="";
+  render();flash("Demo angelegt. Normale Runden auslosen und Ergebnisse erfassen.");
+}
+
 function downloadBackup() {
   const blob = new Blob([store.exportJson()], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -495,6 +507,7 @@ document.addEventListener("click", event => {
   if (action === "tab") { view = trigger.dataset.tab; search = ""; editingResult=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
+  if (action === "demo-filler") return run(showFillerDemo);
   if (action === "draw-special-generate" && t) return run(() => {
     const draw=generateRibbonSpecialRound(t);
     store.editTournament(t.id,{draw});
