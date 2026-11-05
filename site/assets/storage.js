@@ -45,6 +45,11 @@ export function normalizeTournament(v) {
     rounds: integer(v.rounds, 1, 8, 4),
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
+    // Auslosungen werden pro Turnier gespeichert. Die Signatur verhindert, dass ein
+    // alter Plan nach Teilnehmer-/Platzänderungen als gültig dargestellt wird.
+    draw: v.draw && typeof v.draw === "object" && !Array.isArray(v.draw) &&
+      typeof v.draw.signature === "string" && Array.isArray(v.draw.rounds) &&
+      v.draw.rounds.length <= 20 ? v.draw : null,
     participants: Array.isArray(v.participants) ? v.participants.slice(0, 500).map(p => ({
       id: text(p.id, 80) || uid(),
       name: text(p.name, 80),
@@ -58,7 +63,7 @@ export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
-    rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels, participants: []
+    rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels, draw: null, participants: []
   });
 }
 
