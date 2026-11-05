@@ -107,6 +107,7 @@ export function generateRibbonSpecialRound(t,options={}) {
 }
 
 export function resetRibbonSpecialRound(t){
+  if(t?.draw?.finals)throw Error("Bitte zuerst die Endrunde zurücknehmen.");
   if(!t?.draw?.specialRound)throw Error("Es ist keine Auffüllrunde vorhanden.");
   const {specialRound,...draw}=t.draw;
   return {...draw,status:"auffuellrunde_offen"};
