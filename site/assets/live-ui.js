@@ -32,11 +32,12 @@ export function renderLiveScreen(data) {
       <p>Die Turnierleitung steuert diese Anzeige im anderen Browserfenster.</p>
     </section>`;
   }
-  const standings=data.ranking.length?`<aside class="live-rankings" aria-label="Schleifchen-Zwischenstand">
-      <h3>Schleifchen-Stand</h3><p>Vorrunde · Top ${data.ranking.length}</p>
+  const doubles=data.format==="doubles";
+  const standings=data.ranking.length?`<aside class="live-rankings" aria-label="${doubles?"Doppel-Livetabelle":"Schleifchen-Zwischenstand"}">
+      <h3>${doubles?"Doppel-Livetabelle":"Schleifchen-Stand"}</h3><p>${doubles?"Siege · Game-Differenz":"Vorrunde · Top "+data.ranking.length}</p>
       ${data.ranking.map(p=>`<div class="live-standing-line"><span class="live-standing-rank">${p.place}.</span>
         <span class="live-standing-name">${escapeLiveText(p.name)}</span>
-        <span class="live-standing-ribbons">${p.ribbons} ◉</span>
+        <span class="live-standing-ribbons">${doubles?`${escapeLiveText(p.wins)} S · ${escapeLiveText(p.gameDiff)} Diff`:`${p.ribbons} ◉`}</span>
       </div>`).join("")}
     </aside>`:"";
   const timer=data.mode==="round"?`<div class="live-time-panel ${data.timer.expired&&data.timer.status==="running"?"overtime":""}">
