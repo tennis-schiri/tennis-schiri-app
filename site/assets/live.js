@@ -1,54 +1,116 @@
-import {BrowserTournamentStore} from "./storage.js?v=060";
-import {buildLiveDisplay} from "./live-model.js?v=060";
-import {clockFor} from "./operations.js?v=060";
-import {renderLiveScreen} from "./live-ui.js?v=060";
+import {BrowserTournamentStore} from "./storage.js?v=061";
+import {buildLiveDisplay} from "./live-model.js?v=061";
+import {clockFor} from "./operations.js?v=061";
+import {renderLiveScreen} from "./live-ui.js?v=061";
+import {fetchLive,remoteClockAt,liveKeyValid} from "./remote-live.js?v=061";
 
 const root=document.getElementById("live-root");
 const displayedAt=document.getElementById("live-current-time");
 const toggle=document.getElementById("fullscreen-toggle");
-const requested=new URLSearchParams(window.location.search).get("turnier");
+const connection=document.getElementById("live-connection");
+const footerHelp=document.getElementById("live-footer-help");
+const query=new URLSearchParams(window.location.search||"");
+const requested=query.get("turnier");
+const remoteChannel=new URLSearchParams((window.location.hash||"").replace(/^#/,"")).get("kanal");
+const remoteMode=liveKeyValid(remoteChannel);
 const STORAGE_KEY="tennis-schiri-tournaments-v1";
-let lastSnapshot="";
-let lastMode=null;
-let lastTournament=null;
+let lastSnapshot="",lastMode=null,lastTournament=null;
+let lastRemoteData=null,remoteReceivedAt=0,remoteServerLag=0,lastRemoteRequest=0;
+let remoteFetching=false,remoteUnreachable=false;
 
-const selectedTournament=()=>{
+if(remoteMode){
+  if(connection)connection.textContent="● LIVE VOM SERVER";
+  if(footerHelp)footerHelp.textContent="Fernanzeige · unabhängig vom Gerät · Spielstände werden regelmäßig aktualisiert";
+}else if(remoteChannel){
+  root.innerHTML=renderLiveScreen({mode:"waiting",message:"Dieser Live-Link ist ungültig. Bitte den aktuellen Zuschauer-Link verwenden."});
+}
+function selectedTournament(){
   const store=new BrowserTournamentStore();
   if(requested)return store.list().find(t=>t.id===requested)||null;
   return store.active();
-};
-function refresh() {
-  const tournament=selectedTournament();
-  const fingerprint=tournament?JSON.stringify(tournament):"missing";
+}
+function refreshLocal() {
+  if(remoteChannel)return;
+  const t=selectedTournament(),fingerprint=t?JSON.stringify(t):"missing";
   if(fingerprint===lastSnapshot)return;
   lastSnapshot=fingerprint;
-  lastTournament=tournament;
-  const view=buildLiveDisplay(tournament);
-  lastMode=view;
-  root.innerHTML=renderLiveScreen(view);
+  lastTournament=t;
+  lastMode=buildLiveDisplay(t);
+  root.innerHTML=renderLiveScreen(lastMode);
 }
-function updateClock() {
+function markConnection(ok){
+  if(!remoteMode||!connection)return;
+  connection.textContent=ok?"● LIVE VOM SERVER":"● VERBINDUNG UNTERBROCHEN";
+  connection.classList.toggle("live-offline",!ok);
+}
+async function refreshRemote(){
+  if(!remoteMode||remoteFetching)return;
+  remoteFetching=true;
+  lastRemoteRequest=Date.now();
+  try{
+    const response=await fetchLive(remoteChannel);
+    const display=response.display;
+    if(!display||typeof display!=="object")throw Error("Ungültige Live-Antwort.");
+    const fingerprint=JSON.stringify(display);
+    if(lastSnapshot!==fingerprint){
+      root.innerHTML=renderLiveScreen(display);
+      lastSnapshot=fingerprint;
+    }
+    lastMode=display;
+    lastRemoteData=response;
+    remoteReceivedAt=Date.now();
+    remoteServerLag=Math.max(0,response.serverNow-response.savedAt);
+    remoteUnreachable=false;
+    markConnection(remoteServerLag<20000);
+  }catch(e){
+    remoteUnreachable=true;
+    markConnection(false);
+    if(!lastRemoteData){
+      const msg=e?.message||"Noch keine Fernübertragung verfügbar.";
+      root.innerHTML=renderLiveScreen({mode:"waiting",message:msg});
+    }
+  }finally{remoteFetching=false;}
+}
+function updateClock(){
   const now=Date.now();
-  if(displayedAt)displayedAt.textContent=new Date(now).toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
-  if(lastMode?.mode!=="round"||!lastTournament)return;
+  if(displayedAt)displayedAt.textContent=new Date(now).toLocaleTimeString("de-DE",{
+    hour:"2-digit",minute:"2-digit",second:"2-digit"
+  });
+  if(lastMode?.mode!=="round")return;
   const el=document.querySelector("[data-live-timer]");
   if(!el)return;
-  const clock=clockFor(lastTournament,lastMode.index,now);
-  el.textContent=clock.display;
+  let status,display,expired;
+  if(remoteMode){
+    const stale=remoteUnreachable||remoteServerLag+(now-remoteReceivedAt)>=20000;
+    markConnection(!stale);
+    const elapsed=Math.min(20000,remoteServerLag+Math.max(0,now-remoteReceivedAt));
+    ({status,display,expired}=remoteClockAt(lastMode.timer,elapsed));
+  }else{
+    if(!lastTournament)return;
+    ({status,display,expired}=clockFor(lastTournament,lastMode.index,now));
+  }
+  el.textContent=display;
   const panel=el.closest(".live-time-panel");
-  if(panel)panel.classList.toggle("overtime",clock.expired&&clock.status==="running");
-  const status=document.querySelector("[data-live-status]");
-  if(status)status.textContent={
-    ready:"NOCH NICHT GESTARTET",running:clock.expired?"ÜBERZEIT":"LÄUFT",
+  if(panel)panel.classList.toggle("overtime",expired&&status==="running");
+  const text=document.querySelector("[data-live-status]");
+  if(text)text.textContent={
+    ready:"NOCH NICHT GESTARTET",running:expired?"ÜBERZEIT":"LÄUFT",
     paused:"PAUSIERT",finished:"BEENDET"
-  }[clock.status];
+  }[status]||"";
 }
 window.addEventListener("storage",e=>{
-  if(e.key===STORAGE_KEY||e.key===null)refresh();
+  if(!remoteChannel&&(e.key===STORAGE_KEY||e.key===null))refreshLocal();
 });
-window.addEventListener("focus",refresh);
+window.addEventListener("focus",()=>{
+  if(remoteMode){lastRemoteRequest=0;refreshRemote();}
+  else refreshLocal();
+});
 document.addEventListener("visibilitychange",()=>{
-  if(!document.hidden){refresh();updateClock();}
+  if(!document.hidden){
+    if(remoteMode){lastRemoteRequest=0;refreshRemote();}
+    else refreshLocal();
+    updateClock();
+  }
 });
 if(toggle)toggle.addEventListener("click",()=>{
   if(document.fullscreenElement)document.exitFullscreen?.().catch?.(()=>{});
@@ -57,8 +119,12 @@ if(toggle)toggle.addEventListener("click",()=>{
 document.addEventListener("fullscreenchange",()=>{
   if(toggle)toggle.textContent=document.fullscreenElement?"⛶ Vollbild verlassen":"⛶ Vollbild";
 });
-// Polling als Sicherheitsnetz, falls ein Speicherereignis beim Wechsel
-// des Monitors/Fensters verpasst wurde; Countdown selbst läuft sekundengenau.
-window.setInterval(()=>{refresh();updateClock();},1000);
-refresh();
+window.setInterval(()=>{
+  if(remoteMode){
+    if(Date.now()-lastRemoteRequest>=3000)refreshRemote();
+  }else refreshLocal();
+  updateClock();
+},1000);
+if(remoteMode)refreshRemote();
+else if(!remoteChannel)refreshLocal();
 updateClock();
