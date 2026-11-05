@@ -111,7 +111,7 @@ final class AuthService
                 self::stamp($expires)
             ]);
             $this->pdo->commit();
-        } catch (\\Throwable $e) {
+        } catch (\Throwable $e) {
             if ($this->pdo->inTransaction())$this->pdo->rollBack();
             throw $e;
         }
