@@ -12,7 +12,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - Erste MariaDB/MySQL-Migration mit zwölf Tabellen für Benutzer, Vereine, Mitgliedschaften, Einladungen, Bestätigung/Passwort-Reset, sichere Sessions, Lizenzpläne, organisationsbezogene Lizenzzuordnung und Audit.
 - PHP-Sicherheitsbasis mit Passwort-Hashing, kryptographisch zufälligen Hash-Tokens, UUIDs, Formularvalidierung, Rollenmatrix und zeitlicher Lizenzprüfung.
 - Privater PDO-Connector mit Umgebungsvariablen und ein CLI-only-Migrator mit ausdrücklicher Freigabe und SHA-256-Integritätsprüfung; **beides vom bestehenden FTPS-Upload ausgeschlossen**.
-- Erweiterter GitHub-Prüfworkflow: PHP-Syntax und 12 Kontoregeltests, 12 zusätzliche statische SQL-/Sicherheitsprüfungen sowie echte Installations-/Integritätsprüfung gegen eine temporäre MariaDB in CI; keine Produktionsdaten.
+- Erweiterter GitHub-Prüfworkflow: PHP-Syntax und 13 Kontoregeltests, 12 zusätzliche statische SQL-/Sicherheitsprüfungen sowie echte Installations-/Integritätsprüfung gegen eine temporäre MariaDB in CI; keine Produktionsdaten.
 - Dokumentation: [backend/README.md](backend/README.md), [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md), [PROJEKTSTATUS.md](PROJEKTSTATUS.md).
 - Folgend: B0.2 mit registrierten Benutzerkonten, E-Mail-Bestätigung, Login, Organisation anlegen und Einladungen. Rechnungen, Zahlungsanbieter und definitive Preise sind noch offen.
 
