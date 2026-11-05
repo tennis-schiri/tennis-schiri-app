@@ -256,3 +256,13 @@
 - **Sicherheitsgrenze:** UI-Dateien bleiben unter `backend/staging-ui/` im privaten Repository und sind nicht Bestandteil der 19-Dateien-FTPS-Allowlist. Keine automatische Veröffentlichung, keine Aktivierung der standardmäßig gesperrten Konto-API.
 - **Integration:** Gleicher HTTPS-Origin und vorhandene serverseitige Session-/Rollen-/CSRF-Prüfung statt clientseitiger Rechtefreigabe. Keine Speicherung von Kennwörtern, Einmal-Tokens oder Sitzungen in LocalStorage.
 - **Freigabe offen:** Separate ALL-INKL-Testdatenbank, verifizierbare E-Mail-Zustellung, Browser-/Sicherheits-/Backup-Tests vor Einladung realer Testnutzer. Keine Produktivregistrierung, keine Lizenzzahlung.
+
+## E-029 · Doppelturnier als zweite eigenständige Turnierart (2026-11-05)
+
+- **Nutzerentscheidung:** Staging/Benutzerregistrierung vorerst zurückstellen und direkt die nächste Turnierart entwickeln. Reihenfolge laut E-002: zuerst Schleifchenturnier (bestehend), danach Doppelturnier mit festen Partnern, später One Point Cup.
+- **Fachquelle:** Die bestehenden Google-Sheet-Tabs `Doppel-Setup`, `Doppel-Teams`, `Doppel-Auslosung`, `Doppel-Livetabelle`, `Doppel-Play-Offs`, `Doppel-Runden & Zeit` aus „Turniere Verein – Auslosung & Livetabelle“; ursprüngliche Tabelle unverändert.
+- **Umsetzung v0.7.0 privat:** Feste Teams aus zwei Spielern, einstellbare Vorrunden-Begegnungen ohne Wiederholung, Spielplan mit freier Platzanzahl, Spielzeit/Wechselpause und Rundenuhr, explicit Sieger + Games/Entscheidungspunkte, teambezogene Rangliste (Siege, Game-Differenz, Games+) und Top-8-Play-offs inkl. Platz 3. Nachrücken bei abgewählten Teams.
+- **Bar-Nenngeld:** Je Spieler separat normal/ermäßigt, nur tatsächlich erhaltene Barzahlungen; keine Online-Nenngeld-Abwicklung. Die TENNILO-Lizenzen sind weiterhin ein separates zukünftiges Abrechnungssystem.
+- **Speicherung:** Gemeinsames Browser-/JSON-Sicherungsmodell, diskriminiert durch `type: ribbon` bzw. `type: doubles`; keine automatische Migration alter Schleifchen-Ergebnisse.
+- **Validierung:** Fachlich unmögliche Spielzahlen (z. B. bei zu wenigen Gegnern oder ungerader Gesamtbegegnungszahl) werden abgewiesen. Ausgeloste Teams/Anwesenheit nur nach Rücknahme der Auslosung ändern. Nachrücker und Ergebnisfortschreibung konsistent.
+- **Freigabe:** Eigenständige Seite und vier neue Dateien in **manueller** FTPS-Allowlist; **keine Veröffentlichung**. Zuerst CI-/Browser-/Praxistests, dann ausdrücklich freigeben. Keine allgemeine Mehrgeräte-Bearbeitung und noch keine Doppel-Fernanzeige. Fachkonzept [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md).
