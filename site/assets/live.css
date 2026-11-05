@@ -53,3 +53,7 @@ button{font:inherit;cursor:pointer}
 @media(max-width:620px){.live-header{padding:14px}.live-header-right{justify-content:flex-start}.live-connection{font-size:10px}.live-matches{grid-template-columns:1fr}.live-time-panel{min-width:0;width:100%;justify-content:space-between}.live-stage-head{align-items:stretch}.live-rankings{display:block}}
 @media(min-width:1750px){.live-match{min-height:175px}.live-match-top{margin-bottom:19px}.live-standing-line{padding:14px 0}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important}}
+
+/* Fernanzeige verliert die Freigabe: Warnfarbe, nicht mehr als live anzeigen. */
+.live-connection.live-offline{color:var(--coral)}
+.live-connection.live-offline .live-dot{background:var(--coral);box-shadow:0 0 8px rgba(239,113,70,.65)}
