@@ -13,7 +13,7 @@
 - [public/index.php](public/index.php): **explizit standardmäßig deaktiviert** (`TENNILO_API_ENABLED` fehlt); die vorhandene App lädt diese Datei nicht hoch. Der Mailadapter ist nur vorbereitet, nicht im echten Hosting getestet.
 - Zusätzliche CI-Tests: [auth-club-integration.php](tests/auth-club-integration.php), [api-integration.php](tests/api-integration.php), [backend-api-safety.test.mjs](../tests/backend-api-safety.test.mjs). Testdatenbank wird nur temporär gestartet.
 
-**Einschränkung:** Noch keine nutzbare Registrierungsseite, kein bestätigter Live-Mailversand und keine Produktivdatenbank. Die bestehende App-Version 0.6.1 bleibt unabhängig davon funktionsfähig; Preise und TENNILO-Zahlungen bleiben offen.
+**Einschränkung:** Die Konto- und Vereinsseite ist als unveröffentlichter Prototyp unter [staging-ui/](staging-ui/README.md) angelegt. Noch keine öffentlich nutzbare Registrierungsseite, kein bestätigter Live-Mailversand und keine Produktivdatenbank. Die bestehende App-Version 0.6.1 bleibt unabhängig davon funktionsfähig; Preise und TENNILO-Zahlungen bleiben offen.
 
 ## Enthalten
 
@@ -87,7 +87,7 @@ GitHub Actions `.github/workflows/verify.yml` führt zusätzlich einen echten In
 
 - Private REST-API ist im Repository vorhanden und CI-getestet; als nächstes separat im geschützten Staging installieren und mit der Konto-Oberfläche verbinden.
 - Vereine anlegen und aktive Eigentümer-Mitgliedschaft **atomar** erstellen: Backend bereits vorhanden; UI und echter Staging-Workflow fehlen.
-- Einladung weiterer Organisatoren, serverseitige Rollenkontrolle, Last-Owner-Schutz: Backend bereits vorhanden; Mailzustellung und UI fehlen.
+- Einladung weiterer Organisatoren, serverseitige Rollenkontrolle und Last-Owner-Schutz: Backend vorhanden und privater UI-Prototyp ergänzt. Reale Mailzustellung, gesichertes Staging und Browser-E2E-Tests fehlen.
 - Keine automatische Lizenzfreigabe durch einen Browser-Redirect.
 - Nach erfolgreicher Konto-/Rollenphase zentrale Turniere und Import bestehender JSON-Sicherungen entwickeln; **erst danach** Zahlungsanbieter, Rechnungen und Preistabelle finalisieren.
 
