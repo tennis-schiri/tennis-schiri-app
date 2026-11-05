@@ -23,6 +23,10 @@ Die bisher entwickelte Auslosung in TENNILO orientiert sich an der bestehenden [
 
 Die zweite TENNILO-Turnierart beruht auf derselben [Vereins-Tabelle „Turniere Verein – Auslosung & Livetabelle“](https://docs.google.com/spreadsheets/d/1aNwzYXmHhpONZURtufkDg6qZHX1-ywOYgyRd_u_LHCY/edit), insbesondere auf `Doppel-Setup`, `Doppel-Teams`, `Doppel-Auslosung`, `Doppel-Livetabelle`, `Doppel-Play-Offs` und `Doppel-Runden & Zeit`. Dies ist ein Turnier mit **festen Zweierteams**, nicht der in der Bibliothek ebenfalls enthaltene Rotationsmodus **Doppel-Tausch**. Die Regeln und bewussten Implementierungsgrenzen sind im [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md) dokumentiert. Das Original-Sheet bleibt unverändert.
 
+## Maßgebliche Quelle für One Point Cup v0.8.0
+
+Die dritte TENNILO-Turnierart basiert auf den Reitern `OPC-Spieler` und `One Point Cup` derselben [Vereins-Tabelle „Turniere Verein – Auslosung & Livetabelle“](https://docs.google.com/spreadsheets/d/1aNwzYXmHhpONZURtufkDg6qZHX1-ywOYgyRd_u_LHCY/edit). Die Vorlage sieht maximal 64 Spieler, ein Standard-32er-Feld, Anwesenheit, Übernahme aus Schleifchen-/Doppel-Listen und ein K.-o.-Tableau mit jeweils einer Siegerentscheidung pro Ballwechsel vor. Abweichungen (zusätzliche Feldgrößen/Freilose und separates lokales Bar-Nenngeld) sind in [ONE_POINT_KONZEPT.md](ONE_POINT_KONZEPT.md) beschrieben. Das Quell-Sheet wurde nicht bearbeitet.
+
 ## Turnierformat-Bibliothek – thematische Orientierung
 
 ### 1. Rotationsformate
