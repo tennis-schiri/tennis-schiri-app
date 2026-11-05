@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.2.3**  
-**Version auf dem Webspace:** **nicht abschließend verifiziert** – der Nutzer hat den ersten FTPS-Upload und eine bedienbare frühe Version bestätigt; für die späteren Versionen 0.2.1–0.2.3 liegt keine durchgehend bestätigte Veröffentlichung vor.
+**Version im GitHub-Code:** **0.3.0**  
+**Version auf dem Webspace:** **nicht abschließend verifiziert** – der Nutzer hat den ersten FTPS-Upload und eine bedienbare frühe Version bestätigt; für die Versionen ab 0.2.1 bis einschließlich 0.3.0 liegt keine durchgehend bestätigte Veröffentlichung vor.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -31,13 +31,17 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; vier App-Dateien
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; fünf App-Dateien
+- [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
+- [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
+- [x] Nötige Auffüllrunde erkennen, ohne die Auswahl der Auffüller vor den Ergebnissen zu treffen
+- [x] Automatisierte Auslosungstests unter `tests/draw.test.mjs` vor jedem manuellen FTPS-Upload
 
-**Prüfstand:** Syntax- und gezielte Logiktests für Verwaltung/Platzanzahl/Platznamen wurden ausgeführt; es gibt bislang **keine** vollständige Browser-End-to-End-Testsuite und keine bestätigte Freigabe als produktive Turniersoftware.
+**Prüfstand:** Simulierte Prüfungen von Auslosungsfällen, Gruppen/Plätzen, Navigation und Browser-Speicherung wurden ausgeführt. Es gibt neue wiederholbare Node-Tests, die beim nächsten manuellen GitHub-Workflow laufen. Ein erfolgreicher GitHub-Testlauf für v0.3.0 ist noch nicht bestätigt. Es gibt bislang keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
 
 ## Nicht implementiert
 
-- [ ] Automatische Auslosung / faire Spiel- und Pausenverteilung für Schleifchenturniere
+- [ ] Vollständige Auslosung inklusive Auffüllrunde (reguläre Runden sind im Code umgesetzt)
 - [ ] Erfassung der Ergebnisse, Berechnung von Wertungen und Livetabellen
 - [ ] Feste Doppel-Teams und One Point Cup
 - [ ] Server-Datenbank, Benutzerkonten, Rollen/Rechte, Mehrgeräte-Synchronisierung
@@ -56,17 +60,17 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Veröffentlichte Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/app.js` |
+| Für v0.3.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/app.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
-**Wichtig:** Der Workflow lädt ausschließlich die vier expliziten Dateien hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich die fünf expliziten App-Dateien hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **Version 0.2.3 veröffentlichen und auf echten Geräten prüfen:** Startseite ↔ Turnier; Turnier anlegen; verschiedene Platzanzahlen; individuelle Platznamen; bestehendes Turnier weiterbearbeiten; JSON-Sicherung exportieren und importieren.
-2. **Schleifchenturnier-Regelwerk aus der vorhandenen Google-Tabelle genau erfassen:** Auslosungslogik, Stärkegruppen, Platzbelegung, Pausen, Wechsel, Teilnehmerausfälle, ungerade Zahlen und Sonderfälle.
-3. **v0.3:** Reine, unabhängig testbare Auslosungslogik entwickeln, anhand reproduzierbarer Beispieldaten prüfen und erst danach mit der UI verbinden.
-4. **Danach:** Ergebniserfassung und Tabelle; anschließend serverseitige Persistenz und Rollen.
+1. **v0.3.0 manuell veröffentlichen und im Browser prüfen:** Neue Auslosung, individuelle Platznamen, Teilnehmer, Sicherung/Import, Rücknavigation und Speicherung; den GitHub-Testlauf kontrollieren.
+2. **Ergebnisse und Schleifchenwertung:** Ergebnisse der regulären Runden erfassen und Gewinner/Schleifchen korrekt berechnen (vgl. Apps Script).
+3. **Sonderrunde:** Erst nach vollständigen Ergebnissen der regulären Runden Auffüller mit 0 oder 1 Schleifchen auswählen. Das Zusatzspiel ist für Auffüller nicht wertungsrelevant.
+4. **Danach:** Tabelle, Endrunde und serverseitige Persistenz mit Benutzerrollen.
 
 ### Quelle für Turnierregeln
 
