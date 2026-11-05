@@ -38,6 +38,7 @@ function checkedDraw(t) {
 
 export function updateRibbonMatchResult(t,roundIndex,matchIndex,value) {
   const draw=checkedDraw(t);
+  if(draw.finals)throw new Error("Bitte zuerst die Endrunde zurücknehmen, bevor Vorrunden-Ergebnisse geändert werden.");
   if(!Number.isInteger(roundIndex)||!Number.isInteger(matchIndex)||roundIndex<0||matchIndex<0)
     throw new Error("Ungültige Runde oder Begegnung.");
   const specialIndex=draw.rounds.length;
