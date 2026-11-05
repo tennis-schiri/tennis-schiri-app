@@ -152,6 +152,14 @@ export function generateRibbonDraw(t,options={}) {
   }
   throw Error("Keine gültige Vorrunden-Auslosung gefunden. Bitte Teilnehmerzahl, Gruppen oder Platzanzahl prüfen.");
 }
+// Das Fingerprint schützt eine bereits ausgewählte Auffüllrunde vor Änderungen
+// an den regulären Ergebnissen (inklusive Game-Zahlen). Ergebnisse der
+// Auffüllrunde selbst gehören bewusst nicht zu diesem Schlüssel.
+export function ribbonNormalResultsKey(draw) {
+  return JSON.stringify((draw?.rounds||[]).map(r=>(r.matches||[]).map(m=>m.result??null)));
+}
+export const ribbonStableHash=stableHash;
+
 export function verifyRibbonDraw(t,draw) {
   const errors=[];
   let spec;
@@ -178,5 +186,53 @@ export function verifyRibbonDraw(t,draw) {
   }
   for(const id of Object.keys(counts))if(counts[id]!==spec.quotas[id])errors.push(`Falsche reguläre Spielzahl für ${id}.`);
   if(draw.rounds.length+(spec.special?1:0)>MAX_ROUNDS)errors.push("Mehr als 20 Runden.");
-  return {ok:errors.length===0,errors,counts,specialPending:!!spec.special};
+  if (draw.specialRound !== undefined && draw.specialRound !== null) {
+    const special=draw.specialRound;
+    if (!spec.special) errors.push("Für dieses Turnier ist keine Auffüllrunde vorgesehen.");
+    else {
+      if (special.number!==draw.rounds.length+1)errors.push("Ungültige Rundennummer der Auffüllrunde.");
+      if (special.normalResultsKey!==ribbonNormalResultsKey(draw))errors.push("Vorrundenergebnisse wurden nach der Auffüll-Auslosung verändert. Bitte Auffüllrunde zurücknehmen.");
+      if (!Array.isArray(special.matches)||special.matches.length!==spec.special.matches)errors.push("Die Anzahl der Spiele in der Auffüllrunde stimmt nicht.");
+      else {
+        const played=Object.fromEntries([...sIds,...wIds].map(id=>[id,0]));
+        const wins=Object.fromEntries([...sIds,...wIds].map(id=>[id,0]));
+        let allNormalResults=true;
+        for (const normal of draw.rounds)for(const m of normal.matches||[]){
+          if (m.result?.winner!==1&&m.result?.winner!==2) {allNormalResults=false;continue;}
+          for(const id of m.slots)if(id in played)played[id]++;
+          const winners=m.result.winner===1?m.slots.slice(0,2):m.slots.slice(2,4);
+          for(const id of winners)if(id in wins)wins[id]++;
+        }
+        if(!allNormalResults)errors.push("Die Auffüllrunde erfordert vollständig erfasste normale Ergebnisse.");
+        const used=new Set(),courtsUsed=new Set();
+        const regularExpected=new Set([...spec.special.regularStrong,...spec.special.regularWeak]);
+        const observedRegular=new Set();
+        let fillerStrong=0,fillerWeak=0;
+        for(const m of special.matches){
+          if(!Array.isArray(m?.slots)||m.slots.length!==4||!Array.isArray(m.fillerMask)||m.fillerMask.length!==4||m.fillerMask.some(x=>typeof x!=="boolean")){
+            errors.push("Ungültige Spieler- oder Auffüller-Markierung.");continue;
+          }
+          if(!courts.has(m.court)||courtsUsed.has(m.court))errors.push("Ungültige Platzbelegung in der Auffüllrunde.");
+          courtsUsed.add(m.court);
+          for(let i=0;i<4;i++){
+            const id=m.slots[i],strong=i===0||i===2;
+            const group=strong?sIds:wIds;
+            if(!group.has(id))errors.push("Stärkegruppen in der Auffüllrunde stimmen nicht.");
+            if(used.has(id))errors.push("Ein Spieler ist in der Auffüllrunde mehrfach eingesetzt.");
+            used.add(id);
+            if(m.fillerMask[i]){
+              if(regularExpected.has(id)||played[id]!==spec.target||wins[id]>1)errors.push("Unzulässiger Auffüllspieler (nicht 0 oder 1 Schleifchen oder bereits regulär eingeplant).");
+              if(strong)fillerStrong++;else fillerWeak++;
+            }else{
+              observedRegular.add(id);
+              if(!regularExpected.has(id)||played[id]!==spec.target-1)errors.push("Falscher regulärer Spieler in der Auffüllrunde.");
+            }
+          }
+        }
+        if(fillerStrong!==spec.special.fillerStrong||fillerWeak!==spec.special.fillerWeak)errors.push("Falsche Anzahl Auffüllspieler.");
+        if(observedRegular.size!==regularExpected.size||[...regularExpected].some(id=>!observedRegular.has(id)))errors.push("Die regulären letzten Spiele wurden nicht vollständig eingeplant.");
+      }
+    }
+  }
+  return {ok:errors.length===0,errors,counts,specialPending:!!spec.special&&!draw.specialRound};
 }
