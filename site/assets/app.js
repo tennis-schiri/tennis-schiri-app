@@ -134,7 +134,7 @@ function intro() {
 }
 
 function browserNotice() {
-  return `<div class="browser-notice">${icon("info")}<div><strong>Lokale Testversion</strong><p>Deine Eingaben werden nur in diesem Browser auf diesem Gerät gespeichert, nicht online synchronisiert. Nutze „Daten sichern“, um eine Sicherung herunterzuladen. Für echte Turniere mit mehreren Geräten ergänzen wir später eine Datenbank.</p></div></div>`;
+  return `<div class="browser-notice">${icon("info")}<div><strong>Lokale Testversion</strong><p>Die vollständigen Turnier- und Kassendaten bleiben auf diesem Gerät gespeichert. Nur wenn du die Fernanzeige ausdrücklich aktivierst, werden Spielpaarungen, Ergebnisse, Rundenuhr und Schleifchen-Zwischenstand vorübergehend auf dem Server veröffentlicht. Nutze „Daten sichern“ für eine JSON-Sicherung. Die gemeinsame Bearbeitung auf mehreren Geräten ist noch nicht möglich.</p></div></div>`;
 }
 
 function sidebar(t) {
@@ -451,7 +451,7 @@ function drawPreview(t) {
       <button class="btn primary" data-action="draw-generate" ${error?"disabled":""}>${icon("court")} ${saved?"Neu auslosen":"Normale Runden auslosen"}</button></div>
     <div class="live-auto-choice"><button type="button" class="btn subtle small" data-action="live-auto">${icon("monitor")} ${t.liveDisplay?"Monitor auf Automatik stellen":"Monitor: Automatische Rundenauswahl"}</button></div>
     ${statline}${explanation}${resultsError}${resultProgress}${roundCards}${scoreboard}${specialNotice}
-    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Serverbasierte Synchronisation und vollständige Turnierfreigabe fehlen noch. Die Endrunde findest du in einem eigenen Menüpunkt. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
+    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Eine lesende Server-Fernanzeige ist nach bewusster Freigabe möglich, aber die Turnierverwaltung bleibt lokal und nicht gemeinsam bearbeitbar. Die Endrunde findest du in einem eigenen Menüpunkt. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
   </section>`;
 }
 function render() {
