@@ -43,7 +43,7 @@ Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implement
 - Games/Entscheidungspunkte und Sieger pro Match; Rangliste nach Siegen, Game-Differenz, Games+
 - Top-8-Play-offs mit Nachrücken, Viertelfinale, Halbfinale, Finale und Platz 3; Korrekturen propagieren sicher
 - Geschützter, schreibgeschützter Doppel-Live-Monitor mit Opt-in-Zuschauerlink und automatischer Endrundenanzeige über die vorhandene PHP-Fernanzeige (nur im unveröffentlichten Code)
-- Gemeinsamer Browser-Speicher und JSON-Backup für alte Schleifchenturniere und neue Doppelturniere; separate Ergebnisdaten
+- Gemeinsamer Browser-Speicher und JSON-Export/-Import für alte Schleifchenturniere und neue Doppelturniere; separate Ergebnisdaten
 - Neue Tests unter `tests/doubles.test.mjs`, `tests/doubles-ui.test.mjs`, `tests/doubles-live.test.mjs` und `tests/doubles-remote-publisher-ui.test.mjs`; PHP-Fernanzeige-Integration erweitert. Isoliert 18 Logikfälle und 462 Auslosungsvarianten erfolgreich geprüft; GitHub-CI und echte Browsertests noch zu bestätigen
 - Neue Dateien in manuell auslösbarer FTPS-Allowlist enthalten; **kein Upload ausgeführt**. Fachdetails: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md)
 
