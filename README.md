@@ -18,6 +18,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md) | Vorschlag für Registrierung, Vereine, Rollen, serverseitige Turniere, TENNILO-Lizenzen, Zahlung und vorläufige Preise |
 | [backend/README.md](backend/README.md) | Backend B0.1/B0.2: Datenbank, Registrierung, Vereinsrollen, Backend-Schutz und CI-Tests |
 | [backend/HTTP_API.md](backend/HTTP_API.md) | Private JSON-API und Sicherheitsbedingungen vor einer späteren Staging-Freigabe |
+| [backend/staging-ui/README.md](backend/staging-ui/README.md) | Neue Konto-/Vereinsoberfläche nur für getrenntes Staging; nicht veröffentlicht |
 
 **Beim Start in einem neuen Chat:** Die drei Dateien oben sowie den aktuellen Code prüfen. Nicht automatisch annehmen, dass `main` bereits auf dem Webspace läuft.
 
@@ -32,7 +33,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 ## Privates Backend B0.1/B0.2 – nicht veröffentlicht
 
-Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implementierten **privaten Registrierungs-, Login-, Vereins- und Einladungsschnittstellen**. Registrierung und E-Mail-Bestätigung, Sitzungen, Passwort-Reset, Mitgliedschafts- und Rollenprüfung wurden gegen temporäre MariaDB getestet. Die [HTTP-API](backend/HTTP_API.md) ist **standardmäßig deaktiviert**; bestehender FTPS-Deploy lädt **keine** Backend-Dateien hoch. Konto-Oberfläche, geprüfter Mailversand, ALL-INKL-Staging, zentrale Turnierdaten und Softwarezahlungen fehlen noch; verbindliche Preise sind offen.
+Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implementierten **privaten Registrierungs-, Login-, Vereins- und Einladungsschnittstellen**. Registrierung und E-Mail-Bestätigung, Sitzungen, Passwort-Reset, Mitgliedschafts- und Rollenprüfung wurden gegen temporäre MariaDB getestet. Die [HTTP-API](backend/HTTP_API.md) ist **standardmäßig deaktiviert**; bestehender FTPS-Deploy lädt **keine** Backend-Dateien hoch. Konto-Oberfläche als isolierter Prototyp unter `backend/staging-ui/` ist ergänzt; geprüfter Mailversand, ALL-INKL-Staging, zentrale Turnierdaten und Softwarezahlungen fehlen noch; verbindliche Preise sind offen.
 
 ## Aktuelle Funktionen (v0.6.1 im Repository)
 
