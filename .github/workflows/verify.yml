@@ -80,3 +80,4 @@ jobs:
           php backend/bin/migrate.php --check
           php backend/tests/schema-integration.php
           php backend/tests/auth-club-integration.php
+          php backend/tests/api-integration.php
