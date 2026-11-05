@@ -261,3 +261,40 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
  .fees-table{min-width:720px}
  .fee-overview-line .text-action{margin-left:0}
 }
+
+/* v0.5.1 – ein gemeinsamer Check-in für Anwesenheit und Bar-Nenngeld */
+.unified-players-table{min-width:1080px;width:100%;font-size:12px}
+.unified-players-table th,.unified-players-table td{vertical-align:middle}
+.unified-players-table th{white-space:nowrap}
+.unified-players-table .checkin-name{display:flex;align-items:center;gap:10px;min-width:155px}
+.unified-players-table .checkin-name strong{line-height:1.35;overflow-wrap:anywhere}
+.unified-players-table .avatar{width:34px;height:34px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+.unified-players-table .presence{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.unified-players-table .player-tier-select{font-size:12px;min-width:155px;width:100%;max-width:220px;border:1px solid var(--line);border-radius:7px;padding:7px 5px;background:var(--white);color:var(--ink)}
+.unified-players-table .individual-fee-note{display:block;color:#9a5f1d;font-size:10px;margin-top:5px}
+.unified-players-table .player-is-absent{opacity:.84;background:#f7f8f7}
+.unified-players-table .checkin-fee-status{display:flex;align-items:flex-start;flex-direction:column;gap:5px;white-space:nowrap}
+.unified-players-table .checkin-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px;min-width:160px}
+.unified-players-table .checkin-actions .btn{font-size:11px;padding:7px 9px}
+.unified-players-table .checkin-actions .draw-edit-btn{white-space:nowrap}
+.unified-players-table .checkin-actions .icon-btn{flex-shrink:0}
+.checkin-stats{margin:18px 0 24px}
+.checkin-panel-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.checkin-panel-head p,.fee-categories-panel .panel-head p{color:var(--muted);font-size:12px;margin:6px 0 0}
+.checkin-panel-head .btn{white-space:nowrap}
+.fee-category-list{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.fee-category-row{display:grid;grid-template-columns:minmax(150px,1fr) minmax(100px,auto) auto;align-items:center;gap:18px;padding:13px 0;border-bottom:1px solid var(--line)}
+.fee-category-row>div:first-child{display:flex;flex-direction:column;gap:5px}
+.fee-category-row>div:first-child strong{font-size:13px}
+.fee-category-row>div:first-child small{font-size:11px;color:var(--muted)}
+.fee-category-row .fee-category-price{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
+.fee-category-actions{display:flex;flex-wrap:wrap;gap:7px}
+.fee-category-actions .btn{font-size:11px}
+@media(max-width:750px){
+  .unified-players-table{min-width:980px}
+  .unified-players-table .checkin-name{min-width:125px}
+  .unified-players-table .player-tier-select{min-width:138px}
+  .fee-category-row{grid-template-columns:minmax(120px,1fr) auto;gap:8px 12px}
+  .fee-category-actions{grid-column:1/-1}
+  .checkin-panel-head .btn{width:100%}
+}
