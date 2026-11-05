@@ -49,6 +49,10 @@ status($call('POST','/auth/register',['email'=>'api-owner@example.org','password
 status($call('POST','/auth/register',['email'=>'api-owner@example.org','password'=>'PasswortSehrSicher1234','displayName'=>'Leitung'],[],$origin),202,'Registrierung');
 checkApi(isset($mail->verify['api-owner@example.org']),'Mail-Bestätigung fehlt');
 status($call('POST','/auth/login',['email'=>'api-owner@example.org','password'=>'PasswortSehrSicher1234'],[],$origin),403,'Vor Verifikation kein Login');
+$firstVerifyToken=$mail->verify['api-owner@example.org'];
+status($call('POST','/auth/resend-verification',['email'=>'api-owner@example.org'],[],$origin),202,'Bestätigung erneut versenden');
+checkApi($firstVerifyToken!==$mail->verify['api-owner@example.org'],'Neues Verifikationstoken muss anders sein');
+status($call('POST','/auth/verify',['token'=>$firstVerifyToken],[],$origin),403,'Vorheriger Link widerrufen');
 status($call('POST','/auth/verify',['token'=>$mail->verify['api-owner@example.org']],[],$origin),200,'E-Mail-Bestätigung');
 $logged=$call('POST','/auth/login',['email'=>'api-owner@example.org','password'=>'PasswortSehrSicher1234'],[],$origin);
 status($logged,200,'Login nach Bestätigung');
