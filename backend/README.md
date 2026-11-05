@@ -1,8 +1,19 @@
-# TENNILO – Backend Phase B0.1 (Datenbank- und Kontomodell)
+# TENNILO – Backend B0.1 + B0.2 (Konten und Vereine)
 
 **Stand:** 2026-11-05  
-**Status:** In GitHub implementierte private Backend-Grundlage, **nicht produktiv installiert**.  
+**Status:** B0.1-Datenmodell und B0.2-Konto-/Vereinsdienste samt geschütztem HTTP-API-Entwurf **in GitHub implementiert und gegen Wegwerf-MariaDB getestet**, nicht produktiv installiert oder freigeschaltet.  
 **Keine öffentliche Registrierung, Anmeldung, Zahlungsabwicklung oder Migration bestehender Turniere aktiv.**
+
+## B0.2 – Registrierung und Vereinsverwaltung (private API)
+
+- [AuthService.php](src/AuthService.php): Registrierung, E-Mail-Bestätigung und erneute Zusendung, Login/Logout, gehashte Sitzungen, CSRF und Passwort-Reset mit Widerruf alter Sitzungen.
+- [ClubService.php](src/ClubService.php): Verifizierte Konten legen Vereine mit atomar zugeordnetem Besitzer an; Einladungen an Organisatoren/Leser, Rollentrennung je Verein und Schutz des letzten Besitzers.
+- [ApiKernel.php](src/ApiKernel.php): vorbereitete JSON-Routen mit Same-Origin-Prüfung, CSRF, sicheren Cookies und minimalen Fehlerantworten; [RateLimiter.php](src/RateLimiter.php) und [Migration 002](migrations/002_auth_request_limits.sql) schützen gegen massenhafte Anfragen.
+- [HTTP_API.md](HTTP_API.md): alle Routen, nötige Umgebungsvariablen, Tests und Sicherheitsbedingungen für eine **spätere Staging-Freigabe**.
+- [public/index.php](public/index.php): **explizit standardmäßig deaktiviert** (`TENNILO_API_ENABLED` fehlt); die vorhandene App lädt diese Datei nicht hoch. Der Mailadapter ist nur vorbereitet, nicht im echten Hosting getestet.
+- Zusätzliche CI-Tests: [auth-club-integration.php](tests/auth-club-integration.php), [api-integration.php](tests/api-integration.php), [backend-api-safety.test.mjs](../tests/backend-api-safety.test.mjs). Testdatenbank wird nur temporär gestartet.
+
+**Einschränkung:** Noch keine nutzbare Registrierungsseite, kein bestätigter Live-Mailversand und keine Produktivdatenbank. Die bestehende App-Version 0.6.1 bleibt unabhängig davon funktionsfähig; Preise und TENNILO-Zahlungen bleiben offen.
 
 ## Enthalten
 
@@ -72,11 +83,11 @@ GitHub Actions `.github/workflows/verify.yml` führt zusätzlich einen echten In
 5. MySQL/MariaDB-DDL ist nicht vollständig transaktional. Für Installationen und Änderungen zwingend vorher Backup/Restore-Möglichkeit sicherstellen. Ein nicht vollständig durchgelaufener Schritt ist manuell zu prüfen.
 6. Vor echtem Nutzerzugang: Registrierungs- und Bestätigungsmails, Session-/CSRF-Schutz, Rate Limits, Rechteprüfung/Transaktionen, Backup-Restore, Datenschutz sowie Monitoring und getrennte Test-/Produktivumgebungen umsetzen.
 
-## Nächste Backend-Phase (B0.2)
+## Nächste Phase: B0.2-Staging und Konto-Oberfläche
 
-- Private REST-API für **Registrierung mit E-Mail-Bestätigung**, Login, Logout und Passwort-Reset.
-- Vereine anlegen und aktive Eigentümer-Mitgliedschaft **atomar** erstellen.
-- Einladung weiterer Organisatoren, serverseitige Rollenkontrolle, Last-Owner-Schutz.
+- Private REST-API ist im Repository vorhanden und CI-getestet; als nächstes separat im geschützten Staging installieren und mit der Konto-Oberfläche verbinden.
+- Vereine anlegen und aktive Eigentümer-Mitgliedschaft **atomar** erstellen: Backend bereits vorhanden; UI und echter Staging-Workflow fehlen.
+- Einladung weiterer Organisatoren, serverseitige Rollenkontrolle, Last-Owner-Schutz: Backend bereits vorhanden; Mailzustellung und UI fehlen.
 - Keine automatische Lizenzfreigabe durch einen Browser-Redirect.
 - Nach erfolgreicher Konto-/Rollenphase zentrale Turniere und Import bestehender JSON-Sicherungen entwickeln; **erst danach** Zahlungsanbieter, Rechnungen und Preistabelle finalisieren.
 
