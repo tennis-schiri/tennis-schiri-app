@@ -1,10 +1,9 @@
-// TENNILO v0.6.0 – rein lesendes Datenmodell für den zweiten Monitor.
-// Nutzt dieselben lokalen Turnierdaten wie die Turnierleitung in einem
-// weiteren Fenster desselben Browserprofils; KEIN Geräte-/Serversync.
-import {verifyRibbonDraw} from "./draw.js?v=060";
-import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=060";
-import {verifyRibbonFinals} from "./finals.js?v=060";
-import {plannedRound,clockFor} from "./operations.js?v=060";
+// TENNILO v0.6.1 – datensparendes Live-Modell für lokale und entfernte Monitore.
+// Das Modell kann nach ausdrücklicher Freigabe auch als gefilterter\n// Snapshot an den PHP-Server übertragen werden.
+import {verifyRibbonDraw} from "./draw.js?v=061";
+import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=061";
+import {verifyRibbonFinals} from "./finals.js?v=061";
+import {plannedRound,clockFor} from "./operations.js?v=061";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
