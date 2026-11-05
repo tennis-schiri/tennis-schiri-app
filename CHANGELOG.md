@@ -5,9 +5,31 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.4.0] – Endrunde für Schleifchenturniere (8 oder 16 Spieler)
+
+**Stand 2026-11-05: Im GitHub-Code umgesetzt und simuliert getestet. FTPS-Upload sowie Browsertest für v0.4.0 noch offen.**
+
+### Neu
+- Eigener Bereich **Endrunde**, unabhängig von der vorherigen Schleifchen-Auslosung.
+- Aus wahlweise 8 oder 16 Einzelspielern nach Schleifchenzahl, gespielten Partien und Name qualifizieren sich die Besten; Teilnehmer können abgewählt werden, die nächsten Spielbereiten rücken nach.
+- Feste Doppel-Teams werden nur einmal ausgelost: zuerst möglichst Stark/Schwächer, bei ungleicher Besetzung verbleibende Spieler innerhalb derselben Gruppe zusammenstellen.
+- **8 Spieler:** 2 Halbfinals + 1 Finale. **16 Spieler:** 4 Viertelfinals + 2 Halbfinals + 1 Finale.
+- Ergebnisse wie gewohnt mit optionalen Game-Zahlen und ausdrücklich gewähltem Siegerteam; der Gewinner rückt automatisch mit seinem festen Partner auf.
+- Sobald ein späterer Gegner durch Ergebniskorrektur wechselt, werden unpassende Folgeergebnisse entfernt. Das Sieger-Doppel wird abschließend hervorgehoben.
+- Endrunden-Teilnehmerwahl, Spielstände und Auslosung bleiben im lokalen Turnier/JSON-Backup erhalten; jederzeit „Endrunde zurücknehmen“, ohne Vorrunden-Ergebnisse zu löschen.
+- Während einer aktiven Endrunde sind Änderungen an den vorherigen Wertungsspielen gesperrt; Korrekturen erst nach Rücknahme der Endrunde.
+- Bei zu wenigen Plätzen erhalten weitere gleichstufige K.-o.-Spiele fortlaufende Spielblocknummern statt stillschweigend zeitgleich demselben Platz zugewiesen zu werden.
+- Neue Module `site/assets/finals.js` und `site/assets/finals-ui.js`; manueller FTPS-Upload umfasst ab jetzt neun App-Dateien plus Favicon.
+- Automatische Tests in `tests/finals.test.mjs` (14 Fälle) und `tests/finals-ui.test.mjs` (vollständiger Bedienablauf).
+
+### Tests und Grenzen
+- **53 Logiktests + 3 simulierte UI-Tests bestanden**, inklusive früherer Auslosungs-, Schleifchen- und Auffüllrunden-Funktionen.
+- Erstes Deployment, echter Browser-/Mobiltest und Praxisfreigabe für v0.4.0 noch nicht bestätigt.
+- Die Endrunde ist kein eigenständiges Doppelturnier-Modul. Online-Synchronisierung und serverseitige Speicherung weiterhin offen.
+
 ## [0.3.3] – Auffüllrunde nach Schleifchen-V7
 
-**Im GitHub-Code implementiert und simuliert getestet. Noch keine bestätigte Veröffentlichung dieser Version oder echter Browser-Test.**
+**Im GitHub-Code implementiert; am 2026-11-05 mit [GitHub Actions Run 42008064031](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42008064031) erfolgreich hochgeladen. Nutzer-Rückmeldung: Auffüllrunde scheint zu funktionieren; kein vollständiger Browser-End-to-End-Test belegt.**
 
 ### Neu
 - Die letzte Auffüllrunde wird nach vollständiger Ergebnis-Erfassung aller normalen Runden separat ausgelost.
