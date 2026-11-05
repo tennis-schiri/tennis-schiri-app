@@ -1,0 +1,35 @@
+name: TENNILO – Code prüfen (kein Upload)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'tests/**'
+      - '.github/workflows/verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: JavaScript und PHP testen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Quellcode lesen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Node.js 22 vorbereiten
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: PHP-Version und Syntax prüfen
+        run: |
+          php -v
+          php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2+ erforderlich.\n"); exit(1); }'
+          php -l site/live-feed.php
+      - name: Alle App- und Live-Tests ausführen
+        run: node --test tests/*.test.mjs
