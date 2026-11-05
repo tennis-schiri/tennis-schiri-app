@@ -1,9 +1,11 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=040";
-import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=040";
-import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=040";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=040";
-import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=040";
-import { renderRibbonFinals } from "./finals-ui.js?v=040";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=050";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=050";
+import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=050";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=050";
+import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=050";
+import { renderRibbonFinals } from "./finals-ui.js?v=050";
+import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=050";
+import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=050";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
@@ -70,7 +72,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.4.0</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.5.0</span>
   </div></header>`;
 }
 
@@ -107,7 +109,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.4.0</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.5.0</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -131,6 +133,7 @@ function sidebar(t) {
       <button data-action="home">${icon("home")} Startseite</button>
       <button data-action="tab" data-tab="overview" class="${view === "overview" ? "selected" : ""}">${icon("trophy")} Übersicht</button>
       <button data-action="tab" data-tab="participants" class="${view === "participants" ? "selected" : ""}">${icon("users")} Teilnehmende</button>
+      <button data-action="tab" data-tab="fees" class="${view === "fees" ? "selected" : ""}">${icon("check")} Nenngeld</button>
       <button data-action="tab" data-tab="draw" class="${view === "draw" ? "selected" : ""}">${icon("court")} Auslosung</button>
       <button data-action="tab" data-tab="finals" class="${view === "finals" ? "selected" : ""}">${icon("trophy")} Endrunde</button>
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
@@ -179,6 +182,9 @@ function overview(t) {
       ${stat("SCHWÄCHER", c.weaker, "anwesende Spieler")}
       ${stat("AKTIVE PLÄTZE", t.courts.length, courtSummary(t))}
     </div>
+    <div class="fee-overview-line"><strong>Nenngeld (bar):</strong>
+      ${euroText(feesOverview(t).received)} erhalten · ${euroText(feesOverview(t).open)} offen
+      <button class="text-action" data-action="tab" data-tab="fees">Kasse öffnen ${icon("arrow")}</button></div>
     ${readiness(t)}
     <div class="two-col">
       <section class="panel"><div class="panel-head"><h3>Turniereinstellungen</h3><button class="text-action" data-action="settings">Bearbeiten ${icon("arrow")}</button></div>
@@ -188,6 +194,7 @@ function overview(t) {
           <div><dt>Pause / Wechsel</dt><dd>${t.breakMinutes} Minuten</dd></div>
           <div><dt>Wertungsspiele je Spieler</dt><dd>${t.rounds}</dd></div>
           <div><dt>Plätze</dt><dd>${courtSummary(t)}</dd></div>
+           <div><dt>Nenngeld</dt><dd>${euroText(t.entryFeeCents||0)} je Person · bar</dd></div>
         </dl>
       </section>
       <section class="panel"><div class="panel-head"><h3>Als Nächstes</h3><span class="mini-tag">ROADMAP</span></div>
@@ -240,6 +247,7 @@ function settings(t) {
         <div><dt>Wechselzeit</dt><dd>${t.breakMinutes} Minuten</dd></div>
         <div><dt>Vorrundenspiele pro Spieler</dt><dd>${t.rounds}</dd></div>
         <div><dt>Aktive Plätze</dt><dd>${courtSummary(t)}</dd></div>
+         <div><dt>Nenngeld</dt><dd>${euroText(t.entryFeeCents||0)} Standardbetrag · bar</dd></div>
       </dl>
     </section>
     <section class="panel setting-panel court-panel">
@@ -252,14 +260,6 @@ function settings(t) {
   </section>`;
 }
 
-function roundStart(t,index) {
-  const match = /^([01]\\d|2[0-3]):([0-5]\\d)$/.exec(String(t.startTime||""));
-  if(!match)return "Startzeit offen";
-  const minutes=Number(match[1])*60+Number(match[2])+index*(t.duration+t.breakMinutes);
-  const hour=String(Math.floor(minutes/60)%24).padStart(2,"0");
-  const minute=String(minutes%60).padStart(2,"0");
-  return `${hour}:${minute} Uhr${minutes>=1440?" (+1 Tag)":""}`;
-}
 function drawPreview(t) {
   const saved=t.draw;
   let spec=null,error=null;
@@ -289,7 +289,8 @@ function drawPreview(t) {
   const allRounds=saved?.specialRound?[...saved.rounds,saved.specialRound]:saved?.rounds||[];
   const roundCards=valid && standings ? `<div class="draw-rounds">${allRounds.map((round,index)=>`
     <details class="draw-round" ${index===drawOpenRound?"open":""}>
-      <summary><span><strong>${index===saved.rounds.length?"Auffüllrunde":`Runde ${index+1}`}</strong><small>${roundStart(t,index)} · ${standings.perRound[index].complete} von ${round.matches.length} Ergebnissen</small></span><span class="draw-expand">Ansehen</span></summary>
+      <summary><span><strong>${index===saved.rounds.length?"Auffüllrunde":`Runde ${index+1}`}</strong><small>Plan ${plannedRound(t,index).start}–${plannedRound(t,index).end} Uhr · ${standings.perRound[index].complete} von ${round.matches.length} Ergebnissen</small></span><span class="draw-expand">Ansehen</span></summary>
+      ${renderClockToolbar(t,index,{icon})}
       <div class="draw-match-list">${round.matches.map((m,matchIndex)=>{
         const result=normalizeRibbonResult(m.result);
         const finished=result.winner!==null;
@@ -297,7 +298,7 @@ function drawPreview(t) {
           editingResult.round===index && editingResult.match===matchIndex;
         const resultLabel=finished && result.score1!==null ? `${result.score1} : ${result.score2}` : "Sieg";
         return `<article class="draw-match ${finished?"draw-match-finished":""}">
-          <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} ${finished?'<span class="draw-result-complete">Beendet</span>':''}</div>
+          <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} <span class="draw-match-time">${plannedRound(t,index).start}–${plannedRound(t,index).end} Uhr</span> ${finished?'<span class="draw-result-complete">Beendet</span>':''}</div>
           <div class="draw-team ${finished?(result.winner===1?"is-winner":"is-loser"):""}${m.fillerMask?.some(Boolean)?" has-filler":""}">
             <span>TEAM 1 ${result.winner===1?`<span class="draw-winner-pill">${icon("check")} Sieger</span>`:""}</span>
             <strong>${displaySlot(m,0)} <em>+</em> ${displaySlot(m,1)}</strong>
@@ -374,8 +375,8 @@ function drawPreview(t) {
 function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
-    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.4.0 · Private Testversion</footer>
+    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "fees" ? renderFees(t,{icon,escapeHtml,stat}) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.5.0 · Private Testversion</footer>
     </main></div>`);
 }
 
