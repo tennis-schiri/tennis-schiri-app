@@ -23,7 +23,7 @@ test("Doppel ist über TENNILO erreichbar; Schleifchen bleibt unverändert aufru
   assert.match(main,/data-action="doppel-new"/);
   assert.match(main,/t\.type==="doubles"/);
   assert.match(main,/doppel\.html/);
-  assert.match(store,/type:v\.type==="doubles"\?"doubles":"ribbon"/);
+  assert.match(store,/type:v\.type==="doubles"\?"doubles":v\.type==="opc"\?"opc":"ribbon"/);
   assert.match(store,/doubles:doublesOf/);
 });
 
