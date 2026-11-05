@@ -1,11 +1,11 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=051";
-import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=051";
-import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=051";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=051";
-import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=051";
-import { renderRibbonFinals } from "./finals-ui.js?v=051";
-import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=051";
-import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=051";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=060";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=060";
+import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=060";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=060";
+import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=060";
+import { renderRibbonFinals } from "./finals-ui.js?v=060";
+import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=060";
+import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=060";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
@@ -72,7 +72,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.5.1</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.6.0</span>
   </div></header>`;
 }
 
@@ -109,7 +109,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.5.1</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.6.0</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -145,7 +145,8 @@ function sidebar(t) {
 function appTop(t) {
   return `<div class="toolbar">
     <div class="breadcrumb">TURNIERMANAGER <span>/</span> SCHLEIFCHENTURNIER</div>
-    <div class="toolbar-actions"><button class="btn subtle small" data-action="export">${icon("download")} Daten sichern</button>
+    <div class="toolbar-actions"><a class="btn live-open-link small" href="./live.html?turnier=${encodeURIComponent(t.id)}" target="_blank" rel="noopener" title="Eigenes Fenster für einen zweiten Monitor öffnen">${icon("monitor")} Live-Monitor öffnen</a>
+      <button class="btn subtle small" data-action="export">${icon("download")} Daten sichern</button>
       <button class="btn subtle small" data-action="import">${icon("upload")} Daten laden</button>
       <input class="sr-only" id="import-file" type="file" accept=".json,application/json" aria-label="Sicherung laden">
     </div>
@@ -338,6 +339,7 @@ function drawPreview(t) {
     <details class="draw-round" ${index===drawOpenRound?"open":""}>
       <summary><span><strong>${index===saved.rounds.length?"Auffüllrunde":`Runde ${index+1}`}</strong><small>Plan ${plannedRound(t,index).start}–${plannedRound(t,index).end} Uhr · ${standings.perRound[index].complete} von ${round.matches.length} Ergebnissen</small></span><span class="draw-expand">Ansehen</span></summary>
       ${renderClockToolbar(t,index,{icon})}
+      <div class="live-round-choice"><button type="button" class="btn ${t.liveDisplay?.mode==="round"&&t.liveDisplay.index===index?"primary":"subtle"} small" data-action="live-round" data-round="${index}">${icon("monitor")} ${t.liveDisplay?.mode==="round"&&t.liveDisplay.index===index?"Auf Live-Monitor ausgewählt":"Diese Runde live zeigen"}</button></div>
       <div class="draw-match-list">${round.matches.map((m,matchIndex)=>{
         const result=normalizeRibbonResult(m.result);
         const finished=result.winner!==null;
@@ -415,6 +417,7 @@ function drawPreview(t) {
     <div class="section-header"><div><div class="eyebrow">SCHLEIFCHENTURNIER / VORRUNDE</div><h2>Auslosung</h2>
       <p class="section-sub">1 starke + 1 schwächere Person je Doppelteam · 3 oder 4 Wertungsspiele pro Person</p></div>
       <button class="btn primary" data-action="draw-generate" ${error?"disabled":""}>${icon("court")} ${saved?"Neu auslosen":"Normale Runden auslosen"}</button></div>
+    <div class="live-auto-choice"><button type="button" class="btn subtle small" data-action="live-auto">${icon("monitor")} ${t.liveDisplay?"Monitor auf Automatik stellen":"Monitor: Automatische Rundenauswahl"}</button></div>
     ${statline}${explanation}${resultsError}${resultProgress}${roundCards}${scoreboard}${specialNotice}
     <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Serverbasierte Synchronisation und vollständige Turnierfreigabe fehlen noch. Die Endrunde findest du in einem eigenen Menüpunkt. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
   </section>`;
@@ -423,7 +426,7 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.5.1 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.6.0 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -647,6 +650,24 @@ document.addEventListener("click", event => {
       body:cashPaymentBody(t,p,{escapeHtml})});
     return;
   }
+  if (action === "live-round" && t) return run(() => {
+    const index=Number(trigger.dataset.round);
+    const count=(t.draw?.rounds?.length||0)+(t.draw?.specialRound?1:0);
+    if(!t.draw||!verifyRibbonDraw(t,t.draw).ok||!Number.isInteger(index)||index<0||index>=count)
+      throw Error("Diese Runde wurde noch nicht gültig ausgelost.");
+    store.editTournament(t.id,{liveDisplay:{mode:"round",index}});
+    drawOpenRound=index;render();flash("Runde für den Live-Monitor ausgewählt.");
+  });
+  if (action === "live-auto" && t) return run(() => {
+    store.editTournament(t.id,{liveDisplay:null});
+    render();flash("Live-Monitor wählt laufende Runden oder Endrunde jetzt automatisch.");
+  });
+  if (action === "live-finals" && t) return run(() => {
+    if(!t.draw?.finals||!verifyRibbonFinals(t).ok)
+      throw Error("Bitte zuerst eine gültige Endrunde auslosen.");
+    store.editTournament(t.id,{liveDisplay:{mode:"finals"}});
+    view="finals";render();flash("Endrunde für den Live-Monitor ausgewählt.");
+  });
   if (action === "round-clock" && t) return run(() => {
     if(!t.draw||!verifyRibbonDraw(t,t.draw).ok)throw Error("Bitte zuerst eine gültige Auslosung erstellen.");
     const index=Number(trigger.dataset.round),operation=trigger.dataset.clockAction;
@@ -692,7 +713,7 @@ document.addEventListener("click", event => {
       if (!confirm(warning)) return;
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
-    store.editTournament(t.id,{draw,roundClocks:{}});
+    store.editTournament(t.id,{draw,roundClocks:{},liveDisplay:null});
     view="draw"; drawOpenRound=0; editingResult=null; editingFinal=null; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
   });
