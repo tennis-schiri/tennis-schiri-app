@@ -101,3 +101,15 @@
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
 **Neue Entscheidung ergänzen:** `E-015 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+
+## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
+
+- **Fachliche Quelle:** Google-Sheet „Turniere Verein – Auslosung & Livetabelle“, Tab „Script“, Zelle A4. Maßgeblich ist der zuletzt definierte Schleifchen-V7-Ansatz (frühere Funktionsvarianten sind im Script ebenfalls vorhanden).
+- **Technik:** Das eigenständige Modul `site/assets/draw.js` plant normale Vorrunden; Darstellung unter dem App-Menüpunkt „Auslosung“.
+- **Teamregel:** Jede Doppelmannschaft umfasst 1 starke + 1 schwächere Person. Pro Runde darf niemand doppelt aufgestellt sein. Die Auslosung beachtet Anzahl und Bezeichnung der Plätze.
+- **Wertung:** Laut Vorlage erhält jede regulär anwesende Person drei oder vier Wertungsspiele. Die normale Auslosung prüft passende individuelle Kontingente.
+- **Auffüllrunde:** Bei nicht exakt passender Besetzung wird eine letzte Runde separat behandelt. Zusätzliche Auffüllspieler müssen aus den Personen mit 0 oder 1 Schleifchen nach den Normalrunden ausgewählt werden. Ihr zusätzliches Match wird ihnen nicht als Wertungsspiel oder Schleifchen angerechnet.
+- **Stand v0.3.0:** Nur normale Vorrunden werden tatsächlich ausgelost; Auffüllrunde wird bei Bedarf erkannt, aber noch nicht final besetzt. Ergebniserfassung und Wertung fehlen noch.
+- **Konsistenz:** Ein gespeicherter Plan wird gegen eine Signatur aus Teilnehmerkennungen, Anwesenheit, Stärkegruppen, Wertungsspielen und aktiven Plätzen geprüft. Ein veralteter Plan wird nicht als gültig angezeigt.
+- **Qualität:** Wiederholbare Tests in `tests/draw.test.mjs`, vor jedem manuellen Upload per GitHub Actions. Ein erfolgreicher Live-Test ist gesondert zu bestätigen.
+- **Offen:** Ergebnisfelder, Gewinnerwertung, Auswahl der Auffüller nach Ergebnissen, Endrunde, Livetabelle sowie umfassende Browser-End-to-End-Tests.
