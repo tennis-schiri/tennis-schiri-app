@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#082b35">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'">
+  <title>TENNILO · Konto · geschützte Testumgebung</title>
+  <link rel="stylesheet" href="./konto.css">
+  <script type="module" src="./konto.mjs"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">TENN<span>I</span>LO <small>KONTO</small></div>
+      <span class="environment">GESCHÜTZTE TESTUMGEBUNG</span>
+    </div>
+  </header>
+  <main class="layout">
+    <section class="intro" aria-label="Über TENNILO">
+      <span class="eyebrow">WENIGER ORGA. MEHR TENNIS.</span>
+      <h1>Dein Verein.<br><em>Dein Turnier.</em></h1>
+      <p>Ein Konto für Vereine, Turnierleitungen und Helfer. Gemeinsam organisieren – mit klaren Rollen und einer zentralen Verwaltung.</p>
+      <div class="coming">
+        <strong>In Entwicklung</strong>
+        <p>Dies ist die getrennte Konto-Testoberfläche. Turnierdaten bleiben vorerst lokal in der bestehenden App. Lizenzen oder Zahlungen können hier nicht abgeschlossen werden.</p>
+      </div>
+      <div class="ball" aria-hidden="true"></div>
+    </section>
+    <section class="card" aria-labelledby="view-title">
+      <span class="card-label">TENNILO / BENUTZERKONTO</span>
+      <h2 id="view-title">Konto</h2>
+      <p class="card-description" id="view-description"></p>
+      <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+      <div id="content" aria-live="off"></div>
+    </section>
+  </main>
+  <footer>Prototyp B0.2 – keine öffentliche Registrierung · Keine Zahlung · Keine automatische Bereitstellung</footer>
+</body>
+</html>
