@@ -6,7 +6,7 @@ import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetR
 import { renderRibbonFinals } from "./finals-ui.js?v=061";
 import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=061";
 import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=061";
-import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=061";
+import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=070";
 
 const store = new BrowserTournamentStore();
 let remoteRequest=null;
