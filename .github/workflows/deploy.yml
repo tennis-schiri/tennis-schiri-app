@@ -31,6 +31,14 @@ jobs:
       - name: Quellcode abrufen
         uses: actions/checkout@v4
 
+      - name: Node.js fuer Auslosungstests vorbereiten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Auslosungslogik vor Upload testen
+        run: node --test tests/draw.test.mjs
+
       - name: Startseite sicher in den App-FTP-Ordner laden
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
