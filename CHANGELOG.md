@@ -15,7 +15,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - Games, Entscheidungspunkte bei Gleichstand und explizite Siegerauswahl; Tabelle nach Siegen, Game-Differenz und Games+.
 - Play-offs für die besten acht zugelassenen Teams inklusive Abwahl/Nachrücken, Viertelfinale, Halbfinale, Finale und Platz 3. Korrekturen an einem früheren Sieger setzen abhängige Resultate zurück.
 - Spielzeiten, Rundenuhr und konfigurierbare Platznamen/-anzahl. Teams nach Auslosung für Änderungen gesperrt, Kassenkorrekturen weiterhin möglich.
-- Neues `type: doubles` mit separatem `doubles`-Modell in bestehendem Browser- und JSON-Backup; alte Schleifchenturniere bleiben `type: ribbon`.
+- Neues `type: doubles` mit separatem `doubles`-Modell in bestehendem Browser- und JSON-Backup; alte Schleifchenturniere bleiben `type: ribbon`. Der Doppelmodus bietet jetzt auch den direkten JSON-Import mit ausdrücklicher Warnung vor dem Ersetzen bisheriger Daten.
 - `tests/doubles.test.mjs` mit 18 Logikfällen im isolierten JavaScript-Testlauf erfolgreich; `tests/doubles-ui.test.mjs` als UI-/Deploy-Regressionsprüfung ergänzt. Vollständige GitHub-CI und echte Browser-/Mobiltests weiterhin offen.
 - Vier neue App-Dateien in die **manuell** gestartete FTPS-Allowlist aufgenommen (nun 23). Kein automatischer Produktiv-Upload. `backend/` bleibt vollständig ausgeschlossen.
 - Regeln, Grenzen und offene Punkte: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md). Schreibgeschützte Doppel-Fernanzeige jetzt im privaten Code integriert, echte Zwei-Geräte-/PHP-Tests offen; zentrale Mehrgeräte-Bearbeitung weiterhin offen.
