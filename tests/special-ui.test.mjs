@@ -84,4 +84,14 @@ test("Auffüllrunde erst nach Vorrunde, ungewertete Auffüller, Korrektur via Zu
   assert.match(root.innerHTML,/data-action="draw-special-generate"/);
   click("draw-edit-result",{round:"0",match:"0"});
   assert.match(root.innerHTML,/data-action="draw-cancel-edit"/);
+
+  click("home");
+  assert.match(root.innerHTML,/data-action="demo-filler"/);
+  click("demo-filler");
+  const demo=read();
+  assert.equal(demo.rounds,3);
+  assert.equal(demo.courts.length,3);
+  assert.equal(demo.participants.filter(p=>p.present&&p.group==="stark").length,5);
+  assert.equal(demo.participants.filter(p=>p.present&&p.group==="schwaecher").length,5);
+  assert.match(root.innerHTML,/Normale Runden auslosen/);
 });
