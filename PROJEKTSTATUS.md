@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.5.1**  
-**FTPS-Upload zuletzt bestätigt:** **v0.5.0** – [GitHub-Actions-Lauf 42020751117](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42020751117) vom **2026-11-05** war erfolgreich (Commit `f1cd2161796a624465291198c8140eb9401d81f2`). **v0.5.1 liegt bisher nur im GitHub-Code** und wurde nicht live veröffentlicht oder im echten Browser getestet.
+**Version im GitHub-Code:** **0.6.0**  
+**FTPS-Upload zuletzt bestätigt:** **v0.5.1** – manueller [GitHub-Actions-Lauf 42033283559](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42033283559) vom **2026-11-05** erfolgreich (Commit `195afe4c42f7a0db64f2e87ec7e809dec4adf6c5`). Der Nutzer beurteilt die kombinierte Teilnehmer-/Nenngeldliste positiv. **v0.6.0 mit Live-Monitor liegt bisher nur in GitHub; kein echter Monitor-Browsertest oder FTPS-Upload bestätigt.**
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -31,7 +31,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.5.0 zehn App-Assets plus index.html und Favicon
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.6.0 17 ausschließlich freigegebene Dateien inkl. separater Monitorseite; kein automatischer Deploy bei Code-Commit
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
@@ -65,8 +65,13 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Individuelle Kategorieauswahl je Teilnehmer direkt in der Liste oder im Bearbeiten-Dialog; Sonderbeträge werden beim bewussten Kategorienwechsel nach Bestätigung aufgehoben, tatsächlich erhaltene Zahlungen bleiben erhalten
 - [x] Bestehende Turniere und JSON-Backups automatisch auf Kategorie „Standard“ mit bisherigem Nenngeld migriert; Barzahlung, Anwesenheit, Spielplan und Rundenuhr bleiben erhalten
 - [x] Zusätzliche Tests `tests/fee-tiers.test.mjs` (11 Fälle) und `tests/fee-tiers-ui.test.mjs` (gemeinsamer Check-in); insgesamt **79 Logiktests und 5 simulierte UI-Tests** bestanden
+- [x] **v0.6.0: separater Live-Monitor** unter `site/live.html` mit großen Spielpaarungen und Platznamen, Ergebnissen/Siegern, Schleifchen-Topliste, Countdown/Überzeit, Auffüllrunde und K.-o.-Endrunde samt Sieger-Doppel
+- [x] Neue Vollbildschaltfläche; Live-Monitor aus der Turnierleitung in weiterem Browserfenster öffnen und an den zweiten Monitor verschieben
+- [x] Die Turnierleitung kann einzelne Runden oder die Endrunde ausdrücklich auswählen; sonst wird die gerade laufende Runde automatisch angezeigt. Auswahl wird als `liveDisplay` im lokalen Turnier gespeichert
+- [x] Datenaktualisierung im zweiten Fenster per `storage`-Ereignis und ergänzender Sekundenprüfung; kein Nenngeld/Bezahlstatus oder Bearbeiten auf der Anzeige
+- [x] Zusätzliche Tests `tests/live.test.mjs` (14), `tests/live-ui.test.mjs` (5) und zwei UI-Synchronisations-/Bedientests; **98 Logik-/Darstellungsprüfungen + 7 simulierte UI-Tests = 105 bestanden**
 
-**Prüfstand:** v0.5.0 wurde am 2026-11-05 über GitHub Actions erfolgreich auf den geschützten Webspace übertragen. Version **0.5.1** mit der vereinten Teilnehmer-/Kassenliste und mehreren Nenngeld-Kategorien wurde mit **79 Logiktests und 5 simulierten UI-Tests** ohne Fehler geprüft. Live-Upload und echter Browsertest für v0.5.1 stehen noch aus. Keine vollständige End-to-End-/Praxis-/Sicherheitsprüfung und keine Freigabe für reale Turniere. Die Rundenuhr bleibt browserseitig und ist nicht geräteübergreifend synchronisiert.
+**Prüfstand:** Version **0.5.1** ist zuletzt erfolgreich per manuellem FTPS-Lauf veröffentlicht worden (Run `42033283559`). In GitHub ist **0.6.0** mit einer schreibgeschützten Live-Ansicht für einen zweiten Monitor implementiert. Aktueller simulierter Prüflauf: **98 Logik-/Darstellungstests sowie 7 UI-/Synchronisationstests erfolgreich** (gesamt 105). **Weder FTPS-Upload noch echter zweiter Monitor für v0.6.0 getestet.** Eine Live-Synchronisierung funktioniert nur in verschiedenen Fenstern/Tabs desselben Browserprofils desselben Rechners; für unabhängige Geräte fehlt Backend/Persistenz. Keine Freigabe für reale Turniere.
 
 ## Nicht implementiert
 
@@ -89,19 +94,20 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.5.1 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
+| Für v0.6.0 vorgesehene Upload-Dateien | `site/index.html`, `site/live.html`, `site/favicon.png`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, `site/assets/live.css`, `site/assets/live-model.js`, `site/assets/live-ui.js`, `site/assets/live.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
 
-**Wichtig:** Der Workflow lädt ausschließlich die zwölf expliziten Dateien (zehn App-Assets, HTML und Favicon) hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich 17 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **Version 0.5.1 manuell veröffentlichen:** In GitHub Actions den bestehenden FTPS-Workflow auf `main` starten; alle 84 Tests müssen vor dem Upload erfolgreich sein.
-2. **Gemeinsamen Check-in prüfen:** In „Teilnehmende & Nenngeld“ An- und Abwesenheit markieren, Jugend/Erwachsene-Tarife in Einstellungen anlegen, Spieler in der Liste zuordnen und Barzahlungen erfassen/korrigieren.
-3. **Datenmigration und Zahlungsbeträge prüfen:** Ein bereits mit v0.5.0 angelegtes Turnier öffnen, Standard-Kategorie und vorhandene Zahlungen kontrollieren. Eine Tarifänderung darf den tatsächlich erhaltenen Barbetrag nicht verändern; JSON-Sicherung einmal exportieren und erneut einlesen.
-4. **Weiterhin Schleifchenturnier:** Spielzeiten und Rundenuhr unter Praxisbedingungen prüfen; Doppelturnier und One Point Cup bleiben vorerst zurückgestellt. Vor echten Turnieren Serverdatenhaltung, Mehrgeräte-Synchronisation und Sicherheits-/Datenschutzkonzept.
+1. **v0.6.0 manuell hochladen:** GitHub Actions → bisheriger `workflow_dispatch` auf `main`. Der Testschritt `node --test tests/*.test.mjs` muss erfolgreich sein, bevor die 17 Dateien übertragen werden.
+2. **Zwei-Monitor-Test:** Im selben Browserprofil einen Turnierleiter-Tab und das über „Live-Monitor öffnen“ gestartete Fenster öffnen. Dieses auf den per Kabel angeschlossenen zweiten Bildschirm ziehen und auf Vollbild stellen.
+3. **Live-Daten prüfen:** Runde starten, Countdown in der Anzeige vergleichen, Siegerergebnis speichern, automatische Aktualisierung der Spielkarten/Zwischenstände kontrollieren und gezielt eine andere Runde sowie die Endrunde anzeigen. Auffüllrunde und Sieger-Doppel testen.
+4. **Grenze:** Ein unabhängiger Rechner/TV-Browser kann lokale Browserdaten nicht sehen. Dafür sind Serverdatenbank, Berechtigungs-/Sicherheitskonzept und echter Mehrgeräte-Push oder Polling nötig. Bis dahin keine produktive öffentliche Live-Anzeige.
+5. **Weiter im Schleifchenturnier:** Weitere Verbesserungen anhand des Monitor-Tests; eigenständige Doppelturniere bleiben vorerst zurückgestellt.
 
 ### Google Drive und fachliche Quellen
 
