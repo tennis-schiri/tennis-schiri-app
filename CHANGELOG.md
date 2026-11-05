@@ -5,6 +5,25 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.3.0] – normale Schleifchenturnier-Vorrunden
+
+**Im GitHub-Code implementiert. Live-Veröffentlichung und GitHub-Actions-Testlauf noch nicht bestätigt.**
+
+### Neu
+- Neuer Menüpunkt **Auslosung** mit Runden, Startzeiten, benannten Plätzen und Begegnungen.
+- Eigenständiges JavaScript-Modul `site/assets/draw.js`; orientiert am V7-Schleifchenansatz der vorhandenen Google-Tabelle.
+- Jedes Doppelteam besteht aus 1 Stark + 1 Schwächer; 3 oder 4 reguläre Wertungsspiele je anwesendem Spieler.
+- Keine Mehrfachbelegung einer Person innerhalb derselben Runde; Teilnehmende und Plätze werden überprüft.
+- Normale Runden werden gespeichert; eine Signatur erkennt spätere Änderungen der Stärkegruppen, Teilnehmeranwesenheit, Spielanzahl und Platzliste.
+- Eine eventuell notwendige **Auffüllrunde** wird nur angekündigt – noch nicht ausgelost.
+- Reproduzierbare Node-Tests unter `tests/draw.test.mjs`; der manuelle GitHub-Workflow führt sie vor dem Upload aus.
+- Der Workflow überträgt ab dieser Version fünf App-Dateien, einschließlich der Auslosungslogik.
+
+### Prüfstatus und Grenzen
+- Szenarien mit geraden, ungeraden sowie ungleich großen Stärkegruppen wurden in simulierten Prüfungen getestet.
+- Ein grüner GitHub-Actions-Lauf für diesen Stand ist noch nicht bestätigt.
+- Noch keine Ergebnis-/Schleifchenwertung, Auffüllrunde, Endrunde oder Livetabelle; daher **keine Freigabe für echte Turniere**.
+
 ## [0.2.3] – individuelle Platznamen
 
 **Im Repository implementiert. Live-Veröffentlichung nicht bestätigt.**
