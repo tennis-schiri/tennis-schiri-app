@@ -5,9 +5,30 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.3.3] – Auffüllrunde nach Schleifchen-V7
+
+**Im GitHub-Code implementiert und simuliert getestet. Noch keine bestätigte Veröffentlichung dieser Version oder echter Browser-Test.**
+
+### Neu
+- Die letzte Auffüllrunde wird nach vollständiger Ergebnis-Erfassung aller normalen Runden separat ausgelost.
+- Auffüllspieler werden aus Teilnehmern ihrer jeweiligen Stärkegruppe ausgewählt, die ihre normale Spielquote erfüllt und **höchstens 1 Schleifchen** gewonnen haben. Bereits regulär für die letzte Runde vorgesehene Teilnehmer sind ausgeschlossen.
+- Bestehende Partnerbegegnungen werden bei der Paarung stärker gewichtet als wiederholte Gegner. Jede Mannschaft besteht weiterhin aus 1 starkem und 1 schwächerem Spieler; kein Teilnehmer darf in der letzten Runde doppelt vorkommen.
+- Gelb markierte **Auffüller · ohne Wertung**: Zusatzeinsätze dieser Spieler verändern weder ihre gespielten Wertungsspiele noch ihre Schleifchen oder Niederlagen. Andere Spieler bekommen das fehlende reguläre Wertungsspiel.
+- Ergebnisse können auch in der Auffüllrunde eingegeben werden; Anzeigen funktionieren wie gewohnt mit Sieger-Markierung und kompakter Spielstandansicht.
+- Eine bereits ausgeloste Auffüllrunde sperrt Änderungen an normalen Ergebnissen. Über „Auffüllrunde zurücknehmen“ kann die letzte Runde inklusive Zusatz-Ergebnissen gelöscht werden; **alle normalen Runden und Ergebnisse bleiben erhalten**.
+- Sicherheitsprüfungen für veränderte normale Ergebnisse, nicht zulässige Füller, falsche Gruppen, doppelte Platz-/Spielerbelegung und unvollständige Spielpläne.
+- Neues Modul `site/assets/special.js`; manueller FTPS-Workflow überträgt jetzt **sieben** ausdrücklich festgelegte App-Dateien.
+- Neue Testdateien `tests/special.test.mjs` (12 Regeltests) und `tests/special-ui.test.mjs` (Bedienablauf).
+- Startseite enthält nun „Auffüllrunde testen“: Musterturnier mit 5 starken und 5 schwächeren Spielern, 3 Wertungsspielen und 3 Plätzen.
+
+### Prüfung und Grenzen
+- **39 Logiktests + 2 simulierte UI-Tests erfolgreich**; darunter Regressionstests für die unveränderte kompakte Ergebnisanzeige.
+- GitHub-Actions-Testlauf für die Version 0.3.3 und echter Browser-Funktionstest stehen noch aus.
+- **Noch nicht implementiert:** Endrunden-Qualifikation, Halbfinal-/Finalspiele, Turnierabschluss und Mehrgeräte-Synchronisierung. Keine Freigabe für produktive Turniere.
+
 ## [0.3.2] – kompakte Ergebnisanzeige und Gewinner-Markierung
 
-**Stand 2026-11-05:** In GitHub implementiert, UI-Ablauf simuliert geprüft. **FTPS-Upload und echter Browser-Test für v0.3.2 noch offen.**
+**Stand 2026-11-05:** Am 2026-11-05 per manuellem [GitHub-Actions-Lauf 42003891468](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42003891468) erfolgreich getestet und via FTPS hochgeladen. Der Nutzer bestätigte anschließend die kompakte Ergebnisanzeige.
 
 ### Geändert
 - Sobald ein Ergebnis gespeichert ist, verschwindet die Ergebnis-Eingabezeile der betreffenden Begegnung.
