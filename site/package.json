@@ -1,7 +1,7 @@
 {
   "name": "tennilo-client",
   "private": true,
-  "version": "0.3.2",
+  "version": "0.3.3",
   "type": "module",
   "description": "Browser-App ohne Build-Prozess; package.json aktiviert ES-Module für Node-Tests."
 }
