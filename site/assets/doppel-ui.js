@@ -1,4 +1,4 @@
-import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=070";
+import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=080";
 import {euroCents,euroText,euroInput,clockFor} from "./operations.js?v=061";
 import {
   analyzeDoublesSetup,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
