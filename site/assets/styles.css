@@ -115,3 +115,33 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
  .draw-result-form button{grid-column:1/-1}
  .draw-result-complete{font-size:9px}
 }
+
+/* v0.3.2 – gespeicherte Ergebnisse kompakt anzeigen, Sieger hervorheben */
+.draw-match{grid-template-columns:minmax(110px,.75fr) minmax(0,1.3fr) 74px minmax(0,1.3fr)}
+.draw-match-finished{background:linear-gradient(90deg,#fff 0%,#fcfdf9 100%)}
+.draw-team.is-winner{background:#f0f7eb;border-left:3px solid var(--orange);border-radius:7px;padding:10px 10px 10px 12px;color:#123e3b}
+.draw-team.is-winner>span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.draw-team.is-loser{color:#657874}
+.draw-winner-pill{display:inline-flex!important;align-items:center;gap:4px;border-radius:100px;background:var(--lime);color:var(--navy)!important;font-size:9px!important;letter-spacing:.025em!important;font-weight:900!important;padding:4px 7px}
+.draw-winner-pill .icon{width:12px;height:12px}
+.draw-versus-final{border-radius:10px;min-height:50px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;background:var(--navy);color:#fff;padding:6px 5px}
+.draw-versus-final strong{font-size:18px;letter-spacing:-.045em;line-height:1.05;white-space:nowrap;font-variant-numeric:tabular-nums}
+.draw-versus-final strong span{color:var(--lime);padding:0 2px}
+.draw-versus-final small{font-size:8px;letter-spacing:.09em;color:#d4e5e3}
+.draw-versus-final .draw-no-score{display:flex;justify-content:center}
+.draw-versus-final .draw-no-score .icon{color:var(--lime);width:21px;height:21px}
+.draw-match-controls{grid-column:1/-1;display:flex;justify-content:flex-end;align-items:center;margin-top:-2px}
+.draw-edit-btn{display:inline-flex;gap:6px;align-items:center;border:0;background:transparent;color:#a94e31;font-size:11px;font-weight:850;padding:5px 3px;border-radius:5px}
+.draw-edit-btn:hover{text-decoration:underline;color:var(--navy)}
+.draw-edit-btn .icon{width:14px;height:14px}
+.draw-result-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.draw-result-actions .btn{flex:0 1 auto}
+@media(max-width:750px){
+  .draw-match{grid-template-columns:minmax(0,1fr) 66px minmax(0,1fr);column-gap:6px}
+  .draw-team.is-winner{padding:8px;border-left-width:3px}
+  .draw-winner-pill{font-size:8px!important}
+  .draw-versus-final strong{font-size:15px}
+  .draw-versus-final small{font-size:7px}
+  .draw-result-actions{grid-column:1/-1}
+  .draw-result-actions .btn{flex:1;grid-column:auto}
+}
