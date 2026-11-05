@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-018 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-019 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -133,3 +133,12 @@
 - **Auffüllrunde:** Nach Abschluss aller **normalen** Ergebnisse werden spielberechtigte Auffüllkandidaten mit höchstens einem Schleifchen geprüft. Die konkrete Auffüller-Auslosung und die Wertungsfreiheit ihrer Zusatzeinsätze bleiben dem nächsten Schritt vorbehalten.
 - **Technik/Prüfung:** `site/assets/results.js` und `tests/results.test.mjs`. Der manuelle GitHub-Workflow testet `tests/*.test.mjs` vor einem Upload; sechs App-Dateien werden übertragen. Der GitHub-Testlauf und die Live-Version 0.3.1 sind noch nicht bestätigt.
 - **Abgrenzung:** Keine vollständige, geräteübergreifende Livetabelle oder finale Rangliste; Browser-Testversion.
+
+## E-018 · Kompakte Ergebnisanzeige nach Speicherung (2026-11-05)
+
+- **Anforderung:** Nach dem Speichern einer Begegnung soll die Eingabezeile verschwinden. Stattdessen steht der Spielstand sichtbar zwischen beiden Teams; der Gewinner soll eindeutig erkennbar sein.
+- **Umsetzung v0.3.2:** Für entschiedene Spiele statt des Formulars eine kompakte Ansicht mit optionalem Game-Stand und einer farbigen Sieger-Markierung anzeigen. Wenn keine Games erfasst wurden, keine Zahlen erfinden; Gewinner kennzeichnen und Sieg-Symbol anzeigen.
+- **Korrekturen:** „Ergebnis ändern“ öffnet das vorausgefüllte Formular; „Abbrechen“ schließt es, ohne den gespeicherten Wert zu ändern. Eine erneute Speicherung aktualisiert die Schleifchenwertung wie bisher.
+- **Speicherung:** Die Bearbeitungsansicht ist ausschließlich temporärer UI-Zustand, nicht Bestandteil des Turnier-JSON. Gespeicherte Ergebnisse bleiben kompatibel und nach Neustart kompakt sichtbar.
+- **Technik/Tests:** Anpassungen in `site/assets/app.js` und `styles.css`; Regressionstest `tests/result-ui.test.mjs`. Der bestehende manuelle Workflow prüft automatisch auch diesen Test.
+- **Freigabe:** Version 0.3.2 noch nicht per FTPS hochgeladen bzw. im echten Browser getestet. Letzter bestätigter manuell erfolgreicher FTPS-Lauf: v0.3.1, [41991275917](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917).
