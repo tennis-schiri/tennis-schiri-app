@@ -97,6 +97,11 @@ export function normalizeTournament(v) {
     entryFeeCents: categories[0].amountCents,
     feeCategories:categories,
     roundClocks: normalizeClocks(v.roundClocks),
+    // Auswahl für ein zweites Fenster desselben Browsers – nicht übertragene Daten.
+    liveDisplay:v.liveDisplay?.mode==="finals"?{mode:"finals"}:
+      v.liveDisplay?.mode==="round"&&Number.isInteger(v.liveDisplay.index)&&
+      v.liveDisplay.index>=0&&v.liveDisplay.index<21?
+      {mode:"round",index:v.liveDisplay.index}:null,
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
     // Endrunden-Optionen bleiben unabhängig von der Auslosung im Turnier gespeichert.
@@ -128,7 +133,7 @@ export function newTournament(values = {}) {
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
     feeCategories:values.feeCategories,
-    roundClocks: {}, draw: null, participants: []
+    roundClocks: {}, liveDisplay:null, draw: null, participants: []
   });
 }
 
