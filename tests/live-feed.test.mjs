@@ -67,6 +67,25 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
     assert.ok(!publicText.includes(privateField),privateField);
   response=await post(wrong);
   assert.equal(response.status,403);
+  const doubles={
+    ...query,format:"doubles",name:"Doppelturnier",index:26,
+    paid1:2300,present:true,
+    ranking:[{place:1,name:"Alex / Kim",wins:3,gameDiff:-5,gamesFor:17,played:4,
+      paid1:123456,ribbons:9999}]
+  };
+  response=await post(writer,"publish",doubles);
+  assert.equal(response.status,200,await response.text());
+  response=await get();
+  assert.equal(response.status,200);
+  const dblBody=await response.json();
+  assert.equal(dblBody.display.format,"doubles");
+  assert.equal(dblBody.display.index,26);
+  assert.equal(dblBody.display.ranking[0].wins,3);
+  assert.equal(dblBody.display.ranking[0].gameDiff,-5);
+  assert.equal(dblBody.display.ranking[0].gamesFor,17);
+  assert.ok(!("ribbons" in dblBody.display.ranking[0]));
+  for(const secret of ["paid1","present","123456","2300"])
+    assert.ok(!JSON.stringify(dblBody.display).includes(secret));
   response=await post(writer,"stop");
   assert.equal(response.status,200);
   response=await get();
