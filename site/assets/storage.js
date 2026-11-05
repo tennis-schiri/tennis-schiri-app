@@ -126,7 +126,7 @@ export function normalizeTournament(v) {
     // Auswahl für ein zweites Fenster desselben Browsers – nicht übertragene Daten.
     liveDisplay:v.liveDisplay?.mode==="finals"?{mode:"finals"}:
       v.liveDisplay?.mode==="round"&&Number.isInteger(v.liveDisplay.index)&&
-      v.liveDisplay.index>=0&&v.liveDisplay.index<21?
+      v.liveDisplay.index>=0&&v.liveDisplay.index<(v.type==="doubles"?500:21)?
       {mode:"round",index:v.liveDisplay.index}:null,
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
