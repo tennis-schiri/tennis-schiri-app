@@ -5,7 +5,7 @@
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
 **Version im GitHub-Code:** **0.3.0**  
-**Version auf dem Webspace:** **nicht abschließend verifiziert** – der Nutzer hat den ersten FTPS-Upload und eine bedienbare frühe Version bestätigt; für die Versionen ab 0.2.1 bis einschließlich 0.3.0 liegt keine durchgehend bestätigte Veröffentlichung vor.
+**FTPS-Upload zuletzt bestätigt:** v0.3.0 – manueller [GitHub-Actions-Lauf 41986086093](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41986086093) vom 2026-11-05 erfolgreich (Commit `3225a52129e0c97403d2246f309140880c210439`). Tests und Transfer aller fünf App-Dateien waren grün. **Browser-Funktionstest der v0.3.0 nach diesem Upload steht noch aus.**
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -37,7 +37,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Nötige Auffüllrunde erkennen, ohne die Auswahl der Auffüller vor den Ergebnissen zu treffen
 - [x] Automatisierte Auslosungstests unter `tests/draw.test.mjs` vor jedem manuellen FTPS-Upload
 
-**Prüfstand:** Simulierte Prüfungen von Auslosungsfällen, Gruppen/Plätzen, Navigation und Browser-Speicherung wurden ausgeführt. Es gibt neue wiederholbare Node-Tests, die beim nächsten manuellen GitHub-Workflow laufen. Ein erfolgreicher GitHub-Testlauf für v0.3.0 ist noch nicht bestätigt. Es gibt bislang keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
+**Prüfstand:** Simulierte Prüfungen von Auslosungsfällen, Gruppen/Plätzen, Navigation und Browser-Speicherung wurden ausgeführt. Es gibt neue wiederholbare Node-Tests, die beim nächsten manuellen GitHub-Workflow laufen. Der GitHub-Actions-Lauf `41986086093` bestätigte die Auslosungstests und den FTPS-Upload erfolgreich. Es gibt bislang keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
 
 ## Nicht implementiert
 
@@ -63,11 +63,11 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Für v0.3.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/app.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
-**Wichtig:** Der Workflow lädt ausschließlich die fünf expliziten App-Dateien hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der erste Lauf mit den neuen Action-Versionen ist noch nicht bestätigt. Der Upload bleibt manuell.\n\n**Wichtig:** Der Workflow lädt ausschließlich die fünf expliziten App-Dateien hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.3.0 manuell veröffentlichen und im Browser prüfen:** Neue Auslosung, individuelle Platznamen, Teilnehmer, Sicherung/Import, Rücknavigation und Speicherung; den GitHub-Testlauf kontrollieren.
+1. **v0.3.0 nach erfolgreichem Upload im Browser prüfen:** Neue Auslosung, individuelle Platznamen, Teilnehmer, Sicherung/Import, Rücknavigation und Speicherung; den GitHub-Testlauf kontrollieren.
 2. **Ergebnisse und Schleifchenwertung:** Ergebnisse der regulären Runden erfassen und Gewinner/Schleifchen korrekt berechnen (vgl. Apps Script).
 3. **Sonderrunde:** Erst nach vollständigen Ergebnissen der regulären Runden Auffüller mit 0 oder 1 Schleifchen auswählen. Das Zusatzspiel ist für Auffüller nicht wertungsrelevant.
 4. **Danach:** Tabelle, Endrunde und serverseitige Persistenz mit Benutzerrollen.
