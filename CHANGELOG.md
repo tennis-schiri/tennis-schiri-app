@@ -5,6 +5,21 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.7.0] – Doppelturnier mit festen Partnern (nur GitHub, nicht veröffentlicht)
+
+**2026-11-05:** Neue eigenständige Turnierart als lokale Testversion implementiert. Letzter bestätigter FTP-Upload bleibt **v0.6.1** (Run 42044203175). Noch keine Freigabe, kein Webhosting-Test und kein neuer Upload.
+
+- Eigene `site/doppel.html`-Oberfläche für feste Zweierteams. Hauptstartseite zeigt sowohl Schleifchen- als auch Doppelturniere und öffnet den passenden Modus.
+- Teams mit je zwei Spielern, Anwesenheit, Bar-Nenngeld individuell pro Spieler (Standard und ermäßigt), Einzahlungssummen sowie manuelle Korrektur.
+- Wiederholungsfreie Vorrundenauslosung mit Standard vier und wählbar 1–8 Spielen je anwesendem Team; berechnet zusätzliche Zeitblöcke bei knappen Plätzen. Ungerade Teamzahlen werden unterstützt, sofern dieselbe Zahl Begegnungen je Team mathematisch möglich ist.
+- Games, Entscheidungspunkte bei Gleichstand und explizite Siegerauswahl; Tabelle nach Siegen, Game-Differenz und Games+.
+- Play-offs für die besten acht zugelassenen Teams inklusive Abwahl/Nachrücken, Viertelfinale, Halbfinale, Finale und Platz 3. Korrekturen an einem früheren Sieger setzen abhängige Resultate zurück.
+- Spielzeiten, Rundenuhr und konfigurierbare Platznamen/-anzahl. Teams nach Auslosung für Änderungen gesperrt, Kassenkorrekturen weiterhin möglich.
+- Neues `type: doubles` mit separatem `doubles`-Modell in bestehendem Browser- und JSON-Backup; alte Schleifchenturniere bleiben `type: ribbon`.
+- `tests/doubles.test.mjs` mit 18 Logikfällen im isolierten JavaScript-Testlauf erfolgreich; `tests/doubles-ui.test.mjs` als UI-/Deploy-Regressionsprüfung ergänzt. Vollständige GitHub-CI und echte Browser-/Mobiltests weiterhin offen.
+- Vier neue App-Dateien in die **manuell** gestartete FTPS-Allowlist aufgenommen (nun 23). Kein automatischer Produktiv-Upload. `backend/` bleibt vollständig ausgeschlossen.
+- Regeln, Grenzen und offene Punkte: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md). Eigenständige Live-Fernanzeige für Doppelturniere und zentrale Mehrgeräte-Bearbeitung weiterhin offen.
+
 ## [Backend B0.2 UI-Prototyp] – Konto- und Vereinsoberflächen (nicht veröffentlicht)
 
 **2026-11-05:** Unter `backend/staging-ui/` eine eigenständige, responsive Kontoseite im TENNILO-Farbschema erstellt. Sie bedient die bestehende private Konto-/Vereins-API: Registrierung, Mail-Bestätigung und erneuter Link, Login/Logout, Passwort-Reset, Verein anlegen/wechseln, Mitglieder lesen, Einladungen versenden/annehmen sowie Rollenänderung/Entfernen durch Besitzer. Einmal-Link-Tokens werden aus dem Browser-URL-Fragment entfernt; keine Credentials im Browser-Speicher; Darstellung untrusted Daten als Text.
