@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.3.1 · **Letzter bestätigter Upload:** v0.3.0 am 2026-11-05 (Run `41986086093`). Die neuen Ergebnisfunktionen aus v0.3.1 wurden noch **nicht** veröffentlicht.
+**Aktueller GitHub-Code:** v0.3.2 · **Letzter bestätigter Upload:** v0.3.1 am 2026-11-05 (GitHub-Actions-Lauf [`41991275917`](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917)). Die neue kompakte Ergebnisanzeige aus v0.3.2 liegt bislang nur im Repository.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.3.1 im Repository)
+## Aktuelle Funktionen (v0.3.2 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -42,6 +42,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Schleifchen-Zwischenstand, gespielte Partien, Niederlagen und Siegquote; Wertung: ein Schleifchen je Person im Siegerteam
 - Nach allen regulären Ergebnissen prüfen, ob genügend Spieler mit 0 oder 1 Schleifchen für die Auffüllrunde infrage kommen
 - Ergebnisse ändern, löschen und mit JSON sichern bzw. wiederherstellen
+- **Kompakte Ergebnisansicht nach dem Speichern:** Ergebnis direkt zwischen den Doppel-Teams, Sieger deutlich hervorgehoben, Eingabeformular ausgeblendet; „Ergebnis ändern“ öffnet die vorausgefüllten Felder und „Abbrechen“ verwirft ungespeicherte Änderungen
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
 **Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, tatsächliche Auffüller-Auslosung, Endrunde, zentrale Livetabelle oder Mehrgerätebetrieb. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
@@ -54,7 +55,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/storage.js` – browserbasierter Speicheradapter, Datenmodell Version 1
 - `site/assets/draw.js` – Auslosungslogik und Spielplanprüfung
 - `site/assets/results.js` – Spielstände, Sieger, Schleifchenwertung und Kandidatenprüfung
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs` – automatisierte Node-Tests ohne Build-Prozess
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -73,6 +74,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.1 manuell veröffentlichen und im Browser die Ergebniserfassung und den Schleifchen-Zwischenstand testen. Danach die regelgerechte Auffüllrunde und Endrunde umsetzen.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.2 manuell veröffentlichen und die kompakte Ergebnisanzeige samt Bearbeiten/Abbrechen im echten Browser testen. Danach die regelgerechte Auffüllrunde und Endrunde umsetzen.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
