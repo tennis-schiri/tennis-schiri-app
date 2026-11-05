@@ -5,9 +5,25 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.3.2] – kompakte Ergebnisanzeige und Gewinner-Markierung
+
+**Stand 2026-11-05:** In GitHub implementiert, UI-Ablauf simuliert geprüft. **FTPS-Upload und echter Browser-Test für v0.3.2 noch offen.**
+
+### Geändert
+- Sobald ein Ergebnis gespeichert ist, verschwindet die Ergebnis-Eingabezeile der betreffenden Begegnung.
+- Die Game-Zahlen werden direkt zwischen den beiden Teams angezeigt, falls vorhanden. Wird nur der Sieger erfasst, erscheint ein kompaktes Sieg-Symbol statt eines erfundenen Spielstands.
+- Siegerteam ist durch eine hervorgehobene Fläche und eine deutlich sichtbare „Sieger“-Markierung gekennzeichnet.
+- Über **„Ergebnis ändern“** lassen sich die vorausgefüllten Eingabefelder jederzeit wieder öffnen; **„Abbrechen“** verwirft ungespeicherte Änderungen.
+- Nach erneuter Speicherung, Neuladen oder Wiederöffnen bleibt die kompakte Ergebnisanzeige erhalten. Es gibt keine Änderung am Ergebnis-Datenmodell.
+- Version und Browser-Cache-Parameter auf 0.3.2 aktualisiert.
+
+### Tests
+- Bereits vorhandene 27 Logiktests und ein neuer UI-Regressionstest (`tests/result-ui.test.mjs`) für Speichern, automatische Kompaktansicht, Gewinner-Markierung, Bearbeiten, Abbrechen und Wiederöffnen.
+- Der bestehende manuelle Workflow `node --test tests/*.test.mjs` berücksichtigt die neue Testdatei automatisch. Er lädt weiterhin ausschließlich die sechs App-Dateien hoch, ohne FTP-Zugangsdaten oder Passwortschutz zu verändern.
+
 ## [0.3.1] – Ergebnisse und Schleifchen-Zwischenstand
 
-**Stand 2026-11-05:** Im GitHub-Code umgesetzt und simuliert getestet; **noch kein bestätigter FTPS-Upload dieser Version**.
+**Stand 2026-11-05:** Per manuellem [GitHub-Actions-Lauf 41991275917](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917) erfolgreich getestet und per FTPS hochgeladen. Anschließend Rückmeldung des Nutzers zur Ergebnisanzeige; ein vollständiger Browser-End-to-End-Test ist noch nicht bestätigt.
 
 ### Neu
 - Pro normaler Vorrundenbegegnung Siegerteam ausdrücklich erfassen; gewonnene Games pro Team sind optional (jeweils 0–99). Bei ungleichen Games darf der Gewinner nicht widersprechen; bei gleichen Games ist eine gesonderte Siegerentscheidung erforderlich.
