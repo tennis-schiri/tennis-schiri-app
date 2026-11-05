@@ -148,7 +148,7 @@
 - **Entscheidung:** Für TENNILO zunächst ausschließlich Barzahlung des Nenngelds vor Ort vorsehen. Das entspricht dem zunächst angestrebten Ablauf bei Vereinsturnieren.
 - **Funktionale Idee:** Nenngeld pro Turnier oder Konkurrenz hinterlegen, bei Teilnehmern den Zahlungsstatus (offen / bar bezahlt) manuell führen und erhaltene sowie offene Beträge übersichtlich anzeigen. Ggf. am Check-in erfassen.
 - **Nicht Teil der ersten Ausbaustufe:** Integrierte Überweisung, PayPal, Stripe oder andere Online-Zahlungsabwicklung. Auch keine automatische Zahlungsbestätigung behaupten.
-- **Einordnung:** Produktanforderung für die künftige Nenngeldverwaltung, **nicht bereits implementiert**. Zeitpunkt innerhalb der Roadmap bleibt flexibel; die laufende Entwicklung des Schleifchenturniers hat Vorrang.
+- **Einordnung (aktualisiert 2026-11-05):** Seit Version 0.5.0 im GitHub-Code implementiert: Standard-Nenngeld pro Turnier (anfangs 0,00 €), individueller Spielerbetrag inkl. kostenfrei, manuell erfasste Barzahlung pro Person und Kassenübersicht. Zahlungseingänge werden als tatsächlicher Betrag in Cent gespeichert, auch bei späteren Tarifänderungen. Noch nicht live bestätigt oder für echte Turniere freigegeben.
 - **Abgrenzung:** Nenngeld der Turnierteilnehmer ist etwas anderes als eine spätere TENNILO-App-Lizenzgebühr.
 
 ## E-020 · Auffüllrunde nach den normalen Ergebnissen (2026-11-05)
@@ -177,3 +177,15 @@
 - **Persistenz:** Im Turnier `finalSize` (8/16) und `finalOptOut` (abgewählte Spielerkennungen); in `draw.finals` die K.-o.-Auslosung, Ergebnisse und ein Fingerprint der ursprünglichen Wertung. Alte Turniere bekommen kompatible Standardwerte; JSON-Backup bleibt Schema-Version 1.
 - **Tests:** `tests/finals.test.mjs` und `tests/finals-ui.test.mjs`; lokaler Simulationsstand 53 Logik- und 3 UI-Tests erfolgreich. v0.4.0 noch nicht live veröffentlicht und im echten Browser geprüft.
 - **Offen:** Eigenständiges Doppelturnier mit festen Teams, One Point Cup, serverseitige Speicherung, Mehrgeräte-Liveansicht und abschließende Praxisfreigabe.
+
+## E-022 · Spielzeiten und echte Rundenuhr (2026-11-05)
+
+- **Fokus:** Zunächst weiter das Schleifchenturnier vervollständigen; eigenständige Doppelturniere und One Point Cup vorerst zurückstellen.
+- **Geplante Zeiten:** Jede normale Vorrunde und eine gegebenenfalls notwendige Auffüllrunde erhält aus Turnierstartzeit, konfigurierter Spieldauer und Wechselpause eine geplante Start-/Endzeit und ein Pausenende. Bei Mitternachtsüberschreitung ist der Folgetag kenntlich.
+- **Spielplan:** Die geplante Spielzeit erscheint sowohl in der Rundenüberschrift als auch direkt an jeder Platz-Begegnung. Die Uhr ist für alle Matches einer Runde gemeinsam.
+- **Rundenuhr:** Jede Runde hat die Aktionen **Runde starten**, **Pausieren**, **Fortsetzen**, **Runde beenden** und nach Sicherheitsbestätigung **Uhr zurücksetzen**. Countdown sekundengenau gemäß der bei Start eingestellten Spieldauer, danach Überzeitanzeige. Nach Zeitablauf läuft die Uhr weiter, bis die Leitung beendet; **keine automatische Ergebniseingabe oder Siegerentscheidung**.
+- **Zeitdaten:** Der tatsächliche Start und die pausierte Laufzeit liegen mit Zeitstempel in `roundClocks` pro Turnier. Beim erneuten Laden läuft eine gestartete Uhr auf Basis der Gerätezeit weiter. Keine Serverzeit- oder Mehrgeräte-Synchronisierung vorhanden; ein anderes Gerät ist nicht als gemeinsame Turnieruhr geeignet.
+- **Schutz:** Pro Turnier darf nur eine Rundenuhr gleichzeitig laufen. Bei Neuauslosung werden alte Rundenzeiten nach bestehender Bestätigung gelöscht. Bei Rücknahme der Auffüllrunde wird auch deren Rundenuhr gelöscht. Änderungen an der konfigurierten Spieldauer verändern eine bereits gestartete Uhr nicht rückwirkend.
+- **Nenngeld:** Gleichzeitig `entryFeeCents`, `feeOverrideCents`, `feePaidCents`, `feePaidAt` eingeführt. Kein Online-Zahlungsdienst; Zahlungseinträge sind ausschließlich manuell bestätigt. Die Kassenübersicht enthält alle angemeldeten Teilnehmer (Anwesenheitsstatus beeinflusst die Forderung nicht). Individuelle Gebührenanpassung und Korrektur auch nach Barzahlung möglich.
+- **Datenmigration:** Bestehende Turniere bleiben in Browser-Datenmodell Version 1 lesbar; alte Turniere bekommen 0,00 € Standard-Nenngeld und keine gestarteten Uhren. Barzahlungen und Zeitstempel werden in JSON-Sicherungen aufgenommen.
+- **Tests / Version:** `site/assets/operations.js`, `operations-ui.js`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`; zusammen mit Altbestand 68 Logiktests und 4 simulierte UI-Tests bestanden. v0.5.0 noch nicht durch den manuellen FTPS-Workflow veröffentlicht.
