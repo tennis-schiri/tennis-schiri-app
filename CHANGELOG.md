@@ -5,6 +5,26 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.5.0] – Bar-Nenngeld, Spielzeiten und laufende Rundenuhr
+
+**Stand 2026-11-05:** In GitHub implementiert. **Noch kein bestätigter manueller FTPS-Upload oder echter Browsertest für Version 0.5.0.** Der letzte veröffentlichte Stand ist 0.4.0.
+
+### Neue Funktionen
+- **Nenngeld / Barzahlung:** Standardbetrag in Euro pro Turnier (Voreinstellung 0,00 €); optional individuelles Nenngeld je Spieler, auch kostenfrei. Kein Bezahldienst, keine Onlinezahlung.
+- Neuer Bereich „Nenngeld“ mit Kassenliste, Sollbetrag, tatsächlich bar erhaltenem Betrag, offenen Forderungen, Teilzahlungen und sichtbaren Überzahlungen. „Rest bar erhalten“ bestätigt ausschließlich bei tatsächlicher Bargeldübergabe; Zahlungen können im Dialog korrigiert oder auf 0 gesetzt werden.
+- Bestehende Barzahlungen bleiben bei späteren Anpassungen des Standardbetrags als Cent-Beträge dokumentiert. Alle angemeldeten Personen erscheinen in der Liste, auch bei Abwesenheit.
+- **Spielplan-Zeiten:** Geplante Runden- und Match-Zeiten werden explizit als Start–Ende angezeigt, inklusive Wechselpause/Pausenende und ggf. „+1 Tag“.
+- **„Runde starten“:** Live-Sekunden-Countdown gemäß eingestellter Spieldauer; Pausieren, Fortsetzen, Beenden, Zurücksetzen mit Bestätigung. Nach Ablauf roter Überzeit-Zähler statt automatischem Abbruch.
+- Zeitstempel und Pausendauer werden pro Runde im Browser gespeichert. Eine aktive Uhr läuft nach Neuladen zeitlich korrekt weiter; es darf nur eine Rundenuhr pro Turnier gleichzeitig laufen.
+- Alte Rundenuhren werden bei Neuauslosung gelöscht; bei Rücknahme der Auffüllrunde wird deren Uhr ebenfalls gelöscht.
+- Browserdaten- und JSON-Backup-Schema weiterhin Version 1, alte Turniere mit Standard 0,00 € und ohne Uhr kompatibel.
+- Neue Module `site/assets/operations.js` und `site/assets/operations-ui.js`. Der manuelle FTPS-Workflow führt weiterhin zuerst alle Tests aus und überträgt anschließend zwölf explizit zugelassene Dateien.
+
+### Tests und Einschränkungen
+- **68 Logiktests + 4 simulierte UI-Regressionstests bestanden**, inkl. bisheriger Schleifchen-Endrunde. Neue Dateien `tests/operations.test.mjs` und `tests/operations-ui.test.mjs`.
+- **Wichtig:** Die Uhr verwendet die lokale Uhrzeit des jeweiligen Geräts. Noch keine Geräte-Synchronisierung, gemeinsame Server-Uhr, akustische Signale oder Echtzeit-Liveteilnahme über mehrere Geräte. Eine abgelaufene Uhr erzeugt weder Ergebnisse noch Schleifchen.
+- Kein umfassender Browser-/Praxistest, keine Freigabe für reale Turniere. Doppelturnier-Entwicklung vorerst zurückgestellt.
+
 ## [0.4.0] – Endrunde für Schleifchenturniere (8 oder 16 Spieler)
 
 **Stand 2026-11-05:** v0.4.0 im manuellen [GitHub-Actions-Lauf 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677) erfolgreich geprüft und per FTPS übertragen. Der Nutzer berichtet, dass die Endrunde anscheinend funktioniert. **Vollständige Browser-, Turnier- und Sicherheitstests bleiben offen.**
