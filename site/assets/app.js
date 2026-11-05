@@ -1,13 +1,28 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=060";
-import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=060";
-import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=060";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=060";
-import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=060";
-import { renderRibbonFinals } from "./finals-ui.js?v=060";
-import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=060";
-import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=060";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=061";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=061";
+import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=061";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=061";
+import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=061";
+import { renderRibbonFinals } from "./finals-ui.js?v=061";
+import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=061";
+import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=061";
+import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=061";
 
 const store = new BrowserTournamentStore();
+let remoteRequest=null;
+let remoteLastSent=0;
+let remoteStopPending=false;
+let remoteErrorShown=false;
+async function pushRemote() {
+  if(remoteRequest||remoteStopPending)return;
+  const t=store.active(),keys=t&&readLiveSecrets(t.id);
+  if(!t||!keys)return;
+  remoteRequest=publishLive(keys,publicLiveSnapshot(t));
+  try{await remoteRequest;remoteLastSent=Date.now();remoteErrorShown=false;}
+  catch(e){if(!remoteErrorShown){remoteErrorShown=true;flash("Fernanzeige: "+e.message,"bad");}}
+  finally{remoteRequest=null;}
+}
+
 const root = document.getElementById("app");
 const dialogRoot = document.getElementById("dialog-root");
 const noticeRoot = document.getElementById("toast-region");
@@ -73,7 +88,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.6.0</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.6.1</span>
   </div></header>`;
 }
 
@@ -110,7 +125,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.6.0</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.6.1</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -143,6 +158,22 @@ function sidebar(t) {
   </aside>`;
 }
 
+function remoteShareControls(t) {
+  const keys=readLiveSecrets(t.id);
+  const url=keys?remoteLiveUrl(keys.channel,window.location.href):null;
+  return `<div class="remote-live-panel">
+    <div><strong>${icon("monitor")} Fernanzeige für andere Geräte</strong>
+      <p>${keys?"Aktiv – Spielstände werden etwa alle drei Sekunden veröffentlicht.":
+        "Für einen eigenen Laptop, ein Tablet oder einen Smart-TV. Es werden nur Spielplan, Ergebnisse und Zwischenstand übertragen."}</p>
+      <small>Geschützter Testbereich: Am anderen Gerät ist gegebenenfalls das Webspace-Passwort nötig.</small></div>
+    <div class="remote-live-actions">
+      ${keys?`<button type="button" class="btn primary small" data-action="remote-copy">Live-Link kopieren</button>
+        <a class="btn subtle small" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Fernanzeige öffnen</a>
+        <button type="button" class="btn ghost small" data-action="remote-stop">Freigabe beenden</button>`:
+        '<button type="button" class="btn primary small" data-action="remote-start">Fernanzeige aktivieren</button>'}
+    </div>
+  </div>`;
+}
 function appTop(t) {
   return `<div class="toolbar">
     <div class="breadcrumb">TURNIERMANAGER <span>/</span> SCHLEIFCHENTURNIER</div>
@@ -157,7 +188,7 @@ function appTop(t) {
       <h1>${escapeHtml(t.name)}</h1><p>${icon("calendar")} ${dateDisplay(t.date)} <span>·</span> ${icon("clock")} ${escapeHtml(t.startTime)} Uhr <span>·</span> ${t.courts.length} Plätze</p>
     </div>
     <div class="hero-orbit" aria-hidden="true"><div class="tennis-ball"></div></div>
-  </div>`;
+  </div>${remoteShareControls(t)}`;
 }
 
 function stat(label, value, sub, type = "") {
@@ -427,7 +458,7 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.6.0 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.6.1 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -651,6 +682,39 @@ document.addEventListener("click", event => {
       body:cashPaymentBody(t,p,{escapeHtml})});
     return;
   }
+  if (action === "remote-start" && t) {
+    if(readLiveSecrets(t.id))return flash("Fernanzeige ist bereits aktiv.");
+    let keys;
+    try{keys=createLiveSecrets(window.crypto);}catch(e){return flash(e.message,"bad");}
+    return publishLive(keys,publicLiveSnapshot(t)).then(()=>{
+      saveLiveSecrets(t.id,keys);
+      remoteLastSent=Date.now();remoteErrorShown=false;
+      render();flash("Fernanzeige aktiviert. Den Zuschauer-Link jetzt kopieren.");
+    }).catch(e=>flash("Fernanzeige konnte nicht aktiviert werden: "+e.message,"bad"));
+  }
+  if (action === "remote-copy" && t) {
+    const keys=readLiveSecrets(t.id);
+    if(!keys)return flash("Bitte zuerst die Fernanzeige aktivieren.","bad");
+    const link=remoteLiveUrl(keys.channel,window.location.href);
+    if(navigator.clipboard?.writeText){
+      return navigator.clipboard.writeText(link).then(()=>flash("Live-Link kopiert."))
+        .catch(()=>window.prompt?.("Live-Link kopieren:",link));
+    }
+    window.prompt?.("Live-Link kopieren:",link);
+    return;
+  }
+  if (action === "remote-stop" && t) {
+    const keys=readLiveSecrets(t.id);
+    if(!keys)return;
+    if(!confirm("Fernanzeige beenden? Der geteilte Link wird ungültig."))return;
+    remoteStopPending=true;
+    return (remoteRequest||Promise.resolve()).catch(()=>{})
+      .then(()=>publishLive(keys,null,{action:"stop"})).then(()=>{
+        clearLiveSecrets(t.id);remoteLastSent=0;remoteErrorShown=false;
+        render();flash("Fernanzeige beendet. Der geteilte Link ist ungültig.");
+      }).catch(e=>flash("Die Freigabe konnte nicht beendet werden: "+e.message,"bad"))
+      .finally(()=>{remoteStopPending=false;});
+  }
   if (action === "live-round" && t) return run(() => {
     const index=Number(trigger.dataset.round);
     const count=(t.draw?.rounds?.length||0)+(t.draw?.specialRound?1:0);
@@ -866,7 +930,10 @@ document.addEventListener("submit", event => {
 window.addEventListener("storage", event => { if (event.key === "tennis-schiri-tournaments-v1") { store.state = store.load(); render(); flash("Daten aus einem anderen Tab aktualisiert."); } });
 // Nur sichtbare Timer-Texte aktualisieren; Eingabeformulare nicht jede Sekunde neu aufbauen.
 if(typeof window.setInterval==="function"){
-  window.setInterval(()=>{ if(view==="draw")refreshClockDisplays(store.active(),document); },1000);
+  window.setInterval(()=>{
+    if(view==="draw")refreshClockDisplays(store.active(),document);
+    if(Date.now()-remoteLastSent>=3000)pushRemote();
+  },1000);
 }
 window.addEventListener("focus",()=>{ if(view==="draw")refreshClockDisplays(store.active(),document); });
 render();
