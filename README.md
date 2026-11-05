@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.4.0** · **Letzter bestätigter FTPS-Upload:** v0.3.3 am 2026-11-05 ([Run 42008064031](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42008064031)). Der Nutzer hat den Ablauf der Auffüllrunde anschließend als funktionsfähig beschrieben. **v0.4.0 ist noch nicht veröffentlicht oder im echten Browser geprüft.**
+**Aktueller GitHub-Code und letzter bestätigter FTPS-Upload:** **v0.4.0**, 2026-11-05 ([GitHub Actions Run 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677)). Nutzer-Rückmeldung: Endrunde scheint zu funktionieren; umfassender Praxis- und Sicherheitstest steht noch aus.
 
 ## Einstieg und Projektdokumentation
 
@@ -84,6 +84,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.4.0 manuell veröffentlichen. Anschließend die Endrunde mit 8 und 16 Spielern, Abwahl/Nachrückern, Siegerweitergabe, Endergebnis und Rücknahme im Browser testen. Danach das eigenständige Doppelturnier-Modul planen.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.4.0 wurde erfolgreich veröffentlicht und erhielt positives erstes Funktionsfeedback. Nächster Entwicklungsschritt ist das **eigenständige Doppelturnier mit festen Teams**. Umfassende Praxis-/Browser- und Sicherheitstests des Schleifchenturniers bleiben offen.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
