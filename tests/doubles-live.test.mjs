@@ -9,8 +9,8 @@ import {buildLiveDisplay} from "../site/assets/live-model.js";
 import {renderLiveScreen} from "../site/assets/live-ui.js";
 import {publicLiveSnapshot,remoteLiveUrl} from "../site/assets/remote-live.js";
 
-function fixture({teams=8,courts=4}={}) {
-  const t=newTournament({type:"doubles",name:"Jugend & Erwachsene",rounds:4,
+function fixture({teams=8,courts=4,games=4}={}) {
+  const t=newTournament({type:"doubles",name:"Jugend & Erwachsene",rounds:games,
     duration:20,breakMinutes:10,startTime:"10:00",
     courts:Array.from({length:courts},(_,i)=>i+1)});
   t.doubles.teams=Array.from({length:teams},(_,i)=>({
@@ -48,6 +48,7 @@ test("Doppel-Livebild verwendet feste Partner und eine Teamrangliste",()=>{
 test("Zuschauer-Daten sind auf Spielpaarungen und Rangliste begrenzt",()=>{
   const t=fixture();
   t.doubles.teams[0].player1='<script>alert("x")</script>';
+  t.doubles.draw=generateDoublesDraw(t,{seed:9876});
   // Der Spielplan bleibt gültig: Name ist kein Bestandteil der Draw-Signatur,
   // beim Neuladen würden unzulässige Namen erst in die Oberfläche escaped.
   const view=publicLiveSnapshot(t);
@@ -64,7 +65,7 @@ test("Zuschauer-Daten sind auf Spielpaarungen und Rangliste begrenzt",()=>{
 });
 
 test("Doppel-Monitor wählt auf Wunsch eine Runde und erhält Auswahl nach JSON-Reload",()=>{
-  const t=fixture({teams:9,courts:1});
+  const t=fixture({teams:9,courts:1,games:6});
   const index=20;
   t.liveDisplay={mode:"round",index};
   assert.equal(buildLiveDisplay(t).index,index);
