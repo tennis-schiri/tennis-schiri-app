@@ -159,8 +159,9 @@ export class BrowserTournamentStore {
       name,
       group: values.group === "stark" ? "stark" : "schwaecher",
       present: values.present === true,
-      feeOverrideCents: values.feeOverrideCents==null ? (old?.feeOverrideCents??null) :
-        money(values.feeOverrideCents),
+      feeOverrideCents: Object.prototype.hasOwnProperty.call(values,"feeOverrideCents")
+        ? (values.feeOverrideCents==null ? null : money(values.feeOverrideCents))
+        : (old?.feeOverrideCents??null),
       feePaidCents: old?.feePaidCents||0,
       feePaidAt: old?.feePaidAt||null
     };
