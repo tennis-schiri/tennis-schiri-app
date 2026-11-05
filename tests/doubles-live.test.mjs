@@ -45,6 +45,22 @@ test("Doppel-Livebild verwendet feste Partner und eine Teamrangliste",()=>{
   assert.match(html,/Game-Differenz/);
 });
 
+test("Nächste Doppel-Runde ist auch bei sechs Plätzen sichtbar; Teamrangliste bleibt",()=>{
+  const t=fixture({teams:12,courts:6});
+  const current=buildLiveDisplay(t);
+  assert.equal(current.matches.length,6);
+  assert.equal(current.nextRound.title,"Runde 2");
+  assert.equal(current.nextRound.matches.length,6);
+  assert.ok(current.ranking.length>0);
+  const html=renderLiveScreen(current);
+  assert.match(html,/live-matches-dense/);
+  assert.match(html,/Nächste Runde: Runde 2/);
+  assert.match(html,/Doppel-Livetabelle/);
+  assert.match(html,/live-rankings/);
+  t.liveDisplay={mode:"round",index:t.doubles.draw.rounds.length-1};
+  assert.equal(buildLiveDisplay(t).nextRound,null);
+});
+
 test("Zuschauer-Daten sind auf Spielpaarungen und Rangliste begrenzt",()=>{
   const t=fixture();
   t.doubles.teams[0].player1='<script>alert("x")</script>';
