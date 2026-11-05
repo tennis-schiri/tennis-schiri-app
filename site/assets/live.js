@@ -1,8 +1,8 @@
-import {BrowserTournamentStore} from "./storage.js?v=061";
-import {buildLiveDisplay} from "./live-model.js?v=061";
+import {BrowserTournamentStore} from "./storage.js?v=070";
+import {buildLiveDisplay} from "./live-model.js?v=070";
 import {clockFor} from "./operations.js?v=061";
-import {renderLiveScreen} from "./live-ui.js?v=061";
-import {fetchLive,remoteClockAt,liveKeyValid} from "./remote-live.js?v=061";
+import {renderLiveScreen} from "./live-ui.js?v=070";
+import {fetchLive,remoteClockAt,liveKeyValid} from "./remote-live.js?v=070";
 
 const root=document.getElementById("live-root");
 const displayedAt=document.getElementById("live-current-time");
