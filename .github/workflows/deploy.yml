@@ -39,7 +39,7 @@ jobs:
           node-version: '22'
 
       - name: Auslosungslogik vor Upload testen
-        run: node --test tests/draw.test.mjs
+        run: node --test tests/*.test.mjs
 
       - name: Startseite sicher in den App-FTP-Ordner laden
         env:
@@ -49,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in site/index.html site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/app.js; do
+          for file in site/index.html site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/app.js; do
             test -f "$file"
           done
           : "${FTP_HOST:?FTP_HOST ist nicht als GitHub Secret hinterlegt}"
@@ -59,7 +59,7 @@ jobs:
           # Der FTP-Nutzer ist auf das App-Verzeichnis beschränkt.
           # Nur ausdrücklich zugelassene Dateien, KEINE Server-Dateien löschen.
           # .htaccess, index.htm und WordPress bleiben unverändert.
-          for file in site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/app.js site/index.html; do
+          for file in site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/app.js site/index.html; do
             remote="${file#site/}"
             echo "Übertrage $remote …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
@@ -67,4 +67,4 @@ jobs:
               --upload-file "$file" \
               "ftp://${FTP_HOST}:21/$remote"
           done
-          echo "Alle fünf App-Dateien wurden hochgeladen."
+          echo "Alle sechs App-Dateien wurden hochgeladen."
