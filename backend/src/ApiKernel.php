@@ -72,6 +72,8 @@ final class ApiKernel
             'login'=>[15,900],
             'reset'=>[5,3600],
             'verify'=>[12,900],
+            'resend'=>[3,3600],
+            'club'=>[4,86400],
             'invite'=>[12,3600],
             'accept'=>[12,900]
         ];
@@ -105,6 +107,12 @@ final class ApiKernel
                     $email,self::value($body,'password'),
                     self::value($body,'displayName',120)
                 );
+                return ['status'=>202,'body'=>['message'=>'Falls möglich, wurde eine Bestätigungsmail versendet.']];
+            }
+            if ($method==='POST' && $path==='/auth/resend-verification') {
+                $email=AccountPolicy::normalizeEmail(self::value($body,'email',254));
+                $this->throttle('resend',$remoteAddr,$email);
+                $this->auth->resendVerification($email);
                 return ['status'=>202,'body'=>['message'=>'Falls möglich, wurde eine Bestätigungsmail versendet.']];
             }
             if ($method==='POST' && $path==='/auth/verify') {
@@ -149,6 +157,7 @@ final class ApiKernel
             }
             if ($method==='POST' && $path==='/clubs') {
                 $user=$this->authenticated($cookies,$headers,true);
+                $this->rate->hit('club','user',$user['id'],4,86400);
                 $id=$this->clubs->createOrganization(
                     $user['id'],self::value($body,'name',160),
                     self::value($body,'slug',80)
