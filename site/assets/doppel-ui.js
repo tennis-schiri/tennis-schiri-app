@@ -5,6 +5,10 @@ import {
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
   doublesPlayoffStatus,doublesPlanRound,changeDoublesClock,normalizeDoublesResult
 } from "./doubles.js?v=070";
+import {
+  publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
+  clearLiveSecrets,publishLive,remoteLiveUrl
+} from "./remote-live.js?v=070";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
@@ -12,6 +16,20 @@ const dialogRoot=document.getElementById("dialog-root");
 const noticeRoot=document.getElementById("toast-region");
 let view=store.active()?.type==="doubles"?"overview":"home";
 let currentRound=0;
+let remoteRequest=null,remoteLastSent=0,remoteStopPending=false,remoteErrorShown=false;
+async function pushRemote() {
+  if(remoteRequest||remoteStopPending)return;
+  const t=active(),keys=t&&readLiveSecrets(t.id);
+  if(!t||!keys)return;
+  remoteRequest=publishLive(keys,publicLiveSnapshot(t));
+  try{
+    await remoteRequest;
+    remoteLastSent=Date.now();
+    remoteErrorShown=false;
+  }catch(error){
+    if(!remoteErrorShown){remoteErrorShown=true;flash("Fernanzeige: "+error.message,true);}
+  }finally{remoteRequest=null;}
+}
 
 const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -55,6 +73,19 @@ function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
     '<p>Teams, Barzahlungen und Ergebnisse werden im Browser dieses Geräts gespeichert. '+
     'Sichere die Daten regelmäßig als JSON. Eine öffentliche Fernanzeige und die gemeinsame Bearbeitung auf anderen Geräten sind für diesen Doppelmodus noch nicht freigeschaltet.</p></div></div>';
+}
+function livePanel(t) {
+  const keys=readLiveSecrets(t.id);
+  const url=keys?remoteLiveUrl(keys.channel,window.location.href):null;
+  return '<div class="remote-live-panel"><div><strong>Fernanzeige für Monitor, Tablet oder Smart-TV</strong>'+
+    '<p>Nur Paarungen, Ergebnisse, Rundenuhr und Teamrangliste. Kein Bar-Nenngeld und keine Anwesenheitslisten. '+
+    'Ein separater Zuschauer-Link wird erst nach deiner Freigabe erzeugt.</p></div>'+
+    '<div class="remote-live-actions"><button class="btn ghost small" data-act="live-local">Monitor öffnen</button>'+
+    (keys?'<button class="btn primary small" data-act="remote-copy">Zuschauer-Link kopieren</button>'+
+      '<button class="btn ghost small" data-act="remote-stop">Freigabe beenden</button>':
+      '<button class="btn primary small" data-act="remote-start">Fernanzeige aktivieren</button>')+
+    (t.liveDisplay?'<button class="btn ghost small" data-act="live-auto">Anzeige automatisch wählen</button>':'')+
+    '</div></div>';
 }
 function home() {
   const all=doublesList();
@@ -101,7 +132,7 @@ function overview(t) {
   return sectionHead("DOPPELTURNIER / ZENTRALE","Turnierübersicht",
     "Feste Teams, Vorrunde und die besten acht Teams in den Play-offs.",
     '<button class="btn subtle" data-act="settings">Turniereinstellungen</button>')+
-    stats(t)+
+    stats(t)+livePanel(t)+
     '<div class="double-grid"><section class="double-panel"><h3>Turnierstatus</h3>'+
     '<p><strong>Turnier:</strong> '+esc(t.name)+'<br><strong>Datum:</strong> '+dateText(t.date)+
     '<br><strong>Start:</strong> '+esc(t.startTime)+' Uhr<br><strong>Spieldauer:</strong> '+t.duration+
@@ -185,11 +216,12 @@ function drawPage(t) {
   const index=Math.min(currentRound,draw.rounds.length-1),r=draw.rounds[index];
   const done=r.matches.filter(hasResult).length;
   const all=draw.rounds.flatMap(x=>x.matches);
-  return top+'<div class="double-success">'+all.filter(hasResult).length+' von '+all.length+' Begegnungen erfasst. '+draw.rounds.length+' zeitliche Spielblöcke.</div>'+
+  return top+livePanel(t)+'<div class="double-success">'+all.filter(hasResult).length+' von '+all.length+' Begegnungen erfasst. '+draw.rounds.length+' zeitliche Spielblöcke.</div>'+
     '<div class="double-round-list" aria-label="Runde auswählen">'+
     draw.rounds.map((item,i)=>'<button data-act="round" data-round="'+i+'" class="'+(i===index?"active":"")+'">Runde '+(i+1)+
       (item.matches.every(hasResult)?" ✓":"")+'</button>').join("")+'</div>'+
     '<section class="double-panel"><h3>Runde '+(index+1)+' · '+done+' / '+r.matches.length+' Ergebnisse</h3>'+
+    '<div class="double-actions"><button class="btn ghost small" data-act="live-round" data-round="'+index+'">Diese Runde auf Monitor zeigen</button></div>'+
     roundTimer(t,index)+r.matches.map((m,i)=>matchMarkup(t,m,i,{round:index})).join("")+'</section>';
 }
 function tablePage(t) {
@@ -220,7 +252,8 @@ function playoffsPage(t) {
   if(t.doubles.playoffs) {
     if(!stage.ready)return head+'<div class="double-warning">'+esc(stage.error||"Play-offs nicht verfügbar.")+'</div>';
     const p=stage.playoffs;
-    return head+'<div class="double-actions"><button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
+    return head+livePanel(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
+      '<button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
       (stage.champion?'<div class="double-success"><strong>Turniersieger: '+esc(label(t,stage.champion))+'</strong>'+
         (stage.third?'<br>Platz 3: '+esc(label(t,stage.third)):'')+'</div>':'')+
       '<div class="double-bracket"><div>'+playoffStage(t,"Viertelfinale","quarterfinals",p.quarterfinals)+
@@ -457,6 +490,65 @@ document.addEventListener("click",event=>{
   if(act==="settings"){view="settings";render();return;}
   if(act==="close")return closeDialog();
   if(!t)return;
+  if(act==="live-local") {
+    const target=new URL("./live.html",window.location.href);
+    target.searchParams.set("turnier",t.id);
+    window.open(target.href,"_blank","noopener,noreferrer");
+    return;
+  }
+  if(act==="live-round")return run(()=>{
+    const index=Number(trigger.dataset.round);
+    if(!t.doubles.draw||!verifyDoublesDraw(t).ok||
+      !Number.isInteger(index)||index<0||index>=t.doubles.draw.rounds.length)
+      throw Error("Bitte zuerst eine gültige Doppel-Vorrunde auslosen.");
+    mutate(t,{liveDisplay:{mode:"round",index}});
+    flash("Diese Runde wird auf dem Live-Monitor gezeigt.");
+  });
+  if(act==="live-playoffs")return run(()=>{
+    if(!t.doubles.playoffs||!doublesPlayoffStatus(t).ready)
+      throw Error("Bitte zuerst gültige Play-offs auslosen.");
+    mutate(t,{liveDisplay:{mode:"finals"}});
+    flash("Die Play-offs werden auf dem Live-Monitor gezeigt.");
+  });
+  if(act==="live-auto")return run(()=>{
+    mutate(t,{liveDisplay:null});
+    flash("Der Live-Monitor wählt die laufende Runde oder die Play-offs automatisch.");
+  });
+  if(act==="remote-start") {
+    if(readLiveSecrets(t.id))return flash("Fernanzeige ist bereits aktiv.");
+    if(!t.doubles.draw||!verifyDoublesDraw(t).ok)
+      return flash("Bitte zuerst eine gültige Doppel-Vorrunde auslosen.",true);
+    let keys;
+    try{keys=createLiveSecrets(window.crypto);}catch(error){return flash(error.message,true);}
+    return publishLive(keys,publicLiveSnapshot(t)).then(()=>{
+      saveLiveSecrets(t.id,keys);
+      remoteLastSent=Date.now();remoteErrorShown=false;
+      render();flash("Fernanzeige aktiviert. Den Zuschauer-Link jetzt kopieren.");
+    }).catch(error=>flash("Fernanzeige konnte nicht aktiviert werden: "+error.message,true));
+  }
+  if(act==="remote-copy") {
+    const keys=readLiveSecrets(t.id);
+    if(!keys)return flash("Bitte zuerst die Fernanzeige aktivieren.",true);
+    const link=remoteLiveUrl(keys.channel,window.location.href);
+    if(navigator.clipboard?.writeText){
+      return navigator.clipboard.writeText(link).then(()=>flash("Live-Link kopiert."))
+        .catch(()=>window.prompt?.("Live-Link kopieren:",link));
+    }
+    window.prompt?.("Live-Link kopieren:",link);
+    return;
+  }
+  if(act==="remote-stop") {
+    const keys=readLiveSecrets(t.id);
+    if(!keys)return;
+    if(!confirm("Fernanzeige beenden? Der geteilte Link wird ungültig."))return;
+    remoteStopPending=true;
+    return (remoteRequest||Promise.resolve()).catch(()=>{})
+      .then(()=>publishLive(keys,null,{action:"stop"})).then(()=>{
+        clearLiveSecrets(t.id);remoteLastSent=0;remoteErrorShown=false;
+        render();flash("Fernanzeige beendet. Der Zuschauer-Link wurde widerrufen.");
+      }).catch(error=>flash("Fernanzeige konnte nicht beendet werden: "+error.message,true))
+      .finally(()=>{remoteStopPending=false;});
+  }
   if(act==="team-add")return run(()=>teamDialog(t));
   if(act==="team-edit")return run(()=>teamDialog(t,t.doubles.teams.find(x=>x.id===trigger.dataset.id)));
   if(act==="cash")return run(()=>cashDialog(t,t.doubles.teams.find(x=>x.id===trigger.dataset.id)));
@@ -510,6 +602,7 @@ document.addEventListener("click",event=>{
     flash("Rundenuhr aktualisiert.");
   });
   if(act==="delete")return run(()=>{
+    if(readLiveSecrets(t.id))throw Error("Bitte zuerst die Fernanzeige beenden, damit der Zuschauer-Link widerrufen wird.");
     if(!confirm("Doppelturnier „"+t.name+"“ inklusive aller Daten wirklich löschen?"))return;
     store.deleteTournament(t.id);view="home";render();flash("Turnier gelöscht.");
   });
@@ -561,6 +654,7 @@ window.addEventListener("storage",event=>{
 });
 if(typeof window.setInterval==="function"){
   window.setInterval(()=>{
+    if(Date.now()-remoteLastSent>=3000)pushRemote();
     const t=active();
     if(!t||view!=="draw")return;
     for(const element of document.querySelectorAll("[data-clock][role=timer]")){
