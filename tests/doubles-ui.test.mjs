@@ -38,6 +38,9 @@ test("Doppel-Oberfläche stellt Teamverwaltung, Kasse, Vorrunde, Endrunde und Ba
   assert.match(ui,/function cashDialog/);
   assert.match(ui,/normalizeDoublesResult/);
   assert.match(ui,/store\.exportJson\(\)/);
+  assert.match(ui,/store\.importJson\(raw\)/);
+  assert.match(ui,/id="doubles-import"/);
+  assert.match(ui,/file\.size>3000000/);
   assert.match(ui,/window\.addEventListener\("storage"/);
   assert.doesNotMatch(ui,/\bfetch\s*\(/);
   assert.doesNotMatch(ui,/Stripe|Mollie|PayPal/);
