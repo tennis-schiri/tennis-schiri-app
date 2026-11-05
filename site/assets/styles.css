@@ -58,3 +58,36 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .court-editor-row input{width:100%;min-width:0;min-height:40px;border:1px solid #cadbd5;background:#fff;border-radius:8px;padding:9px 12px;color:var(--ink)}
 .court-editor-row input:focus-visible{border-color:var(--orange)}
 @media(max-width:700px){.court-panel-head .btn{width:100%}.court-editor-row{grid-template-columns:80px minmax(0,1fr)}}
+
+/* v0.3.0 – Schleifchenturnier-Auslosung */
+.draw-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.draw-rounds{display:flex;flex-direction:column;gap:13px;margin:24px 0}
+.draw-round{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:var(--shadow)}
+.draw-round summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;padding:18px 23px;gap:12px;background:#f9faf7}
+.draw-round summary::-webkit-details-marker{display:none}
+.draw-round summary>span:first-child{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.draw-round summary strong{font-size:17px;letter-spacing:-.025em}
+.draw-round summary small{font-size:12px;color:var(--muted);font-weight:650}
+.draw-expand{color:#bd5635;font-size:12px;font-weight:850}
+.draw-round[open] .draw-expand{color:var(--navy)}
+.draw-match-list{padding:6px 22px 18px}
+.draw-match{display:grid;grid-template-columns:minmax(110px,.75fr) minmax(0,1.3fr) 34px minmax(0,1.3fr);gap:12px;align-items:center;border-top:1px solid #edf1ed;padding:16px 3px;min-height:74px}
+.draw-court{display:flex;gap:9px;align-items:center;color:#53736d;font-weight:850;font-size:12px;overflow-wrap:anywhere}
+.draw-court .icon{width:16px;height:16px}
+.draw-team{display:flex;flex-direction:column;gap:5px;min-width:0}
+.draw-team span{font-size:10px;font-weight:900;letter-spacing:.11em;color:#9cad9f}
+.draw-team strong{font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.draw-team em{font-style:normal;color:#d8643b;padding:0 4px}
+.draw-versus{border-radius:100px;background:#edf2eb;color:#5d7770;padding:8px 4px;text-align:center;font-size:10px;font-weight:950}
+@media(max-width:1000px){.draw-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+  .nav-tabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .nav-tabs button{font-size:10px;gap:5px;padding:8px 2px}
+  .nav-tabs button .icon{width:16px;height:16px}
+  .draw-round summary{padding:15px}
+  .draw-round summary>span:first-child{gap:5px;flex-direction:column;align-items:flex-start}
+  .draw-match-list{padding:5px 12px 10px}
+  .draw-match{grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:6px}
+  .draw-court{grid-column:1/-1;margin-bottom:5px}
+  .draw-team strong{font-size:12px}
+}
