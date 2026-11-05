@@ -53,7 +53,8 @@ try {
     foreach ($files as $file) {
         $version = basename($file);
         $sql = file_get_contents($file);
-        if ($sql === false || !str_starts_with($version, '00')) {
+        if ($sql === false
+            || preg_match('/^[0-9]{3}_[a-z0-9_]+\.sql$/D', $version) !== 1) {
             throw new RuntimeException('Ungültige Migrationsdatei.');
         }
         $digest = hash('sha256', $sql);
