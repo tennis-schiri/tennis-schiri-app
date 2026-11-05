@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.3.2 · **Letzter bestätigter Upload:** v0.3.1 am 2026-11-05 (GitHub-Actions-Lauf [`41991275917`](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917)). Die neue kompakte Ergebnisanzeige aus v0.3.2 liegt bislang nur im Repository.
+**Aktueller GitHub-Code:** v0.3.3 · **Letzter bestätigter Upload:** v0.3.2 am 2026-11-05 ([Run 42003891468](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42003891468)). **v0.3.3 liegt noch ausschließlich im Repository** und ist nicht live getestet.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.3.2 im Repository)
+## Aktuelle Funktionen (v0.3.3 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -43,9 +43,12 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Nach allen regulären Ergebnissen prüfen, ob genügend Spieler mit 0 oder 1 Schleifchen für die Auffüllrunde infrage kommen
 - Ergebnisse ändern, löschen und mit JSON sichern bzw. wiederherstellen
 - **Kompakte Ergebnisansicht nach dem Speichern:** Ergebnis direkt zwischen den Doppel-Teams, Sieger deutlich hervorgehoben, Eingabeformular ausgeblendet; „Ergebnis ändern“ öffnet die vorausgefüllten Felder und „Abbrechen“ verwirft ungespeicherte Änderungen
+- **Auffüllrunde nach V7:** Nach vollständigen regulären Ergebnissen automatisch 0-/1-Schleifchen-Auffüllspieler auswählen; die Zusatzspiele zählen nur für die regulären Teilnehmer
+- Auffüller im Spielplan gelb markiert, eigene Ergebnisfelder und sichere Rücknahme der Auffüllrunde; normale Ergebnisse bleiben dabei erhalten
+- **Testvorlage:** Über „Auffüllrunde testen“ direkt eine 5+5-Spieler-Demo mit drei Wertungsspielen und drei Plätzen anlegen
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
-**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, tatsächliche Auffüller-Auslosung, Endrunde, zentrale Livetabelle oder Mehrgerätebetrieb. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
+**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, Endrunde, zentrale Livetabelle oder Mehrgerätebetrieb. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
 
 ## Technik und Dateistruktur
 
@@ -55,7 +58,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/storage.js` – browserbasierter Speicheradapter, Datenmodell Version 1
 - `site/assets/draw.js` – Auslosungslogik und Spielplanprüfung
 - `site/assets/results.js` – Spielstände, Sieger, Schleifchenwertung und Kandidatenprüfung
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
+- `site/assets/special.js` – separate Auffüller-Auslosung, Validierung und Rücknahme
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -65,7 +69,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die fünf Dateien in `site/assets/` per FTPS übertragen.
+3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die sechs Dateien in `site/assets/` per FTPS übertragen.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -74,6 +78,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.2 manuell veröffentlichen und die kompakte Ergebnisanzeige samt Bearbeiten/Abbrechen im echten Browser testen. Danach die regelgerechte Auffüllrunde und Endrunde umsetzen.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.3 manuell veröffentlichen und mit der Auffüllrunden-Demo die Auslosung, Wertung und Rücknahme testen. Danach die Endrunde und den Turnierabschluss umsetzen.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
