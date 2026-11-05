@@ -5,6 +5,10 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.7.0 Live-Monitor-Layout] – Kompakte Paarungen und nächste Runde (nur GitHub)
+
+**2026-11-05:** Gemeinsame Monitoransicht beider Turnierarten überarbeitet: kleinere Karten und Schrift, bei mehr als vier gleichzeitig angezeigten Plätzen ein dichteres Raster, dazu unter den aktuellen Begegnungen der bereits ausgeloste nächste Spielblock mit geplanter Startzeit. Die bestehende Livetabelle bleibt immer neben dem Spielplan bzw. unter ihm auf schmalen Bildschirmen. Nächste Runde nur anzeigen, wenn sie tatsächlich existiert; keine fiktiven Paarungen. Für Play-offs wird eine folgende Stufe nur bei feststehenden Paarungen angekündigt. Der gefilterte PHP-Snapshot erlaubt das neue `nextRound`-Objekt mit derselben strikten Paarungs-Whitelist; keine Kassen-/Check-in-Daten. Tests in `live.test.mjs`, `doubles-live.test.mjs`, `live-ui.test.mjs` und `live-feed.test.mjs` ergänzt. **Kein FTPS-Upload; echte Browser-/GitHub-CI-Prüfung noch offen.**
+
 ## [0.7.0] – Doppelturnier mit festen Partnern (nur GitHub, nicht veröffentlicht)
 
 **2026-11-05:** Neue eigenständige Turnierart als lokale Testversion implementiert. Letzter bestätigter FTP-Upload bleibt **v0.6.1** (Run 42044203175). Noch keine Freigabe, kein Webhosting-Test und kein neuer Upload.
