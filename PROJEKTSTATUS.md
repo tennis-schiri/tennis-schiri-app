@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.6.0**  
-**FTPS-Upload zuletzt bestätigt:** **v0.5.1** – manueller [GitHub-Actions-Lauf 42033283559](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42033283559) vom **2026-11-05** erfolgreich (Commit `195afe4c42f7a0db64f2e87ec7e809dec4adf6c5`). Der Nutzer beurteilt die kombinierte Teilnehmer-/Nenngeldliste positiv. **v0.6.0 mit Live-Monitor liegt bisher nur in GitHub; kein echter Monitor-Browsertest oder FTPS-Upload bestätigt.**
+**Version im GitHub-Code:** **0.6.1**  
+**FTPS-Upload zuletzt bestätigt:** **v0.6.0** – manueller [GitHub-Actions-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292) vom **2026-11-05** erfolgreich (Commit `30d455808cbd54c8ff6cc6aec77d8b7e4d293e10`). **v0.6.1 mit geräteübergreifendem PHP-Live-Dienst ist noch nicht hochgeladen oder auf ALL-INKL getestet.**
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -31,7 +31,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.6.0 17 ausschließlich freigegebene Dateien inkl. separater Monitorseite; kein automatischer Deploy bei Code-Commit
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.6.1 nur 19 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
@@ -70,13 +70,18 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Die Turnierleitung kann einzelne Runden oder die Endrunde ausdrücklich auswählen; sonst wird die gerade laufende Runde automatisch angezeigt. Auswahl wird als `liveDisplay` im lokalen Turnier gespeichert
 - [x] Datenaktualisierung im zweiten Fenster per `storage`-Ereignis und ergänzender Sekundenprüfung; kein Nenngeld/Bezahlstatus oder Bearbeiten auf der Anzeige
 - [x] Zusätzliche Tests `tests/live.test.mjs` (14), `tests/live-ui.test.mjs` (5) und zwei UI-Synchronisations-/Bedientests; **98 Logik-/Darstellungsprüfungen + 7 simulierte UI-Tests = 105 bestanden**
+- [x] **v0.6.1: unabhängige Fernanzeige**: Turnierleitung startet sie ausdrücklich und erhält kopierbaren Zuschauer-Link. Externe Laptops, Tablets und Smart-TVs mit Browser lesen über `site/live-feed.php` aktualisierte Paarungen, Ergebnisse, Zwischenstand und Rundenuhr.
+- [x] Getrennter starker Lese- und Schreibschlüssel; der Schreibschlüssel bleibt in einem eigenen Browser-Speichereintrag, nicht im Zuschauer-Link und nicht im JSON-Backup. Ein geteiltes Fernanzeige-Kennwort berechtigt nur zum Lesen.
+- [x] PHP-Dienst mit datensparsamem Whitelisting, temporärer Dateispeicherung **außerhalb des öffentlichen Dokumentenverzeichnisses**, Ablauf nach 24h ohne neue Veröffentlichung und sofortigem Link-Widerruf. **Kein** Abgleich der vollständigen Turnier-/Nenngeld-Daten.
+- [x] Eigene Live-Ansicht pollt Server ungefähr alle 3 Sekunden; Countdown basiert auf Server-Zeitstempel statt absoluter Uhrzeit des TV-Geräts; bei unterbrochener Übertragung bzw. Widerruf Hinweis/Warteansicht.
+- [x] Neue `tests/remote-live.test.mjs` (8), `tests/live-feed.test.mjs` (PHP-Integration), `tests/remote-publisher-ui.test.mjs` und `tests/remote-viewer-ui.test.mjs`; **116 Tests erfolgreich**, PHP-Syntax und echte API-Requests im GitHub-Testlauf [42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731). Kein Deployment in diesem Testlauf.
 
-**Prüfstand:** Version **0.5.1** ist zuletzt erfolgreich per manuellem FTPS-Lauf veröffentlicht worden (Run `42033283559`). In GitHub ist **0.6.0** mit einer schreibgeschützten Live-Ansicht für einen zweiten Monitor implementiert. Aktueller simulierter Prüflauf: **98 Logik-/Darstellungstests sowie 7 UI-/Synchronisationstests erfolgreich** (gesamt 105). **Weder FTPS-Upload noch echter zweiter Monitor für v0.6.0 getestet.** Eine Live-Synchronisierung funktioniert nur in verschiedenen Fenstern/Tabs desselben Browserprofils desselben Rechners; für unabhängige Geräte fehlt Backend/Persistenz. Keine Freigabe für reale Turniere.
+**Prüfstand:** Letzter bestätigter FTPS-Upload ist **v0.6.0** (Run `42037542292`). **v0.6.1** mit separatem PHP-Live-Zwischenspeicher, Opt-in-Freigabe und unabhängigem Zuschauer-Link liegt im GitHub-Code. Der automatische [GitHub-Testlauf 42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731) hat **116 Tests und die PHP-Syntaxprüfung erfolgreich** abgeschlossen, einschließlich einer lokalen API-Integration. **Noch kein Upload und kein echter ALL-INKL-/Smart-TV-/Zweitgeräte-Funktionstest.** Der PHP-Dienst setzt PHP 8.2+ und beschreibbares Server-Temp-Verzeichnis voraus. Apache-Passwortschutz am externen Viewer bleibt vorläufig aktiv. Keine Freigabe für reale Turniere und keine Cloud-Mehrgeräte-Bearbeitung.
 
 ## Nicht implementiert
 
 - [ ] Eigenständiger Doppelturniermodus und One Point Cup (Schleifchenturnier-Endrunde mit v0.4.0 veröffentlicht; erster positiver Funktionseindruck)
-- [ ] Serverbasierte Livetabelle und vollständige Turnierwertung (lokale Ergebniserfassung und Schleifchen-Zwischenstand sind implementiert)
+- [ ] Vollständige zentrale Mehrgeräte-Datenbank und gemeinsame Turnierbearbeitung (die **lesende** PHP-Fernanzeige der Spielstände ist in v0.6.1 implementiert und wartet auf den Webhosting-Praxistest)
 - [ ] Eigenständige Verwaltung von Doppelturnieren mit dauerhaft festen Teams über alle Turnierrunden
 - [ ] Server-Datenbank, Benutzerkonten, Rollen/Rechte, Mehrgeräte-Synchronisierung
 - [ ] Mehrbenutzerbetrieb, Backups auf Serverebene, Datenschutz- und Sicherheitsfreigabe
@@ -94,20 +99,20 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.6.0 vorgesehene Upload-Dateien | `site/index.html`, `site/live.html`, `site/favicon.png`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, `site/assets/live.css`, `site/assets/live-model.js`, `site/assets/live-ui.js`, `site/assets/live.js` |
+| Für v0.6.1 vorgesehene Upload-Dateien | 19 ausdrücklich freigegebene Dateien: `site/index.html`, `site/live.html`, `site/live-feed.php`, `site/favicon.png` sowie `site/assets/styles.css`, `storage.js`, `draw.js`, `results.js`, `special.js`, `finals.js`, `finals-ui.js`, `operations.js`, `operations-ui.js`, `app.js`, `live.css`, `live-model.js`, `live-ui.js`, `live.js`, `remote-live.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
 
-**Wichtig:** Der Workflow lädt ausschließlich 17 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich 19 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.6.0 manuell hochladen:** GitHub Actions → bisheriger `workflow_dispatch` auf `main`. Der Testschritt `node --test tests/*.test.mjs` muss erfolgreich sein, bevor die 17 Dateien übertragen werden.
-2. **Zwei-Monitor-Test:** Im selben Browserprofil einen Turnierleiter-Tab und das über „Live-Monitor öffnen“ gestartete Fenster öffnen. Dieses auf den per Kabel angeschlossenen zweiten Bildschirm ziehen und auf Vollbild stellen.
-3. **Live-Daten prüfen:** Runde starten, Countdown in der Anzeige vergleichen, Siegerergebnis speichern, automatische Aktualisierung der Spielkarten/Zwischenstände kontrollieren und gezielt eine andere Runde sowie die Endrunde anzeigen. Auffüllrunde und Sieger-Doppel testen.
-4. **Grenze:** Ein unabhängiger Rechner/TV-Browser kann lokale Browserdaten nicht sehen. Dafür sind Serverdatenbank, Berechtigungs-/Sicherheitskonzept und echter Mehrgeräte-Push oder Polling nötig. Bis dahin keine produktive öffentliche Live-Anzeige.
-5. **Weiter im Schleifchenturnier:** Weitere Verbesserungen anhand des Monitor-Tests; eigenständige Doppelturniere bleiben vorerst zurückgestellt.
+1. **v0.6.1 manuell veröffentlichen:** Im GitHub-Actions-Workflow `deploy.yml` auf `main` starten. Vor FTPS-Upload laufen PHP-8.2-/Syntaxprüfung und alle 116 Tests; der reine Testworkflow `verify.yml` ist bereits grün (Run 42041015731).
+2. **ALL-INKL-PHP prüfen:** Testversion im KAS auf eine unterstützte aktuelle PHP-Version (mindestens 8.2) einstellen, wenn der Endpoint `/live-feed.php` Fehler meldet. Der Webspace benötigt ein schreibbares PHP-Temp-Verzeichnis; bestehende `.htaccess` und Webspace-Passwortschutz nicht verändern.
+3. **Zwei-Geräte-Test:** Auf Turnierleiter-Rechner ein Beispielturnier öffnen, „Fernanzeige aktivieren“ drücken und den **Live-Link kopieren**. Link auf unabhängigem Laptop, Tablet oder Smart-TV öffnen; bei Bedarf denselben Webspace-Zugang eingeben.
+4. **Ergebnisübertragung prüfen:** Runde starten, Rundenuhr am zweiten Gerät vergleichen, Ergebnisse und Rangliste nachführen lassen, gezielt andere Runde/Endrunde zeigen; Freigabe beenden und kontrollieren, dass der Viewer keine Live-Daten mehr zeigt.
+5. **Grenzen:** Nur eine datensparsame, schreibgeschützte Zuschaueranzeige wird übertragen; Turnierdaten bleiben lokal. Für echte Vereins-Turniere später datenschutzrechtliche Abstimmung, Produktionsberechtigungen, persistentes Backend, Backup und Mehrgerätebearbeitung.
 
 ### Google Drive und fachliche Quellen
 
