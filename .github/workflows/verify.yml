@@ -6,6 +6,7 @@ on:
     paths:
       - 'site/**'
       - 'tests/**'
+      - 'backend/**'
       - '.github/workflows/verify.yml'
   workflow_dispatch:
 
@@ -33,3 +34,48 @@ jobs:
           php -l site/live-feed.php
       - name: Alle App- und Live-Tests ausführen
         run: node --test tests/*.test.mjs
+      - name: PHP-Kontomodell auf Syntax und Rollen testen
+        run: |
+          for file in backend/src/*.php backend/bin/*.php backend/tests/*.php; do
+            php -l "$file"
+          done
+          php backend/tests/account-policy-test.php
+
+  database-model:
+    name: Vereins- und Kontomodell gegen Wegwerf-MariaDB prüfen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: ci_root_never_use_in_production
+          MARIADB_DATABASE: tennilo_ci_test
+          MARIADB_USER: tennilo_ci
+          MARIADB_PASSWORD: ci_only_local_database_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Nur Quellcode lesen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: PHP mit PDO MySQL prüfen
+        run: |
+          php -r 'if (PHP_VERSION_ID < 80200 || !extension_loaded("pdo_mysql")) { fwrite(STDERR, "PHP 8.2+ mit pdo_mysql erforderlich.\\n"); exit(1); }'
+          for file in backend/src/*.php backend/bin/*.php backend/tests/*.php; do php -l "$file"; done
+      - name: Schema installieren und Fremdschlüssel / Vereine testen
+        env:
+          TENNILO_DB_HOST: 127.0.0.1
+          TENNILO_DB_PORT: '3306'
+          TENNILO_DB_NAME: tennilo_ci_test
+          TENNILO_DB_USER: tennilo_ci
+          TENNILO_DB_PASSWORD: ci_only_local_database_password
+          TENNILO_DB_ALLOW_MIGRATE: '1'
+        run: |
+          php backend/bin/migrate.php --apply
+          php backend/bin/migrate.php --check
+          php backend/tests/schema-integration.php
