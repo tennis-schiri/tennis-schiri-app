@@ -31,7 +31,7 @@ Die eigene Google-Tabelle [„Turniere Verein – Auslosung & Livetabelle“](ht
 | `tests/doubles.test.mjs` | Auslosung, Ergebnislogik, Rangliste, Endrundenschutz, Zeitplanung |
 | `tests/doubles-ui.test.mjs` | Verfügbarkeit der Oberflächen, Routing, Sicherheit und explizite FTPS-Allowlist |
 
-Alte Schleifchenturniere werden beim Einlesen ohne `type` weiterhin als `ribbon` normalisiert. Neue Doppelturniere haben `type: "doubles"` und `doubles: {teams,draw,playoffs,playoffOptOut}`. Gemeinsame JSON-Sicherungen enthalten beide Turnierarten, getrennte Ergebnisdaten werden nicht vermischt.
+Alte Schleifchenturniere werden beim Einlesen ohne `type` weiterhin als `ribbon` normalisiert. Neue Doppelturniere haben `type: "doubles"` und `doubles: {teams,draw,playoffs,playoffOptOut}`. Gemeinsame JSON-Sicherungen enthalten beide Turnierarten, getrennte Ergebnisdaten werden nicht vermischt. Der Doppelmodus bietet jetzt neben dem JSON-Download auch einen direkten **Import** der Sicherung mit einer ausdrücklichen Warnung, dass die bisherigen Browser-Turniere ersetzt werden (maximal 3 MB).
 
 ## Auslosung und Einschränkungen
 
