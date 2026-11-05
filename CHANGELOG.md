@@ -7,7 +7,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 
 ## [0.6.1] – Fernanzeige auf eigenständigem Laptop, Tablet und Smart-TV
 
-**Stand 2026-11-05:** In GitHub implementiert, PHP-Syntax und 116 JavaScript-/PHP-Tests erfolgreich ([GitHub-Testlauf 42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731)). **FTPS-Veröffentlichung und tatsächlicher Webspace-/Zweitgeräte-Test fehlen noch.** Zuletzt bestätigt veröffentlicht: **v0.6.0** im manuellen [FTPS-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292).
+**Stand 2026-11-05:** In GitHub implementiert, PHP-Syntax und 116 JavaScript-/PHP-Tests erfolgreich ([GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880)). **FTPS-Veröffentlichung und tatsächlicher Webspace-/Zweitgeräte-Test fehlen noch.** Zuletzt bestätigt veröffentlicht: **v0.6.0** im manuellen [FTPS-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292).
 
 ### Neu
 - Eigene, **serverbasierte, aber ausschließlich lesende Fernanzeige**: Anders als v0.6.0 kann der Zuschauer nun auf einem anderen Gerät im Internet sitzen. Keine gemeinsame Browser-Session erforderlich.
