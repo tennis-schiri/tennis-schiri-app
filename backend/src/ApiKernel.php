@@ -49,7 +49,10 @@ final class ApiKernel
 
     private static function expiredCookies(): array
     {
-        return self::cookies('','');
+        $cookies=self::cookies('','');
+        foreach ($cookies as &$cookie) $cookie['options']['expires']=time()-3600;
+        unset($cookie);
+        return $cookies;
     }
 
     private function authenticated(array $cookies,array $headers,bool $write): array
