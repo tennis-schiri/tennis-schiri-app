@@ -53,6 +53,7 @@ function public_live_payload($input): array {
     }
     $out = [
         'mode' => $mode,
+        'format' => ($input['format'] ?? '') === 'doubles' ? 'doubles' : 'ribbon',
         'name' => live_str($input['name'] ?? '', 90),
         'date' => live_str($input['date'] ?? '', 12),
         'startTime' => live_str($input['startTime'] ?? '', 8),
@@ -64,7 +65,7 @@ function public_live_payload($input): array {
     $out['subtitle'] = live_str($input['subtitle'] ?? '', 180);
     $out['progress'] = live_number($input['progress'] ?? null, 0, 100);
     $out['total'] = live_number($input['total'] ?? null, 0, 100);
-    $out['index'] = live_number($input['index'] ?? null, 0, 20);
+    $out['index'] = live_number($input['index'] ?? null, 0, 499);
     $out['plannedStart'] = live_str($input['plannedStart'] ?? '', 30);
     $out['plannedEnd'] = live_str($input['plannedEnd'] ?? '', 30);
 
@@ -101,12 +102,20 @@ function public_live_payload($input): array {
     $out['ranking'] = [];
     foreach ($ranking as $p) {
         if (!is_array($p)) fail_live(422, 'Ungültiger Ranglisteneintrag.');
-        $out['ranking'][] = [
+        $row = [
             'place' => live_number($p['place'] ?? null, 1, 100, 1),
             'name' => live_str($p['name'] ?? '', 90),
-            'ribbons' => live_number($p['ribbons'] ?? null, 0, 1000),
             'played' => live_number($p['played'] ?? null, 0, 1000)
         ];
+        if ($out['format'] === 'doubles') {
+            $diff = $p['gameDiff'] ?? null;
+            $row['wins'] = live_number($p['wins'] ?? null, 0, 1000);
+            $row['gameDiff'] = is_int($diff) && $diff >= -1000 && $diff <= 1000 ? $diff : 0;
+            $row['gamesFor'] = live_number($p['gamesFor'] ?? null, 0, 1000);
+        } else {
+            $row['ribbons'] = live_number($p['ribbons'] ?? null, 0, 1000);
+        }
+        $out['ranking'][] = $row;
     }
     $out['champion'] = live_names($input['champion'] ?? []);
     if ($mode === 'round') {
