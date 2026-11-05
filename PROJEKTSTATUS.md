@@ -5,7 +5,7 @@
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
 **Version im GitHub-Code:** **0.4.0**  
-**FTPS-Upload zuletzt bestätigt:** v0.3.3 – manueller [GitHub-Actions-Lauf 42008064031](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42008064031) vom 2026-11-05 erfolgreich. Der Nutzer bestätigte anschließend, dass die Auffüllrunde offenbar funktioniert. **v0.4.0 (Endrunde) liegt bislang nur im GitHub-Code** und wurde nicht live veröffentlicht oder im echten Browser getestet.
+**FTPS-Upload zuletzt bestätigt:** **v0.4.0** – manueller [GitHub-Actions-Lauf 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677) vom **2026-11-05** erfolgreich (Commit `922711d000fea6b988694371662364d956c10461`). Der Nutzer meldete danach, dass die Endrunde **anscheinend funktioniert**. Das gilt als erster positiver manueller Funktionseindruck, **nicht** als vollständiger Browser-/Praxis- oder Sicherheitstest.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -55,11 +55,11 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Bestehende Wertungen während aktiver Endrunde geschützt; nach einer Änderung des K.-o.-Siegers werden nachfolgende Ergebnisse zurückgesetzt
 - [x] `tests/finals.test.mjs` (14 Logiktests) und `tests/finals-ui.test.mjs` (Bedienablauf); insgesamt **53 Logiktests und 3 simulierte UI-Tests** bestanden
 
-**Prüfstand:** v0.3.0–v0.3.3 wurden über GitHub Actions erfolgreich auf den geschützten Webspace übertragen. Der Nutzer hat den Ablauf der Auffüllrunde in v0.3.3 positiv getestet. v0.4.0 ist im GitHub-Code mit **53 Logiktests und drei simulierten UI-Regressionstests** erfolgreich geprüft; **kein erfolgreicher GitHub-Actions-Lauf für v0.4.0** und kein echter Browsertest bestätigt. Weiterhin keine vollständige Browser-End-to-End-Suite und keine Freigabe für reale Turniere.
+**Prüfstand:** v0.3.0–v0.4.0 wurden per GitHub Actions erfolgreich auf den passwortgeschützten Webspace übertragen. v0.4.0 bestand vor dem Upload **53 Logiktests und 3 simulierte UI-Regressionstests**; der veröffentlichte Lauf `42013798677` war erfolgreich. Der Nutzer bestätigte einen ersten positiven Testeindruck zur Endrunde; umfassende reale Browser-/Mobil-, Turnier-, Datenschutz- und Sicherheitsprüfungen bleiben offen. **Noch keine Freigabe für produktive Turniere.**
 
 ## Nicht implementiert
 
-- [ ] Eigenständiger Doppelturniermodus und One Point Cup (Endrunde für Schleifchenturnier ist im Code umgesetzt, v0.4.0 noch nicht live bestätigt)
+- [ ] Eigenständiger Doppelturniermodus und One Point Cup (Schleifchenturnier-Endrunde mit v0.4.0 veröffentlicht; erster positiver Funktionseindruck)
 - [ ] Serverbasierte Livetabelle und vollständige Turnierwertung (lokale Ergebniserfassung und Schleifchen-Zwischenstand sind implementiert)
 - [ ] Eigenständige Verwaltung von Doppelturnieren mit dauerhaft festen Teams über alle Turnierrunden
 - [ ] Server-Datenbank, Benutzerkonten, Rollen/Rechte, Mehrgeräte-Synchronisierung
@@ -87,10 +87,10 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.4.0 manuell veröffentlichen und in echten Browsern testen:** 8-Spieler-Endrunde mit Qualifikation/Nachrückern, Halbfinale, Finale, Sieger-Doppel, Ergebnisänderung und Rücknahme.
-2. **16-Spieler-Endrunde prüfen:** Im bisherigen Beispielturnier mit 16 Teilnehmenden alle Vorrundenergebnisse erfassen, auf 16 Finalspieler umstellen, vier Viertelfinale, zwei Halbfinale und das Finale kontrollieren.
-3. **Ausfallszenarien prüfen:** Nicht genügend qualifizierte Spieler, Abwahl und Nachrücken, ungleich große Stärkegruppen, wenige Plätze (Spielblöcke), Korrektur eines früheren Siegers und JSON-Sicherung.
-4. **Danach:** Nächstes eigenständiges Turnierformat (Doppelturnier mit festen Teams), später One Point Cup; serverseitige Persistenz und Mehrgerätebetrieb separat planen.
+1. **Schleifchenturnier v0.4.0 weiter absichern:** Bei Gelegenheit 8er- und 16er-Endrunde, Nachrücken, Ergebniskorrektur, Rücknahme und JSON-Backup unter realen Browserbedingungen prüfen. Erster Funktionseindruck ist bereits positiv.
+2. **Nächstes Produktmodul: eigenständiges Doppelturnier planen:** dauerhaft feste Teams (anders als Schleifchenturnier), Team-Anmeldung, Teilnehmer-/Teamverwaltung, Auslosung, Wertung, Qualifikation/Finale und Ergebniserfassung nach den vorhandenen fachlichen Vorlagen.
+3. **Anschließend:** Doppelturnier schrittweise implementieren und automatisch testen; weitere Formate (One Point Cup) folgen.
+4. **Vor Produktiveinsatz:** Backend, Mehrgeräte-Synchronisierung, Rollen/Rechte, Datensicherung, Datenschutz- und Sicherheitstests.
 
 ### Google Drive und fachliche Quellen
 
