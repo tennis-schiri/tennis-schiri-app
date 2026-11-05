@@ -224,3 +224,40 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
   .finals-score-form{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .finals-score-form label:nth-child(3),.finals-score-form .draw-result-actions{grid-column:1/-1}
 }
+
+/* v0.5.0 – Bar-Nenngeld und live aktualisierte Rundenuhr */
+.fee-overview-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:12px 0 22px;font-size:13px;color:var(--navy)}
+.fee-overview-line .text-action{margin-left:auto}
+.fees-stats{margin:17px 0 24px}
+.fees-panel{overflow:hidden}
+.fees-panel .panel-head p{margin:5px 0 0;font-size:12px;color:var(--muted)}
+.fees-table{min-width:760px}
+.fees-table td:first-child small{display:block;margin-top:4px;font-size:10px;color:#788e85}
+.fee-status{display:inline-block;font-weight:850;font-size:11px;border-radius:8px;padding:5px 7px;white-space:nowrap}
+.fee-status.bezahlt{background:#e4f4df;color:#235c37}
+.fee-status.offen{background:#fff1cb;color:#835a0e}
+.fee-status.teilweise{background:#fff3d9;color:#855b21}
+.fee-status.überzahlung{background:#f9ddd9;color:#99382e}
+.fee-status.frei{background:#eff2ef;color:#56746d}
+.fee-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fee-actions .btn{white-space:nowrap}
+.round-timer-panel{margin:8px 20px 10px;background:#f2f7f1;border:1px solid #dae8de;border-radius:11px;padding:15px 17px}
+.round-timer-info{display:flex;align-items:center;flex-wrap:wrap;gap:18px}
+.round-clock-eyebrow{display:flex;align-items:center;gap:6px;color:#3c6056;font-size:10px;font-weight:900;letter-spacing:.085em}
+.round-clock-eyebrow .icon{width:14px;height:14px}
+.round-countdown{font-size:clamp(27px,4vw,40px);font-weight:900;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:-.035em;line-height:1.18;margin-top:4px}
+.round-countdown.is-overtime{color:var(--danger)}
+.round-times{display:flex;flex-direction:column;gap:5px;color:#5a766d;font-size:12px}
+.round-times strong{color:var(--navy);font-size:13px}
+.round-timer-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.round-timer-actions .btn{font-size:12px}
+.draw-match-time{font-variant-numeric:tabular-nums;font-size:11px;font-weight:750;color:#53736d;white-space:nowrap;margin-left:auto}
+.draw-court{flex-wrap:wrap}
+@media(max-width:700px){
+ .round-timer-panel{margin:8px 11px 13px;padding:12px}
+ .round-timer-info{gap:12px}
+ .round-timer-actions .btn{flex:1}
+ .draw-match-time{margin-left:0;font-size:10px}
+ .fees-table{min-width:720px}
+ .fee-overview-line .text-action{margin-left:0}
+}
