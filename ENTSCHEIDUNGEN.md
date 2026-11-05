@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-026 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-027 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -226,3 +226,15 @@
 - **Upload:** Ein manuelles, weiter durch GitHub Secrets geschütztes FTPS-Deployment überträgt 19 erlaubte Dateien; `.htaccess`, `index.htm` und WordPress bleiben unangetastet. Zusätzlich neuer `verify.yml`-Workflow ohne FTPS-Upload. `deploy.yml` blockiert Upload bei PHP-Syntax-/Versionstest- oder JavaScript-/PHP-Integrationstestfehlern.
 - **Nachweis:** [GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880) erfolgreich, **116 Tests und PHP-Syntaxprüfung bestanden**. PHP-Endpunkt im lokalen Test-Webserver geprobt. Noch **nicht** auf ALL-INKL getestet, nicht von einem realen Smart-TV geprüft und **nicht** produktiv freigegeben.
 - **Nächste Schritte:** v0.6.1 manuell veröffentlichen, PHP-Funktionsfähigkeit/Temp-Verzeichnis prüfen, Zuschauer-Link auf unabhängigem Gerät testen, Verbindungen/Ergebnis-Updates/Widerruf überprüfen. Bei Bedarf später ein rollenbasiertes, dauerhaftes Backend für Mehrgeräte-**Bearbeitung** und eine öffentlich nutzbare, separat geschützte Zuschauer-Domain schaffen.
+
+## E-026 · B0.1: Vereins-/Benutzerkonten und Lizenzmodell vor öffentlicher Registrierung (2026-11-05)
+
+- **Nutzerentscheidung:** TENNILO braucht vor dem öffentlichen Vertrieb ein vollständiges Backend mit Benutzerregistrierung, Vereinskonten, Preisen, Lizenzen und Software-Zahlungen. Als ersten konkreten Schritt **das Datenbank- und Kontomodell** implementieren; Turnierfunktionen nicht gleichzeitig umfassend umbauen.
+- **Mandant:** Eine Person kann mehreren Vereinen zugeordnet werden; eine Organisation ist der juristische/vertragliche Lizenzinhaber und Eigentümer ihrer Turniere. Turnierteilnehmer sind keine registrierten Plattformnutzer, solange sie sich nicht bewusst anmelden.
+- **Rechte:** `owner` verwaltet Verein, Mitglieder und künftige Lizenz-/Rechnungsdaten; `organizer` verwaltet Turniere und Live-Freigabe; `viewer` darf nur berechtigte Vereins-/Turnierdaten lesen. Zuschauer-Live-Freigabe ist getrennt und erhält keine Administrationsrechte. Globale Administratoren brauchen eine separate explizite Freischaltung.
+- **Datenmodell (B0.1 implementiert):** Zwölf MariaDB/MySQL-Tabellen `schema_migrations`, `users`, `organizations`, `organization_memberships`, `organization_invitations`, `email_verification_tokens`, `password_reset_tokens`, `auth_sessions`, `platform_administrators`, `license_plans`, `organization_licenses`, `audit_events`.
+- **Sicherheit:** Passwort-Hashing über PHP `password_hash`, zufällige Tokens (256 Bit), Speicherung ausschließlich als SHA-256-Hash, ablaufende Sessions/Einladungen, E-Mail-Eindeutigkeit, Fremdschlüssel und nur ein aktueller Lizenzdatensatz je Verein. Der letzte aktive Vereinsbesitzer darf später nur in einer serverseitig abgesicherten Transaktion mit Ersatz entfernt werden.
+- **Hosting:** PHP/PDO und MariaDB/MySQL als Ziel auf ALL-INKL, **konkrete Zugangsdaten/Serverfähigkeit vor Installation prüfen**. Neue Backend-Dateien liegen ausschließlich im Repo-Verzeichnis `backend/` außerhalb des öffentlich ausgelieferten `site/`; die vorhandene FTPS-Action ist absichtlich nicht erweitert.
+- **Technische Tests:** PHP-Unit-/Rollenprüfungen, SQL-Strukturregression und echter MariaDB-Integrationstest in temporärer GitHub-Actions-Datenbank; dort niemals Produktiv-Credentials oder echte Kundendaten verwenden.
+- **Preis- und Zahlungsentscheidung ausdrücklich offen:** Bisherige Zahlen 14,90 € pro Turnier und 99 €/Jahr sind Ideenvorschläge, **keine verbindlichen Preise**. Zunächst kein Online-Nenngeld: Turnierteilnehmer zahlen beim Verein weiterhin bar. Softwarelizenz-Zahlungen an TENNILO werden später getrennt verarbeitet.
+- **Nächster Schritt B0.2:** Server-API für Registrierung mit bestätigter E-Mail, Login/Logout/Passwort-Reset, sichere Sitzungen, Vereine anlegen/erste Besitzerrolle atomar und weitere Organisatoren per Einladungslink. Vor echten Nutzern Datenschutz, Backups/Restore, Rechte-/CSRF-/Rate-Limit-Tests und Produktionskonfiguration sicherstellen.
