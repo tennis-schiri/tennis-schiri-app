@@ -103,6 +103,7 @@ export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editi
   return `<section class="screen">
     <div class="section-header"><div><div class="eyebrow">SCHLEIFCHENTURNIER / ABSCHLUSS</div>
       <h2>Endrunde</h2><p class="section-sub">Qualifikation nach Schleifchen · feste Doppel bis zum Turniersieg</p></div></div>
+    ${saved?`<div class="live-finals-choice"><button type="button" class="btn subtle" data-action="live-finals">${icon("monitor")} Endrunde auf Live-Monitor anzeigen</button></div>`:""}
     ${chooser}${selection}${invalid}${action}${champion}${bracket}
     <div class="browser-notice">${icon("info")}<div><strong>Endrunde in der Testversion</strong>
       <p>Die Gewinner rücken automatisch weiter. Endrundenspiele zählen nicht als neue Schleifchen-Wertung der Vorrunde. Noch keine Mehrgeräte-Synchronisierung oder Freigabe für echte Turniere.</p></div></div>
