@@ -39,6 +39,11 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
       leftFillers:[false,false],rightFillers:[false,false],
       winner:null,score1:null,score2:null,finished:false,feePaidCents:100000}],
     ranking:[{place:1,name:"Alex",ribbons:2,played:3}],
+    nextRound:{title:"Runde 2",plannedStart:"10:30",
+      matches:[{number:1,court:"Platz 6",batch:1,left:["Sven","Kim"],
+        right:["Lea","Pat"],winner:null,score1:null,score2:null,finished:false,
+        entryFeeCents:54321,paid1:78900,participants:[{email:"NICHT ANZEIGEN 2"}]}],
+      paid2:65432},
     timer:{status:"running",remainingMs:60000,overtimeMs:0,durationMs:1200000,
       display:"01:00",expired:false},
     champion:null};
@@ -60,10 +65,14 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
   assert.equal(body.display.name,"Club & Jugend");
   assert.equal(body.display.matches[0].left[0],"Alex");
   assert.equal(body.display.timer.remainingMs,60000);
+  assert.equal(body.display.nextRound.title,"Runde 2");
+  assert.equal(body.display.nextRound.plannedStart,"10:30");
+  assert.equal(body.display.nextRound.matches[0].court,"Platz 6");
+  assert.equal(body.display.nextRound.matches[0].left[0],"Sven");
   assert.ok(Number.isInteger(body.savedAt)&&Number.isInteger(body.serverNow));
   assert.ok(!("writerHash" in body));
   const publicText=JSON.stringify(body);
-  for(const privateField of ["participants","entryFeeCents","feePaidCents","NICHT ANZEIGEN"])
+  for(const privateField of ["participants","entryFeeCents","feePaidCents","NICHT ANZEIGEN","54321","78900","65432","paid1","paid2"])
     assert.ok(!publicText.includes(privateField),privateField);
   response=await post(wrong);
   assert.equal(response.status,403);
@@ -80,6 +89,8 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
   const dblBody=await response.json();
   assert.equal(dblBody.display.format,"doubles");
   assert.equal(dblBody.display.index,26);
+  assert.equal(dblBody.display.nextRound.title,"Runde 2");
+  assert.equal(dblBody.display.nextRound.matches[0].left[0],"Sven");
   assert.equal(dblBody.display.ranking[0].wins,3);
   assert.equal(dblBody.display.ranking[0].gameDiff,-5);
   assert.equal(dblBody.display.ranking[0].gamesFor,17);
