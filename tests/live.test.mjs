@@ -51,6 +51,19 @@ test("Erste unentschiedene Runde wird automatisch gezeigt",()=>{
   assert.equal(live.progress,0);
 });
 
+test("Vorschau zeigt die nächste ausgeloste Schleifchen-Runde mit ihren Paarungen",()=>{
+  const t=ready();
+  const live=buildLiveDisplay(t);
+  assert.equal(live.nextRound.title,"Runde 2");
+  assert.equal(live.nextRound.plannedStart,"10:30");
+  assert.equal(live.nextRound.matches.length,t.draw.rounds[1].matches.length);
+  assert.ok(live.nextRound.matches[0].left.length===2);
+  assert.equal(live.ranking.length,10);
+  t.liveDisplay={mode:"round",index:t.draw.rounds.length-1};
+  const last=buildLiveDisplay(t);
+  assert.equal(last.nextRound,null);
+});
+
 test("Auf einem Monitor werden keine Nenngelder oder Barzahlungen an Datenmodell ausgegeben",()=>{
   const t=ready();
   t.participants[0].feePaidCents=9999;
