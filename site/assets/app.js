@@ -495,6 +495,10 @@ document.addEventListener("click", event => {
     const round=Number(trigger.dataset.round),match=Number(trigger.dataset.match);
     const roundItem=round===t.draw?.rounds.length?t.draw.specialRound:t.draw?.rounds?.[round];
     if (!Number.isInteger(round) || !Number.isInteger(match) || !roundItem?.matches?.[match]) return;
+    if(t.draw.finals){
+      flash("Bitte zuerst die Endrunde zurücknehmen, um Vorrundenergebnisse zu ändern.","bad");
+      return;
+    }
     if(t.draw.specialRound && round<t.draw.rounds.length){
       flash("Zuerst die Auffüllrunde zurücknehmen, um normale Ergebnisse zu ändern.","bad");
       return;
@@ -505,10 +509,41 @@ document.addEventListener("click", event => {
     return;
   }
   if (action === "draw-cancel-edit") { editingResult=null; render(); return; }
+  if (action === "final-edit-result" && t?.draw?.finals) {
+    const stage=Number(trigger.dataset.stage),match=Number(trigger.dataset.match);
+    if(!Number.isInteger(stage)||!Number.isInteger(match)||!t.draw.finals.rounds?.[stage]?.matches?.[match])return;
+    editingFinal={tournamentId:t.id,stage,match};render();return;
+  }
+  if (action === "final-cancel-edit") { editingFinal=null;render();return; }
+  if (action === "final-size" && t) return run(() => {
+    if(t.draw?.finals)throw Error("Bitte zuerst die Endrunde zurücknehmen.");
+    const size=Number(trigger.dataset.size);
+    if(![8,16].includes(size))throw Error("Für die Endrunde sind 8 oder 16 Spieler vorgesehen.");
+    store.editTournament(t.id,{finalSize:size});
+    render();
+  });
+  if (action === "final-generate" && t) return run(() => {
+    const preview=ribbonFinalPreview(t);
+    if(!preview.ready)throw Error(preview.reason||"Die Endrunde ist noch nicht bereit.");
+    const strong=preview.eligible.filter(p=>p.group==="stark").length;
+    if(!confirm(`Endrunde für ${preview.size} Spieler auslosen? (${strong} Stark / ${preview.size-strong} Schwächer). Die Doppelpartner bleiben bis zum Finale fest zusammen.`))return;
+    const draw=createRibbonFinals(t,{seed:Math.floor(Math.random()*2147483647)});
+    store.editTournament(t.id,{draw});
+    editingFinal=null;view="finals";render();
+    flash("Endrunde ausgelost. Sieger rücken automatisch weiter.");
+  });
+  if (action === "final-reset" && t?.draw?.finals) return run(() => {
+    const scored=t.draw.finals.rounds.some(r=>r.matches.some(m=>m.result?.winner===1||m.result?.winner===2));
+    const message=scored?"Endrunde mit allen Endrunden-Ergebnissen zurücknehmen? Die Vorrunden bleiben erhalten.":
+      "Endrunde zurücknehmen? Die Vorrunden bleiben erhalten.";
+    if(!confirm(message))return;
+    store.editTournament(t.id,{draw:resetRibbonFinals(t)});
+    editingFinal=null;render();flash("Endrunde zurückgenommen. Vorrunden-Ergebnisse bleiben erhalten.");
+  });
   if (action === "close-dialog") return closeDialog();
-  if (action === "home") { view = "home"; search = ""; editingResult=null; render(); window.scrollTo?.(0, 0); return; }
-  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; editingResult=null; render(); window.scrollTo?.(0, 0); });
-  if (action === "tab") { view = trigger.dataset.tab; search = ""; editingResult=null; render(); return; }
+  if (action === "home") { view = "home"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); return; }
+  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); });
+  if (action === "tab") { view = trigger.dataset.tab; search = ""; editingResult=null; editingFinal=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
   if (action === "demo-filler") return run(showFillerDemo);
@@ -521,6 +556,7 @@ document.addEventListener("click", event => {
     flash("Auffüllrunde ausgelost. Auffüller spielen ohne eigene Wertung.");
   });
   if (action === "draw-special-reset" && t?.draw?.specialRound) return run(() => {
+    if(t.draw.finals)throw Error("Bitte zuerst die Endrunde zurücknehmen.");
     const decided=t.draw.specialRound.matches.some(m=>m.result?.winner===1||m.result?.winner===2);
     const message=decided ?
       "Auffüllrunde inklusive ihrer bereits erfassten Ergebnisse zurücknehmen? Die normalen Vorrundenergebnisse bleiben erhalten." :
@@ -537,12 +573,12 @@ document.addEventListener("click", event => {
       let played=0;
       try { if(verifyRibbonDraw(t,t.draw).ok)played=ribbonStandings(t).completeMatches; }
       catch { played=1; } // Auch fehlerhafte importierte Ergebnisse dürfen die Neuauslosung nicht blockieren.
-      const warning=played ? `Achtung: Es sind Ergebnisse in diesem Turnier gespeichert. Bei einer erneuten Auslosung gehen alle Ergebnisse und Schleifen verloren. Wirklich neu auslosen?` : "Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?";
+      const warning=t.draw.finals ? "Achtung: Die Endrunde und sämtliche vorherigen Ergebnisse gehen bei einer neuen Auslosung verloren. Wirklich fortfahren?" : played ? `Achtung: Es sind Ergebnisse in diesem Turnier gespeichert. Bei einer erneuten Auslosung gehen alle Ergebnisse und Schleifen verloren. Wirklich neu auslosen?` : "Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?";
       if (!confirm(warning)) return;
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
     store.editTournament(t.id,{draw});
-    view="draw"; drawOpenRound=0; editingResult=null; render();
+    view="draw"; drawOpenRound=0; editingResult=null; editingFinal=null; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
   });
   if (action === "add-player" && t) return showPlayerDialog(t);
