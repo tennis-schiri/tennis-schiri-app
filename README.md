@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller App-Code:** **v0.6.1**, am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller App-Code:** **v0.7.0 im privaten GitHub-Repository (noch nicht veröffentlicht)**. Vorherige **v0.6.1** am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -11,6 +11,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | Datei | Zweck |
 | --- | --- |
 | [PROJEKTSTATUS.md](PROJEKTSTATUS.md) | Tatsächlicher Stand, offen/geplant, Hosting, Tests und nächste Aufgaben |
+| [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md) | Neu: Turnierart Doppelturnier – Fachregeln, Umsetzung, Grenzen, Tests |
 | [ENTSCHEIDUNGEN.md](ENTSCHEIDUNGEN.md) | Produktanforderungen, begründete Entscheidungen und Randbedingungen |
 | [CHANGELOG.md](CHANGELOG.md) | Änderungen pro Version, inklusive Veröffentlichungs-/Teststatus |
 | [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md) | Google-Drive-Turnierbibliothek, formatbezogene Referenzen und gemeinsamer Dokumentationsordner |
@@ -35,7 +36,17 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implementierten **privaten Registrierungs-, Login-, Vereins- und Einladungsschnittstellen**. Registrierung und E-Mail-Bestätigung, Sitzungen, Passwort-Reset, Mitgliedschafts- und Rollenprüfung wurden gegen temporäre MariaDB getestet. Die [HTTP-API](backend/HTTP_API.md) ist **standardmäßig deaktiviert**; bestehender FTPS-Deploy lädt **keine** Backend-Dateien hoch. Konto-Oberfläche als isolierter Prototyp unter `backend/staging-ui/` ist ergänzt; geprüfter Mailversand, ALL-INKL-Staging, zentrale Turnierdaten und Softwarezahlungen fehlen noch; verbindliche Preise sind offen.
 
-## Aktuelle Funktionen (v0.6.1 im Repository)
+## Neue Turnierart v0.7.0 – Doppelturnier (nur GitHub, noch nicht veröffentlicht)
+
+- Eigenständige Doppelturnier-Oberfläche mit festen Zweierteams, Anwesenheit, Bar-Nenngeld je Spieler und eigenem Turnierbereich
+- Auslosung mit 1–8 Spielen je Team, standardmäßig 4; keine doppelten Gegner oder gleichzeitigen Einsätze, freie Platzanzahl und Zeitplanung
+- Games/Entscheidungspunkte und Sieger pro Match; Rangliste nach Siegen, Game-Differenz, Games+
+- Top-8-Play-offs mit Nachrücken, Viertelfinale, Halbfinale, Finale und Platz 3; Korrekturen propagieren sicher
+- Gemeinsamer Browser-Speicher und JSON-Backup für alte Schleifchenturniere und neue Doppelturniere; separate Ergebnisdaten
+- Neue Tests unter `tests/doubles.test.mjs` und `tests/doubles-ui.test.mjs`; isoliert 18 Logikfälle bestanden, GitHub-CI und echte Browsertests noch zu bestätigen
+- Neue Dateien in manuell auslösbarer FTPS-Allowlist enthalten; **kein Upload ausgeführt**. Fachdetails: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md)
+
+## Bisherige Schleifchenturnier-Funktionen (v0.6.1 veröffentlicht)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
