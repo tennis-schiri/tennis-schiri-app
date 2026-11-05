@@ -51,6 +51,9 @@ const normalizeMatch=(t,m,{roundFinal=false,number=1}={})=>{
 };
 const ranking=standing=>(standing?.participants||[]).slice(0,10)
   .map((p,i)=>({place:i+1,name:p.name,ribbons:p.ribbons,played:p.played}));
+const previewRound=(title,matches,start)=>({
+  title,plannedStart:start,matches
+});
 const stageToDisplay=(t,standing)=>{
   const finals=t.draw.finals;
   const check=verifyRibbonFinals(t);
@@ -59,9 +62,14 @@ const stageToDisplay=(t,standing)=>{
   let index=stages.findIndex(stage=>stage.matches.some(m=>!validResult(m.result)));
   if(index<0)index=stages.length-1;
   const stage=stages[index];
+  const following=stages[index+1];
+  const nextRound=following?.matches?.length&&following.matches.every(m=>
+    Array.isArray(m.team1)&&m.team1.length===2&&Array.isArray(m.team2)&&m.team2.length===2)?
+    previewRound(following.label,following.matches.map((m,i)=>
+      normalizeMatch(t,m,{roundFinal:true,number:i+1})),null):null;
   return {
     mode:"finals",title:stage.label,subtitle:"K.-o.-Endrunde · feste Doppel",
-    stageIndex:index,stageCount:stages.length,
+    nextRound,stageIndex:index,stageCount:stages.length,
     progress:stage.matches.filter(m=>validResult(m.result)).length,
     total:stage.matches.length,
     matches:stage.matches.map((m,i)=>normalizeMatch(t,m,{roundFinal:true,number:i+1})),
@@ -123,7 +131,10 @@ function doublesLiveDisplay(t,now) {
     let stage=stages.find(s=>s.matches.some(m=>!validResult(m.result)));
     if(!stage)stage=stages[2];
     const champion=status.champion?doublesTeamNames(t,status.champion):null;
-    return {...base,mode:"finals",title:stage.title,
+    const next=stages[stages.indexOf(stage)+1];
+    const nextRound=next?.matches?.length&&next.matches.every(m=>m.team1&&m.team2)?
+      previewRound(next.title,next.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),null):null;
+    return {...base,mode:"finals",title:stage.title,nextRound,
       subtitle:"Doppelturnier · feste Teams · Top-8-Play-offs",
       progress:stage.matches.filter(m=>validResult(m.result)).length,
       total:stage.matches.length,
@@ -133,7 +144,11 @@ function doublesLiveDisplay(t,now) {
   const index=selectedDoublesRound(t);
   const round=t.doubles.draw.rounds[index];
   const plan=doublesPlanRound(t,index),timer=clockFor(t,index,now);
-  return {...base,mode:"round",index,title:"Runde "+(index+1),
+  const following=t.doubles.draw.rounds[index+1];
+  const nextRound=following?previewRound("Runde "+(index+2),
+    following.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),
+    doublesPlanRound(t,index+1).start):null;
+  return {...base,mode:"round",index,title:"Runde "+(index+1),nextRound,
     subtitle:"Doppelturnier · feste Teams · Vorrunde",
     plannedStart:plan.start,plannedEnd:plan.end,timer,
     progress:round.matches.filter(m=>validResult(m.result)).length,
@@ -163,8 +178,13 @@ export function buildLiveDisplay(t,now=Date.now()) {
   const plan=plannedRound(t,index);
   const timer=clockFor(t,index,now);
   const matches=round.matches.map((m,i)=>normalizeMatch(t,m,{number:i+1}));
+  const following=sourceRound(t,index+1);
+  const nextRound=following?previewRound(
+    index+1===t.draw.rounds.length?"Auffüllrunde":"Runde "+(index+2),
+    following.matches.map((m,i)=>normalizeMatch(t,m,{number:i+1})),
+    plannedRound(t,index+1).start):null;
   return {...base,
-    mode:"round",index,title:special?"Auffüllrunde":`Runde ${index+1}`,
+    mode:"round",index,title:special?"Auffüllrunde":`Runde ${index+1}`,nextRound,
     subtitle:special?"Zusätzliche Spiele · Auffüller ohne eigene Wertung":
       "Schleifchenturnier · Vorrunde",
     plannedStart:plan.start,plannedEnd:plan.end,
