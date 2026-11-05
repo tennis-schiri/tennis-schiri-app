@@ -39,8 +39,8 @@ const money=(v,fallback=0)=>integer(v,0,9999999,fallback);
 const normalizeClocks=v=>{
   const clocks=Object.create(null);
   if(!v||typeof v!=="object"||Array.isArray(v))return clocks;
-  for(const [key,item] of Object.entries(v).slice(0,21)){
-    if(!/^(?:0|[1-9]\\d?)$/.test(key)||Number(key)>=21||!item||typeof item!=="object")continue;
+  for(const [key,item] of Object.entries(v).slice(0,500)){
+    if(!/^(?:0|[1-9]\d{0,2})$/.test(key)||Number(key)>=500||!item||typeof item!=="object")continue;
     const first=Number(item.firstStartedAt),start=item.startedAt==null?null:Number(item.startedAt);
     const finished=item.finishedAt==null?null:Number(item.finishedAt);
     if(!Number.isSafeInteger(first)||first<=0||
@@ -83,11 +83,37 @@ const feeCategoriesOf=(list,standardCents)=>{
   }
   return categories;
 };
+// Doppelturniere teilen sich den sicheren Browser-/JSON-Sicherungsmechanismus,
+// speichern Teams, Spielplan und Play-offs aber getrennt von Schleifchen-Daten.
+const doublesOf=(value,categories)=>{
+  const raw=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+  const allowed=new Set(categories.map(c=>c.id));
+  const teams=(Array.isArray(raw.teams)?raw.teams:[]).slice(0,100).map(team=>({
+    id:text(team?.id,80)||uid(),
+    player1:text(team?.player1,80),player2:text(team?.player2,80),
+    present:team?.present===true,
+    tier1:allowed.has(team?.tier1)?team.tier1:"standard",
+    tier2:allowed.has(team?.tier2)?team.tier2:"standard",
+    paid1:money(team?.paid1),paid2:money(team?.paid2)
+  })).filter(team=>team.player1&&team.player2);
+  const draw=raw.draw?.format==="doubles-v1"&&typeof raw.draw.signature==="string"&&
+    raw.draw.signature.length<30000&&Array.isArray(raw.draw.rounds)&&raw.draw.rounds.length<=500&&
+    raw.draw.rounds.every(r=>Array.isArray(r.matches)&&r.matches.length<=100)?raw.draw:null;
+  const p=raw.playoffs;
+  const playoffs=p&&typeof p==="object"&&Array.isArray(p.seeds)&&p.seeds.length===8&&
+    Array.isArray(p.quarterfinals)&&p.quarterfinals.length===4&&
+    Array.isArray(p.semifinals)&&p.semifinals.length===2&&p.final&&p.thirdPlace?p:null;
+  return {teams,draw,playoffs,playoffOptOut:Array.isArray(raw.playoffOptOut)?
+    [...new Set(raw.playoffOptOut.map(id=>text(id,80)).filter(Boolean))].slice(0,100):[]};
+};
+
 export function normalizeTournament(v) {
   const courts = courtsOf(v.courts);
   const categories=feeCategoriesOf(v.feeCategories,money(v.entryFeeCents));
   return {
     id: text(v.id, 80) || uid(),
+    type:v.type==="doubles"?"doubles":"ribbon",
+    doubles:doublesOf(v.doubles,categories),
     name: text(v.name) || "Unbenanntes Turnier",
     date: /^\d{4}-\d{2}-\d{2}$/.test(v.date ?? "") ? v.date : todayLocal(),
     startTime: /^\d{2}:\d{2}$/.test(v.startTime ?? "") ? v.startTime : "10:00",
@@ -128,7 +154,7 @@ export function normalizeTournament(v) {
 
 export function newTournament(values = {}) {
   return normalizeTournament({
-    id: uid(), name: values.name, date: values.date, startTime: values.startTime,
+    id: uid(), type:values.type, doubles:values.doubles, name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
