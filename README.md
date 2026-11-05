@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.6.0** – eigene schreibgeschützte Live-Monitor-Seite für ein zweites Fenster, mit Spielplan, Rundenuhr, Zwischenstand und Endrunde. **Noch nicht hochgeladen.** **Letzter bestätigter FTPS-Upload:** **v0.5.1**, 2026-11-05 ([GitHub Actions Run 42033283559](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42033283559)). Der Benutzer hat die Teilnehmer-/Nenngeldliste positiv beurteilt; echte Monitortests für v0.6.0 stehen noch aus.
+**Aktueller GitHub-Code:** **v0.6.1** – Fernanzeige über einen eigenen Laptop, Tablet oder Smart-TV mittels datensparsamem PHP-Serverdienst auf ALL-INKL. **Nur im Repository, noch nicht live.** Letzter bestätigter manueller FTPS-Upload: **v0.6.0**, 2026-11-05 ([Run 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292)). **v0.6.1 hat 116 JavaScript-/PHP-Tests bestanden** ([Testlauf 42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731)); echter Webhosting-/Zweitgerätetest offen.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.6.0 im Repository)
+## Aktuelle Funktionen (v0.6.1 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -58,8 +58,11 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - **Geplante Spielzeiten im Spielplan:** pro Runde sowie an jeder Begegnung Start-/Endzeit; Wechsel-/Pausenende aus Startzeit, Spieldauer und Pause berechnet
 - **Rundenuhr:** „Runde starten“, Pausieren, Fortsetzen, Beenden und bestätigtes Zurücksetzen. Sekunden-Countdown mit Überzeitanzeige; reale Zeitstempel bleiben bei Neuladen und JSON-Sicherung erhalten
 - **Live-Monitor (v0.6.0):** Eigene großformatige, schreibgeschützte Seite `site/live.html` für ein zweites Browserfenster auf einem angeschlossenen Bildschirm; Vollbildschaltfläche, aktuelle Platzpaarungen, markierte Sieger und Ergebnisse, laufende Rundenuhr, Schleifchen-Zwischenstand sowie Endrunde bis zum Sieger-Doppel
+- **v0.6.1 – echte Fernanzeige:** Auf der Turnierleitung ausdrücklich „Fernanzeige aktivieren“ anklicken und den Zuschauer-Link kopieren. Dieser öffnet die Monitorseite auch auf **einem anderen Laptop/Tablet/Smart-TV** mit Internet und Zugang zum geschützten Webspace. Der Browser sendet nur Anzeigedaten an `site/live-feed.php`; Zuschauer lesen sie im Abstand weniger Sekunden, können aber nichts verändern.
+- Zugriff über zwei voneinander getrennte zufällige Geheimnisse (Leseschlüssel im URL-Fragment, Schreibschlüssel nur im Browser der Turnierleitung). „Freigabe beenden“ widerruft den Link; Server-Snapshots laufen spätestens nach 24 Stunden ohne Veröffentlichung ab.
+- Der PHP-Dienst speichert nur kurzlebige **Spielpaarungen, Ergebnisse, Rangliste, Rundenuhr und Endrundenstand** in einem nicht öffentlich auslieferbaren temporären Serverordner. Keine Nenngeld-/Check-in-/Barzahlungsdaten, keine zentrale Turnierdatenbank oder gemeinsames Bearbeiten. Der bestehende Webspace-Passwortschutz gilt weiterhin; ein zweites Gerät muss sich möglicherweise dort anmelden.
 - Live-Anzeige aktualisiert sich bei Änderungen in der Turnierleitung automatisch über gemeinsamen Browser-Speicher (`storage`-Ereignis mit zusätzlicher Prüfung jede Sekunde). Eine Runde kann gezielt auf den Monitor gelegt werden; alternativ Auswahl der laufenden Runde bzw. Endrunde automatisch. Aktive Monitor-Auswahl bleibt im JSON-Backup erhalten
-- **Einschränkung:** Funktioniert nur in weiteren Fenstern/Tabs **desselben Browsers/Profils auf demselben Gerät**. Nicht auf einem eigenständigen Laptop/Tablet/Smart-TV. Keine serverseitige Synchronisierung; auf dem Monitor werden keine Nenngeld- oder Anwesenheitsdaten gezeigt
+- **Zwei Betriebsarten:** Die lokale Anzeige bleibt zwischen Fenstern desselben Browserprofils nutzbar. Die ausdrücklich aktivierte **Fernanzeige** nutzt hingegen PHP-Snapshots auf dem Webserver und funktioniert geräteübergreifend. Beide sind schreibgeschützte Zuschaueransichten. Die eigentlichen Turnierdaten bleiben lokal und müssen weiterhin per JSON gesichert werden.
 - Gleichzeitige laufende Rundenuhren desselben Turniers werden verhindert; eine erneute Auslosung verwirft die zugehörigen Uhren nach Bestätigung
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
@@ -80,7 +83,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/operations-ui.js` – Kassenübersicht und Rundenuhr-Bedienoberfläche
 - `site/live.html`, `site/assets/live.css` – separate Vollbildansicht für den zweiten Monitor
 - `site/assets/live-model.js`, `site/assets/live-ui.js`, `site/assets/live.js` – Live-Anzeige, datensparsame Darstellung, Reaktion auf Spielstandänderungen
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`, `tests/fee-tiers.test.mjs`, `tests/fee-tiers-ui.test.mjs`, `tests/live.test.mjs`, `tests/live-ui.test.mjs`, `tests/live-controller.test.mjs`, `tests/live-sync.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
+- `site/live-feed.php`, `site/assets/remote-live.js` – serverseitige, zeitlich begrenzte Anzeigedaten und sichere Aktivierung/Viderruf der Fernanzeige
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`, `tests/fee-tiers.test.mjs`, `tests/fee-tiers-ui.test.mjs`, `tests/live.test.mjs`, `tests/live-ui.test.mjs`, `tests/live-controller.test.mjs`, `tests/live-sync.test.mjs`, `tests/remote-live.test.mjs`, `tests/live-feed.test.mjs`, `tests/remote-publisher-ui.test.mjs`, `tests/remote-viewer-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -90,7 +94,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg überträgt er **17 ausdrücklich freigegebene Dateien** per FTPS: bestehende App inklusive Index/Favicon sowie die neue Monitorseite und ihre fünf Assets. Andere Dateien, `.htaccess`, `index.htm` und WordPress bleiben unverändert.
+3. Der Workflow prüft zuerst die PHP-Version/-Syntax und danach sämtliche `tests/*.test.mjs`, einschließlich einer API-Integration mit lokalem PHP-Testserver. Nur bei Erfolg überträgt er **19 ausdrücklich freigegebene Dateien** per FTPS; `.htaccess`, `index.htm` und WordPress bleiben unberührt.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -99,6 +103,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): **v0.6.0** manuell veröffentlichen, in der Turnierleitung „Live-Monitor öffnen“ anklicken und das zweite Fenster auf einen angeschlossenen Monitor ziehen. „Vollbild“ wählen, eine Runde starten und Ergebnisse speichern; automatische Synchronisierung testen. Weitere Schleifchenturnier-Anforderungen haben Vorrang, Doppelturnier bleibt zurückgestellt.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): **v0.6.1** nach Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
