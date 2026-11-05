@@ -388,6 +388,10 @@ function settingsFields(t = {}) {
     <label class="field">Startzeit<input name="startTime" type="time" required value="${escapeHtml(t.startTime ?? "10:00")}"></label>
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
+    <label class="field wide">Nenngeld pro Spieler (€) · bar
+      <input name="entryFee" inputmode="decimal" pattern="[0-9]+([,.][0-9]{1,2})?" required
+        value="${euroInput(t.entryFeeCents??0)}" placeholder="0,00">
+      <span class="field-hint">Standard 0,00 €. Zahlungen nur manuell und in bar bestätigen.</span></label>
     <label class="field wide">Wertungsspiele je Spieler<select name="rounds" required>
       <option value="3" ${Number(t.rounds)===3?"selected":""}>3 Wertungsspiele</option>
       <option value="4" ${Number(t.rounds ?? 4)===4?"selected":""}>4 Wertungsspiele</option>
@@ -438,6 +442,9 @@ function showPlayerDialog(t, p = null) {
       <label class="field wide">Vor- und Nachname<input name="name" required maxlength="80" autocomplete="off" value="${escapeHtml(p?.name ?? "")}" placeholder="z. B. Alex Beispiel"></label>
       <label class="field">Spielstärke<select name="group"><option value="stark" ${p?.group === "stark" ? "selected" : ""}>Stark</option><option value="schwaecher" ${p?.group !== "stark" ? "selected" : ""}>Schwächer</option></select></label>
       <label class="field checkbox-field"><input name="present" type="checkbox" ${p ? (p.present ? "checked" : "") : "checked"}> Ist anwesend</label>
+      <label class="field wide">Individuelles Nenngeld (€) · optional
+        <input name="feeOverride" inputmode="decimal" pattern="([0-9]+([,.][0-9]{1,2})?)?" placeholder="Standardbetrag" value="${p?.feeOverrideCents==null?"":euroInput(p.feeOverrideCents)}">
+        <span class="field-hint">Leer = Standardbetrag · 0,00 € = kostenfrei.</span></label>
     </div>` });
 }
 
@@ -454,7 +461,7 @@ function readSettings(form) {
   return {
     name: String(data.get("name") ?? "").trim(), date: String(data.get("date") ?? ""),
     startTime: String(data.get("startTime") ?? ""), duration: Number(data.get("duration")),
-    breakMinutes: Number(data.get("breakMinutes")), rounds: Number(data.get("rounds")), courts
+    breakMinutes: Number(data.get("breakMinutes")), rounds: Number(data.get("rounds")), entryFeeCents:euroCents(data.get("entryFee")), courts
   };
 }
 function showDemo() {
@@ -686,7 +693,10 @@ document.addEventListener("submit", event => {
       view = "settings";
     } else if (kind === "add-player" || kind === "edit-player") {
       const data = new FormData(form), t = store.active();
-      store.upsertParticipant(t.id, { name:data.get("name"), group:data.get("group"), present:data.has("present") }, kind === "edit-player" ? String(data.get("playerId")) : null);
+      store.upsertParticipant(t.id, {
+        name:data.get("name"), group:data.get("group"), present:data.has("present"),
+        feeOverrideCents:String(data.get("feeOverride")??"").trim()===""?null:euroCents(data.get("feeOverride"))
+      }, kind === "edit-player" ? String(data.get("playerId")) : null);
       view = "participants";
     }
     closeDialog(); render(); flash("Gespeichert.");
