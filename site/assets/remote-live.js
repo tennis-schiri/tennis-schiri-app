@@ -42,7 +42,7 @@ export function publicLiveSnapshot(t,now=Date.now()){
   const view=buildLiveDisplay(t,now);
   const allow=["format","mode","name","date","startTime","message","title","subtitle",
     "progress","total","index","plannedStart","plannedEnd","matches",
-    "ranking","champion","timer"];
+    "ranking","champion","timer","nextRound"];
   return Object.fromEntries(allow.filter(key=>view[key]!==undefined)
     .map(key=>[key,view[key]]));
 }
