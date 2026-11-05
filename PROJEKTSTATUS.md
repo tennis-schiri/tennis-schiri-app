@@ -5,7 +5,7 @@
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
 **Version im GitHub-Code:** **0.6.1**  
-**FTPS-Upload zuletzt bestätigt:** **v0.6.0** – manueller [GitHub-Actions-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292) vom **2026-11-05** erfolgreich (Commit `30d455808cbd54c8ff6cc6aec77d8b7e4d293e10`). **v0.6.1 mit geräteübergreifendem PHP-Live-Dienst ist noch nicht hochgeladen oder auf ALL-INKL getestet.**
+**FTPS-Upload zuletzt bestätigt:** **v0.6.1** – [GitHub Actions Run 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) vom **2026-11-05** erfolgreich; alle App- und Live-Dateien im manuellen FTPS-Job hochgeladen. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -106,24 +106,27 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 **Wichtig:** Der Workflow lädt ausschließlich 19 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
-## SaaS-Backend, Registrierung und Abrechnung – noch offen
+## SaaS-Backend, Registrierung und Abrechnung – B0.1 begonnen
 
-**Priorisierung (2026-11-05):** Vor einem öffentlichen, kostenpflichtigen Produktstart fehlt ein vollwertiges Backend. Der vorhandene PHP-Live-Dienst aus v0.6.1 ist eine **schreibgeschützte Fernanzeige**, noch keine Nutzer-/Vereins-/Lizenz-/Rechnungsverwaltung. Ein unverbindlicher Architektur- und Preisvorschlag wurde in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md) dokumentiert.
+**Priorisierung (2026-11-05):** Der Nutzer hat den Ausbau zum vollständigen Backend bestätigt. **B0.1 – Datenbank- und Kontomodell – ist im privaten GitHub-Code umgesetzt und erfolgreich mit einer temporären CI-MariaDB geprüft.** Der vorhandene PHP-Live-Dienst ist noch keine allgemeine Datenbank-/Benutzerverwaltung. Registrierung, Login, Abrechnung und zentrale Turnierdaten bleiben offen. Konzept in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md), konkrete Basis in [backend/README.md](backend/README.md).
 
+- [x] **B0.1:** Private SQL-Migration für 12 Tabellen (Benutzer, Vereine, Vereinsmitgliedschaften, Einladungen, Sessions, Reset-/Bestätigungstokens, Lizenzpläne, Lizenzen, Audit) und getrennte PHP-Rollen-/Sicherheitsregeln implementiert.
+- [x] CLI-only-Migrationsskript mit ausdrücklicher Freigabe/Prüfsumme sowie GitHub-Verifikation gegen eine temporäre MariaDB; **keine echten Zugangsdaten oder Installationen auf ALL-INKL**.
+- [ ] **B0.2:** Registrierungs-/Login-API mit E-Mail-Bestätigung, Login-Sitzungen, Vereine anlegen, Besitzertransaktionen und Einladung von Organisatoren.
 - Personen registrieren sich mit bestätigter E-Mail; die **Organisation/Verein** ist Eigentümer der Turniere und kauft die Lizenz.
 - Rollen: Besitzer, Organisator, Leser sowie separater schreibgeschützter Zuschauer. Ein Nutzer kann mehreren Vereinen zugeordnet sein.
 - Zielbild ALL-INKL: PHP-API, MariaDB/MySQL, serverseitige Sessions/Autorisierung, Datenmigration aus lokalen/JSON-Turnieren, Revisionen, Backups und Rechteprüfung. Konkretes Paket erst prüfen.
 - **Nenngeld bleibt bar beim Verein**; TENNILO-Lizenzgebühren sind ein anderes Abrechnungssystem und können später über einen externen Zahlungsdienst eingezogen werden.
 - Nur als **Diskussionsvorschlag**, nicht als Produkt-/Preisbeschluss: Demo kostenlos, einzelnes Turnier ca. 14,90 €, Vereins-Jahreslizenz ca. 99 €, größerer Veranstalter auf Anfrage.
-- Fachliche Reihenfolge: v0.6.1 live testen → Backend-Sicherheit/Datenbank → Registrierung/Vereine/Rollen → serverseitige Turniere → Lizenzprüfung → Checkout/Rechnung/Zahlungen → Pilotbetrieb. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
+- Fachliche Reihenfolge: B0.1 Daten-/Rollenmodell **erledigt** → B0.2 Registrierung/Vereine/Rollen → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.6.1 manuell veröffentlichen:** Im GitHub-Actions-Workflow `deploy.yml` auf `main` starten. Vor FTPS-Upload laufen PHP-8.2-/Syntaxprüfung und alle 116 Tests; der reine Testworkflow `verify.yml` ist bereits grün (Run 42042177880).
-2. **ALL-INKL-PHP prüfen:** Testversion im KAS auf eine unterstützte aktuelle PHP-Version (mindestens 8.2) einstellen, wenn der Endpoint `/live-feed.php` Fehler meldet. Der Webspace benötigt ein schreibbares PHP-Temp-Verzeichnis; bestehende `.htaccess` und Webspace-Passwortschutz nicht verändern.
-3. **Zwei-Geräte-Test:** Auf Turnierleiter-Rechner ein Beispielturnier öffnen, „Fernanzeige aktivieren“ drücken und den **Live-Link kopieren**. Link auf unabhängigem Laptop, Tablet oder Smart-TV öffnen; bei Bedarf denselben Webspace-Zugang eingeben.
-4. **Ergebnisübertragung prüfen:** Runde starten, Rundenuhr am zweiten Gerät vergleichen, Ergebnisse und Rangliste nachführen lassen, gezielt andere Runde/Endrunde zeigen; Freigabe beenden und kontrollieren, dass der Viewer keine Live-Daten mehr zeigt.
-5. **Grenzen:** Nur eine datensparsame, schreibgeschützte Zuschaueranzeige wird übertragen; Turnierdaten bleiben lokal. Für echte Vereins-Turniere später datenschutzrechtliche Abstimmung, Produktionsberechtigungen, persistentes Backend, Backup und Mehrgerätebearbeitung.
+1. **Backend B0.2 vorbereiten:** Eine gesicherte PHP-API für Registrierung, E-Mail-Bestätigung, Login/Logout, Passwort-Reset und sichere Sessions planen; die bereits implementierte Rollen-/Lizenzbasis verwenden.
+2. **ALL-INKL-Testumgebung erst nach Prüfung:** PHP/PDO-MySQL, private Backend-Verzeichnisse, Datenbank, ggf. CLI/SSH und Backup-Möglichkeiten im konkreten Hostingpaket klären. Keinen Migrator in das öffentlich erreichbare `site/` stellen und noch keine produktive Datenbank anlegen.
+3. **Vereine und Einladung:** Organisationsanlage + erstes Besitzerkonto in einer Datenbanktransaktion; weitere Benutzer einladen und rollenabhängigen Zugriff serverseitig testen. Nie den letzten Besitzer ohne Ersatz entfernen.
+4. **Danach:** bestehende Schleifchenturniere kontrolliert aus JSON ins Backend übernehmen, mehrere berechtigte Organisatoren, Kasse und Ergebnisse zentral speichern. Erst anschließend TENNILO-Lizenzen und Zahlungsanbieter integrieren; **Nenngeld bleibt zunächst bar**.
+5. **Parallel offener Praxistest:** Der manuell veröffentlichte Live-Monitor v0.6.1 muss auf einem tatsächlich unabhängigen zweiten Gerät auf ALL-INKL geprüft werden. Keine vollständige produktive Freigabe behaupten.
 
 ### Google Drive und fachliche Quellen
 
