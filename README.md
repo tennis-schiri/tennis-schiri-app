@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.2.3 · **Live-Stand:** letzte Veröffentlichung der neueren Versionen noch zu verifizieren.
+**Aktueller GitHub-Code:** v0.3.0 · **Live-Stand:** letzte Veröffentlichung der neueren Versionen noch zu verifizieren.
 
 ## Einstieg und Projektdokumentation
 
@@ -17,7 +17,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **Beim Start in einem neuen Chat:** Die drei Dateien oben sowie den aktuellen Code prüfen. Nicht automatisch annehmen, dass `main` bereits auf dem Webspace läuft.
 
-## Aktuelle Funktionen (v0.2.3 im Repository)
+## Aktuelle Funktionen (v0.3.0 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -26,9 +26,11 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Teilnehmende hinzufügen, bearbeiten, löschen und suchen
 - Stärkegruppen (Stark/Schwächer) und Anwesenheit verwalten
 - Dashboard mit Teilnehmerstatistiken; JSON-Datensicherung und -Wiederherstellung
+- Auslosung der **normalen Schleifchenturnier-Vorrunden** (3 oder 4 Wertungsspiele pro Spieler), mit Runden, Zeit, Platz und Teams
+- Jedes Doppelteam besteht aus 1 Stark + 1 Schwächer; aufgefüllte Sonderrunde bleibt bewusst bis nach Ergebniserfassung offen
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
-**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, vollständige Auslosungslogik, Ergebniserfassung oder Livetabellen. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
+**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, Auffüller-Auslosung, Ergebniserfassung oder Livetabellen. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
 
 ## Technik und Dateistruktur
 
@@ -36,6 +38,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/styles.css` – responsives Design
 - `site/assets/app.js` – Benutzeroberfläche und Interaktionen
 - `site/assets/storage.js` – browserbasierter Speicheradapter, Datenmodell Version 1
+- `site/assets/draw.js` – Auslosungslogik und Spielplanprüfung
+- `site/package.json` und `tests/draw.test.mjs` – automatisierte Node-Tests ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -45,7 +49,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow überträgt ausschließlich `site/index.html` und die drei Dateien in `site/assets/` per FTPS.
+3. Der Workflow prüft zuerst `tests/draw.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die vier Dateien in `site/assets/` per FTPS übertragen.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -54,6 +58,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.2.3 auf dem Webspace prüfen, dann die Schleifchenturnier-Auslosungslogik aus der vorhandenen Google-Tabelle übernehmen und systematisch testen.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.0 manuell veröffentlichen und prüfen; anschließend Ergebniserfassung sowie die 0/1-Schleifchen-Regel für eine eventuell nötige Auffüllrunde implementieren.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
