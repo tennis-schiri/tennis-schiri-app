@@ -5,7 +5,7 @@
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
 **Version im GitHub-Code:** **0.6.1**  
-**FTPS-Upload zuletzt bestätigt:** **v0.6.1** – [GitHub Actions Run 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) vom **2026-11-05** erfolgreich; alle App- und Live-Dateien im manuellen FTPS-Job hochgeladen. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1 wird **nicht** über FTPS veröffentlicht.
+**FTPS-Upload zuletzt bestätigt:** **v0.6.1** – [GitHub Actions Run 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) vom **2026-11-05** erfolgreich; alle App- und Live-Dateien im manuellen FTPS-Job hochgeladen. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -106,27 +106,30 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 **Wichtig:** Der Workflow lädt ausschließlich 19 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
-## SaaS-Backend, Registrierung und Abrechnung – B0.1 begonnen
+## SaaS-Backend, Registrierung und Abrechnung – B0.1/B0.2 im Repository
 
-**Priorisierung (2026-11-05):** Der Nutzer hat den Ausbau zum vollständigen Backend bestätigt. **B0.1 – Datenbank- und Kontomodell – ist im privaten GitHub-Code umgesetzt und erfolgreich mit einer temporären CI-MariaDB geprüft.** Der vorhandene PHP-Live-Dienst ist noch keine allgemeine Datenbank-/Benutzerverwaltung. Registrierung, Login, Abrechnung und zentrale Turnierdaten bleiben offen. Konzept in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md), konkrete Basis in [backend/README.md](backend/README.md).
+**Stand (2026-11-05):** Der Nutzer hat die Backend-Entwicklung bestätigt. **B0.1 (Datenmodell) und B0.2 (private Konto-/Vereinsdienste und deaktivierte JSON-API) sind in GitHub implementiert und gegen Wegwerf-MariaDB getestet.** E-Mail-Bestätigung, Login/Logout, sichere Sitzungen, Passwort-Reset, Vereinsanlage, Einladungen und Rollentrennung sind im privaten Code vorhanden; **keine öffentliche Registrierung, keine ALL-INKL-Produktivdatenbank und keine Konto-Oberfläche**. Einzelheiten in [backend/HTTP_API.md](backend/HTTP_API.md), Architektur in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md).
 
 - [x] **B0.1:** Private SQL-Migration für 12 Tabellen (Benutzer, Vereine, Vereinsmitgliedschaften, Einladungen, Sessions, Reset-/Bestätigungstokens, Lizenzpläne, Lizenzen, Audit) und getrennte PHP-Rollen-/Sicherheitsregeln implementiert.
 - [x] CLI-only-Migrationsskript mit ausdrücklicher Freigabe/Prüfsumme sowie GitHub-Verifikation gegen eine temporäre MariaDB; **keine echten Zugangsdaten oder Installationen auf ALL-INKL**.
-- [ ] **B0.2:** Registrierungs-/Login-API mit E-Mail-Bestätigung, Login-Sitzungen, Vereine anlegen, Besitzertransaktionen und Einladung von Organisatoren.
+- [x] **B0.2 Backend:** Registrierung mit E-Mail-Bestätigung/erneutem Versand, Login/Logout, 12-Stunden-Sessions mit CSRF, Passwort-Reset samt Sitzungswiderruf, Vereinsanlage + erster Besitzer in einer Transaktion, Einladungen/Annahme, Rollenänderungen und Schutz des letzten Besitzers.
+- [x] **Sicherheit B0.2:** Passwort-Hashing, Token nur als SHA-256 in der Datenbank, sichere Cookie-Optionen, Same-Origin-Schreibschutz, persistente HMAC-basierte Quoten, API standardmäßig abgeschaltet und vom bestehenden FTPS-Upload ausgeschlossen.
+- [x] **B0.2 Tests:** PHP-/Node-Regressionsprüfungen und Integration gegen separate CI-MariaDB inklusive verweigertem Fremdvereinszugriff, abgelaufener Sitzung/Reset, Einmal-Einladungen, Login-Limits, CSRF und Login-Cookies.
+- [ ] **B0.2 Staging/UI:** Kontoseiten für Registrierung/Login, E-Mail-Bestätigung und Vereine, geprüfter Mailtransport, getrennte ALL-INKL-Testdatenbank, gesicherte Bereitstellung und Browser-E2E-Tests. **Nicht freigegeben.**
 - Personen registrieren sich mit bestätigter E-Mail; die **Organisation/Verein** ist Eigentümer der Turniere und kauft die Lizenz.
 - Rollen: Besitzer, Organisator, Leser sowie separater schreibgeschützter Zuschauer. Ein Nutzer kann mehreren Vereinen zugeordnet sein.
 - Zielbild ALL-INKL: PHP-API, MariaDB/MySQL, serverseitige Sessions/Autorisierung, Datenmigration aus lokalen/JSON-Turnieren, Revisionen, Backups und Rechteprüfung. Konkretes Paket erst prüfen.
 - **Nenngeld bleibt bar beim Verein**; TENNILO-Lizenzgebühren sind ein anderes Abrechnungssystem und können später über einen externen Zahlungsdienst eingezogen werden.
 - Nur als **Diskussionsvorschlag**, nicht als Produkt-/Preisbeschluss: Demo kostenlos, einzelnes Turnier ca. 14,90 €, Vereins-Jahreslizenz ca. 99 €, größerer Veranstalter auf Anfrage.
-- Fachliche Reihenfolge: B0.1 Daten-/Rollenmodell **erledigt** → B0.2 Registrierung/Vereine/Rollen → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
+- Fachliche Reihenfolge: B0.1 und privater B0.2-Code **erledigt** → B0.2 Staging-/Konto-Oberfläche und Mailzustellung → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **Backend B0.2 vorbereiten:** Eine gesicherte PHP-API für Registrierung, E-Mail-Bestätigung, Login/Logout, Passwort-Reset und sichere Sessions planen; die bereits implementierte Rollen-/Lizenzbasis verwenden.
-2. **ALL-INKL-Testumgebung erst nach Prüfung:** PHP/PDO-MySQL, private Backend-Verzeichnisse, Datenbank, ggf. CLI/SSH und Backup-Möglichkeiten im konkreten Hostingpaket klären. Keinen Migrator in das öffentlich erreichbare `site/` stellen und noch keine produktive Datenbank anlegen.
-3. **Vereine und Einladung:** Organisationsanlage + erstes Besitzerkonto in einer Datenbanktransaktion; weitere Benutzer einladen und rollenabhängigen Zugriff serverseitig testen. Nie den letzten Besitzer ohne Ersatz entfernen.
-4. **Danach:** bestehende Schleifchenturniere kontrolliert aus JSON ins Backend übernehmen, mehrere berechtigte Organisatoren, Kasse und Ergebnisse zentral speichern. Erst anschließend TENNILO-Lizenzen und Zahlungsanbieter integrieren; **Nenngeld bleibt zunächst bar**.
-5. **Parallel offener Praxistest:** Der manuell veröffentlichte Live-Monitor v0.6.1 muss auf einem tatsächlich unabhängigen zweiten Gerät auf ALL-INKL geprüft werden. Keine vollständige produktive Freigabe behaupten.
+1. **Getrennte ALL-INKL-Testumgebung prüfen:** Verfügbarkeit von PHP 8.2+, PDO-MySQL, Datenbank, sicheren privaten Verzeichnissen, Mailversand, Sicherung und ggf. CLI/SSH im konkreten Tarif klären. Keine Zugangsdaten ins Repository oder in den Chat schreiben.
+2. **B0.2-Oberfläche erstellen:** Konto-/Anmeldeseiten, E-Mail-Bestätigung (einschließlich erneutem Link), Passwort-Reset, „Verein anlegen“, Mitglieder einladen, Rollen und Verein wechseln. Das private API-Backend ist bereits gebaut, aber `TENNILO_API_ENABLED` bleibt ausgeschaltet.
+3. **Staging absichern und testen:** Mailzustellung/Absender, HTTPS- und Cookie-Pfade, Same-Origin/CSRF, Rate-Limit, Rechte für mehrere Vereine und Wiederherstellung aus Backup verifizieren. Erst danach Testnutzer zulassen.
+4. **B0.3 später:** Schleifchenturniere zentral in die Datenbank übertragen, alte JSON-Daten kontrolliert importieren, Mehrgeräte-Bearbeitung sicher machen. Danach Lizenzvergabe und Software-Bezahlung; Nenngelder weiterhin zunächst bar.
+5. **Offener Praxistest:** Fernanzeige 0.6.1 von einem echten zweiten Gerät prüfen. Dafür nicht unkontrolliert Backend/Registrierung veröffentlichen.
 
 ### Google Drive und fachliche Quellen
 
