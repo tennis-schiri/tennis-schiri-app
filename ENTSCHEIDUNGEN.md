@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-019 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-020 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -142,3 +142,11 @@
 - **Speicherung:** Die Bearbeitungsansicht ist ausschließlich temporärer UI-Zustand, nicht Bestandteil des Turnier-JSON. Gespeicherte Ergebnisse bleiben kompatibel und nach Neustart kompakt sichtbar.
 - **Technik/Tests:** Anpassungen in `site/assets/app.js` und `styles.css`; Regressionstest `tests/result-ui.test.mjs`. Der bestehende manuelle Workflow prüft automatisch auch diesen Test.
 - **Freigabe:** Version 0.3.2 noch nicht per FTPS hochgeladen bzw. im echten Browser getestet. Letzter bestätigter manuell erfolgreicher FTPS-Lauf: v0.3.1, [41991275917](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917).
+
+## E-019 · Nenngeldverwaltung: zunächst nur Barzahlung (2026-11-05)
+
+- **Entscheidung:** Für TENNILO zunächst ausschließlich Barzahlung des Nenngelds vor Ort vorsehen. Das entspricht dem zunächst angestrebten Ablauf bei Vereinsturnieren.
+- **Funktionale Idee:** Nenngeld pro Turnier oder Konkurrenz hinterlegen, bei Teilnehmern den Zahlungsstatus (offen / bar bezahlt) manuell führen und erhaltene sowie offene Beträge übersichtlich anzeigen. Ggf. am Check-in erfassen.
+- **Nicht Teil der ersten Ausbaustufe:** Integrierte Überweisung, PayPal, Stripe oder andere Online-Zahlungsabwicklung. Auch keine automatische Zahlungsbestätigung behaupten.
+- **Einordnung:** Produktanforderung für die künftige Nenngeldverwaltung, **nicht bereits implementiert**. Zeitpunkt innerhalb der Roadmap bleibt flexibel; die laufende Entwicklung des Schleifchenturniers hat Vorrang.
+- **Abgrenzung:** Nenngeld der Turnierteilnehmer ist etwas anderes als eine spätere TENNILO-App-Lizenzgebühr.
