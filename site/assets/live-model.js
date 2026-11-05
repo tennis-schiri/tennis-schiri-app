@@ -4,6 +4,7 @@ import {verifyRibbonDraw} from "./draw.js?v=061";
 import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=061";
 import {verifyRibbonFinals} from "./finals.js?v=061";
 import {plannedRound,clockFor} from "./operations.js?v=061";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=070";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
@@ -69,8 +70,81 @@ const stageToDisplay=(t,standing)=>{
       t.participants.find(p=>p.id===id)?.name||"Unbekannter Spieler"):null
   };
 };
+
+const doublesTeamNames=(t,id)=>{
+  const team=(t.doubles?.teams||[]).find(team=>team.id===id);
+  return team?[team.player1,team.player2]:["Sieger der vorherigen Runde"];
+};
+const doublesVisibleMatch=(t,m,i)=>({
+  number:i+1,court:t.courtLabels?.[m.court]||"Platz "+m.court,batch:1,
+  left:doublesTeamNames(t,m.team1),right:doublesTeamNames(t,m.team2),
+  leftFillers:[],rightFillers:[],winner:validResult(m.result)?m.result.winner:null,
+  score1:m.result?.score1??null,score2:m.result?.score2??null,
+  finished:validResult(m.result)
+});
+const doublesRanking=info=>info.ranking.slice(0,10).map((row,i)=>({
+  place:i+1,name:row.name,wins:row.wins,gameDiff:row.gameDiff,
+  gamesFor:row.gamesFor,played:row.played
+}));
+function selectedDoublesRound(t) {
+  const rounds=t.doubles.draw.rounds,explicit=t.liveDisplay;
+  if(explicit?.mode==="round"&&Number.isInteger(explicit.index)&&
+    explicit.index>=0&&explicit.index<rounds.length)return explicit.index;
+  const clocks=Object.entries(t.roundClocks||{})
+    .map(([key,clock])=>({index:Number(key),clock}))
+    .filter(({index,clock})=>Number.isInteger(index)&&index>=0&&index<rounds.length&&clock?.firstStartedAt);
+  const running=clocks.filter(x=>x.clock.startedAt!=null&&x.clock.finishedAt==null)
+    .sort((a,b)=>b.clock.firstStartedAt-a.clock.firstStartedAt);
+  if(running.length)return running[0].index;
+  const last=clocks.sort((a,b)=>b.clock.firstStartedAt-a.clock.firstStartedAt)[0];
+  if(last)return last.index;
+  const open=rounds.findIndex(round=>round.matches.some(m=>!validResult(m.result)));
+  return open>=0?open:rounds.length-1;
+}
+function doublesLiveDisplay(t,now) {
+  const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now,format:"doubles"};
+  if(!t.doubles?.draw)return {...base,mode:"waiting",message:"Das Doppelturnier ist noch nicht ausgelost."};
+  const verification=verifyDoublesDraw(t);
+  if(!verification.ok)return {...base,mode:"invalid",message:verification.errors[0]};
+  let standing;
+  try{standing=doublesStandings(t);}catch(error){
+    return {...base,mode:"invalid",message:error.message};
+  }
+  const ranking=doublesRanking(standing);
+  if(t.doubles.playoffs&&t.liveDisplay?.mode!=="round"){
+    const status=doublesPlayoffStatus(t);
+    if(!status.ready)return {...base,mode:"invalid",message:status.error||"Die Play-offs sind ungültig."};
+    const stages=[
+      {title:"Viertelfinale",matches:status.playoffs.quarterfinals},
+      {title:"Halbfinale",matches:status.playoffs.semifinals},
+      {title:"Finale",matches:[status.playoffs.final]},
+      {title:"Spiel um Platz 3",matches:[status.playoffs.thirdPlace]}
+    ];
+    let stage=stages.find(s=>s.matches.some(m=>!validResult(m.result)));
+    if(!stage)stage=stages[2];
+    const champion=status.champion?doublesTeamNames(t,status.champion):null;
+    return {...base,mode:"finals",title:stage.title,
+      subtitle:"Doppelturnier · feste Teams · Top-8-Play-offs",
+      progress:stage.matches.filter(m=>validResult(m.result)).length,
+      total:stage.matches.length,
+      matches:stage.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),
+      ranking,champion};
+  }
+  const index=selectedDoublesRound(t);
+  const round=t.doubles.draw.rounds[index];
+  const plan=doublesPlanRound(t,index),timer=clockFor(t,index,now);
+  return {...base,mode:"round",index,title:"Runde "+(index+1),
+    subtitle:"Doppelturnier · feste Teams · Vorrunde",
+    plannedStart:plan.start,plannedEnd:plan.end,timer,
+    progress:round.matches.filter(m=>validResult(m.result)).length,
+    total:round.matches.length,
+    matches:round.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),
+    ranking,champion:null};
+}
+
 export function buildLiveDisplay(t,now=Date.now()) {
   if(!t)return {mode:"missing",message:"Das Turnier wurde in diesem Browser nicht gefunden."};
+  if(t.type==="doubles")return doublesLiveDisplay(t,now);
   const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now};
   if(!t.draw)return {...base,mode:"waiting",message:"Die Auslosung ist noch nicht erstellt."};
   const valid=verifyRibbonDraw(t,t.draw);
