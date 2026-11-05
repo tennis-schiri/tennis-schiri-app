@@ -75,8 +75,10 @@ async function run(action, control) {
   if (control) control.disabled = true;
   try {
     await action();
+    return true;
   } catch (error) {
     flash(error && error.message ? error.message : 'Aktion fehlgeschlagen.', true);
+    return false;
   } finally {
     if (control) control.disabled = false;
   }
@@ -193,14 +195,13 @@ function showVerify() {
   if (!state.action || state.action.kind !== 'verify') {
     content.append(el('p', 'Kein gültiger Bestätigungslink vorhanden.', 'muted'));
   } else {
-    content.append(button('E-Mail jetzt bestätigen', control => control, 'btn primary'));
-    const confirm = content.lastElementChild;
-    confirm.addEventListener('click', () => run(async () => {
+    const confirm = button('E-Mail jetzt bestätigen', () => run(async () => {
       await api('POST', '/auth/verify', {token: state.action.token});
       state.action = null;
       setView(state.user ? 'clubs' : 'login');
       flash('Deine E-Mail ist bestätigt. Du kannst dich anmelden.');
-    }, confirm));
+    }, confirm), 'btn primary');
+    content.append(confirm);
   }
   extraActions([['Link erneut anfordern', 'resend'], ['Zur Anmeldung', 'login']]);
 }
@@ -376,7 +377,7 @@ function showClubs() {
           await loadMembers();
           setView('clubs');
           flash('Rolle aktualisiert.');
-        }, roleSelect).then(() => { if (state.members === null) roleSelect.value = member.role; });
+        }, roleSelect).then(success => { if (!success) roleSelect.value = member.role; });
       });
       actions.append(roleSelect);
       actions.append(button('Entfernen', () => {
