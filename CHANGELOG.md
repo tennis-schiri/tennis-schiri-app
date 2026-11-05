@@ -5,9 +5,16 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## Wartung · 2026-11-05 – GitHub-Actions-Umgebung
+
+- Node-20-Warnung beseitigt: `actions/checkout` und `actions/setup-node` von v4 auf v7 angehoben (interner Action-Runtime Node 24).
+- Beide Jobs zunächst auf `ubuntu-24.04` fixiert, um die laufende Migration von `ubuntu-latest` auf Ubuntu 26.04 nicht ungeprüft zu übernehmen.
+- `persist-credentials: false` für den Checkout; keine Git-Zugangsdaten müssen für den reinen FTPS-Upload persistiert werden.
+- Manueller Upload, Tests, FTP-Secrets und Dateiliste unverändert. Erster Lauf mit den neuen Action-Versionen steht noch aus.
+
 ## [0.3.0] – normale Schleifchenturnier-Vorrunden
 
-**Im GitHub-Code implementiert. Live-Veröffentlichung und GitHub-Actions-Testlauf noch nicht bestätigt.**
+**Im GitHub-Code implementiert und per manuellem [Actions-Lauf 41986086093](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41986086093) am 2026-11-05 erfolgreich getestet und via FTPS übertragen. Ein echter Browser-Funktionstest fehlt noch.**
 
 ### Neu
 - Neuer Menüpunkt **Auslosung** mit Runden, Startzeiten, benannten Plätzen und Begegnungen.
@@ -21,7 +28,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 
 ### Prüfstatus und Grenzen
 - Szenarien mit geraden, ungeraden sowie ungleich großen Stärkegruppen wurden in simulierten Prüfungen getestet.
-- Ein grüner GitHub-Actions-Lauf für diesen Stand ist noch nicht bestätigt.
+- Der GitHub-Actions-Lauf `41986086093` war grün und enthielt die Auslosungstests sowie den FTPS-Upload.
 - Noch keine Ergebnis-/Schleifchenwertung, Auffüllrunde, Endrunde oder Livetabelle; daher **keine Freigabe für echte Turniere**.
 
 ## [0.2.3] – individuelle Platznamen
