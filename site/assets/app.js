@@ -1,4 +1,5 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=023";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=030";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=030";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
@@ -62,7 +63,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.2.3</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.0</span>
   </div></header>`;
 }
 
@@ -122,6 +123,7 @@ function sidebar(t) {
       <button data-action="home">${icon("home")} Startseite</button>
       <button data-action="tab" data-tab="overview" class="${view === "overview" ? "selected" : ""}">${icon("trophy")} Übersicht</button>
       <button data-action="tab" data-tab="participants" class="${view === "participants" ? "selected" : ""}">${icon("users")} Teilnehmende</button>
+      <button data-action="tab" data-tab="draw" class="${view === "draw" ? "selected" : ""}">${icon("court")} Auslosung</button>
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
     </nav>
     <button class="btn side-new" data-action="new">${icon("plus")} Neues Turnier</button>
@@ -182,8 +184,8 @@ function overview(t) {
       <section class="panel"><div class="panel-head"><h3>Als Nächstes</h3><span class="mini-tag">ROADMAP</span></div>
         <ol class="roadmap">
           <li class="done"><span>${icon("check")}</span><div><strong>Turnier & Teilnehmer</strong><small>Jetzt verfügbar</small></div></li>
-          <li><span>2</span><div><strong>Automatische Auslosung</strong><small>In Entwicklung</small></div></li>
-          <li><span>3</span><div><strong>Ergebnisse & Livetabelle</strong><small>Geplant</small></div></li>
+          <li class="done"><span>${icon("check")}</span><div><strong>Normale Vorrunden auslosen</strong><small>Jetzt als Testversion verfügbar</small></div></li>
+          <li><span>3</span><div><strong>Ergebnisse, Auffüllrunde & Livetabelle</strong><small>Nächster Entwicklungsschritt</small></div></li>
         </ol>
       </section>
     </div>
@@ -240,11 +242,59 @@ function settings(t) {
   </section>`;
 }
 
+function roundStart(t,index) {
+  const match = /^([01]\\d|2[0-3]):([0-5]\\d)$/.exec(String(t.startTime||""));
+  if(!match)return "Startzeit offen";
+  const minutes=Number(match[1])*60+Number(match[2])+index*(t.duration+t.breakMinutes);
+  const hour=String(Math.floor(minutes/60)%24).padStart(2,"0");
+  const minute=String(minutes%60).padStart(2,"0");
+  return `${hour}:${minute} Uhr${minutes>=1440?" (+1 Tag)":""}`;
+}
+function drawPreview(t) {
+  const saved=t.draw;
+  let spec=null,error=null;
+  try{spec=analyzeRibbonDraw(t);}catch(e){error=e.message;}
+  const verification=saved ? verifyRibbonDraw(t,saved) : null;
+  const valid=verification?.ok===true;
+  const statline=spec?`<div class="draw-summary">
+    ${stat("ANWESEND",spec.strong+spec.weak,`${spec.strong} Stark · ${spec.weak} Schwächer`)}
+    ${stat("SPIELE / PERSON",spec.target,"reguläre Wertungsspiele")}
+    ${stat("NORMALE MATCHES",spec.expectedNormalMatches,"vor einer möglichen Auffüllrunde")}
+    ${stat("SPIELE JE RUNDE",spec.maxMatches,"maximal gleichzeitig")}
+  </div>`:"";
+  const explanation=error?`<div class="advice warn">${icon("alert")}<div><strong>Auslosung noch nicht möglich</strong><span>${escapeHtml(error)}</span></div></div>`:
+    valid ? `<div class="advice good">${icon("check")}<div><strong>Normale Runden geprüft</strong><span>Jeder Spieler hat die geplanten regulären Einsätze; kein Doppel ist innerhalb einer Runde doppelt besetzt.</span></div></div>`:
+    saved ? `<div class="advice warn">${icon("alert")}<div><strong>Gespeicherte Auslosung ist nicht mehr gültig</strong><span>${escapeHtml(verification?.errors?.[0]||"Bitte erneut auslosen.")}</span></div></div>`:
+    `<div class="advice neutral">${icon("info")}<div><strong>Bereit für die Auslosung</strong><span>Erst beim Klicken wird ein Spielplan erzeugt und im Browser gespeichert.</span></div></div>`;
+  const nameById=new Map(t.participants.map(p=>[p.id,p.name]));
+  const displayName=id=>escapeHtml(nameById.get(id)||"Unbekannter Spieler");
+  const roundCards=valid ? `<div class="draw-rounds">${saved.rounds.map((round,index)=>`
+    <details class="draw-round" ${index===0?"open":""}>
+      <summary><span><strong>Runde ${index+1}</strong><small>${roundStart(t,index)} · ${round.matches.length} Spiele</small></span><span class="draw-expand">Ansehen</span></summary>
+      <div class="draw-match-list">${round.matches.map(m=>`<article class="draw-match">
+        <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))}</div>
+        <div class="draw-team"><span>TEAM 1</span><strong>${displayName(m.slots[0])} <em>+</em> ${displayName(m.slots[1])}</strong></div>
+        <div class="draw-versus">VS</div>
+        <div class="draw-team"><span>TEAM 2</span><strong>${displayName(m.slots[2])} <em>+</em> ${displayName(m.slots[3])}</strong></div>
+      </article>`).join("")}</div>
+    </details>`).join("")}</div>`:"";
+  const specialNotice=spec?.special ? `<div class="advice warn">${icon("info")}<div>
+    <strong>Auffüllrunde erforderlich – noch nicht ausgelost</strong>
+    <span>${spec.special.matches} zusätzliche Match(es): ${spec.special.fillerStrong} starke und ${spec.special.fillerWeak} schwächere Auffüller. Laut Vorlage werden diese erst anhand der Ergebnisse der normalen Runden ausgewählt (0 oder 1 Schleifchen). Ihre Zusatzspiele zählen für sie nicht als Wertungsspiel.</span>
+  </div></div>` : valid ? `<div class="advice good">${icon("check")}<div><strong>Keine Auffüllrunde erforderlich</strong><span>Die regulären Wertungsspiele sind vollständig eingeplant.</span></div></div>`:"";
+  return `<section class="screen">
+    <div class="section-header"><div><div class="eyebrow">SCHLEIFCHENTURNIER / VORRUNDE</div><h2>Auslosung</h2>
+      <p class="section-sub">1 starke + 1 schwächere Person je Doppelteam · 3 oder 4 Wertungsspiele pro Person</p></div>
+      <button class="btn primary" data-action="draw-generate" ${error?"disabled":""}>${icon("court")} ${saved?"Neu auslosen":"Normale Runden auslosen"}</button></div>
+    ${statline}${explanation}${roundCards}${specialNotice}
+    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Aktuell werden die normalen Vorrunden erzeugt. Ergebnisse, Auffüller-Auswahl, Schleifchenwertung und Endrunde sind noch nicht verfügbar. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
+  </section>`;
+}
 function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
-    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.2.3 · Private Testversion</footer>
+    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : overview(t)}
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.0 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -352,6 +402,13 @@ document.addEventListener("click", event => {
   if (action === "tab") { view = trigger.dataset.tab; search = ""; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
+  if (action === "draw-generate" && t) return run(() => {
+    if (t.draw && !confirm("Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?")) return;
+    const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
+    store.editTournament(t.id,{draw});
+    view="draw";render();
+    flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
+  });
   if (action === "add-player" && t) return showPlayerDialog(t);
   if (action === "edit-player" && t) {
     const p = t.participants.find(p => p.id === trigger.dataset.id);
