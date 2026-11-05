@@ -8,7 +8,7 @@ import {
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
   clearLiveSecrets,publishLive,remoteLiveUrl
-} from "./remote-live.js?v=070";
+} from "./remote-live.js?v=071";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
