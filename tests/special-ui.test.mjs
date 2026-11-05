@@ -26,6 +26,9 @@ test("Auffüllrunde erst nach Vorrunde, ungewertete Auffüller, Korrektur via Zu
   };
   globalThis.window={addEventListener(){},scrollTo(){}};
   globalThis.confirm=()=>true;
+  const originalSetTimeout=globalThis.setTimeout;
+  globalThis.setTimeout=(callback,delay,...args)=>
+    delay===4700 ? (callback(),0) : originalSetTimeout(callback,delay,...args);
   globalThis.FormData=class {
     constructor(form){this.data=form.data??{}}
     get(key){return this.data[key]??null}
