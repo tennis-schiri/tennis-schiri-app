@@ -61,13 +61,13 @@ if ($method==='POST' || $method==='PATCH') {
         echo json_encode(['error'=>'Anfrage zu groß.']);
         exit;
     }
-    $decoded=json_decode($raw,true);
-    if (!is_array($decoded) || array_is_list($decoded)) {
+    $decoded=json_decode($raw,false);
+    if (!($decoded instanceof \stdClass)) {
         http_response_code(400);
         echo json_encode(['error'=>'Ungültiges JSON-Objekt.']);
         exit;
     }
-    $body=$decoded;
+    $body=(array)$decoded;
 }
 
 require_once dirname(__DIR__).'/src/Database.php';
