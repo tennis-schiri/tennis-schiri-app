@@ -113,3 +113,12 @@
 - **Konsistenz:** Ein gespeicherter Plan wird gegen eine Signatur aus Teilnehmerkennungen, Anwesenheit, Stärkegruppen, Wertungsspielen und aktiven Plätzen geprüft. Ein veralteter Plan wird nicht als gültig angezeigt.
 - **Qualität:** Wiederholbare Tests in `tests/draw.test.mjs`, vor jedem manuellen Upload per GitHub Actions. Ein erfolgreicher Live-Test ist gesondert zu bestätigen.
 - **Offen:** Ergebnisfelder, Gewinnerwertung, Auswahl der Auffüller nach Ergebnissen, Endrunde, Livetabelle sowie umfassende Browser-End-to-End-Tests.
+
+## E-016 · Drive als fachliche Ergänzung (2026-11-05)
+
+- **Entscheidung:** Der bestehende Drive-Projektordner dient als Quelle für Turnierformate und als Ablage für lesbare TENNILO-Projektkonzepte.
+- **Neu angelegt:** Unterordner „TENNILO – Dokumentation“ (https://drive.google.com/drive/folders/1w6WBQH0o5MEwnKn3ZuuN43HiHaxvMnBg) und ein Google-Doc-Projektwegweiser (https://docs.google.com/document/d/1d9Gx6AahC1RbEVFtavmo4Y8UAU7_R6EzmmiWQ5mlZr8/edit).
+- **Vorhanden und unverändert:** „Turnierformate“ (https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs) mit PDF-Regelbeschreibungen und Excel-Ergebnisvorlagen.
+- **Abgrenzung:** GitHub bleibt verbindlich für Code, Produktentscheidungen, Versionen, Test- und Veröffentlichungsstatus. Drive dient für fachliche Originale, Recherche und Konzepte. Keine zweite unabhängig gepflegte Versionschronik.
+- **Regel:** Vor neuen Formaten den relevanten PDF-/Excel-Inhalt und Sonderfälle genau prüfen. Die PDF-Formate ersetzen nicht automatisch das bestehende Schleifchenturnier-V7-Regelwerk.
+- **Quellenindex:** [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md).
