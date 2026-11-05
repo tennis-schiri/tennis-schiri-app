@@ -5,6 +5,25 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.3.1] – Ergebnisse und Schleifchen-Zwischenstand
+
+**Stand 2026-11-05:** Im GitHub-Code umgesetzt und simuliert getestet; **noch kein bestätigter FTPS-Upload dieser Version**.
+
+### Neu
+- Pro normaler Vorrundenbegegnung Siegerteam ausdrücklich erfassen; gewonnene Games pro Team sind optional (jeweils 0–99). Bei ungleichen Games darf der Gewinner nicht widersprechen; bei gleichen Games ist eine gesonderte Siegerentscheidung erforderlich.
+- Jedes Mitglied des Siegerteams erhält genau ein Schleifchen; Verlierer werden gezählt. Gespielte Begegnungen und aktuelle Siegquote werden pro Person angezeigt.
+- Lokale Zwischenstand-Tabelle mit Sortierung nach Schleifchen, gespielten Matches und Name, analog zur bisherigen Google-Tabelle.
+- Ergebnisse bearbeiten, zurücksetzen, browserseitig speichern und über die bestehende JSON-Sicherung austauschen.
+- Statusanzeige für vollständig erfasste reguläre Runden; erst dann wird die Zahl geeigneter Auffüllkandidaten (0 oder 1 Schleifchen, ohne die bereits für das letzte Match vorgesehenen regulären Spieler) ermittelt.
+- Auslosungs-Reset warnt bei vorhandenen Ergebnissen vor Verlust aller Resultate.
+- Neues Modul `site/assets/results.js` mit elf gezielten Tests in `tests/results.test.mjs`.
+- Manueller GitHub-Actions-Workflow prüft künftig beide Testdateien (`tests/*.test.mjs`) und lädt sechs App-Dateien hoch.
+
+### Tests, Kompatibilität und Grenzen
+- Elf Ergebnistests und simulierter Browser-Bedienablauf (Eingabe, widersprüchliche Games, Rücksetzung, Wiederöffnen, JSON-Backup) erfolgreich.
+- Alte Spielpläne ohne Ergebnisfelder bleiben kompatibel. Browser-Speicherschlüssel und Schema-Version 1 unverändert.
+- Noch keine tatsächliche Auffüllrunde oder Endrunde, zentrale Datenbank oder Mehrgeräte-Livetabelle; weiterhin Testversion.
+
 ## Wartung · 2026-11-05 – GitHub-Actions-Umgebung
 
 - Node-20-Warnung beseitigt: `actions/checkout` und `actions/setup-node` von v4 auf v7 angehoben (interner Action-Runtime Node 24).
