@@ -49,8 +49,8 @@ test("Zuschauer-Daten sind auf Spielpaarungen und Rangliste begrenzt",()=>{
   const t=fixture();
   t.doubles.teams[0].player1='<script>alert("x")</script>';
   t.doubles.draw=generateDoublesDraw(t,{seed:9876});
-  // Der Spielplan bleibt gültig: Name ist kein Bestandteil der Draw-Signatur,
-  // beim Neuladen würden unzulässige Namen erst in die Oberfläche escaped.
+  // Der neue Name erfordert eine neue Draw-Signatur; die Zuschaueransicht
+  // muss die Anzeige trotzdem sicher als Text statt als HTML darstellen.
   const view=publicLiveSnapshot(t);
   const raw=JSON.stringify(view);
   assert.equal(view.format,"doubles");
