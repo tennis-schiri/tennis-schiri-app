@@ -9,6 +9,7 @@ const noticeRoot = document.getElementById("toast-region");
 let view = "home";
 let search = "";
 let drawOpenRound = 0;
+let editingResult = null; // Nur die aktuell geöffnete Bearbeitung, nicht als Turnierdaten speichern.
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -65,7 +66,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.1</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.2</span>
   </div></header>`;
 }
 
@@ -101,7 +102,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.3.1</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.3.2</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -278,12 +279,28 @@ function drawPreview(t) {
       <summary><span><strong>Runde ${index+1}</strong><small>${roundStart(t,index)} · ${standings.perRound[index].complete} von ${round.matches.length} Ergebnissen</small></span><span class="draw-expand">Ansehen</span></summary>
       <div class="draw-match-list">${round.matches.map((m,matchIndex)=>{
         const result=normalizeRibbonResult(m.result);
-        return `<article class="draw-match">
-          <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} ${result.winner!==null?'<span class="draw-result-complete">Ergebnis erfasst</span>':''}</div>
-          <div class="draw-team"><span>TEAM 1</span><strong>${displayName(m.slots[0])} <em>+</em> ${displayName(m.slots[1])}</strong></div>
-          <div class="draw-versus">VS</div>
-          <div class="draw-team"><span>TEAM 2</span><strong>${displayName(m.slots[2])} <em>+</em> ${displayName(m.slots[3])}</strong></div>
-          <form class="draw-result-form" data-form="draw-result" data-round="${index}" data-match="${matchIndex}">
+        const finished=result.winner!==null;
+        const editing=finished && editingResult?.tournamentId===t.id &&
+          editingResult.round===index && editingResult.match===matchIndex;
+        const resultLabel=finished && result.score1!==null ? `${result.score1} : ${result.score2}` : "Sieg";
+        return `<article class="draw-match ${finished?"draw-match-finished":""}">
+          <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} ${finished?'<span class="draw-result-complete">Beendet</span>':''}</div>
+          <div class="draw-team ${finished?(result.winner===1?"is-winner":"is-loser"):""}">
+            <span>TEAM 1 ${result.winner===1?`<span class="draw-winner-pill">${icon("check")} Sieger</span>`:""}</span>
+            <strong>${displayName(m.slots[0])} <em>+</em> ${displayName(m.slots[1])}</strong>
+          </div>
+          <div class="draw-versus ${finished?"draw-versus-final":""}" ${finished?`aria-label="Ergebnis: ${resultLabel}, Sieger Team ${result.winner}"`:""}>
+            ${finished ? result.score1!==null ? `<strong>${result.score1}<span>:</span>${result.score2}</strong><small>GAMES</small>`
+             : `<strong class="draw-no-score">${icon("check")}</strong><small>SIEG</small>` : "VS"}
+          </div>
+          <div class="draw-team ${finished?(result.winner===2?"is-winner":"is-loser"):""}">
+            <span>TEAM 2 ${result.winner===2?`<span class="draw-winner-pill">${icon("check")} Sieger</span>`:""}</span>
+            <strong>${displayName(m.slots[2])} <em>+</em> ${displayName(m.slots[3])}</strong>
+          </div>
+          ${finished && !editing ? `<div class="draw-match-controls">
+            <button type="button" class="draw-edit-btn" data-action="draw-edit-result" data-round="${index}" data-match="${matchIndex}" aria-label="Ergebnis in Runde ${index+1} auf ${escapeHtml(courtName(t,m.court))} ändern">${icon("edit")} Ergebnis ändern</button>
+          </div>` : ""}
+          ${!finished || editing ? `<form class="draw-result-form" data-form="draw-result" data-round="${index}" data-match="${matchIndex}">
             <label class="draw-score-label">Games Team 1<input name="score1" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score1??""}"></label>
             <label class="draw-score-label">Games Team 2<input name="score2" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score2??""}"></label>
             <label class="draw-winner-label">Siegerteam
@@ -293,8 +310,11 @@ function drawPreview(t) {
                 <option value="2" ${result.winner===2?"selected":""}>Team 2</option>
               </select>
             </label>
-            <button type="submit" class="btn subtle small">Ergebnis speichern</button>
-          </form>
+            <div class="draw-result-actions">
+              <button type="submit" class="btn subtle small">Ergebnis speichern</button>
+              ${editing ? `<button type="button" class="btn ghost small" data-action="draw-cancel-edit">Abbrechen</button>` : ""}
+            </div>
+          </form>` : ""}
         </article>`;
       }).join("")}</div>
     </details>`).join("")}</div>`:"";
@@ -329,7 +349,7 @@ function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.1 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.2 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -434,10 +454,19 @@ document.addEventListener("click", event => {
   const trigger = event.target.closest("[data-action]");
   if (!trigger || trigger.matches("input[type=checkbox]")) return;
   const action = trigger.dataset.action, t = store.active();
+  if (action === "draw-edit-result" && t) {
+    const round=Number(trigger.dataset.round),match=Number(trigger.dataset.match);
+    if (!Number.isInteger(round) || !Number.isInteger(match) || !t.draw?.rounds?.[round]?.matches?.[match]) return;
+    editingResult={tournamentId:t.id,round,match};
+    drawOpenRound=round;
+    render();
+    return;
+  }
+  if (action === "draw-cancel-edit") { editingResult=null; render(); return; }
   if (action === "close-dialog") return closeDialog();
-  if (action === "home") { view = "home"; search = ""; render(); window.scrollTo?.(0, 0); return; }
-  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; render(); window.scrollTo?.(0, 0); });
-  if (action === "tab") { view = trigger.dataset.tab; search = ""; render(); return; }
+  if (action === "home") { view = "home"; search = ""; editingResult=null; render(); window.scrollTo?.(0, 0); return; }
+  if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; editingResult=null; render(); window.scrollTo?.(0, 0); });
+  if (action === "tab") { view = trigger.dataset.tab; search = ""; editingResult=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
   if (action === "draw-generate" && t) return run(() => {
@@ -450,7 +479,7 @@ document.addEventListener("click", event => {
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
     store.editTournament(t.id,{draw});
-    view="draw"; drawOpenRound=0; render();
+    view="draw"; drawOpenRound=0; editingResult=null; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
   });
   if (action === "add-player" && t) return showPlayerDialog(t);
@@ -518,6 +547,7 @@ document.addEventListener("submit", event => {
     });
     store.editTournament(t.id,{draw});
     drawOpenRound=roundIndex;
+    editingResult=null;
     render();
     flash(data.get("winner") ? "Ergebnis und Schleifen gespeichert." : "Ergebnis zurückgesetzt.");
   });
