@@ -5,9 +5,22 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.5.1] – Gemeinsamer Check-in und mehrere Nenngeld-Kategorien
+
+**Stand 2026-11-05:** In GitHub implementiert und simuliert getestet. **FTPS-Upload und echter Browsertest für v0.5.1 noch offen.** Letzter bestätigter Upload: v0.5.0.
+
+### Änderungen
+- **Teilnehmende und Bar-Nenngeld in einer einzigen Liste:** Spieler, Stärkegruppe, Anwesenheit, Tarif, Sollbetrag, tatsächlich erhaltenes Bargeld, offener Betrag und Erfassungsaktionen gemeinsam sichtbar. Separater „Nenngeld“-Navigationspunkt entfernt; bisherige Menü-/Schnellaktionen führen zur vereinten Liste.
+- **Frei konfigurierbare Nenngeld-Kategorien** pro Turnier: Name und Eurobetrag (beispielsweise „Jugend“ 5 € und „Erwachsene“ 12 €). Kategorien werden unter Einstellungen hinzugefügt und bearbeitet; bis zu 20 Kategorien einschließlich Standard.
+- Pro Teilnehmer kann ein Tarif unmittelbar per Dropdown oder im Bearbeiten-Dialog zugeordnet werden. Stärkegruppe und Nenngeld-Kategorie sind fachlich unabhängig.
+- **Datenmigration:** Bestehende Turniere erhalten automatisch eine Kategorie „Standard“ mit ihrem bisher geltenden Nenngeld. Bisherige individuelle Sonderbeträge, Zahlungseingänge, Anwesenheiten und Spielpläne bleiben gespeichert.
+- **Betragsschutz:** Bereits tatsächlich erhaltene Barzahlungen ändern sich bei einem Tarifwechsel oder einer Preisänderung nicht automatisch. Das Entfernen einer noch zugewiesenen Kategorie ist untersagt. Ein individueller Sonderbetrag wird beim ausdrücklichen Tarifwechsel nach Bestätigung aufgehoben.
+- Die bestehende Rundenuhr und die Schleifchenturnier-Auslosung bleiben unverändert. Es gibt weiterhin keine Onlinezahlung oder geräteübergreifende Synchronisierung.
+- Tests: `tests/fee-tiers.test.mjs` (11 neue Logikprüfungen) und `tests/fee-tiers-ui.test.mjs` (gemeinsamer Bedienablauf); **79 Logiktests + 5 simulierte UI-Regressionstests erfolgreich**.
+
 ## [0.5.0] – Bar-Nenngeld, Spielzeiten und laufende Rundenuhr
 
-**Stand 2026-11-05:** In GitHub implementiert. **Noch kein bestätigter manueller FTPS-Upload oder echter Browsertest für Version 0.5.0.** Der letzte veröffentlichte Stand ist 0.4.0.
+**Stand 2026-11-05:** Version 0.5.0 wurde per manuellem [GitHub-Actions-Lauf 42020751117](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42020751117) erfolgreich getestet und via FTPS hochgeladen. Ein umfassender Browser-/Praxistest ist noch nicht bestätigt.
 
 ### Neue Funktionen
 - **Nenngeld / Barzahlung:** Standardbetrag in Euro pro Turnier (Voreinstellung 0,00 €); optional individuelles Nenngeld je Spieler, auch kostenfrei. Kein Bezahldienst, keine Onlinezahlung.
