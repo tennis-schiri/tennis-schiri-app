@@ -1,5 +1,6 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=030";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=030";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=031";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=031";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=031";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
@@ -7,6 +8,7 @@ const dialogRoot = document.getElementById("dialog-root");
 const noticeRoot = document.getElementById("toast-region");
 let view = "home";
 let search = "";
+let drawOpenRound = 0;
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -63,7 +65,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.0</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.1</span>
   </div></header>`;
 }
 
@@ -99,7 +101,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.2</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.3.1</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -156,7 +158,7 @@ function readiness(t) {
   if (c.present === 0) return `<div class="advice warn">${icon("alert")} <div><strong>Noch keine anwesenden Spieler.</strong><span>Erfasse Teilnehmende oder aktiviere ihre Anwesenheit.</span></div></div>`;
   if (c.strong !== c.weaker) return `<div class="advice warn">${icon("alert")} <div><strong>Stärkegruppen sind ungleich verteilt.</strong><span>Aktuell ${c.strong} Stark und ${c.weaker} Schwächer. Die spätere Auslosungslogik muss solche Fälle berücksichtigen.</span></div></div>`;
   if (c.present % 4 !== 0) return `<div class="advice neutral">${icon("info")} <div><strong>Nicht alle können gleichzeitig Doppel spielen.</strong><span>Aktuell sind ${c.present} Spieler anwesend. Pausen und Auffüller werden erst im Auslosungsmodul geplant.</span></div></div>`;
-  return `<div class="advice good">${icon("check")} <div><strong>Teilnehmerübersicht ausgeglichen.</strong><span>Die Stärkegruppen sind gleich groß. Eine automatische Auslosung ist in Version 0.2 noch nicht enthalten.</span></div></div>`;
+  return `<div class="advice good">${icon("check")} <div><strong>Teilnehmerübersicht ausgeglichen.</strong><span>Die Stärkegruppen sind gleich groß. Die normale Vorrunde kann im Bereich „Auslosung“ erstellt werden.</span></div></div>`;
 }
 
 function overview(t) {
@@ -185,7 +187,8 @@ function overview(t) {
         <ol class="roadmap">
           <li class="done"><span>${icon("check")}</span><div><strong>Turnier & Teilnehmer</strong><small>Jetzt verfügbar</small></div></li>
           <li class="done"><span>${icon("check")}</span><div><strong>Normale Vorrunden auslosen</strong><small>Jetzt als Testversion verfügbar</small></div></li>
-          <li><span>3</span><div><strong>Ergebnisse, Auffüllrunde & Livetabelle</strong><small>Nächster Entwicklungsschritt</small></div></li>
+          <li><span>3</span><div><strong>Ergebnisse & Schleifchenwertung</strong><small>Jetzt als Testversion verfügbar</small></div></li>
+          <li><span>4</span><div><strong>Auffüllrunde und Endrunde</strong><small>Geplant</small></div></li>
         </ol>
       </section>
     </div>
@@ -256,6 +259,8 @@ function drawPreview(t) {
   try{spec=analyzeRibbonDraw(t);}catch(e){error=e.message;}
   const verification=saved ? verifyRibbonDraw(t,saved) : null;
   const valid=verification?.ok===true;
+  let standings=null, standingsError=null;
+  if(valid)try{standings=ribbonStandings(t);}catch(e){standingsError=e.message;}
   const statline=spec?`<div class="draw-summary">
     ${stat("ANWESEND",spec.strong+spec.weak,`${spec.strong} Stark · ${spec.weak} Schwächer`)}
     ${stat("SPIELE / PERSON",spec.target,"reguläre Wertungsspiele")}
@@ -268,33 +273,63 @@ function drawPreview(t) {
     `<div class="advice neutral">${icon("info")}<div><strong>Bereit für die Auslosung</strong><span>Erst beim Klicken wird ein Spielplan erzeugt und im Browser gespeichert.</span></div></div>`;
   const nameById=new Map(t.participants.map(p=>[p.id,p.name]));
   const displayName=id=>escapeHtml(nameById.get(id)||"Unbekannter Spieler");
-  const roundCards=valid ? `<div class="draw-rounds">${saved.rounds.map((round,index)=>`
-    <details class="draw-round" ${index===0?"open":""}>
-      <summary><span><strong>Runde ${index+1}</strong><small>${roundStart(t,index)} · ${round.matches.length} Spiele</small></span><span class="draw-expand">Ansehen</span></summary>
-      <div class="draw-match-list">${round.matches.map(m=>`<article class="draw-match">
-        <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))}</div>
-        <div class="draw-team"><span>TEAM 1</span><strong>${displayName(m.slots[0])} <em>+</em> ${displayName(m.slots[1])}</strong></div>
-        <div class="draw-versus">VS</div>
-        <div class="draw-team"><span>TEAM 2</span><strong>${displayName(m.slots[2])} <em>+</em> ${displayName(m.slots[3])}</strong></div>
-      </article>`).join("")}</div>
+  const roundCards=valid && standings ? `<div class="draw-rounds">${saved.rounds.map((round,index)=>`
+    <details class="draw-round" ${index===drawOpenRound?"open":""}>
+      <summary><span><strong>Runde ${index+1}</strong><small>${roundStart(t,index)} · ${standings.perRound[index].complete} von ${round.matches.length} Ergebnissen</small></span><span class="draw-expand">Ansehen</span></summary>
+      <div class="draw-match-list">${round.matches.map((m,matchIndex)=>{
+        const result=normalizeRibbonResult(m.result);
+        return `<article class="draw-match">
+          <div class="draw-court">${icon("court")} ${escapeHtml(courtName(t,m.court))} ${result.winner!==null?'<span class="draw-result-complete">Ergebnis erfasst</span>':''}</div>
+          <div class="draw-team"><span>TEAM 1</span><strong>${displayName(m.slots[0])} <em>+</em> ${displayName(m.slots[1])}</strong></div>
+          <div class="draw-versus">VS</div>
+          <div class="draw-team"><span>TEAM 2</span><strong>${displayName(m.slots[2])} <em>+</em> ${displayName(m.slots[3])}</strong></div>
+          <form class="draw-result-form" data-form="draw-result" data-round="${index}" data-match="${matchIndex}">
+            <label class="draw-score-label">Games Team 1<input name="score1" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score1??""}"></label>
+            <label class="draw-score-label">Games Team 2<input name="score2" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score2??""}"></label>
+            <label class="draw-winner-label">Siegerteam
+              <select name="winner" aria-label="Siegerteam, Runde ${index+1}, Platz ${escapeHtml(courtName(t,m.court))}">
+                <option value="" ${result.winner===null?"selected":""}>Noch offen</option>
+                <option value="1" ${result.winner===1?"selected":""}>Team 1</option>
+                <option value="2" ${result.winner===2?"selected":""}>Team 2</option>
+              </select>
+            </label>
+            <button type="submit" class="btn subtle small">Ergebnis speichern</button>
+          </form>
+        </article>`;
+      }).join("")}</div>
     </details>`).join("")}</div>`:"";
+  const scoreboard=standings ? `<section class="panel draw-ranking" aria-label="Aktueller Schleifchenstand">
+    <div class="panel-head"><div><h3>Schleifchen-Zwischenstand</h3><p>${standings.completeMatches} von ${standings.totalMatches} Ergebnissen erfasst</p></div><span class="mini-tag">${standings.complete?"VORRUNDE AUSGEWERTET":"LÄUFT"}</span></div>
+    <div class="draw-table-scroll"><table class="draw-ranking-table">
+      <thead><tr><th>Rang</th><th>Spieler</th><th>Gruppe</th><th>Spiele</th><th>Schleifen</th><th>Niederlagen</th><th>Quote</th></tr></thead>
+      <tbody>${standings.participants.map((p,i)=>`<tr><td>${i+1}.</td><td><strong>${escapeHtml(p.name)}</strong></td>
+        <td>${groupLabel(p.group)}</td><td>${p.played} / ${p.target}</td><td class="draw-ribbons">${p.ribbons}</td><td>${p.losses}</td><td>${Math.round(p.quote*100)} %</td></tr>`).join("")}</tbody>
+    </table></div>
+    <p class="draw-table-note">Reihenfolge wie in der Vorlage: zuerst Schleifen, dann gespielte Partien, dann Name. Ein Schleifchen erhalten beide Personen des Siegerteams.</p>
+  </section>`:"";
+  const resultProgress=standings ? `<div class="advice ${standings.complete?"good":"neutral"}">${icon(standings.complete?"check":"info")}<div>
+    <strong>${standings.complete?"Alle normalen Ergebnisse erfasst":"Ergebnisse können jetzt eingetragen werden"}</strong>
+    <span>${standings.completeMatches} von ${standings.totalMatches} Partien entschieden. Siegerteam ausdrücklich wählen; Game-Zahlen sind optional. Bei identischer Game-Zahl muss das Siegerteam gesondert feststehen.</span>
+  </div></div>`:"";
   const specialNotice=spec?.special ? `<div class="advice warn">${icon("info")}<div>
     <strong>Auffüllrunde erforderlich – noch nicht ausgelost</strong>
-    <span>${spec.special.matches} zusätzliche Match(es): ${spec.special.fillerStrong} starke und ${spec.special.fillerWeak} schwächere Auffüller. Laut Vorlage werden diese erst anhand der Ergebnisse der normalen Runden ausgewählt (0 oder 1 Schleifchen). Ihre Zusatzspiele zählen für sie nicht als Wertungsspiel.</span>
+    <span>${spec.special.matches} zusätzliche Match(es): ${spec.special.fillerStrong} starke und ${spec.special.fillerWeak} schwächere Auffüller. Erst nach vollständiger Ergebniserfassung dürfen Spieler mit 0 oder 1 Schleifchen ausgewählt werden. Für Auffüller zählt dieses Zusatzspiel nicht als Wertungsspiel.</span>
+    ${standings?.complete?`<span>${standings.fillerReady?"Genügend Auffüllkandidaten vorhanden":"Auffüllkandidaten reichen nach den bisherigen Ergebnissen nicht aus"}: ${standings.eligible.strong.length} starke, ${standings.eligible.weak.length} schwächere Spieler erfüllen die Bedingungen. Die eigentliche Auffüller-Auslosung folgt als eigener Schritt.</span>`:""}
   </div></div>` : valid ? `<div class="advice good">${icon("check")}<div><strong>Keine Auffüllrunde erforderlich</strong><span>Die regulären Wertungsspiele sind vollständig eingeplant.</span></div></div>`:"";
+  const resultsError=standingsError?`<div class="advice warn">${icon("alert")}<div><strong>Ergebnisse konnten nicht gelesen werden.</strong><span>${escapeHtml(standingsError)}</span></div></div>`:"";
   return `<section class="screen">
     <div class="section-header"><div><div class="eyebrow">SCHLEIFCHENTURNIER / VORRUNDE</div><h2>Auslosung</h2>
       <p class="section-sub">1 starke + 1 schwächere Person je Doppelteam · 3 oder 4 Wertungsspiele pro Person</p></div>
       <button class="btn primary" data-action="draw-generate" ${error?"disabled":""}>${icon("court")} ${saved?"Neu auslosen":"Normale Runden auslosen"}</button></div>
-    ${statline}${explanation}${roundCards}${specialNotice}
-    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Aktuell werden die normalen Vorrunden erzeugt. Ergebnisse, Auffüller-Auswahl, Schleifchenwertung und Endrunde sind noch nicht verfügbar. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
+    ${statline}${explanation}${resultsError}${resultProgress}${roundCards}${scoreboard}${specialNotice}
+    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Auffüller-Auslosung, Endrunde, serverbasierte Synchronisation und vollständige Turnierfreigabe fehlen noch. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
   </section>`;
 }
 function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.0 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.1 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -306,7 +341,10 @@ function settingsFields(t = {}) {
     <label class="field">Startzeit<input name="startTime" type="time" required value="${escapeHtml(t.startTime ?? "10:00")}"></label>
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
-    <label class="field wide">Wertungsspiele je Spieler<input name="rounds" type="number" min="1" max="8" required value="${t.rounds ?? 4}"></label>
+    <label class="field wide">Wertungsspiele je Spieler<select name="rounds" required>
+      <option value="3" ${Number(t.rounds)===3?"selected":""}>3 Wertungsspiele</option>
+      <option value="4" ${Number(t.rounds ?? 4)===4?"selected":""}>4 Wertungsspiele</option>
+    </select><span class="field-hint">Schleifchenturnier nach unserer Vorlage: 3 oder 4 Wertungsspiele pro Person.</span></label>
     <label class="field wide">Anzahl der Plätze<input name="courtCount" type="number" min="1" max="1000" step="1" inputmode="numeric" required value="${courtCount}"><span class="field-hint">Frei wählbar, auch mehr als 7. Bei neuen Turnieren werden die Plätze fortlaufend ab 1 nummeriert.</span></label>
   </div>`;
 }
@@ -403,10 +441,14 @@ document.addEventListener("click", event => {
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
   if (action === "draw-generate" && t) return run(() => {
-    if (t.draw && !confirm("Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?")) return;
+    if (t.draw) {
+      const tally=verifyRibbonDraw(t,t.draw).ok?ribbonStandings(t):null;
+      const warning=tally?.completeMatches ? `Achtung: Es sind bereits ${tally.completeMatches} Ergebnisse erfasst. Bei einer erneuten Auslosung gehen alle Ergebnisse und Schleifen dieses Turniers verloren. Wirklich neu auslosen?` : "Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?";
+      if (!confirm(warning)) return;
+    }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
     store.editTournament(t.id,{draw});
-    view="draw";render();
+    view="draw"; drawOpenRound=0; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
   });
   if (action === "add-player" && t) return showPlayerDialog(t);
@@ -464,6 +506,19 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind === "draw-result") return run(() => {
+    const t=store.active();
+    if(!t)throw Error("Turnier nicht gefunden.");
+    const data=new FormData(form);
+    const roundIndex=Number(form.dataset.round),matchIndex=Number(form.dataset.match);
+    const draw=updateRibbonMatchResult(t,roundIndex,matchIndex,{
+      score1:data.get("score1"),score2:data.get("score2"),winner:data.get("winner")
+    });
+    store.editTournament(t.id,{draw});
+    drawOpenRound=roundIndex;
+    render();
+    flash(data.get("winner") ? "Ergebnis und Schleifen gespeichert." : "Ergebnis zurückgesetzt.");
+  });
   run(() => {
     if (kind === "create" || kind === "settings") {
       const values = readSettings(form);
