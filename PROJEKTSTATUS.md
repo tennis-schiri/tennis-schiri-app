@@ -4,7 +4,7 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.4.0**  
+**Version im GitHub-Code:** **0.5.0**  
 **FTPS-Upload zuletzt bestätigt:** **v0.4.0** – manueller [GitHub-Actions-Lauf 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677) vom **2026-11-05** erfolgreich (Commit `922711d000fea6b988694371662364d956c10461`). Der Nutzer meldete danach, dass die Endrunde **anscheinend funktioniert**. Das gilt als erster positiver manueller Funktionseindruck, **nicht** als vollständiger Browser-/Praxis- oder Sicherheitstest.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
@@ -31,7 +31,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.4.0 neun App-Dateien plus bestehendes Favicon
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.5.0 zehn App-Assets plus index.html und Favicon
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
@@ -53,9 +53,15 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] K.-o.-Endrunde: 8 Personen → 2 Halbfinale und Finale; 16 Personen → 4 Viertelfinale, 2 Halbfinale und Finale
 - [x] Ergebnis-Eingabe, automatische Siegerweitergabe, Turniersieger-Doppel sowie sichere Endrunden-Rücknahme ohne Änderung der Vorrunde
 - [x] Bestehende Wertungen während aktiver Endrunde geschützt; nach einer Änderung des K.-o.-Siegers werden nachfolgende Ergebnisse zurückgesetzt
-- [x] `tests/finals.test.mjs` (14 Logiktests) und `tests/finals-ui.test.mjs` (Bedienablauf); insgesamt **53 Logiktests und 3 simulierte UI-Tests** bestanden
+- [x] `tests/finals.test.mjs` (14 Logiktests) und `tests/finals-ui.test.mjs` (Bedienablauf)
+- [x] **v0.5.0:** Nenngeld (nur bar): Standardbetrag je Turnier, individueller Betrag je Spieler, Zahlungseingänge und Korrekturen
+- [x] Kassenansicht mit Soll, bar erhalten, offen, Teilzahlungen und Überzahlungen
+- [x] Spiel- und Pausenzeiten pro Runde und pro Match im Spielplan, einschließlich Wechselpause und Mitternachtswechsel
+- [x] Rundenuhr mit Start/Pause/Fortsetzen/Beenden/Zurücksetzen, Countdown und Überzeit; Zeitstempel überstehen Browser-Neuladen und JSON-Sicherungen
+- [x] Nur eine Rundenuhr darf gleichzeitig laufen; nach Neuauslosung werden alte Rundenuhren gelöscht
+- [x] `tests/operations.test.mjs` (15 Logiktests) und `tests/operations-ui.test.mjs` (Kassen- und Uhr-Bedientest); zusammen mit allen bisherigen Funktionen **68 Logiktests und 4 simulierte UI-Tests bestanden**
 
-**Prüfstand:** v0.3.0–v0.4.0 wurden per GitHub Actions erfolgreich auf den passwortgeschützten Webspace übertragen. v0.4.0 bestand vor dem Upload **53 Logiktests und 3 simulierte UI-Regressionstests**; der veröffentlichte Lauf `42013798677` war erfolgreich. Der Nutzer bestätigte einen ersten positiven Testeindruck zur Endrunde; umfassende reale Browser-/Mobil-, Turnier-, Datenschutz- und Sicherheitsprüfungen bleiben offen. **Noch keine Freigabe für produktive Turniere.**
+**Prüfstand:** Version 0.4.0 ist der letzte erfolgreich über GitHub Actions veröffentlichte Stand (Run `42013798677`); der Nutzer hat die Endrunde positiv angetestet. **Version 0.5.0 liegt ausschließlich im GitHub-Code**, noch ohne bestätigten FTPS-Upload oder echten Browsertest. Für v0.5.0 wurden **68 Logiktests und 4 simulierte UI-Regressionstests** erfolgreich durchgeführt. Keine vollständige Browser-End-to-End-Suite und **keine Freigabe für reale Turniere**. Die Rundenuhr ist ausschließlich browserbasiert, nutzt die Gerätezeit und synchronisiert nicht zwischen verschiedenen Geräten.
 
 ## Nicht implementiert
 
@@ -78,19 +84,19 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.4.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
+| Für v0.5.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
 
-**Wichtig:** Der Workflow lädt ausschließlich die neun expliziten App-Dateien und das Favicon hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich die zwölf expliziten Dateien (zehn App-Assets, HTML und Favicon) hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **Schleifchenturnier v0.4.0 weiter absichern:** Bei Gelegenheit 8er- und 16er-Endrunde, Nachrücken, Ergebniskorrektur, Rücknahme und JSON-Backup unter realen Browserbedingungen prüfen. Erster Funktionseindruck ist bereits positiv.
-2. **Nächstes Produktmodul: eigenständiges Doppelturnier planen:** dauerhaft feste Teams (anders als Schleifchenturnier), Team-Anmeldung, Teilnehmer-/Teamverwaltung, Auslosung, Wertung, Qualifikation/Finale und Ergebniserfassung nach den vorhandenen fachlichen Vorlagen.
-3. **Anschließend:** Doppelturnier schrittweise implementieren und automatisch testen; weitere Formate (One Point Cup) folgen.
-4. **Vor Produktiveinsatz:** Backend, Mehrgeräte-Synchronisierung, Rollen/Rechte, Datensicherung, Datenschutz- und Sicherheitstests.
+1. **Version 0.5.0 manuell hochladen:** GitHub Actions → `workflow_dispatch` starten, alle Tests prüfen; Browser-Testversion danach neu laden.
+2. **Bar-Nenngeld prüfen:** Standard z. B. auf 5,00 € setzen, Teilnehmer mit individuellem Betrag bearbeiten, Barzahlung vollständig/teilweise erfassen und korrigieren; Soll/Barzahlung/offene Beträge und JSON-Backup vergleichen.
+3. **Rundenzeiten und Rundenuhr prüfen:** Im Spielplan geplante Start-/End-/Pausenzeiten kontrollieren; „Runde starten“, Pausieren/Fortsetzen, Browser neu laden, Zeitablauf und „Runde beenden“ testen. Nur eine gleichzeitig laufende Runde.
+4. **Weiter Schleifchenturnier:** Nach dem Praxisfeedback weitere Lücken im Ablauf beheben. Doppelturnier und One Point Cup zurückgestellt; vor echtem Turnier Backend, Mehrgerätebetrieb, Backup-, Datenschutz- und Sicherheitskonzept umsetzen.
 
 ### Google Drive und fachliche Quellen
 
