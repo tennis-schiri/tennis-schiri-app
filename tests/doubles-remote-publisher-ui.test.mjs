@@ -30,10 +30,10 @@ test("Doppel-Turnierleitung: Opt-in, Teamdaten, Link kopieren und Freigabe wider
     body:{appendChild(){}}
   };
   const dialog={innerHTML:"",querySelector(){return {showModal(){},close(){},addEventListener(){}}},replaceChildren(){}};
-  let pulse,copied="",opened="";
+  let pulse,copied="",opened="",entropy=0;
   globalThis.window={
     location:{href:"https://app.tennis-schiri.de/doppel.html",hash:"",pathname:"/doppel.html",search:""},
-    crypto:{getRandomValues(bytes){for(let i=0;i<bytes.length;i++)bytes[i]=(i+17)%256;return bytes}},
+    crypto:{getRandomValues(bytes){for(let i=0;i<bytes.length;i++)bytes[i]=(i+17+entropy)%256;entropy+=24;return bytes}},
     addEventListener(){},
     open(url){opened=url},
     setTimeout(){},
