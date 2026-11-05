@@ -87,7 +87,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Zeitblöcke, Start-/Endzeiten, Wechselpause, Rundenuhr, Game-Ergebnisse und Entscheidungspunkte mit expliziter Siegerauswahl.
 - [x] Livetabelle nach Siegen → Game-Differenz → Games+; Top-8-Play-offs mit Abwahl/Nachrücken, Viertel-/Halbfinale, Finale und Spiel um Platz 3; abhängige Ergebnisse werden bei Paarungsänderung gelöscht.
 - [x] `tests/doubles.test.mjs`: 18 Logikfälle im isolierten JavaScript-Testlauf bestanden. Syntax der neuen Module überprüft. `tests/doubles-ui.test.mjs` für Oberflächen-/Deployregression im Repository.
-- [ ] GitHub Actions gesamte CI, manuelle PC-/Mobilgerät-Browsertests und ALL-INKL-Funktionstests der Doppelvariante sind **noch offen**. Keine öffentlichen Konten, kein Datenbank-Mehrgerätebetrieb und keine eigenständige Doppel-Fernanzeige. Detailkonzept: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md).
+- [ ] GitHub Actions gesamte CI, manuelle PC-/Mobilgerät-Browsertests und ALL-INKL-Funktionstests der Doppelvariante sind **noch offen**. Keine öffentlichen Konten und kein Datenbank-Mehrgerätebetrieb. Die eigenständige **lesende** Doppel-Fernanzeige ist als Erweiterung des vorhandenen PHP-Snapshot-Dienstes im privaten GitHub-Code integriert; echter Zweitgeräte-Test offen. Detailkonzept: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md).
 - [ ] **Veröffentlichung:** Noch **kein** FTPS-Upload von v0.7.0 durchgeführt; neue vier Seiten-/Moduldateien nur in die explizite manuelle Allowlist aufgenommen. v0.6.1 ist der zuletzt bestätigte Upload.
 
 ## Nicht implementiert
@@ -138,7 +138,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-**Priorität nach Nutzerentscheidung 2026-11-05:** ALL-INKL-Staging und Benutzerregistrierung zunächst zurückstellen; jetzt zuerst den Doppelturniermodus als nächste Turnierart entwickeln und prüfen. Die Implementation v0.7.0 liegt im GitHub-Code. Nächste Aufgabe ist die *vollständige* CI-/Browsertest- und Release-Prüfung des Doppelmodus; kein ungefragter FTPS-Upload. Anschließend bei Bedarf Doppel-Fernanzeige und später One Point Cup.
+**Priorität nach Nutzerentscheidung 2026-11-05:** ALL-INKL-Staging und Benutzerregistrierung zunächst zurückstellen; jetzt zuerst den Doppelturniermodus als nächste Turnierart entwickeln und prüfen. Die Implementation v0.7.0 liegt im GitHub-Code. Nächste Aufgabe ist die *vollständige* CI-/Browsertest- und Release-Prüfung des Doppelmodus; kein ungefragter FTPS-Upload. Die geschützte Doppel-Fernanzeige ist ebenfalls im GitHub-Code ergänzt; nach Prüfung und Freigabe später One Point Cup.
 
 ### Aufgeschobene Backend-/Staging-Aufgaben
 
@@ -165,3 +165,5 @@ Bestehende Google-Tabelle: [„Turniere Verein – Auslosung & Livetabelle“](h
 ### Aktualisierungsregel
 
 Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Versionsstand im Code, tatsächlich bestätigter Live-Stand, fertig vs. offen, Testergebnisse, konkrete nächste Aufgabe. Entscheidungen und Versionsänderungen zusätzlich in `ENTSCHEIDUNGEN.md` und `CHANGELOG.md` eintragen.
+
+**Doppel-Fernanzeige v0.7.0 (nur GitHub):** Gemeinsamer Monitor `site/live.html` zeigt nun bei Doppelturnieren Spielblöcke, feste Partner, Games, Sieger, Countdown, Teamrangliste (Siege/Game-Differenz) und Top-8-Play-offs. In `site/assets/doppel-ui.js` ist die bewusste Server-Freigabe mit eigenem Leselink und Stop-/Widerruffunktion ergänzt. `site/live-feed.php` und seine bestehende datensparsame Allowlist wurden für den Doppelmodus erweitert, dabei keine Bar-/Anwesenheitsdaten. Tests `tests/doubles-live.test.mjs`, `tests/doubles-remote-publisher-ui.test.mjs` und erweiterter `tests/live-feed.test.mjs`. **Kein FTPS-Upload, kein bestätigter ALL-INKL-/Mobilgerätetest.**
