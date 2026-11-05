@@ -38,7 +38,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Auslosungslogik vor Upload testen
+      - name: PHP-Version und Syntax des Live-Dienstes prüfen
+        run: |
+          php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2 oder neuer ist erforderlich.\\n"); exit(1); }'
+          php -l site/live-feed.php
+
+      - name: Alle Node-Tests inklusive PHP-Live-Integration prüfen
         run: node --test tests/*.test.mjs
 
       - name: Startseite sicher in den App-FTP-Ordner laden
@@ -49,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in site/favicon.png site/index.html site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/app.js site/live.html; do
+          for file in site/favicon.png site/index.html site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php; do
             test -f "$file"
           done
           : "${FTP_HOST:?FTP_HOST ist nicht als GitHub Secret hinterlegt}"
@@ -59,7 +64,7 @@ jobs:
           # Der FTP-Nutzer ist auf das App-Verzeichnis beschränkt.
           # Nur ausdrücklich zugelassene Dateien, KEINE Server-Dateien löschen.
           # .htaccess, index.htm und WordPress bleiben unverändert.
-          for file in site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/app.js site/live.html site/favicon.png site/index.html; do
+          for file in site/assets/styles.css site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php site/favicon.png site/index.html; do
             remote="${file#site/}"
             echo "Übertrage $remote …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
@@ -67,4 +72,4 @@ jobs:
               --upload-file "$file" \
               "ftp://${FTP_HOST}:21/$remote"
           done
-          echo "Alle siebzehn App-Dateien wurden hochgeladen."
+          echo "Alle neunzehn App-Dateien wurden hochgeladen."
