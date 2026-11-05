@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.3.1**  
-**FTPS-Upload zuletzt bestätigt:** v0.3.0 – manueller [GitHub-Actions-Lauf 41986086093](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41986086093) vom 2026-11-05 erfolgreich (Commit `3225a52129e0c97403d2246f309140880c210439`). Tests und Transfer aller fünf App-Dateien waren grün. **Browser-Funktionstest der v0.3.0 nach diesem Upload steht noch aus.** Die neuen Ergebnisfunktionen **v0.3.1 liegen bisher nur in GitHub**; noch kein Upload dafür bestätigt.
+**Version im GitHub-Code:** **0.3.2**  
+**FTPS-Upload zuletzt bestätigt:** v0.3.1 – manueller [GitHub-Actions-Lauf 41991275917](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917) vom 2026-11-05 erfolgreich (Commit `91979957b58333bbef0762db51ae4e1ec1c9352f`). Der Nutzer hat anschließend Feedback zur Ergebnisansicht gegeben. **Die neue Version v0.3.2 ist noch nicht hochgeladen oder im echten Browser getestet.**
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -40,9 +40,11 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Schleifchen-Zwischenstand für alle anwesenden Spieler (Siege, Niederlagen, Spiele, Quote) nach der Logik der bestehenden Tabelle
 - [x] Vorprüfung von Auffüllkandidaten (0 oder 1 Schleifchen) nach Abschluss aller regulären Ergebnisse
 - [x] Ergebnisse bleiben im jeweiligen Browser gespeichert und in JSON-Sicherungen erhalten
+- [x] **v0.3.2:** Nach dem Speichern wird der Ergebniseditor durch den Spielstand zwischen den Teams ersetzt; Gewinnerseite deutlich markiert; „Ergebnis ändern“ und „Abbrechen“ erlauben Korrekturen ohne Datenverlust
+- [x] UI-Regressionstest `tests/result-ui.test.mjs` für Speichern, Einklappen, Gewinnerhervorhebung, Bearbeiten, Abbrechen und erneutes Öffnen
 - [x] `tests/results.test.mjs` mit elf Ergebnis- und Wertungstests; beide Testsuiten vor dem nächsten manuellen Upload
 
-**Prüfstand:** Simulierte Prüfungen von Auslosungsfällen, Gruppen/Plätzen, Navigation und Browser-Speicherung wurden ausgeführt. Die Auslosungstests liefen in GitHub Actions für v0.3.0 erfolgreich (Run `41986086093`). Für v0.3.1 wurden zusätzlich elf Ergebnis-/Wertungstests und ein simulierter App-Bedienablauf erfolgreich geprüft; der neue GitHub-Actions-Lauf ist noch **nicht** bestätigt. Es gibt bislang keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
+**Prüfstand:** Simulierte Prüfungen von Auslosungsfällen, Gruppen/Plätzen, Navigation und Browser-Speicherung wurden ausgeführt. Die Auslosungstests liefen in GitHub Actions für v0.3.0 erfolgreich (Run `41986086093`). v0.3.1 wurde per GitHub-Actions-Lauf `41991275917` erfolgreich getestet und übertragen. Für v0.3.2 wurde die Ergebnisansicht in simulierten App-Interaktionen erfolgreich geprüft; der neue UI-Test ist ins Repository aufgenommen, **ein GitHub-Actions-Lauf für v0.3.2 steht noch aus**. Es gibt bislang keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
 
 ## Nicht implementiert
 
@@ -65,7 +67,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.3.1 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/app.js` |
+| Für v0.3.2 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/app.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
@@ -74,7 +76,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.3.1 manuell veröffentlichen und im echten Browser prüfen:** Turnier anlegen bzw. Demo laden, normale Runden auslosen, Sieger und Games erfassen, Zwischenstand kontrollieren, Ergebnis ändern/löschen, Browser neu öffnen und JSON-Sicherung prüfen.
+1. **v0.3.2 manuell veröffentlichen und im Browser prüfen:** Bei einem Match Ergebnis eintragen; danach nur Spielstand und Gewinner-Markierung sehen. Über „Ergebnis ändern“ öffnen, optional „Abbrechen“ oder korrigieren; nach Neuladen muss die kompakte Anzeige erhalten bleiben.
 2. **Auffüllrunde nach Schleifchen-V7:** Aus 0-/1-Schleifchen-Spielern geeignete Auffüller auswählen, 1 Stark + 1 Schwächer je Team beibehalten, für Auffüller keinen eigenen Wertungs-Einsatz zählen; Auslosung nur bei vollständigen regulären Ergebnissen erlauben.
 3. **Danach:** Endrunde und vollständige Tabelle/Turnierabschluss entwickeln.
 4. **Später:** Serverseitige Persistenz, Benutzerrollen, Mehrgeräte-Synchronisierung, Sicherung und Datenschutz.
