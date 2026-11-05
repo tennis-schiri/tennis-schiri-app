@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-020 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-025 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -199,4 +199,17 @@
 - **Barzahlungsschutz:** `feePaidCents` und ein gegebenenfalls gespeicherter Zahlungszeitpunkt bleiben bei Preis- und Kategorienänderungen erhalten. Zahlung „bar erhalten“ darf nur nach tatsächlicher Übergabe bestätigt werden. Bereits zugewiesene Kategorien können nicht gelöscht werden.
 - **Unabhängigkeit:** Anwesenheit wirkt weiterhin auf die Auslosung, nicht automatisch auf die Nenngeldforderung. Auch abwesende angemeldete Personen stehen in der gemeinsamen Check-in-/Kassenliste.
 - **Sicherheit:** Kategorie-Namen sind eindeutig (ohne Groß-/Kleinschreibungsunterschied) und maximal 40 Zeichen lang, Preise werden in Cent validiert, maximal 20 Kategorien je Turnier. UI bleibt mobil als horizontal scrollbar angelegte Tabelle bedienbar; keine automatische Synchronisierung zwischen Geräten.
-- **Version / Tests:** In GitHub ab v0.5.1, nach erfolgreichen 79 Logik- und 5 simulierten UI-Tests. Live-Upload und echter Browser-Funktionstest v0.5.1 stehen noch aus.
+- **Version / Tests:** In GitHub ab v0.5.1, nach erfolgreichen 79 Logik- und 5 simulierten UI-Tests. Version 0.5.1 wurde am 2026-11-05 im manuellen GitHub-Actions-Lauf 42033283559 erfolgreich veröffentlicht; ein umfassender Browsertest ist noch offen.
+
+## E-024 · Schreibgeschützter Live-Monitor im selben Browser (2026-11-05)
+
+- **Anforderung:** Zusätzliche, kontrastreiche Live-Ansicht für einen separaten Monitor während eines Schleifchenturniers. Die Turnierleitung soll weiterhin an der App arbeiten können, Zuschauer sehen Spielplan, Rundenstand, Ergebnisse und Uhr in groß.
+- **Vorläufiges Zielgerät:** Zweiter Monitor, der an **denselben Rechner** angeschlossen ist. Die Turnierleitung öffnet `site/live.html?turnier=<Turnier-ID>` über „Live-Monitor öffnen“ in einem weiteren Fenster desselben Browserprofils, zieht dieses Fenster auf den zweiten Monitor und aktiviert dort Vollbild. **Kein** Versprechen für eigenständigen Smart-TV, Zweitrechner, anderes Browserprofil oder Smartphone.
+- **Warum diese Beschränkung:** Die App speichert Turniere derzeit ausschließlich in `localStorage`. Andere Fenster desselben Ursprungs im gleichen Browserprofil können diese Daten über `storage`-Ereignisse sehen; unterschiedliche Geräte können es nicht. Ein geräteübergreifendes Live-Portal benötigt später Serverdatenbank, Authentifizierung, Berechtigungen und ein Live-Update-Protokoll.
+- **Inhalt der Anzeige:** Aktuelle Runde, Platzbelegung, möglichst groß lesbare Doppel-Teams, Sieger-Markierung und Game-Zahlen, Schleifchen-Zwischenstand, Rundenuhr mit Countdown/Überzeit, Auffüllrunde mit Auffüller-Kennzeichnung und Endrunde bis zum Sieger-Doppel.
+- **Steuerung:** Standardmäßig automatische Auswahl der laufenden, sonst zuletzt gestarteten oder nächsten offenen Runde; bei Endrunden-Auslosung K.-o.-Anzeige. Die Leitung kann bewusst eine einzelne Vorrunde/Auffüllrunde oder die Endrunde auf dem Monitor anzeigen; `liveDisplay` wird pro Turnier gespeichert und ins bestehende JSON-Backup übernommen. Erneute normale Auslosung setzt die Auswahl auf Automatik.
+- **Aktualisierung:** Zweites Fenster wertet `storage`-Ereignisse aus und prüft zusätzlich jede Sekunde auf veränderte Turnierdaten; nur der Sekundenwert der Uhr wird laufend aktualisiert. Bestehende Turnierlogik und Zahlungen bleiben unberührt.
+- **Datenschutz und Sicherheit:** Live-Monitor schreibgeschützt, kein Check-in, kein Kassendialog und keine Nenngeld-/Barzahlungsdaten. Spieler-Namen werden als HTML-Text escaped. Die Seite bleibt unter dem bestehenden geschützten Webspace und erhält `noindex,nofollow`. Eine öffentliche Freigabe oder separates Rollenmodell ist damit **nicht** erreicht.
+- **Dateien:** `site/live.html`, `site/assets/live.css`, `site/assets/live.js`, `site/assets/live-model.js`, `site/assets/live-ui.js`; vorhandene App-Steuerung und Speicherung erweitert. Manuell bestätigter FTPS-Workflow mit 17 ausdrücklich erlaubten Dateien; niemals `.htaccess`, `index.htm` oder WordPress ändern.
+- **Version und Tests:** v0.6.0 in GitHub; 98 Logik-/Darstellungstests und sieben simulierte UI-Tests bestanden, einschließlich Zwei-Fenster-Speicheraktualisierung. Kein echter Monitor-Browsertest und kein veröffentlichter FTPS-Lauf für v0.6.0 bestätigt.
+- **Weiteres Vorgehen:** Erst im zweiten Bildschirm am selben Rechner testen. Wenn später ein **unabhängiges Gerät** verlangt wird, Server-Synchronisierung als eigenes Vorhaben mit Sicherheits-/Datenschutzkonzept umsetzen.
