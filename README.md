@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.3.0 · **Live-Stand:** letzte Veröffentlichung der neueren Versionen noch zu verifizieren.
+**Aktueller GitHub-Code:** v0.3.0 · **Upload:** manuelle GitHub-Action am 2026-11-05 erfolgreich (Run `41986086093`); Browser-Funktionstest noch ausstehend.
 
 ## Einstieg und Projektdokumentation
 
