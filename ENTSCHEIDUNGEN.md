@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-015 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-018 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -122,3 +122,14 @@
 - **Abgrenzung:** GitHub bleibt verbindlich für Code, Produktentscheidungen, Versionen, Test- und Veröffentlichungsstatus. Drive dient für fachliche Originale, Recherche und Konzepte. Keine zweite unabhängig gepflegte Versionschronik.
 - **Regel:** Vor neuen Formaten den relevanten PDF-/Excel-Inhalt und Sonderfälle genau prüfen. Die PDF-Formate ersetzen nicht automatisch das bestehende Schleifchenturnier-V7-Regelwerk.
 - **Quellenindex:** [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md).
+
+## E-017 · Ergebniserfassung und Schleifchen-Zwischenstand (2026-11-05)
+
+- **Quelle:** „Schleifchen-Spielplan“ (Ergebnis 1/2, Sieger), „Schleifchen-Tabelle“ (Spiele, Schleifen, Niederlagen, Quote) und „Schleifchen V7“ im Apps Script der vorhandenen Google-Tabelle.
+- **Entscheidung:** Bei jeder regulären Begegnung wird das **Siegerteam ausdrücklich ausgewählt**. Zwei Game-Zahlen sind optional; wenn sie eingetragen werden, müssen beide vorliegen und eine eventuelle höhere Game-Zahl muss zum Sieger passen. Bei Game-Gleichstand ist eine gesonderte Siegerentscheidung erforderlich, nicht eine automatische Unentschieden-Wertung.
+- **Wertung:** Jede Person des Siegerteams erhält genau **1 Schleifchen**, jede Person des Verliererteams **1 Niederlage**. Ein als entschieden markiertes Match wird bei beiden Teams als gespielte Partie gezählt. Siegquote = Schleifen / entschiedene Spiele.
+- **Rangfolge im Zwischenstand:** Schleifchen absteigend, gespielte Partien absteigend, Name aufsteigend – entsprechend der Vorlage.
+- **Speicherung:** Ergebnisse werden im bestehenden `draw.rounds[].matches[].result` abgelegt. Vorhandene Spielpläne ohne Resultate bleiben lesbar. Auch Ergebnisänderung, Rücksetzung und JSON-Export/Import werden unterstützt.
+- **Auffüllrunde:** Nach Abschluss aller **normalen** Ergebnisse werden spielberechtigte Auffüllkandidaten mit höchstens einem Schleifchen geprüft. Die konkrete Auffüller-Auslosung und die Wertungsfreiheit ihrer Zusatzeinsätze bleiben dem nächsten Schritt vorbehalten.
+- **Technik/Prüfung:** `site/assets/results.js` und `tests/results.test.mjs`. Der manuelle GitHub-Workflow testet `tests/*.test.mjs` vor einem Upload; sechs App-Dateien werden übertragen. Der GitHub-Testlauf und die Live-Version 0.3.1 sind noch nicht bestätigt.
+- **Abgrenzung:** Keine vollständige, geräteübergreifende Livetabelle oder finale Rangliste; Browser-Testversion.
