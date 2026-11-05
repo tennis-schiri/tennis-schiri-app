@@ -65,9 +65,13 @@ async function refreshRemote(){
   }catch(e){
     remoteUnreachable=true;
     markConnection(false);
-    if(!lastRemoteData){
-      const msg=e?.message||"Noch keine Fernübertragung verfügbar.";
-      root.innerHTML=renderLiveScreen({mode:"waiting",message:msg});
+    if(e?.status===404||e?.status===410){
+      lastRemoteData=null;lastMode=null;lastSnapshot="";
+      root.innerHTML=renderLiveScreen({mode:"waiting",
+        message:"Die Live-Übertragung wurde beendet oder der Link ist abgelaufen. Bitte neuen Link anfordern."});
+    }else if(!lastRemoteData){
+      root.innerHTML=renderLiveScreen({mode:"waiting",
+        message:e?.message||"Noch keine Fernübertragung verfügbar."});
     }
   }finally{remoteFetching=false;}
 }
