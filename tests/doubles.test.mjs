@@ -126,7 +126,7 @@ test("Play-offs leiten Sieger und Verlierer korrekt in Finale und Platz 3",()=>{
   for(let i=0;i<2;i++)t.doubles.playoffs=updateDoublesPlayoffResult(t,"semifinals",i,result(6,1,1));
   assert.ok(t.doubles.playoffs.final.team1&&t.doubles.playoffs.final.team2);
   assert.ok(t.doubles.playoffs.thirdPlace.team1&&t.doubles.playoffs.thirdPlace.team2);
-  t.doubles.playoffs=updateDoublesPlayoffResult(t,"final",0,result(6,3,2));
+  t.doubles.playoffs=updateDoublesPlayoffResult(t,"final",0,result(3,6,2));
   t.doubles.playoffs=updateDoublesPlayoffResult(t,"thirdPlace",0,result(6,4,1));
   assert.equal(doublesPlayoffStatus(t).done,true);
   const champion=t.doubles.playoffs.final.team2;
