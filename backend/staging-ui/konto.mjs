@@ -332,9 +332,15 @@ function showClubs() {
   for (const club of state.clubs) {
     const selected = club.id === state.selectedId;
     const item = button('', () => run(async () => {
-      state.selectedId = club.id;
-      await loadMembers();
-      setView('clubs');
+      const previousId = state.selectedId;
+      try {
+        state.selectedId = club.id;
+        await loadMembers();
+        setView('clubs');
+      } catch (error) {
+        state.selectedId = previousId;
+        throw error;
+      }
     }), 'club-button' + (selected ? ' selected' : ''));
     const name = el('span');
     name.append(el('strong', club.name), el('small', club.slug));
