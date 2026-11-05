@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.3.3 · **Letzter bestätigter Upload:** v0.3.2 am 2026-11-05 ([Run 42003891468](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42003891468)). **v0.3.3 liegt noch ausschließlich im Repository** und ist nicht live getestet.
+**Aktueller GitHub-Code:** **v0.4.0** · **Letzter bestätigter FTPS-Upload:** v0.3.3 am 2026-11-05 ([Run 42008064031](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42008064031)). Der Nutzer hat den Ablauf der Auffüllrunde anschließend als funktionsfähig beschrieben. **v0.4.0 ist noch nicht veröffentlicht oder im echten Browser geprüft.**
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.3.3 im Repository)
+## Aktuelle Funktionen (v0.4.0 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -46,9 +46,13 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - **Auffüllrunde nach V7:** Nach vollständigen regulären Ergebnissen automatisch 0-/1-Schleifchen-Auffüllspieler auswählen; die Zusatzspiele zählen nur für die regulären Teilnehmer
 - Auffüller im Spielplan gelb markiert, eigene Ergebnisfelder und sichere Rücknahme der Auffüllrunde; normale Ergebnisse bleiben dabei erhalten
 - **Testvorlage:** Über „Auffüllrunde testen“ direkt eine 5+5-Spieler-Demo mit drei Wertungsspielen und drei Plätzen anlegen
+- **Endrunde (v0.4.0):** 8 oder 16 Teilnehmer nach Schleifchenzahl qualifizieren; Spieler können abgewählt werden und die nächsten berechtigten Personen rücken automatisch nach
+- Ausgeloste **feste Doppelpartner** (zuerst Stark/Schwächer, bei Bedarf gleichgruppige Teams) mit Halbfinale und Finale; bei 16 Endrundenteilnehmern zusätzlich Viertelfinale
+- Sieger ziehen automatisch in die nächste Runde ein; Ergebnisse und Änderungen werden gespeichert. Das Sieger-Doppel wird am Ende hervorgehoben
+- Endrunde zurücknehmen, ohne die Vorrunden- oder Auffüllrunden-Ergebnisse zu verlieren; diese sind während einer aktiven Endrunde gegen Änderungen geschützt
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
-**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, Endrunde, zentrale Livetabelle oder Mehrgerätebetrieb. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
+**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, zentrale Liveveröffentlichung für andere Geräte oder eigenständige Doppelturnierverwaltung. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
 
 ## Technik und Dateistruktur
 
@@ -59,7 +63,9 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/draw.js` – Auslosungslogik und Spielplanprüfung
 - `site/assets/results.js` – Spielstände, Sieger, Schleifchenwertung und Kandidatenprüfung
 - `site/assets/special.js` – separate Auffüller-Auslosung, Validierung und Rücknahme
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
+- `site/assets/finals.js` – Endrunden-Qualifikation, feste Doppel, K.-o.-Fortschritt und Ergebnisprüfung
+- `site/assets/finals-ui.js` – Endrunden-Oberfläche mit Teilnehmerauswahl und Turniersieger
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -69,7 +75,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die sechs Dateien in `site/assets/` per FTPS übertragen.
+3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die acht Dateien in `site/assets/`, `site/index.html` und das vorhandene Favicon per FTPS übertragen.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -78,6 +84,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.3 manuell veröffentlichen und mit der Auffüllrunden-Demo die Auslosung, Wertung und Rücknahme testen. Danach die Endrunde und den Turnierabschluss umsetzen.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.4.0 manuell veröffentlichen. Anschließend die Endrunde mit 8 und 16 Spielern, Abwahl/Nachrückern, Siegerweitergabe, Endergebnis und Rücknahme im Browser testen. Danach das eigenständige Doppelturnier-Modul planen.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
