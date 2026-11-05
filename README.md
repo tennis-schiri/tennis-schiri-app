@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** v0.3.0 · **Upload:** manuelle GitHub-Action am 2026-11-05 erfolgreich (Run `41986086093`); Browser-Funktionstest noch ausstehend.
+**Aktueller GitHub-Code:** v0.3.1 · **Letzter bestätigter Upload:** v0.3.0 am 2026-11-05 (Run `41986086093`). Die neuen Ergebnisfunktionen aus v0.3.1 wurden noch **nicht** veröffentlicht.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.3.0 im Repository)
+## Aktuelle Funktionen (v0.3.1 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -37,10 +37,14 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Stärkegruppen (Stark/Schwächer) und Anwesenheit verwalten
 - Dashboard mit Teilnehmerstatistiken; JSON-Datensicherung und -Wiederherstellung
 - Auslosung der **normalen Schleifchenturnier-Vorrunden** (3 oder 4 Wertungsspiele pro Spieler), mit Runden, Zeit, Platz und Teams
-- Jedes Doppelteam besteht aus 1 Stark + 1 Schwächer; aufgefüllte Sonderrunde bleibt bewusst bis nach Ergebniserfassung offen
+- Jedes Doppelteam besteht aus 1 Stark + 1 Schwächer; eine nötige Auffüllrunde bleibt bis zu den Ergebnissen offen
+- Ergebnisse pro Begegnung eingeben: optional gewonnene Games (0–99 pro Team) und **Siegerteam explizit auswählen**
+- Schleifchen-Zwischenstand, gespielte Partien, Niederlagen und Siegquote; Wertung: ein Schleifchen je Person im Siegerteam
+- Nach allen regulären Ergebnissen prüfen, ob genügend Spieler mit 0 oder 1 Schleifchen für die Auffüllrunde infrage kommen
+- Ergebnisse ändern, löschen und mit JSON sichern bzw. wiederherstellen
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
-**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, Auffüller-Auslosung, Ergebniserfassung oder Livetabellen. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
+**Wichtige Einschränkung:** Browser-Testversion mit `localStorage`; **keine** Serverdatenbank, Mehrgeräte-Synchronisation, tatsächliche Auffüller-Auslosung, Endrunde, zentrale Livetabelle oder Mehrgerätebetrieb. Browserdaten sind nicht dauerhaft garantiert – Sicherungsfunktion nutzen. Vor realen Veranstaltungen Datenschutz, Benutzerverwaltung, Sicherheits- und Backup-Konzept umsetzen.
 
 ## Technik und Dateistruktur
 
@@ -49,7 +53,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/app.js` – Benutzeroberfläche und Interaktionen
 - `site/assets/storage.js` – browserbasierter Speicheradapter, Datenmodell Version 1
 - `site/assets/draw.js` – Auslosungslogik und Spielplanprüfung
-- `site/package.json` und `tests/draw.test.mjs` – automatisierte Node-Tests ohne Build-Prozess
+- `site/assets/results.js` – Spielstände, Sieger, Schleifchenwertung und Kandidatenprüfung
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs` – automatisierte Node-Tests ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -59,7 +64,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow prüft zuerst `tests/draw.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die vier Dateien in `site/assets/` per FTPS übertragen.
+3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die fünf Dateien in `site/assets/` per FTPS übertragen.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -68,6 +73,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.0 manuell veröffentlichen und prüfen; anschließend Ergebniserfassung sowie die 0/1-Schleifchen-Regel für eine eventuell nötige Auffüllrunde implementieren.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): v0.3.1 manuell veröffentlichen und im Browser die Ergebniserfassung und den Schleifchen-Zwischenstand testen. Danach die regelgerechte Auffüllrunde und Endrunde umsetzen.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
