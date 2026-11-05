@@ -156,7 +156,7 @@ function stat(label, value, sub, type = "") {
 function readiness(t) {
   const c = count(t);
   if (c.present === 0) return `<div class="advice warn">${icon("alert")} <div><strong>Noch keine anwesenden Spieler.</strong><span>Erfasse Teilnehmende oder aktiviere ihre Anwesenheit.</span></div></div>`;
-  if (c.strong !== c.weaker) return `<div class="advice warn">${icon("alert")} <div><strong>Stärkegruppen sind ungleich verteilt.</strong><span>Aktuell ${c.strong} Stark und ${c.weaker} Schwächer. Die spätere Auslosungslogik muss solche Fälle berücksichtigen.</span></div></div>`;
+  if (c.strong !== c.weaker) return `<div class="advice warn">${icon("alert")} <div><strong>Stärkegruppen sind ungleich verteilt.</strong><span>Aktuell ${c.strong} Stark und ${c.weaker} Schwächer. Im Bereich „Auslosung“ werden die erforderlichen Auffüller und Spielkontingente geprüft.</span></div></div>`;
   if (c.present % 4 !== 0) return `<div class="advice neutral">${icon("info")} <div><strong>Nicht alle können gleichzeitig Doppel spielen.</strong><span>Aktuell sind ${c.present} Spieler anwesend. Pausen und Auffüller werden erst im Auslosungsmodul geplant.</span></div></div>`;
   return `<div class="advice good">${icon("check")} <div><strong>Teilnehmerübersicht ausgeglichen.</strong><span>Die Stärkegruppen sind gleich groß. Die normale Vorrunde kann im Bereich „Auslosung“ erstellt werden.</span></div></div>`;
 }
@@ -442,8 +442,10 @@ document.addEventListener("click", event => {
   if (action === "demo") return run(showDemo);
   if (action === "draw-generate" && t) return run(() => {
     if (t.draw) {
-      const tally=verifyRibbonDraw(t,t.draw).ok?ribbonStandings(t):null;
-      const warning=tally?.completeMatches ? `Achtung: Es sind bereits ${tally.completeMatches} Ergebnisse erfasst. Bei einer erneuten Auslosung gehen alle Ergebnisse und Schleifen dieses Turniers verloren. Wirklich neu auslosen?` : "Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?";
+      let played=0;
+      try { if(verifyRibbonDraw(t,t.draw).ok)played=ribbonStandings(t).completeMatches; }
+      catch { played=1; } // Auch fehlerhafte importierte Ergebnisse dürfen die Neuauslosung nicht blockieren.
+      const warning=played ? `Achtung: Es sind Ergebnisse in diesem Turnier gespeichert. Bei einer erneuten Auslosung gehen alle Ergebnisse und Schleifen verloren. Wirklich neu auslosen?` : "Die bisherige Auslosung dieses Turniers durch einen neuen Spielplan ersetzen?";
       if (!confirm(warning)) return;
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
