@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller App-Code:** **v0.6.1**, am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzliche Backend-Phase B0.1:** Datenbank-/Vereins-/Benutzermodell und Rollen in privatem Repository-Code implementiert und gegen temporäre MariaDB getestet – **keine öffentliche Registrierung oder Datenbank-Installation**.
+**Aktueller App-Code:** **v0.6.1**, am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -16,7 +16,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md) | Google-Drive-Turnierbibliothek, formatbezogene Referenzen und gemeinsamer Dokumentationsordner |
 | [README.md](README.md) | Projektüberblick und technische Orientierung |
 | [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md) | Vorschlag für Registrierung, Vereine, Rollen, serverseitige Turniere, TENNILO-Lizenzen, Zahlung und vorläufige Preise |
-| [backend/README.md](backend/README.md) | Backend B0.1: 12 Datenbanktabellen, PHP-Rollen-/Sicherheitsregeln, Tests und gesperrte Migration |
+| [backend/README.md](backend/README.md) | Backend B0.1/B0.2: Datenbank, Registrierung, Vereinsrollen, Backend-Schutz und CI-Tests |
+| [backend/HTTP_API.md](backend/HTTP_API.md) | Private JSON-API und Sicherheitsbedingungen vor einer späteren Staging-Freigabe |
 
 **Beim Start in einem neuen Chat:** Die drei Dateien oben sowie den aktuellen Code prüfen. Nicht automatisch annehmen, dass `main` bereits auf dem Webspace läuft.
 
@@ -29,9 +30,9 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Privates Backend B0.1 – nicht veröffentlicht
+## Privates Backend B0.1/B0.2 – nicht veröffentlicht
 
-Unter [backend/](backend/README.md) liegt jetzt das **implementierte Datenbank- und Kontomodell**: Benutzer, Vereine, Mitgliedschaften und Rollen, sichere Einladungs-/Reset-/Session-Token, Lizenzpläne und Audit. Eine temporäre GitHub-CI-MariaDB prüft Tabellen und Fremdschlüssel; PHP-Tests prüfen Rollen, sichere Token und Passwörter. **Die bisherige FTPS-Action lädt keine Backend-Dateien hoch.** Registrierung/Login, neue API-Routen, produktive Vereinsdaten und Zahlungen fehlen noch; Preise sind nicht festgelegt.
+Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implementierten **privaten Registrierungs-, Login-, Vereins- und Einladungsschnittstellen**. Registrierung und E-Mail-Bestätigung, Sitzungen, Passwort-Reset, Mitgliedschafts- und Rollenprüfung wurden gegen temporäre MariaDB getestet. Die [HTTP-API](backend/HTTP_API.md) ist **standardmäßig deaktiviert**; bestehender FTPS-Deploy lädt **keine** Backend-Dateien hoch. Konto-Oberfläche, geprüfter Mailversand, ALL-INKL-Staging, zentrale Turnierdaten und Softwarezahlungen fehlen noch; verbindliche Preise sind offen.
 
 ## Aktuelle Funktionen (v0.6.1 im Repository)
 
