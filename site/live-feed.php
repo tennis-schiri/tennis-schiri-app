@@ -41,6 +41,35 @@ function live_scores($v): ?int {
     return is_int($v) && $v >= 0 && $v <= 99 ? $v : null;
 }
 
+function public_live_matches($matches): array {
+    if (!is_array($matches) || !array_is_list($matches) || count($matches) > 64) {
+        fail_live(422, 'Ungültige Begegnungsliste.');
+    }
+    $visible = [];
+    foreach ($matches as $m) {
+        if (!is_array($m)) fail_live(422, 'Ungültige Begegnung.');
+        $winner = $m['winner'] ?? null;
+        $visible[] = [
+            'number' => live_number($m['number'] ?? null, 1, 64, 1),
+            'court' => live_str($m['court'] ?? '', 60),
+            'batch' => live_number($m['batch'] ?? null, 1, 64, 1),
+            'left' => live_names($m['left'] ?? []),
+            'right' => live_names($m['right'] ?? []),
+            'leftFillers' => array_map('live_bool', array_slice(
+                is_array($m['leftFillers'] ?? null) ? $m['leftFillers'] : [], 0, 2
+            )),
+            'rightFillers' => array_map('live_bool', array_slice(
+                is_array($m['rightFillers'] ?? null) ? $m['rightFillers'] : [], 0, 2
+            )),
+            'winner' => in_array($winner, [1, 2], true) ? $winner : null,
+            'score1' => live_scores($m['score1'] ?? null),
+            'score2' => live_scores($m['score2'] ?? null),
+            'finished' => ($m['finished'] ?? false) === true
+        ];
+    }
+    return $visible;
+}
+
 /**
  * Allowlist: niemals unbemerkt die kompletten Turnierdaten, Teilnehmer-IDs,
  * Nenngelder, Anwesenheit oder Zahlungsvorgänge an Zuschauer ausgeben.
@@ -69,30 +98,17 @@ function public_live_payload($input): array {
     $out['plannedStart'] = live_str($input['plannedStart'] ?? '', 30);
     $out['plannedEnd'] = live_str($input['plannedEnd'] ?? '', 30);
 
-    $matches = $input['matches'] ?? [];
-    if (!is_array($matches) || !array_is_list($matches) || count($matches) > 64) {
-        fail_live(422, 'Ungültige Begegnungsliste.');
-    }
-    $out['matches'] = [];
-    foreach ($matches as $m) {
-        if (!is_array($m)) fail_live(422, 'Ungültige Begegnung.');
-        $winner = $m['winner'] ?? null;
-        $out['matches'][] = [
-            'number' => live_number($m['number'] ?? null, 1, 64, 1),
-            'court' => live_str($m['court'] ?? '', 60),
-            'batch' => live_number($m['batch'] ?? null, 1, 64, 1),
-            'left' => live_names($m['left'] ?? []),
-            'right' => live_names($m['right'] ?? []),
-            'leftFillers' => array_map('live_bool', array_slice(
-                is_array($m['leftFillers'] ?? null) ? $m['leftFillers'] : [], 0, 2
-            )),
-            'rightFillers' => array_map('live_bool', array_slice(
-                is_array($m['rightFillers'] ?? null) ? $m['rightFillers'] : [], 0, 2
-            )),
-            'winner' => in_array($winner, [1, 2], true) ? $winner : null,
-            'score1' => live_scores($m['score1'] ?? null),
-            'score2' => live_scores($m['score2'] ?? null),
-            'finished' => ($m['finished'] ?? false) === true
+    $out['matches'] = public_live_matches($input['matches'] ?? []);
+    $next = $input['nextRound'] ?? null;
+    if ($next !== null) {
+        if (!is_array($next) || !isset($next['matches']) || !is_array($next['matches']) ||
+            !array_is_list($next['matches']) || count($next['matches']) < 1) {
+            fail_live(422, 'Ungültige nächste Runde.');
+        }
+        $out['nextRound'] = [
+            'title' => live_str($next['title'] ?? '', 90),
+            'plannedStart' => live_str($next['plannedStart'] ?? '', 30),
+            'matches' => public_live_matches($next['matches'])
         ];
     }
     $ranking = $input['ranking'] ?? [];
