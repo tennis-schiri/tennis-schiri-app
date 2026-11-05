@@ -85,6 +85,39 @@ final class AuthService
         $this->delivery->verification($email,$token);
     }
 
+    /** Re-issue an email link if a new signup lost its first message. */
+    public function resendVerification(string $email): void
+    {
+        $email=AccountPolicy::normalizeEmail($email);
+        $q=$this->pdo->prepare(
+            "SELECT id FROM users WHERE email=? AND status='pending' AND email_verified_at IS NULL"
+        );
+        $q->execute([$email]);
+        $userId=$q->fetchColumn();
+        if (!is_string($userId))return; // generic public response
+        $token=AccountPolicy::newToken();
+        $expires=self::now()->modify('+' . self::VERIFY_HOURS . ' hours');
+        $this->pdo->beginTransaction();
+        try {
+            $this->pdo->prepare(
+                'UPDATE email_verification_tokens SET consumed_at=UTC_TIMESTAMP(6)
+                 WHERE user_id=? AND consumed_at IS NULL'
+            )->execute([$userId]);
+            $this->pdo->prepare(
+                'INSERT INTO email_verification_tokens (id,user_id,token_sha256,expires_at)
+                 VALUES (?,?,?,?)'
+            )->execute([
+                AccountPolicy::newUuid(),$userId,AccountPolicy::tokenHash($token),
+                self::stamp($expires)
+            ]);
+            $this->pdo->commit();
+        } catch (\\Throwable $e) {
+            if ($this->pdo->inTransaction())$this->pdo->rollBack();
+            throw $e;
+        }
+        $this->delivery->verification($email,$token);
+    }
+
     public function verifyEmail(string $token): void
     {
         $digest = AccountPolicy::tokenHash($token);
