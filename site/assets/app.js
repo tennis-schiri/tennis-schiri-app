@@ -1,4 +1,4 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=070";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=080";
 import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=061";
 import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=061";
 import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=061";
@@ -88,7 +88,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.7.0</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.0</span>
   </div></header>`;
 }
 
