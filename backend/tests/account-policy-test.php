@@ -40,6 +40,16 @@ $test('Lange Passwörter sicher gehasht, kein Klartext', function (): void {
     expect(!A::verifyPassword('anderes Passwort',$hash),'bad password');
     rejects(static fn() => A::passwordHash('zu-kurz'), 'weak password');
 });
+$test('Lange Passwörter werden entweder vollständig Argon2id-gehasht oder abgewiesen', function (): void {
+    $veryLong = str_repeat('x', 100) . '-Suffix-Mit-Mehr-Als-72-Bytes';
+    if (defined('PASSWORD_ARGON2ID')) {
+        $hash = A::passwordHash($veryLong);
+        expect(A::verifyPassword($veryLong, $hash), 'full long password');
+        expect(!A::verifyPassword(substr($veryLong, 0, 72), $hash), 'no silent truncation');
+    } else {
+        rejects(static fn() => A::passwordHash($veryLong), 'bcrypt truncation blocked');
+    }
+});
 $test('UUID v4 kryptographisch random', function (): void {
     $x=A::newUuid();$y=A::newUuid();
     expect($x!==$y,'unique uuid');
