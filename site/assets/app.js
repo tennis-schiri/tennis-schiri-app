@@ -1,7 +1,9 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=033";
-import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=033";
-import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=033";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=033";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=040";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=040";
+import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=040";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=040";
+import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=040";
+import { renderRibbonFinals } from "./finals-ui.js?v=040";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
@@ -11,6 +13,7 @@ let view = "home";
 let search = "";
 let drawOpenRound = 0;
 let editingResult = null; // Nur die aktuell geöffnete Bearbeitung, nicht als Turnierdaten speichern.
+let editingFinal = null; // Korrekturformular einer Endrunden-Begegnung.
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -67,7 +70,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.3.3</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.4.0</span>
   </div></header>`;
 }
 
@@ -104,7 +107,7 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.3.3</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.4.0</span></article>
       <article class="format-card muted"><div class="eyebrow">02 / GEPLANT</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Play-offs.</p><span>FOLGT</span></article>
       <article class="format-card muted"><div class="eyebrow">03 / GEPLANT</div><h2>One Point Cup</h2><p>Schnelle Duelle im K.-o.-System.</p><span>FOLGT</span></article>
     </div>
@@ -129,6 +132,7 @@ function sidebar(t) {
       <button data-action="tab" data-tab="overview" class="${view === "overview" ? "selected" : ""}">${icon("trophy")} Übersicht</button>
       <button data-action="tab" data-tab="participants" class="${view === "participants" ? "selected" : ""}">${icon("users")} Teilnehmende</button>
       <button data-action="tab" data-tab="draw" class="${view === "draw" ? "selected" : ""}">${icon("court")} Auslosung</button>
+      <button data-action="tab" data-tab="finals" class="${view === "finals" ? "selected" : ""}">${icon("trophy")} Endrunde</button>
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
     </nav>
     <button class="btn side-new" data-action="new">${icon("plus")} Neues Turnier</button>
@@ -364,14 +368,14 @@ function drawPreview(t) {
       <p class="section-sub">1 starke + 1 schwächere Person je Doppelteam · 3 oder 4 Wertungsspiele pro Person</p></div>
       <button class="btn primary" data-action="draw-generate" ${error?"disabled":""}>${icon("court")} ${saved?"Neu auslosen":"Normale Runden auslosen"}</button></div>
     ${statline}${explanation}${resultsError}${resultProgress}${roundCards}${scoreboard}${specialNotice}
-    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Endrunde, serverbasierte Synchronisation und vollständige Turnierfreigabe fehlen noch. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
+    <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Serverbasierte Synchronisation und vollständige Turnierfreigabe fehlen noch. Die Endrunde findest du in einem eigenen Menüpunkt. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
   </section>`;
 }
 function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
-    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.3.3 · Private Testversion</footer>
+    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.4.0 · Private Testversion</footer>
     </main></div>`);
 }
 
