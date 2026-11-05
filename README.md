@@ -15,6 +15,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | [CHANGELOG.md](CHANGELOG.md) | Änderungen pro Version, inklusive Veröffentlichungs-/Teststatus |
 | [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md) | Google-Drive-Turnierbibliothek, formatbezogene Referenzen und gemeinsamer Dokumentationsordner |
 | [README.md](README.md) | Projektüberblick und technische Orientierung |
+| [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md) | Vorschlag für Registrierung, Vereine, Rollen, serverseitige Turniere, TENNILO-Lizenzen, Zahlung und vorläufige Preise |
 
 **Beim Start in einem neuen Chat:** Die drei Dateien oben sowie den aktuellen Code prüfen. Nicht automatisch annehmen, dass `main` bereits auf dem Webspace läuft.
 
