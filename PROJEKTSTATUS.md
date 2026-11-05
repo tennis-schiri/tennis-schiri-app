@@ -12,7 +12,7 @@
 
 ## Produktidee
 
-Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst Schleifchenturnier, später Doppelturnier und One Point Cup. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
+Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Schleifchenturnier ist veröffentlicht; das Doppelturnier wird als unveröffentlichte v0.7.0 entwickelt, danach folgt One Point Cup. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
 
 **Claim:** „Weniger Orga. Mehr Tennis.“  
 **Aktuelle URL:** https://app.tennis-schiri.de/index.html  
@@ -32,7 +32,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.6.1 nur 19 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; bei v0.6.1 19 Dateien, für die unveröffentlichte v0.7.0 nun 23 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
@@ -81,7 +81,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## Doppelturnier v0.7.0 – neuer lokaler Modus, noch nicht veröffentlicht
 
-- [x] Eigene Doppelturnieroberfläche `site/doppel.html` und integrierter Zugang über die Hauptstartseite. Alte Turniere sind standardmäßig `type: ribbon`, neue Doppelturniere `type: doubles`; beide verbleiben im gemeinsamen JSON-/Browser-Sicherungssystem.
+- [x] Eigene Doppelturnieroberfläche `site/doppel.html` und integrierter Zugang über die Hauptstartseite. Alte Turniere sind standardmäßig `type: ribbon`, neue Doppelturniere `type: doubles`; beide verbleiben im gemeinsamen JSON-/Browser-Sicherungssystem mit Export **und direktem Import** im Doppelmodus (Warnung vor vollständigem Ersetzen).
 - [x] Feste Zweierteams mit Anwesenheitskontrolle, Bar-Nenngeld pro Spieler (normal/ermäßigt), individuell gezahlten Beträgen und Korrekturen; Namen/Anwesenheit während bestehender Auslosung geschützt.
 - [x] Vorrunde mit 1–8 Spielen je Team (Standard 4), auch bei ungerader Teamzahl, soweit mathematisch lösbar; kein doppeltes Gegnerpaar, keine gleichzeitigen Teameinsätze, frei wählbare Plätze.
 - [x] Zeitblöcke, Start-/Endzeiten, Wechselpause, Rundenuhr, Game-Ergebnisse und Entscheidungspunkte mit expliziter Siegerauswahl.
