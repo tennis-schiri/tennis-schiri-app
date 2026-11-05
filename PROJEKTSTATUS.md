@@ -77,7 +77,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Eigene Live-Ansicht pollt Server ungefähr alle 3 Sekunden; Countdown basiert auf Server-Zeitstempel statt absoluter Uhrzeit des TV-Geräts; bei unterbrochener Übertragung bzw. Widerruf Hinweis/Warteansicht.
 - [x] Neue `tests/remote-live.test.mjs` (8), `tests/live-feed.test.mjs` (PHP-Integration), `tests/remote-publisher-ui.test.mjs` und `tests/remote-viewer-ui.test.mjs`; **116 Tests erfolgreich**, PHP-Syntax und echte API-Requests im GitHub-Testlauf [42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880). Kein Deployment in diesem Testlauf.
 
-**Prüfstand:** Letzter bestätigter FTPS-Upload ist **v0.6.0** (Run `42037542292`). **v0.6.1** mit separatem PHP-Live-Zwischenspeicher, Opt-in-Freigabe und unabhängigem Zuschauer-Link liegt im GitHub-Code. Der automatische [GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880) hat **116 Tests und die PHP-Syntaxprüfung erfolgreich** abgeschlossen, einschließlich einer lokalen API-Integration. **Noch kein Upload und kein echter ALL-INKL-/Smart-TV-/Zweitgeräte-Funktionstest.** Der PHP-Dienst setzt PHP 8.2+ und beschreibbares Server-Temp-Verzeichnis voraus. Apache-Passwortschutz am externen Viewer bleibt vorläufig aktiv. Keine Freigabe für reale Turniere und keine Cloud-Mehrgeräte-Bearbeitung.
+**Prüfstand:** Zuletzt bestätigter FTPS-Upload ist **v0.6.1** (Run `42044203175`) vom 2026-11-05. Die Funktion wurde zuvor im automatischen [GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880) mit **116 bestandenen Tests** und PHP-Syntaxprüfung lokal geprüft. **Ein echter ALL-INKL-/Smart-TV-/Zweitgeräte-Funktionstest fehlt weiterhin.** Der PHP-Dienst setzt PHP 8.2+ und beschreibbares Server-Temp-Verzeichnis voraus. Apache-Passwortschutz am externen Viewer bleibt vorläufig aktiv. Keine Freigabe für reale Turniere und keine Cloud-Mehrgeräte-Bearbeitung.
 
 ## Nicht implementiert
 
@@ -123,7 +123,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - Zielbild ALL-INKL: PHP-API, MariaDB/MySQL, serverseitige Sessions/Autorisierung, Datenmigration aus lokalen/JSON-Turnieren, Revisionen, Backups und Rechteprüfung. Konkretes Paket erst prüfen.
 - **Nenngeld bleibt bar beim Verein**; TENNILO-Lizenzgebühren sind ein anderes Abrechnungssystem und können später über einen externen Zahlungsdienst eingezogen werden.
 - Nur als **Diskussionsvorschlag**, nicht als Produkt-/Preisbeschluss: Demo kostenlos, einzelnes Turnier ca. 14,90 €, Vereins-Jahreslizenz ca. 99 €, größerer Veranstalter auf Anfrage.
-- Fachliche Reihenfolge: B0.1 und privater B0.2-Code **erledigt** → B0.2 Staging-/Konto-Oberfläche und Mailzustellung → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
+- Fachliche Reihenfolge: B0.1 und privater B0.2-Code **erledigt** → B0.2 Konto-UI als Prototyp **erledigt** → Staging-/Mail-/Browser-Prüfung → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
