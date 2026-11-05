@@ -298,3 +298,17 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
   .fee-category-actions{grid-column:1/-1}
   .checkin-panel-head .btn{width:100%}
 }
+
+/* v0.6.0 – Bedienung des zweiten Live-Monitors in der Turnierleitung */
+.live-open-link{display:inline-flex;align-items:center;gap:7px;background:#e7ff6a;color:#082b35!important;border:1px solid #d3ef54;text-decoration:none;font-weight:850;white-space:nowrap}
+.live-open-link:hover{background:#dbf464;color:#082b35}
+.live-open-link svg{width:17px;height:17px}
+.live-round-choice{padding:0 20px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.live-auto-choice{margin:0 0 18px;display:flex;justify-content:flex-start}
+.live-finals-choice{margin:0 0 18px;display:flex;gap:10px}
+.live-draw-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+@media(max-width:750px){
+ .toolbar-actions .live-open-link{font-size:11px;padding:8px 10px}
+ .live-round-choice{padding:0 10px 12px}
+ .live-open-link{white-space:normal;text-align:center}
+}
