@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.5.0**  
-**FTPS-Upload zuletzt bestätigt:** **v0.4.0** – manueller [GitHub-Actions-Lauf 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677) vom **2026-11-05** erfolgreich (Commit `922711d000fea6b988694371662364d956c10461`). Der Nutzer meldete danach, dass die Endrunde **anscheinend funktioniert**. Das gilt als erster positiver manueller Funktionseindruck, **nicht** als vollständiger Browser-/Praxis- oder Sicherheitstest.
+**Version im GitHub-Code:** **0.5.1**  
+**FTPS-Upload zuletzt bestätigt:** **v0.5.0** – [GitHub-Actions-Lauf 42020751117](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42020751117) vom **2026-11-05** war erfolgreich (Commit `f1cd2161796a624465291198c8140eb9401d81f2`). **v0.5.1 liegt bisher nur im GitHub-Code** und wurde nicht live veröffentlicht oder im echten Browser getestet.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -59,9 +59,14 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Spiel- und Pausenzeiten pro Runde und pro Match im Spielplan, einschließlich Wechselpause und Mitternachtswechsel
 - [x] Rundenuhr mit Start/Pause/Fortsetzen/Beenden/Zurücksetzen, Countdown und Überzeit; Zeitstempel überstehen Browser-Neuladen und JSON-Sicherungen
 - [x] Nur eine Rundenuhr darf gleichzeitig laufen; nach Neuauslosung werden alte Rundenuhren gelöscht
-- [x] `tests/operations.test.mjs` (15 Logiktests) und `tests/operations-ui.test.mjs` (Kassen- und Uhr-Bedientest); zusammen mit allen bisherigen Funktionen **68 Logiktests und 4 simulierte UI-Tests bestanden**
+- [x] `tests/operations.test.mjs` (15 Logiktests) und `tests/operations-ui.test.mjs` (Kassen- und Uhr-Bedientest)
+- [x] **v0.5.1:** Anwesenheit, Spielstärke, Nenngeld-Kategorie, Soll/Bar erhalten/offen und manuelle Korrekturen in **einer gemeinsamen Teilnehmerliste**; gesonderter Nenngeld-Menüpunkt entfällt
+- [x] Frei konfigurierbare Nenngeld-Kategorien pro Turnier (z. B. Jugend und Erwachsene); in Einstellungen anlegen, bearbeiten und nur löschen, wenn nicht mehr zugewiesen
+- [x] Individuelle Kategorieauswahl je Teilnehmer direkt in der Liste oder im Bearbeiten-Dialog; Sonderbeträge werden beim bewussten Kategorienwechsel nach Bestätigung aufgehoben, tatsächlich erhaltene Zahlungen bleiben erhalten
+- [x] Bestehende Turniere und JSON-Backups automatisch auf Kategorie „Standard“ mit bisherigem Nenngeld migriert; Barzahlung, Anwesenheit, Spielplan und Rundenuhr bleiben erhalten
+- [x] Zusätzliche Tests `tests/fee-tiers.test.mjs` (11 Fälle) und `tests/fee-tiers-ui.test.mjs` (gemeinsamer Check-in); insgesamt **79 Logiktests und 5 simulierte UI-Tests** bestanden
 
-**Prüfstand:** Version 0.4.0 ist der letzte erfolgreich über GitHub Actions veröffentlichte Stand (Run `42013798677`); der Nutzer hat die Endrunde positiv angetestet. **Version 0.5.0 liegt ausschließlich im GitHub-Code**, noch ohne bestätigten FTPS-Upload oder echten Browsertest. Für v0.5.0 wurden **68 Logiktests und 4 simulierte UI-Regressionstests** erfolgreich durchgeführt. Keine vollständige Browser-End-to-End-Suite und **keine Freigabe für reale Turniere**. Die Rundenuhr ist ausschließlich browserbasiert, nutzt die Gerätezeit und synchronisiert nicht zwischen verschiedenen Geräten.
+**Prüfstand:** v0.5.0 wurde am 2026-11-05 über GitHub Actions erfolgreich auf den geschützten Webspace übertragen. Version **0.5.1** mit der vereinten Teilnehmer-/Kassenliste und mehreren Nenngeld-Kategorien wurde mit **79 Logiktests und 5 simulierten UI-Tests** ohne Fehler geprüft. Live-Upload und echter Browsertest für v0.5.1 stehen noch aus. Keine vollständige End-to-End-/Praxis-/Sicherheitsprüfung und keine Freigabe für reale Turniere. Die Rundenuhr bleibt browserseitig und ist nicht geräteübergreifend synchronisiert.
 
 ## Nicht implementiert
 
@@ -84,7 +89,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.5.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
+| Für v0.5.1 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/operations.js`, `site/assets/operations-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
@@ -93,10 +98,10 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **Version 0.5.0 manuell hochladen:** GitHub Actions → `workflow_dispatch` starten, alle Tests prüfen; Browser-Testversion danach neu laden.
-2. **Bar-Nenngeld prüfen:** Standard z. B. auf 5,00 € setzen, Teilnehmer mit individuellem Betrag bearbeiten, Barzahlung vollständig/teilweise erfassen und korrigieren; Soll/Barzahlung/offene Beträge und JSON-Backup vergleichen.
-3. **Rundenzeiten und Rundenuhr prüfen:** Im Spielplan geplante Start-/End-/Pausenzeiten kontrollieren; „Runde starten“, Pausieren/Fortsetzen, Browser neu laden, Zeitablauf und „Runde beenden“ testen. Nur eine gleichzeitig laufende Runde.
-4. **Weiter Schleifchenturnier:** Nach dem Praxisfeedback weitere Lücken im Ablauf beheben. Doppelturnier und One Point Cup zurückgestellt; vor echtem Turnier Backend, Mehrgerätebetrieb, Backup-, Datenschutz- und Sicherheitskonzept umsetzen.
+1. **Version 0.5.1 manuell veröffentlichen:** In GitHub Actions den bestehenden FTPS-Workflow auf `main` starten; alle 84 Tests müssen vor dem Upload erfolgreich sein.
+2. **Gemeinsamen Check-in prüfen:** In „Teilnehmende & Nenngeld“ An- und Abwesenheit markieren, Jugend/Erwachsene-Tarife in Einstellungen anlegen, Spieler in der Liste zuordnen und Barzahlungen erfassen/korrigieren.
+3. **Datenmigration und Zahlungsbeträge prüfen:** Ein bereits mit v0.5.0 angelegtes Turnier öffnen, Standard-Kategorie und vorhandene Zahlungen kontrollieren. Eine Tarifänderung darf den tatsächlich erhaltenen Barbetrag nicht verändern; JSON-Sicherung einmal exportieren und erneut einlesen.
+4. **Weiterhin Schleifchenturnier:** Spielzeiten und Rundenuhr unter Praxisbedingungen prüfen; Doppelturnier und One Point Cup bleiben vorerst zurückgestellt. Vor echten Turnieren Serverdatenhaltung, Mehrgeräte-Synchronisation und Sicherheits-/Datenschutzkonzept.
 
 ### Google Drive und fachliche Quellen
 
