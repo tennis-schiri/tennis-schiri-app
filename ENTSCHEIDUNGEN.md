@@ -163,3 +163,17 @@
 - **Testversion v0.3.3:** `site/assets/special.js`, erweiterte `draw.js`/`results.js` und UI. Automatische Tests `tests/special.test.mjs` sowie `tests/special-ui.test.mjs` sind implementiert. Aktueller Simulationsstand: 39 Logiktests und 2 UI-Tests erfolgreich. Noch **keine** Live-Veröffentlichung oder vollständiger Browsertest bestätigt.
 - **Testmöglichkeit:** Startseite → „Auffüllrunde testen“ legt ein Beispielturnier mit 5 starken, 5 schwächeren Personen, 3 Wertungsspielen und 3 Plätzen an.
 - **Nicht Bestandteil dieses Schritts:** Endrunden-Qualifikation, Halbfinale/Finale und abschließende Gesamtwertung sowie freie manuelle Umbesetzung von Auffüllern. Bei unzureichenden 0-/1-Schleifchen-Kandidaten verhindert die App die Auslosung und zeigt den tatsächlichen Fehlbestand, statt ungültige Spieler zuzuweisen.
+
+## E-021 · Schleifchen-Endrunde mit 8 oder 16 Spielern (2026-11-05)
+
+- **Fachquelle:** Original-Turniertabelle „Turniere Verein – Auslosung & Livetabelle“, insbesondere `getRibbonFinalSelection_`, `syncRibbonFinalSelection_`, `drawRibbonFinals_` und `syncRibbonFinalProgression_`. Unterschiedliche ältere Funktionsdefinitionen im Apps Script beachten.
+- **Qualifikation:** Entweder 8 oder 16 Einzelspieler. Rangfolge Schleifchen absteigend, gespielte Partien absteigend, Name aufsteigend. Default: die entsprechend bestplatzierten anwesenden Spieler; explizite Abwahl erlaubt automatische Nachrücker.
+- **Voraussetzung:** Sämtliche regulären Ergebnisse und gegebenenfalls die Auffüllrunde müssen abgeschlossen sein. Die Endrunde darf ihre Teilnehmer nicht vorher final festlegen.
+- **Doppelpartner:** Aus den qualifizierten Spielern einmalig auslosen, möglichst ein starker und ein schwächerer Teilnehmer je Team. Nach Abdeckung aller möglichen gemischten Paare übrige Personen innerhalb derselben Stärkegruppe zusammenlosen. Keine erneute Partnerauslosung zwischen Viertelfinale, Halbfinale und Finale.
+- **K.-o.-Ablauf:** 8 Einzelspieler bilden vier Teams, die zwei Halbfinale und ein Finale bestreiten; 16 bilden acht Teams mit vier Viertelfinalen, zwei Halbfinalen und einem Finale.
+- **Fortschreibung:** Gewinnt Team 1/2, rückt das gesamte Team automatisch auf. Verändert sich eine Paarung nach Ergebniskorrektur, werden ungültige Folge-Ergebnisse gelöscht. Der Sieger des Finals ist das Turniersieger-Doppel.
+- **Wertungsabgrenzung:** Endrunden-Siege verändern **nicht** die Schleifchenzahl der Vorrunde.
+- **Sicherheit:** Bei aktiver Endrunde dürfen Vorrunden-Ergebnisse nicht verändert und die Auffüllrunde nicht einzeln zurückgenommen werden. Dazu zuerst die Endrunde zurücknehmen; ihre Resultate werden entfernt, alle vorherigen Runden bleiben erhalten.
+- **Persistenz:** Im Turnier `finalSize` (8/16) und `finalOptOut` (abgewählte Spielerkennungen); in `draw.finals` die K.-o.-Auslosung, Ergebnisse und ein Fingerprint der ursprünglichen Wertung. Alte Turniere bekommen kompatible Standardwerte; JSON-Backup bleibt Schema-Version 1.
+- **Tests:** `tests/finals.test.mjs` und `tests/finals-ui.test.mjs`; lokaler Simulationsstand 53 Logik- und 3 UI-Tests erfolgreich. v0.4.0 noch nicht live veröffentlicht und im echten Browser geprüft.
+- **Offen:** Eigenständiges Doppelturnier mit festen Teams, One Point Cup, serverseitige Speicherung, Mehrgeräte-Liveansicht und abschließende Praxisfreigabe.
