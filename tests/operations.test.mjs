@@ -53,7 +53,7 @@ test("Plan kann über Mitternacht reichen",()=>{
   const t=fixture(30,10,"23:40");
   assert.equal(plannedRound(t,0).end,"00:10 (+1 Tag)");
   assert.equal(plannedRound(t,1).start,"00:20 (+1 Tag)");
-  assert.equal(plannedRound(t,2).pauseEnd,"01:30 (+1 Tag)");
+  assert.equal(plannedRound(t,2).pauseEnd,"01:40 (+1 Tag)");
 });
 
 test("Nicht gestartete Uhr zeigt die vorgegebene Spieldauer",()=>{
