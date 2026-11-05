@@ -311,7 +311,7 @@ function drawPreview(t) {
             <strong>${displaySlot(m,2)} <em>+</em> ${displaySlot(m,3)}</strong>
           </div>
           ${finished && !editing ? `<div class="draw-match-controls">
-            <button type="button" class="draw-edit-btn" data-action="draw-edit-result" data-round="${index}" data-match="${matchIndex}" ${saved.specialRound && index<saved.rounds.length ? 'disabled title="Bitte zuerst die Auffüllrunde zurücknehmen."' : ""} aria-label="Ergebnis in Runde ${index+1} auf ${escapeHtml(courtName(t,m.court))} ändern">${icon("edit")} Ergebnis ändern</button>
+            <button type="button" class="draw-edit-btn" data-action="draw-edit-result" data-round="${index}" data-match="${matchIndex}" ${saved.finals || saved.specialRound && index<saved.rounds.length ? 'disabled title="Bitte zuerst die Auffüllrunde zurücknehmen."' : ""} aria-label="Ergebnis in Runde ${index+1} auf ${escapeHtml(courtName(t,m.court))} ändern">${icon("edit")} Ergebnis ändern</button>
           </div>` : ""}
           ${!finished || editing ? `<form class="draw-result-form" data-form="draw-result" data-round="${index}" data-match="${matchIndex}">
             <label class="draw-score-label">Games Team 1<input name="score1" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score1??""}"></label>
@@ -353,7 +353,7 @@ function drawPreview(t) {
         <strong>${standings?.specialProgress?.complete?"Auffüllrunde abgeschlossen":"Auffüllrunde wurde ausgelost"}</strong>
         <span>${standings?.specialProgress?.completeMatches??0} von ${standings?.specialProgress?.totalMatches??spec.special.matches} Zusatzspielen entschieden. Reguläre Vorrundenergebnisse sind jetzt gesperrt. Für Korrekturen zuerst die Auffüllrunde zurücknehmen.</span>
       </div></div>
-      <button class="btn subtle small" data-action="draw-special-reset">${icon("arrowleft")} Auffüllrunde zurücknehmen</button>`
+      <button class="btn subtle small" data-action="draw-special-reset" ${saved.finals?'disabled title="Zuerst Endrunde zurücknehmen."':""}>${icon("arrowleft")} Auffüllrunde zurücknehmen</button>`
        : `${standings?.complete ?
          `<div class="advice ${standings.fillerReady?"good":"warn"}">${icon(standings.fillerReady?"check":"alert")}<div><strong>${standings.fillerReady?"Auslosung bereit":"Nicht genügend geeignete Auffüllspieler"}</strong>
           <span>Geeignet mit 0 oder 1 Schleifchen: ${standings.eligible.strong.length} starke (${spec.special.fillerStrong} benötigt), ${standings.eligible.weak.length} schwächere (${spec.special.fillerWeak} benötigt).</span>
@@ -608,7 +608,16 @@ document.addEventListener("click", event => {
 
 document.addEventListener("change", event => {
   const target = event.target, t = store.active();
-  if (target.id === "tournament-select") return run(() => { store.setActive(target.value); search = ""; view = "overview"; render(); });
+  if (target.id === "tournament-select") return run(() => { store.setActive(target.value); search = ""; view = "overview"; editingFinal=null; render(); });
+  if (target.matches("input[data-action='final-participation']") && t) return run(() => {
+    if(t.draw?.finals)throw Error("Bitte zuerst die Endrunde zurücknehmen.");
+    const id=target.dataset.id;
+    if(!t.participants.some(p=>p.id===id&&p.present))throw Error("Dieser Spieler ist nicht teilnahmeberechtigt.");
+    const excluded=new Set(t.finalOptOut||[]);
+    if(target.checked)excluded.delete(id);else excluded.add(id);
+    store.editTournament(t.id,{finalOptOut:[...excluded]});
+    render();
+  });
   if (target.matches("input[data-action='presence']") && t) return run(() => {
     store.toggleParticipant(t.id, target.dataset.id); render();
   });
@@ -636,6 +645,18 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind === "final-result") return run(() => {
+    const t=store.active();
+    if(!t)throw Error("Turnier nicht gefunden.");
+    const data=new FormData(form);
+    const stage=Number(form.dataset.stage),match=Number(form.dataset.match);
+    const draw=updateRibbonFinalResult(t,stage,match,{
+      score1:data.get("score1"),score2:data.get("score2"),winner:data.get("winner")
+    });
+    store.editTournament(t.id,{draw});
+    editingFinal=null;view="finals";render();
+    flash(data.get("winner")?"Endrunden-Ergebnis gespeichert.":"Endrunden-Ergebnis zurückgesetzt.");
+  });
   if(kind === "draw-result") return run(() => {
     const t=store.active();
     if(!t)throw Error("Turnier nicht gefunden.");
