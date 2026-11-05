@@ -4,8 +4,8 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.3.3**  
-**FTPS-Upload zuletzt bestätigt:** v0.3.2 – manueller [GitHub-Actions-Lauf 42003891468](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42003891468) vom 2026-11-05 erfolgreich (Commit `4c690ca602cb14131c3e1935f0b882af96c61952`). Der Nutzer bestätigte anschließend, dass die kompakte Ergebnisdarstellung passt. **Version 0.3.3 liegt nur in GitHub; ein Live-Upload und echter Browsertest stehen noch aus.**
+**Version im GitHub-Code:** **0.4.0**  
+**FTPS-Upload zuletzt bestätigt:** v0.3.3 – manueller [GitHub-Actions-Lauf 42008064031](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42008064031) vom 2026-11-05 erfolgreich. Der Nutzer bestätigte anschließend, dass die Auffüllrunde offenbar funktioniert. **v0.4.0 (Endrunde) liegt bislang nur im GitHub-Code** und wurde nicht live veröffentlicht oder im echten Browser getestet.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
@@ -31,10 +31,10 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.3.3 sieben App-Dateien
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; ab v0.4.0 neun App-Dateien plus bestehendes Favicon
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
-- [x] Nötige Auffüllrunde erkennen, ohne die Auswahl der Auffüller vor den Ergebnissen zu treffen
+- [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
 - [x] Automatisierte Auslosungstests unter `tests/draw.test.mjs` vor jedem manuellen FTPS-Upload
 - [x] Ergebnisfelder je Begegnung (Games optional, Siegerteam ausdrücklich auswählen); Ergebnisänderung und Rücksetzung
 - [x] Schleifchen-Zwischenstand für alle anwesenden Spieler (Siege, Niederlagen, Spiele, Quote) nach der Logik der bestehenden Tabelle
@@ -47,15 +47,21 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - [x] Auffüllrunde mit eigener Ergebniserfassung; Zusatzspiel zählt ausschließlich für regulär eingeplante Spieler
 - [x] Auffüllrunde mit Sicherheitsabfrage zurücknehmen; reguläre Ergebnisse bleiben erhalten, danach lassen sie sich wieder bearbeiten
 - [x] Neuer Startseiten-Button „Auffüllrunde testen“ für 5 starke + 5 schwächere Demo-Teilnehmer (3 Wertungsspiele)
-- [x] 12 Tests in `tests/special.test.mjs`, zusätzlicher UI-Test `tests/special-ui.test.mjs`; alle lokalen simulierten Tests bestanden
+- [x] 12 Tests in `tests/special.test.mjs`, zusätzlicher UI-Test `tests/special-ui.test.mjs`
+- [x] **v0.4.0:** Endrunden-Tab; Qualifikation der besten 8 oder 16 nach Schleifchen, Spielzahl und Name; einzelne Spieler abwählen und Nachrücker berücksichtigen
+- [x] Einmalige Auslosung fester Doppelpartner: möglichst Stark + Schwächer, übrige Spieler innerhalb der eigenen Stärkegruppe
+- [x] K.-o.-Endrunde: 8 Personen → 2 Halbfinale und Finale; 16 Personen → 4 Viertelfinale, 2 Halbfinale und Finale
+- [x] Ergebnis-Eingabe, automatische Siegerweitergabe, Turniersieger-Doppel sowie sichere Endrunden-Rücknahme ohne Änderung der Vorrunde
+- [x] Bestehende Wertungen während aktiver Endrunde geschützt; nach einer Änderung des K.-o.-Siegers werden nachfolgende Ergebnisse zurückgesetzt
+- [x] `tests/finals.test.mjs` (14 Logiktests) und `tests/finals-ui.test.mjs` (Bedienablauf); insgesamt **53 Logiktests und 3 simulierte UI-Tests** bestanden
 
-**Prüfstand:** GitHub-Actions-Uploads für v0.3.0, v0.3.1 und v0.3.2 wurden als erfolgreich bestätigt. Die neue v0.3.3 wurde mit **39 Logiktests und 2 simulierten UI-Regressionsprüfungen** erfolgreich geprüft; der erste GitHub-Actions-Lauf dieser Version ist noch ausstehend. Weiterhin keine vollständige Browser-End-to-End-Testsuite und keine Freigabe für reale Turniere.
+**Prüfstand:** v0.3.0–v0.3.3 wurden über GitHub Actions erfolgreich auf den geschützten Webspace übertragen. Der Nutzer hat den Ablauf der Auffüllrunde in v0.3.3 positiv getestet. v0.4.0 ist im GitHub-Code mit **53 Logiktests und drei simulierten UI-Regressionstests** erfolgreich geprüft; **kein erfolgreicher GitHub-Actions-Lauf für v0.4.0** und kein echter Browsertest bestätigt. Weiterhin keine vollständige Browser-End-to-End-Suite und keine Freigabe für reale Turniere.
 
 ## Nicht implementiert
 
-- [ ] Endrunde einschließlich Qualifikation und Turnierabschluss (normale Runden und Auffüllrunde sind im Code umgesetzt; v0.3.3 noch nicht live bestätigt)
+- [ ] Eigenständiger Doppelturniermodus und One Point Cup (Endrunde für Schleifchenturnier ist im Code umgesetzt, v0.4.0 noch nicht live bestätigt)
 - [ ] Serverbasierte Livetabelle und vollständige Turnierwertung (lokale Ergebniserfassung und Schleifchen-Zwischenstand sind implementiert)
-- [ ] Feste Doppel-Teams und One Point Cup
+- [ ] Eigenständige Verwaltung von Doppelturnieren mit dauerhaft festen Teams über alle Turnierrunden
 - [ ] Server-Datenbank, Benutzerkonten, Rollen/Rechte, Mehrgeräte-Synchronisierung
 - [ ] Mehrbenutzerbetrieb, Backups auf Serverebene, Datenschutz- und Sicherheitsfreigabe
 - [ ] Automatisierte Browser-/Integrationstests
@@ -72,19 +78,19 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.3.3 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/app.js` |
+| Für v0.4.0 vorgesehene Upload-Dateien | `site/index.html`, `site/assets/styles.css`, `site/assets/storage.js`, `site/assets/draw.js`, `site/assets/results.js`, `site/assets/special.js`, `site/assets/finals.js`, `site/assets/finals-ui.js`, `site/assets/app.js`, außerdem `site/favicon.png` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
 
-**Wichtig:** Der Workflow lädt ausschließlich die sieben expliziten App-Dateien hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich die neun expliziten App-Dateien und das Favicon hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-1. **v0.3.3 manuell veröffentlichen und auf echten Geräten prüfen:** Auf der Startseite „Auffüllrunde testen“ wählen, normale Runden auslosen, alle Ergebnisse eintragen, Auffüllrunde auslosen, dort Ergebnisse erfassen und die Schleifchenwertung der Auffüller prüfen.
-2. **Korrekturablauf testen:** Auffüllrunde zurücknehmen, ein reguläres Ergebnis ändern und anschließend die Auffüllrunde neu auslosen. Nur die Zusatz-Ergebnisse sollen bei Rücknahme verschwinden.
-3. **Danach:** Endrunde mit Teilnehmerqualifikation, Halbfinal-/Finalspielen und Turnierabschluss umsetzen.
-4. **Später:** Serverseitige Persistenz, Benutzerrollen, Mehrgeräte-Synchronisierung, Sicherung und Datenschutz.
+1. **v0.4.0 manuell veröffentlichen und in echten Browsern testen:** 8-Spieler-Endrunde mit Qualifikation/Nachrückern, Halbfinale, Finale, Sieger-Doppel, Ergebnisänderung und Rücknahme.
+2. **16-Spieler-Endrunde prüfen:** Im bisherigen Beispielturnier mit 16 Teilnehmenden alle Vorrundenergebnisse erfassen, auf 16 Finalspieler umstellen, vier Viertelfinale, zwei Halbfinale und das Finale kontrollieren.
+3. **Ausfallszenarien prüfen:** Nicht genügend qualifizierte Spieler, Abwahl und Nachrücken, ungleich große Stärkegruppen, wenige Plätze (Spielblöcke), Korrektur eines früheren Siegers und JSON-Sicherung.
+4. **Danach:** Nächstes eigenständiges Turnierformat (Doppelturnier mit festen Teams), später One Point Cup; serverseitige Persistenz und Mehrgerätebetrieb separat planen.
 
 ### Google Drive und fachliche Quellen
 
