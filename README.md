@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.6.1** – Fernanzeige über einen eigenen Laptop, Tablet oder Smart-TV mittels datensparsamem PHP-Serverdienst auf ALL-INKL. **Nur im Repository, noch nicht live.** Letzter bestätigter manueller FTPS-Upload: **v0.6.0**, 2026-11-05 ([Run 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292)). **v0.6.1 hat 116 JavaScript-/PHP-Tests bestanden** ([Testlauf 42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731)); echter Webhosting-/Zweitgerätetest offen.
+**Aktueller GitHub-Code:** **v0.6.1** – Fernanzeige über einen eigenen Laptop, Tablet oder Smart-TV mittels datensparsamem PHP-Serverdienst auf ALL-INKL. **Nur im Repository, noch nicht live.** Letzter bestätigter manueller FTPS-Upload: **v0.6.0**, 2026-11-05 ([Run 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292)). **v0.6.1 hat 116 JavaScript-/PHP-Tests bestanden** ([Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880)); echter Webhosting-/Zweitgerätetest offen.
 
 ## Einstieg und Projektdokumentation
 
