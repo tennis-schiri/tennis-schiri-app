@@ -35,7 +35,7 @@ Die erste, bislang rein private Backend-Stufe wurde im GitHub-Repository impleme
 - **[backend/src/Database.php](backend/src/Database.php):** Private PDO-Verbindung per Umgebungsvariablen; keine Zugangsdaten im Code.
 - **[backend/bin/migrate.php](backend/bin/migrate.php):** Manuelle Migration **nur per CLI** und mit zusätzlicher ausdrücklicher Freigabe.
 - **[backend/README.md](backend/README.md):** Sicherheitsgrenzen, Datenmodell, Rollen und künftiger Installationsablauf.
-- **Tests:** PHP-Unit-Tests, zwölf SQL-Strukturprüfungen und ein realer Installationstest gegen eine **temporäre CI-MariaDB** in GitHub Actions. Keine produktive Datenbank benötigt oder geändert.
+- **Tests:** 13 PHP-Unit-Tests, zwölf SQL-Strukturprüfungen und ein realer Installationstest gegen eine **temporäre CI-MariaDB** in GitHub Actions. Keine produktive Datenbank benötigt oder geändert.
 
 **Noch nicht implementiert:** Registrierung/Login/E-Mail-Workflow, API-Routen, Vereinsanlage im Browser, serverseitige Turnierdaten, verbindliche Preise, Lizenzkauf, Rechnungserstellung, Zahlungsanbieter und Datenschutz-/Sicherheitsfreigabe. Weiteres Ziel: B0.2 mit Authentifizierung und Vereinsverwaltung; danach zentrale Turnierdaten und schließlich Bezahlabläufe.
 
