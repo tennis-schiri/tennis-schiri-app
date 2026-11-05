@@ -28,7 +28,10 @@ test("Gespeichertes Ergebnis kompakt anzeigen, Sieger hervorheben und erneut bea
   };
   globalThis.window = {addEventListener(){},scrollTo(){}};
   globalThis.confirm = () => true;
-  globalThis.setTimeout = () => 0;
+  const originalSetTimeout = globalThis.setTimeout;
+  // Nur die Toast-Anzeige abkürzen; andere Timer des Node-Test-Runners intakt lassen.
+  globalThis.setTimeout = (callback, delay, ...args) =>
+    delay===4700 ? (callback(), 0) : originalSetTimeout(callback, delay, ...args);
   globalThis.FormData = class {
     constructor(form) { this.data=form.data??{}; }
     get(key) { return this.data[key]??null; }
