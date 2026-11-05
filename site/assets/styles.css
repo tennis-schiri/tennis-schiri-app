@@ -312,3 +312,14 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
  .live-round-choice{padding:0 10px 12px}
  .live-open-link{white-space:normal;text-align:center}
 }
+
+/* v0.6.1 – freiwillige Freigabe für separate Laptops, Tablets und Smart-TVs */
+.remote-live-panel{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 22px;margin:14px 0 25px;padding:17px 21px;background:#eef5eb;border:1px solid #cee5c9;border-left:4px solid var(--lime);border-radius:11px}
+.remote-live-panel>div:first-child{flex:1;min-width:250px}
+.remote-live-panel strong{display:flex;align-items:center;gap:9px;color:var(--navy);font-size:15px}
+.remote-live-panel strong .icon{width:20px;height:20px}
+.remote-live-panel p{color:#42675d;line-height:1.45;font-size:12px;margin:6px 0 3px}
+.remote-live-panel small{color:#60776e;font-size:11px}
+.remote-live-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.remote-live-actions .btn{text-decoration:none}
+@media(max-width:750px){.remote-live-panel{padding:13px;gap:12px}.remote-live-actions{width:100%}.remote-live-actions .btn{flex:1;white-space:normal;font-size:11px;text-align:center}}
