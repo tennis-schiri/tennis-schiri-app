@@ -5,9 +5,31 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.6.1] – Fernanzeige auf eigenständigem Laptop, Tablet und Smart-TV
+
+**Stand 2026-11-05:** In GitHub implementiert, PHP-Syntax und 116 JavaScript-/PHP-Tests erfolgreich ([GitHub-Testlauf 42041015731](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42041015731)). **FTPS-Veröffentlichung und tatsächlicher Webspace-/Zweitgeräte-Test fehlen noch.** Zuletzt bestätigt veröffentlicht: **v0.6.0** im manuellen [FTPS-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292).
+
+### Neu
+- Eigene, **serverbasierte, aber ausschließlich lesende Fernanzeige**: Anders als v0.6.0 kann der Zuschauer nun auf einem anderen Gerät im Internet sitzen. Keine gemeinsame Browser-Session erforderlich.
+- Turnierleitung schaltet die Freigabe **bewusst** über „Fernanzeige aktivieren“ ein. Danach kann sie einen zufälligen Live-Link kopieren oder im Browser öffnen. „Freigabe beenden“ widerruft den Link und löscht den Snapshot.
+- Neuer `site/live-feed.php` auf dem bestehenden ALL-INKL-Webspace. Veröffentlichung per JSON-POST, Zuschauerdaten per GET mit Lese-Schlüssel im HTTP-Header; Übertragung etwa alle drei Sekunden. Keine weitere Hosting-Plattform und für dieses Live-Zwischenstadium noch keine MariaDB-Datenbank erforderlich.
+- Der Monitor-Link enthält einen zufälligen 192-Bit-**Leseschlüssel** ausschließlich im URL-Fragment. Ein weiterer, separater Schreibschlüssel verbleibt im Browser der Turnierleitung und wird **nicht** ins JSON-Turnierbackup aufgenommen.
+- Der PHP-Dienst speichert **nur** das für die Live-Anzeige zulässige Datenmodell (Spielpaarungen, Court-Namen, Game-Ergebnisse, Sieger, Schleifchen-Topliste, Countdown/Endrunde). Turnierkasse, Barzahlungen, Anwesenheitsverwaltung und alle unbenötigten Verwaltungsfelder sind im serverseitigen Allowlist-Filter ausgeschlossen.
+- Kurzlebige Snapshots im nicht öffentlich abrufbaren PHP-Temp-Verzeichnis; Ablauf nach 24 Stunden ohne erneute Veröffentlichung, gelegentliche Bereinigung. Der Zuschauer-Tab erkennt unterbrochene Live-Signale und abgelaufene/widerrufene Links.
+- Zuschauerseite synchronisiert ihre Uhr über den Server-Zeitstempel des letzten Snapshots und zählt lokal in Sekunden weiter – ohne dass die Uhrzeit des Smart-TV exakt mit der Turnierleitungs-Uhr übereinstimmen muss.
+- Die lokale Zwei-Fenster-Funktion bleibt weiterhin verfügbar; bei URL-Fragment `#kanal=...` wird automatisch der Server-Livemodus verwendet.
+- GitHub-Workflow prüft **PHP-Version/Syntax und alle App- und Serverintegrationstests** vor dem unverändert manuellen Upload. Erlaubte Uploadliste um `live-feed.php` und `remote-live.js` auf **19 Dateien** erweitert. Neue reine CI-Prüfung `.github/workflows/verify.yml` ohne Upload.
+- Zusätzliche Tests `remote-live.test.mjs` (8), `live-feed.test.mjs` (PHP-Testserver), `remote-publisher-ui.test.mjs` (Opt-in/Widerruf) und `remote-viewer-ui.test.mjs` (separates Gerät/Anzeige). **116 Checks bestanden**.
+
+### Grenzen
+- Die eigentlichen Turnierdaten bleiben im Browser der Turnierleitung; nur eine lesende Momentaufnahme wird auf ALL-INKL veröffentlicht. **Keine** gemeinsame Verwaltung oder Ergebniseingabe auf mehreren Geräten.
+- Der bestehende HTTP-Passwortschutz gilt vorerst auch für die Fernanzeige. Zuschauer müssen diesen gegebenenfalls am jeweiligen Gerät eingeben. Keine öffentliche Teilnehmer-/Zuschauer-Freigabe implementiert.
+- Server benötigt PHP 8.2+ und ein schreibbares PHP-Temp-Verzeichnis. Unterstützung bei ALL-INKL ist grundsätzlich vorhanden, die konkrete Konfiguration dieses Webspaces wurde noch nicht geprüft.
+- Browser-/Smart-TV-Gerätetest und echte Produktions-/Datenschutzfreigabe stehen aus.
+
 ## [0.6.0] – Live-Ansicht für einen zweiten Monitor
 
-**Stand 2026-11-05:** In GitHub entwickelt und simuliert getestet, **FTPS-Veröffentlichung und echter Zwei-Monitor-Browsertest für v0.6.0 noch offen**. Zuletzt erfolgreich hochgeladen: v0.5.1 (Run 42033283559).
+**Stand 2026-11-05:** Im manuellen [GitHub-Actions-FTPS-Lauf 42037542292](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42037542292) erfolgreich auf den geschützten Webspace übertragen. Umfassender Zwei-Monitor-Browsertest nicht belegt. Die separate geräteübergreifende Funktion entsteht erst in v0.6.1.
 
 ### Neu
 - **Eigene schreibgeschützte `site/live.html`** im TENNILO-Branding: bildschirmfüllende, kontrastreiche TV-/Monitoransicht mit großen Doppel-Spielpaarungen, Platznamen, hervorgehobenen Siegern, eingetragenen Game-Ergebnissen und Schleifchen-Topliste.
