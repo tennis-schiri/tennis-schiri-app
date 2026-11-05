@@ -25,10 +25,10 @@ Nur auf einer **separat gesicherten HTTPS-Test-Domain** könnten die vier Dateie
   konto.css
   konto.mjs
   konto-client.mjs
-  api/index.php       # ausschließlich abgesicherter HTTP-Einstiegspunkt
+  api/index.php       # geprüfter, schmaler Wrapper auf private Backend-Startdatei
 ```
 
-Der PHP-Backend-Code (insbesondere `src/`, `migrations/`, `bin/` und `tests/`) liegt **außerhalb** des Webroots. Die Datei `backend/public/index.php` wird nur separat und ausdrücklich für den gesicherten Testbereich installiert. **Nicht** das gesamte `backend/`-Verzeichnis in den Webroot kopieren.
+Der PHP-Backend-Code (insbesondere `src/`, `migrations/`, `bin/` und `tests/`) liegt **außerhalb** des Webroots. Da `backend/public/index.php` intern relative PHP-Pfade verwendet, darf diese Datei **nicht unverändert** nach `api/index.php` kopiert werden. Stattdessen ist im Staging ein geprüfter, minimaler Wrapper nötig, der die private Startdatei aus einem fest konfigurierten serverseitigen Pfad einbindet. Das ist erst nach Prüfung der ALL-INKL-Verzeichnisstruktur zu konfigurieren. **Nicht** das gesamte `backend/`-Verzeichnis in den Webroot kopieren.
 
 `TENNILO_PUBLIC_URL` muss später auf die Staging-Basisadresse zeigen, damit Bestätigungs-/Reset-/Einladungslinks `/konto.html#...` erreichen. `TENNILO_APP_ORIGIN` muss exakt zum HTTPS-Origin passen. Der Endpoint wird von der UI relativ als `./api/index.php?route=...` aufgerufen. Bei der Installation dürfen die Dateipfade, Cookie-Pfade und der Same-Origin-Schutz nicht beliebig abweichen. Die `__Host-`-Cookies benötigen HTTPS und Pfad `/`.
 
