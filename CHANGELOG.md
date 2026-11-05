@@ -18,7 +18,14 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - Neues `type: doubles` mit separatem `doubles`-Modell in bestehendem Browser- und JSON-Backup; alte Schleifchenturniere bleiben `type: ribbon`.
 - `tests/doubles.test.mjs` mit 18 Logikfällen im isolierten JavaScript-Testlauf erfolgreich; `tests/doubles-ui.test.mjs` als UI-/Deploy-Regressionsprüfung ergänzt. Vollständige GitHub-CI und echte Browser-/Mobiltests weiterhin offen.
 - Vier neue App-Dateien in die **manuell** gestartete FTPS-Allowlist aufgenommen (nun 23). Kein automatischer Produktiv-Upload. `backend/` bleibt vollständig ausgeschlossen.
-- Regeln, Grenzen und offene Punkte: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md). Eigenständige Live-Fernanzeige für Doppelturniere und zentrale Mehrgeräte-Bearbeitung weiterhin offen.
+- Regeln, Grenzen und offene Punkte: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md). Schreibgeschützte Doppel-Fernanzeige jetzt im privaten Code integriert, echte Zwei-Geräte-/PHP-Tests offen; zentrale Mehrgeräte-Bearbeitung weiterhin offen.
+
+### Ergänzt: geschützte Live-Fernanzeige auch für Doppelturniere
+
+- Dieselbe Vollbild-Zuschauerseite `site/live.html` unterstützt jetzt beide Turnierarten. Für feste Doppelteams: Ansetzungen, Spielzeiten, Ergebnis/Games, Sieger, Teamrangliste nach Siegen und Game-Differenz sowie Viertel-/Halbfinale, Finale und Platz 3.
+- Neue Freigabe- und Widerruf-Schaltflächen in der Doppelturnierleitung, einschließlich gezielter Rundenauswahl und automatisch angezeigter Play-offs. Bestehende Lese-/Schreibschlüssel und 24-Stunden-Gültigkeit bleiben erhalten.
+- PHP-Anzeigefilter auf sichere `doubles`-Ranglistenfelder und mehr Zeitblöcke erweitert; weiterhin keine Nenngelder, Barzahlungen oder Anwesenheitslisten im Zuschauer-Snapshot.
+- `tests/doubles-live.test.mjs`, `tests/doubles-remote-publisher-ui.test.mjs` und zusätzliche Doppel-PHP-Integration. Noch keine bestätigte gesamte CI oder echter Geräte-/Hosting-Test; **keine Veröffentlichung**.
 
 ## [Backend B0.2 UI-Prototyp] – Konto- und Vereinsoberflächen (nicht veröffentlicht)
 
