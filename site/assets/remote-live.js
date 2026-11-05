@@ -69,8 +69,11 @@ export async function fetchLive(channel,{request=globalThis.fetch}={}){
     headers:{"X-Tennilo-Channel":channel}
   });
   const json=await response.json().catch(()=>null);
-  if(!response.ok||json?.ok!==true)
-    throw Error(json?.error||"Noch keine Live-Daten verfügbar.");
+  if(!response.ok||json?.ok!==true){
+    const error=Error(json?.error||"Noch keine Live-Daten verfügbar.");
+    error.status=response.status;
+    throw error;
+  }
   return json;
 }
 const pad=n=>String(n).padStart(2,"0");
