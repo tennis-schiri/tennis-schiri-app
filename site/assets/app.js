@@ -54,6 +54,7 @@ function icon(name) {
     trophy: '<path d="M8 21h8M12 17v4M7 4h10v7a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v3a4 4 0 0 0 4 4M17 6h3v3a4 4 0 0 1-4 4"/>',
     calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    monitor: '<rect x="2.5" y="3.5" width="19" height="13.5" rx="2"/><path d="M8 21h8M12 17v4"/>',
     court: '<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M3 12h18M7 5v14M17 5v14"/>',
     download: '<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>',
     upload: '<path d="M12 16V4m-4 4 4-4 4 4M4 18v3h16v-3"/>',
