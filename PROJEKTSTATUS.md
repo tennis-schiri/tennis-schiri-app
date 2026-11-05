@@ -1,6 +1,7 @@
 # TENNILO – Projektstatus
 
 **Stand:** 2026-11-05  
+**Neuer unveröffentlichter Baustein:** B0.2 Konto-/Vereinsoberfläche im separaten `backend/staging-ui/` (kein FTPS-Upload, keine LIVE-Konten).  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
@@ -108,14 +109,15 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 ## SaaS-Backend, Registrierung und Abrechnung – B0.1/B0.2 im Repository
 
-**Stand (2026-11-05):** Der Nutzer hat die Backend-Entwicklung bestätigt. **B0.1 (Datenmodell) und B0.2 (private Konto-/Vereinsdienste und deaktivierte JSON-API) sind in GitHub implementiert und gegen Wegwerf-MariaDB getestet.** E-Mail-Bestätigung, Login/Logout, sichere Sitzungen, Passwort-Reset, Vereinsanlage, Einladungen und Rollentrennung sind im privaten Code vorhanden; **keine öffentliche Registrierung, keine ALL-INKL-Produktivdatenbank und keine Konto-Oberfläche**. Einzelheiten in [backend/HTTP_API.md](backend/HTTP_API.md), Architektur in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md).
+**Stand (2026-11-05):** Der Nutzer hat die Backend-Entwicklung bestätigt. **B0.1 (Datenmodell) und B0.2 (private Konto-/Vereinsdienste und deaktivierte JSON-API) sind in GitHub implementiert und gegen Wegwerf-MariaDB getestet.** E-Mail-Bestätigung, Login/Logout, sichere Sitzungen, Passwort-Reset, Vereinsanlage, Einladungen und Rollentrennung sind im privaten Code vorhanden; **keine öffentliche Registrierung, keine ALL-INKL-Produktivdatenbank und keine veröffentlichte Konto-Oberfläche**. Einzelheiten in [backend/HTTP_API.md](backend/HTTP_API.md), Architektur in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md).
 
 - [x] **B0.1:** Private SQL-Migration für 12 Tabellen (Benutzer, Vereine, Vereinsmitgliedschaften, Einladungen, Sessions, Reset-/Bestätigungstokens, Lizenzpläne, Lizenzen, Audit) und getrennte PHP-Rollen-/Sicherheitsregeln implementiert.
 - [x] CLI-only-Migrationsskript mit ausdrücklicher Freigabe/Prüfsumme sowie GitHub-Verifikation gegen eine temporäre MariaDB; **keine echten Zugangsdaten oder Installationen auf ALL-INKL**.
 - [x] **B0.2 Backend:** Registrierung mit E-Mail-Bestätigung/erneutem Versand, Login/Logout, 12-Stunden-Sessions mit CSRF, Passwort-Reset samt Sitzungswiderruf, Vereinsanlage + erster Besitzer in einer Transaktion, Einladungen/Annahme, Rollenänderungen und Schutz des letzten Besitzers.
 - [x] **Sicherheit B0.2:** Passwort-Hashing, Token nur als SHA-256 in der Datenbank, sichere Cookie-Optionen, Same-Origin-Schreibschutz, persistente HMAC-basierte Quoten, API standardmäßig abgeschaltet und vom bestehenden FTPS-Upload ausgeschlossen.
 - [x] **B0.2 Tests:** PHP-/Node-Regressionsprüfungen und Integration gegen separate CI-MariaDB inklusive verweigertem Fremdvereinszugriff, abgelaufener Sitzung/Reset, Einmal-Einladungen, Login-Limits, CSRF und Login-Cookies.
-- [ ] **B0.2 Staging/UI:** Kontoseiten für Registrierung/Login, E-Mail-Bestätigung und Vereine, geprüfter Mailtransport, getrennte ALL-INKL-Testdatenbank, gesicherte Bereitstellung und Browser-E2E-Tests. **Nicht freigegeben.**
+- [x] **B0.2 Konto-UI im privaten Code:** isolierte Konto-Testseite unter `backend/staging-ui/` für Registrierung, Login, E-Mail-Bestätigung, Reset, Vereinsanlage, Mitglieder, Rollen und Einladungen. Responsive TENNILO-Optik; **nicht veröffentlicht**. Dazu `tests/account-staging-ui.test.mjs`.
+- [ ] **B0.2 Staging/Freigabe:** geprüfter Mailtransport, getrennte ALL-INKL-Testdatenbank, gesicherte Bereitstellung, vollständige Browser-E2E-Tests und Sicherheitsreview. **Nicht freigegeben.**
 - Personen registrieren sich mit bestätigter E-Mail; die **Organisation/Verein** ist Eigentümer der Turniere und kauft die Lizenz.
 - Rollen: Besitzer, Organisator, Leser sowie separater schreibgeschützter Zuschauer. Ein Nutzer kann mehreren Vereinen zugeordnet sein.
 - Zielbild ALL-INKL: PHP-API, MariaDB/MySQL, serverseitige Sessions/Autorisierung, Datenmigration aus lokalen/JSON-Turnieren, Revisionen, Backups und Rechteprüfung. Konkretes Paket erst prüfen.
@@ -126,7 +128,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 ## Nächster sinnvoller Entwicklungsschritt
 
 1. **Getrennte ALL-INKL-Testumgebung prüfen:** Verfügbarkeit von PHP 8.2+, PDO-MySQL, Datenbank, sicheren privaten Verzeichnissen, Mailversand, Sicherung und ggf. CLI/SSH im konkreten Tarif klären. Keine Zugangsdaten ins Repository oder in den Chat schreiben.
-2. **B0.2-Oberfläche erstellen:** Konto-/Anmeldeseiten, E-Mail-Bestätigung (einschließlich erneutem Link), Passwort-Reset, „Verein anlegen“, Mitglieder einladen, Rollen und Verein wechseln. Das private API-Backend ist bereits gebaut, aber `TENNILO_API_ENABLED` bleibt ausgeschaltet.
+2. **B0.2-Oberfläche im echten Browser prüfen:** Der isolierte Prototyp unter `backend/staging-ui/` ist erstellt. Konto-/Anmeldeseiten, E-Mail-Bestätigung, Passwort-Reset, Vereinsanlage, Mitgliedereinladungen und Rollen sind mit den privaten API-Routen verdrahtet. Als Nächstes sind sichere Testinstallation und Browser-E2E-Prüfung nötig; `TENNILO_API_ENABLED` bleibt ausgeschaltet.
 3. **Staging absichern und testen:** Mailzustellung/Absender, HTTPS- und Cookie-Pfade, Same-Origin/CSRF, Rate-Limit, Rechte für mehrere Vereine und Wiederherstellung aus Backup verifizieren. Erst danach Testnutzer zulassen.
 4. **B0.3 später:** Schleifchenturniere zentral in die Datenbank übertragen, alte JSON-Daten kontrolliert importieren, Mehrgeräte-Bearbeitung sicher machen. Danach Lizenzvergabe und Software-Bezahlung; Nenngelder weiterhin zunächst bar.
 5. **Offener Praxistest:** Fernanzeige 0.6.1 von einem echten zweiten Gerät prüfen. Dafür nicht unkontrolliert Backend/Registrierung veröffentlichen.
