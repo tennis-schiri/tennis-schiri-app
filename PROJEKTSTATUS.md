@@ -106,6 +106,17 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 **Wichtig:** Der Workflow lädt ausschließlich 19 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
+## SaaS-Backend, Registrierung und Abrechnung – noch offen
+
+**Priorisierung (2026-11-05):** Vor einem öffentlichen, kostenpflichtigen Produktstart fehlt ein vollwertiges Backend. Der vorhandene PHP-Live-Dienst aus v0.6.1 ist eine **schreibgeschützte Fernanzeige**, noch keine Nutzer-/Vereins-/Lizenz-/Rechnungsverwaltung. Ein unverbindlicher Architektur- und Preisvorschlag wurde in [BACKEND_KONZEPT.md](BACKEND_KONZEPT.md) dokumentiert.
+
+- Personen registrieren sich mit bestätigter E-Mail; die **Organisation/Verein** ist Eigentümer der Turniere und kauft die Lizenz.
+- Rollen: Besitzer, Organisator, Leser sowie separater schreibgeschützter Zuschauer. Ein Nutzer kann mehreren Vereinen zugeordnet sein.
+- Zielbild ALL-INKL: PHP-API, MariaDB/MySQL, serverseitige Sessions/Autorisierung, Datenmigration aus lokalen/JSON-Turnieren, Revisionen, Backups und Rechteprüfung. Konkretes Paket erst prüfen.
+- **Nenngeld bleibt bar beim Verein**; TENNILO-Lizenzgebühren sind ein anderes Abrechnungssystem und können später über einen externen Zahlungsdienst eingezogen werden.
+- Nur als **Diskussionsvorschlag**, nicht als Produkt-/Preisbeschluss: Demo kostenlos, einzelnes Turnier ca. 14,90 €, Vereins-Jahreslizenz ca. 99 €, größerer Veranstalter auf Anfrage.
+- Fachliche Reihenfolge: v0.6.1 live testen → Backend-Sicherheit/Datenbank → Registrierung/Vereine/Rollen → serverseitige Turniere → Lizenzprüfung → Checkout/Rechnung/Zahlungen → Pilotbetrieb. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
+
 ## Nächster sinnvoller Entwicklungsschritt
 
 1. **v0.6.1 manuell veröffentlichen:** Im GitHub-Actions-Workflow `deploy.yml` auf `main` starten. Vor FTPS-Upload laufen PHP-8.2-/Syntaxprüfung und alle 116 Tests; der reine Testworkflow `verify.yml` ist bereits grün (Run 42042177880).
