@@ -29,7 +29,7 @@ final class RateLimiter
         int $maxRequests,
         int $windowSeconds
     ): void {
-        if (!in_array($action, ['register','login','reset','verify','invite','accept'], true)
+        if (!in_array($action, ['register','login','reset','verify','resend','invite','accept','club'], true)
             || !in_array($kind, ['ip','email','user'], true)
             || $value === '' || $maxRequests < 1 || $maxRequests > 1000
             || $windowSeconds < 10 || $windowSeconds > 86400) {
