@@ -94,7 +94,9 @@ function home() {
     '<p class="lead">Doppelturniere mit festen Paarungen, Vorrunde, Livetabelle und Top-8-Play-offs organisieren.</p>'+
     '<div class="welcome-actions"><button class="btn primary" data-act="new">Doppelturnier anlegen</button>'+
     '<button class="btn ghost" data-act="demo">Demoturnier laden</button>'+
-    '<a class="btn ghost" href="./index.html">Zur Hauptstartseite</a></div>'+
+    '<a class="btn ghost" href="./index.html">Zur Hauptstartseite</a>'+
+    '<button class="btn ghost" data-act="import">Sicherung laden</button>'+
+    '<input type="file" id="doubles-import" accept=".json,application/json" hidden></div>'+
     (all.length?'<h2>Deine Doppelturniere ('+all.length+')</h2><div class="double-list">'+all.map(t=>
     '<article class="double-saved"><span class="eyebrow">DOPPELTURNIER</span>'+
     '<h3>'+esc(t.name)+'</h3><p>'+dateText(t.date)+' · '+t.doubles.teams.length+' Teams · '+t.courts.length+' Plätze</p>'+
@@ -109,7 +111,9 @@ function nav(t) {
     '<button type="button" data-act="home">Alle Doppelturniere</button>'+
     tabs.map(([id,title])=>'<button type="button" data-act="tab" data-tab="'+id+'" class="'+(view===id?"active":"")+'">'+title+'</button>').join("")+
     '<hr style="border:0;border-top:1px solid #d6e0d8;width:100%">'+
-    '<button data-act="new">+ Neues Doppelturnier</button><button data-act="backup">Daten sichern (JSON)</button></nav>';
+    '<button data-act="new">+ Neues Doppelturnier</button><button data-act="backup">Daten sichern (JSON)</button>'+
+    '<button data-act="import">Sicherung laden (JSON)</button>'+
+    '<input type="file" id="doubles-import" accept=".json,application/json" hidden></nav>';
 }
 function sectionHead(labelText,title,description,actions="") {
   return '<div class="section-header"><div><div class="eyebrow">'+labelText+'</div><h2>'+title+'</h2>'+
@@ -485,6 +489,7 @@ document.addEventListener("click",event=>{
   if(act==="home"){view="home";render();return;}
   if(act==="new")return newDialog();
   if(act==="demo")return run(showDemo);
+  if(act==="import")return document.getElementById("doubles-import")?.click();
   if(act==="open")return run(()=>{store.setActive(trigger.dataset.id);view="overview";render();});
   if(act==="tab"){view=trigger.dataset.tab;render();return;}
   if(act==="settings"){view="settings";render();return;}
@@ -610,6 +615,19 @@ document.addEventListener("click",event=>{
 });
 document.addEventListener("change",event=>{
   const el=event.target,t=active();
+  if(el.id==="doubles-import"&&el.files?.[0]){
+    const file=el.files[0];
+    if(file.size>3000000){flash("Die Sicherung ist zu groß (maximal 3 MB).",true);el.value="";return;}
+    if(!confirm("Alle aktuell in diesem Browser gespeicherten Turniere durch die JSON-Sicherung ersetzen?")){
+      el.value="";return;
+    }
+    file.text().then(raw=>run(()=>{
+      store.importJson(raw);
+      view="home";currentRound=0;
+      render();flash("Sicherung geladen. Doppel- und Schleifchenturniere sind wiederhergestellt.");
+    })).catch(()=>flash("Die Sicherungsdatei konnte nicht gelesen werden.",true));
+    return;
+  }
   if(!t)return;
   if(el.dataset.act==="presence")return run(()=>{
     if(t.doubles.draw)throw Error("Anwesenheit ist nach der Auslosung gesperrt.");
