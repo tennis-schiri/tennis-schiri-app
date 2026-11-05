@@ -1,7 +1,7 @@
 # TENNILO – Doppelturnier mit festen Zweierteams (v0.7.0)
 
 **Stand:** 2026-11-05  
-**Status:** Im privaten GitHub-Code implementierte lokale Testversion, **nicht veröffentlicht**. Die produktive App auf `app.tennis-schiri.de` bleibt bis zur ausdrücklich ausgelösten FTPS-Veröffentlichung bei v0.6.1. Keine Benutzerregistrierung, keine gemeinsame Cloud-Bearbeitung und noch keine separate externe Doppel-Fernanzeige.
+**Status:** Im privaten GitHub-Code implementierte lokale Testversion, **nicht veröffentlicht**. Die produktive App auf `app.tennis-schiri.de` bleibt bis zur ausdrücklich ausgelösten FTPS-Veröffentlichung bei v0.6.1. Keine Benutzerregistrierung und keine gemeinsame Cloud-Bearbeitung. Eine **explizit aktivierte, schreibgeschützte Fernanzeige** für Doppelturniere ist nun im GitHub-Code ergänzt; noch nicht online getestet.
 
 ## Fachliche Quelle
 
@@ -40,12 +40,18 @@ Alte Schleifchenturniere werden beim Einlesen ohne `type` weiterhin als `ribbon`
 - Die Teamliste und Anwesenheit sind nach der Auslosung gesperrt, damit kein Spielplan unbemerkt ungültig wird. Barzahlungen bleiben veränderbar. Vor Neuauslosung wird gewarnt, dass Ergebnisse und Play-offs verloren gehen.
 - Play-offs beginnen erst nach allen regulären Ergebnissen. Sie sind für mindestens acht anwesende und zugelassene Teams gedacht. Bei weniger Teams wird die Endrunde noch nicht bereitgestellt.
 - Maximal 100 Teams, bis zu 8 Spiele je Team und technisch 1000 Plätze; nicht für einen großen Realbetrieb ohne Performance- und Praxistests freigegeben.
-- Die Benutzeroberfläche übernimmt **keine** Onlinezahlung, keine Spielerkonten, keine zentrale Datenbank und keine öffentliche Zuschauer-Fernanzeige. Die bestehende Fernanzeige v0.6.1 zeigt aktuell ausschließlich Schleifchen-Resultate. Eine eigene Doppel-Live-Anbindung kann später folgen.
+- Die Benutzeroberfläche übernimmt **keine** Onlinezahlung, keine Spielerkonten und keine zentrale Datenbank. Die vorhandene geschützte Zuschauer-Fernanzeige wurde für den Doppelmodus erweitert: Paarungen, Ergebnisse, Rundenuhr und Siege/Game-Differenz der Teamrangliste. Die Turnierleitung muss den Servermodus explizit aktivieren und kann den Zuschauer-Link widerrufen. **Kein öffentlich freier Zugang**, solange der ALL-INKL-HTTP-Passwortschutz besteht.
 
 ## Tests und Veröffentlichung
 
-Die 18 Logiktestfälle in `tests/doubles.test.mjs` wurden am 2026-11-05 zusätzlich isoliert im JavaScript-Ausführungsmodell durchlaufen; sie bestanden nach Korrektur eines falsch notierten Test-Ergebnisses. Die JavaScript-Module wurden syntaktisch geprüft. **Ein vollständiger GitHub-Actions-Lauf, manuelle Browsertests und echte Tests bei ALL-INKL sind separat zu bestätigen.** Das Hinzufügen von `site/doppel.html`, `doppel.css`, `doppel-ui.js` und `doubles.js` zur expliziten FTPS-Allowlist bewirkt **keinen automatischen Upload**.
+Die 18 Logiktestfälle in `tests/doubles.test.mjs` wurden am 2026-11-05 zusätzlich isoliert im JavaScript-Ausführungsmodell durchlaufen; sie bestanden nach Korrektur eines falsch notierten Test-Ergebnisses. Die JavaScript-Module wurden syntaktisch geprüft. **Neue Live-/Fernanzeige-Regressionen** liegen in `tests/doubles-live.test.mjs`, `tests/doubles-remote-publisher-ui.test.mjs` und der erweiterten PHP-Integration `tests/live-feed.test.mjs`. **Ein vollständiger GitHub-Actions-Lauf, manuelle Browsertests und echte Tests bei ALL-INKL sind separat zu bestätigen.** Das Hinzufügen von `site/doppel.html`, `doppel.css`, `doppel-ui.js` und `doubles.js` zur expliziten FTPS-Allowlist bewirkt **keinen automatischen Upload**.
 
-Bevor v0.7.0 online geht: GitHub-CI für alte Schleifchen- und neue Doppel-Tests prüfen; Demo auf PC und Mobilgerät durcharbeiten; 6/7/8 Teams und variierende Plätze ausprobieren; JSON-Export/Import, Barzahlungen, Ergebnisänderung, Play-off-Nachrücker, Countdown und Moduswechsel manuell prüfen. Erst nach ausdrücklicher Freigabe den manuellen FTPS-Workflow starten.
+Bevor v0.7.0 online geht: GitHub-CI für alte Schleifchen- und neue Doppel-/Live-Tests prüfen; Demo auf PC und Mobilgerät durcharbeiten; 6/7/8 Teams und variierende Plätze ausprobieren; JSON-Export/Import, Barzahlungen, Ergebnisänderung, Play-off-Nachrücker, Countdown und Moduswechsel manuell prüfen. Erst nach ausdrücklicher Freigabe den manuellen FTPS-Workflow starten.
 
 **Nächste Turnierart nach dem Doppelturnier:** One Point Cup.
+
+## Neu: Gemeinsamer Live-Monitor für Doppelturniere
+
+Die bestehende `site/live.html` zeigt bei `type: doubles` nach dem Auslosen Teamnamen, Platz, Game-Ergebnisse, Sieger, Zeitplan und laufende Rundenuhr. Die Rangliste heißt **Doppel-Livetabelle** und zeigt Siege und Game-Differenz, statt Schleifchenzahlen. Nach Erstellung der Play-offs erscheinen die aktuelle Endrunde und später das Siegerdoppel. Über die Doppelturnierleitung stehen „Monitor öffnen“, „Fernanzeige aktivieren“, „Zuschauer-Link kopieren“, „Freigabe beenden“, „Diese Runde auf Monitor zeigen“ und „Play-offs auf Monitor zeigen“ bereit.
+
+Der vorhandene `live-feed.php`-Dienst wurde um einen erlaubten Wert `format: doubles`, die Ranglistenfelder `wins`, `gameDiff`, `gamesFor` und Rundennummern bis 499 erweitert. Er filtert unabhängig vom Browser sämtliche privaten Kassen-, Anwesenheits- und Teamverwaltungsfelder aus dem Snapshot. Der zufällige Schreibschlüssel wird nicht in den Zuschauerdaten oder im JSON-Turnierbackup gespeichert. **Ein echter zweiter Monitor und die serverseitige PHP-Erweiterung sind vor dem Upload noch zu testen.**
