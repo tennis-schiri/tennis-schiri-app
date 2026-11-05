@@ -40,7 +40,7 @@ export function publicLiveSnapshot(t,now=Date.now()){
   // Das Live-Modell enthält ausschließlich sichtbare Paarungen, Sieger und
   // Ranglisten, niemals Anwesenheitslisten, Zahlungen oder Gesamt-Turnierdaten.
   const view=buildLiveDisplay(t,now);
-  const allow=["mode","name","date","startTime","message","title","subtitle",
+  const allow=["format","mode","name","date","startTime","message","title","subtitle",
     "progress","total","index","plannedStart","plannedEnd","matches",
     "ranking","champion","timer"];
   return Object.fromEntries(allow.filter(key=>view[key]!==undefined)
