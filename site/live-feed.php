@@ -91,7 +91,7 @@ function public_live_payload($input): array {
             'winner' => in_array($winner, [1, 2], true) ? $winner : null,
             'score1' => live_scores($m['score1'] ?? null),
             'score2' => live_scores($m['score2'] ?? null),
-            'finished' => $m['finished'] === true
+            'finished' => ($m['finished'] ?? false) === true
         ];
     }
     $ranking = $input['ranking'] ?? [];
@@ -157,6 +157,14 @@ if ($method === 'GET') {
     }
 }
 $path = $root . DIRECTORY_SEPARATOR . hash('sha256', $channel) . '.json';
+if ($method === 'POST' && random_int(1, 60) === 1) {
+    $oldFiles = glob($root . DIRECTORY_SEPARATOR . '*.json');
+    foreach (array_slice($oldFiles ?: [], 0, 300) as $oldFile) {
+        if (is_file($oldFile) && filemtime($oldFile) < time() - LIVE_TTL_SECONDS) {
+            @unlink($oldFile);
+        }
+    }
+}
 
 if ($method === 'GET') {
     if (!is_file($path)) fail_live(404, 'Noch keine Live-Übertragung vorhanden.');
