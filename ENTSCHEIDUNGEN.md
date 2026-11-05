@@ -141,7 +141,7 @@
 - **Korrekturen:** „Ergebnis ändern“ öffnet das vorausgefüllte Formular; „Abbrechen“ schließt es, ohne den gespeicherten Wert zu ändern. Eine erneute Speicherung aktualisiert die Schleifchenwertung wie bisher.
 - **Speicherung:** Die Bearbeitungsansicht ist ausschließlich temporärer UI-Zustand, nicht Bestandteil des Turnier-JSON. Gespeicherte Ergebnisse bleiben kompatibel und nach Neustart kompakt sichtbar.
 - **Technik/Tests:** Anpassungen in `site/assets/app.js` und `styles.css`; Regressionstest `tests/result-ui.test.mjs`. Der bestehende manuelle Workflow prüft automatisch auch diesen Test.
-- **Freigabe:** Version 0.3.2 noch nicht per FTPS hochgeladen bzw. im echten Browser getestet. Letzter bestätigter manuell erfolgreicher FTPS-Lauf: v0.3.1, [41991275917](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/41991275917).
+- **Freigabe (aktualisiert):** Version 0.3.2 wurde am 2026-11-05 per [GitHub-Actions-Lauf 42003891468](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42003891468) erfolgreich hochgeladen. Der Nutzer bestätigte die Ergebnisdarstellung anschließend.
 
 ## E-019 · Nenngeldverwaltung: zunächst nur Barzahlung (2026-11-05)
 
@@ -150,3 +150,16 @@
 - **Nicht Teil der ersten Ausbaustufe:** Integrierte Überweisung, PayPal, Stripe oder andere Online-Zahlungsabwicklung. Auch keine automatische Zahlungsbestätigung behaupten.
 - **Einordnung:** Produktanforderung für die künftige Nenngeldverwaltung, **nicht bereits implementiert**. Zeitpunkt innerhalb der Roadmap bleibt flexibel; die laufende Entwicklung des Schleifchenturniers hat Vorrang.
 - **Abgrenzung:** Nenngeld der Turnierteilnehmer ist etwas anderes als eine spätere TENNILO-App-Lizenzgebühr.
+
+## E-020 · Auffüllrunde nach den normalen Ergebnissen (2026-11-05)
+
+- **Fachliche Quelle:** „Turniere Verein – Auslosung & Livetabelle“, Apps Script „Schleifchen V7“, insbesondere `drawRibbonSpecialRound_`, `ribbonReadNormalStats_`, `ribbonBuildSpecialMatches_`.
+- **Zeitpunkt:** Die Auffüllrunde darf erst entstehen, wenn **jedes** reguläre Vorrundenergebnis mit Siegerteam vorliegt. Davor werden weder Auffüller bestimmt noch ihre Spielstärken ignoriert.
+- **Auswahl:** Zusätzliche Auffüller haben ihre reguläre Spielquote bereits erreicht und **0 oder 1 Schleifchen**. Wer als regulärer Spieler für diese letzte Runde vorgesehen ist, kommt nicht als Auffüller infrage. Bevorzugt werden Spieler mit weniger Schleifchen; bei Gleichstand entscheidet eine stabile Reihenfolge.
+- **Doppelteams:** Jedes Team enthält eine starke und eine schwächere Person. Jeder Spieler wird in der letzten Runde höchstens einmal eingesetzt, und jede Platznummer höchstens für ein Match.
+- **Spielwertung:** Die als Auffüller markierten Teilnehmer dürfen das Doppel gewinnen oder verlieren, doch ihr Zusatzspiel zählt für sie **weder als Wertungsspiel noch als Schleifchen oder Niederlage**. Die anderen beiden regulären Teilnehmer bekommen das ihnen noch fehlende Wertungsspiel samt Ergebnis.
+- **Konsistenz:** Normale Ergebnisse werden nach Auslosung der Auffüllrunde gesperrt. Wenn eine Änderung benötigt wird, muss die **Auffüllrunde zunächst zurückgenommen** werden; nur die zusätzliche Runde und ihre Ergebnisse werden dann gelöscht. Die normalen Spielpläne und Ergebnisse bleiben erhalten.
+- **Prüfung:** Das gespeicherte `draw.specialRound` enthält Besetzung, Auffüller-Markierungen und einen Ergebnis-Fingerprint der normalen Runden. Eingelesene Backups mit unpassendem Zustand werden nicht als gültige Auslosung behandelt.
+- **Testversion v0.3.3:** `site/assets/special.js`, erweiterte `draw.js`/`results.js` und UI. Automatische Tests `tests/special.test.mjs` sowie `tests/special-ui.test.mjs` sind implementiert. Aktueller Simulationsstand: 39 Logiktests und 2 UI-Tests erfolgreich. Noch **keine** Live-Veröffentlichung oder vollständiger Browsertest bestätigt.
+- **Testmöglichkeit:** Startseite → „Auffüllrunde testen“ legt ein Beispielturnier mit 5 starken, 5 schwächeren Personen, 3 Wertungsspielen und 3 Plätzen an.
+- **Nicht Bestandteil dieses Schritts:** Endrunden-Qualifikation, Halbfinale/Finale und abschließende Gesamtwertung sowie freie manuelle Umbesetzung von Auffüllern. Bei unzureichenden 0-/1-Schleifchen-Kandidaten verhindert die App die Auslosung und zeigt den tatsächlichen Fehlbestand, statt ungültige Spieler zuzuweisen.
