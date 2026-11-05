@@ -60,12 +60,18 @@ final class AccountPolicy
         if ($length < 12 || $length > 1024) {
             throw new InvalidArgumentException('Passwörter müssen 12–1024 Bytes umfassen.');
         }
+        // Bcrypt silently ignores bytes beyond 72. Never silently truncate.
+        if (!defined('PASSWORD_ARGON2ID') && PASSWORD_DEFAULT === PASSWORD_BCRYPT
+            && $length > 72) {
+            throw new InvalidArgumentException('Dieses System erlaubt maximal 72 Passwort-Bytes.');
+        }
     }
 
     public static function passwordHash(string $password): string
     {
         self::assertPasswordAcceptable($password);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $algorithm = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+        $hash = password_hash($password, $algorithm);
         if (!is_string($hash)) {
             throw new DomainException('Passwort konnte nicht sicher gehasht werden.');
         }
@@ -79,7 +85,8 @@ final class AccountPolicy
 
     public static function needsPasswordRehash(string $hash): bool
     {
-        return password_needs_rehash($hash, PASSWORD_DEFAULT);
+        $algorithm = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_DEFAULT;
+        return password_needs_rehash($hash, $algorithm);
     }
 
     public static function newUuid(): string
