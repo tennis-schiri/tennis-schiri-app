@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.5.1** (gemeinsame Anwesenheits-/Nenngeldliste und mehrere Nenngeld-Kategorien; noch nicht hochgeladen). **Letzter bestätigter FTPS-Upload:** **v0.5.0** vom 2026-11-05 ([GitHub Actions Run 42020751117](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42020751117)). Für v0.5.1 stehen Upload und echter Browsertest noch aus.
+**Aktueller GitHub-Code:** **v0.6.0** – eigene schreibgeschützte Live-Monitor-Seite für ein zweites Fenster, mit Spielplan, Rundenuhr, Zwischenstand und Endrunde. **Noch nicht hochgeladen.** **Letzter bestätigter FTPS-Upload:** **v0.5.1**, 2026-11-05 ([GitHub Actions Run 42033283559](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42033283559)). Der Benutzer hat die Teilnehmer-/Nenngeldliste positiv beurteilt; echte Monitortests für v0.6.0 stehen noch aus.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.5.1 im Repository)
+## Aktuelle Funktionen (v0.6.0 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -57,6 +57,9 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Gemeinsame Teilnehmerliste mit Sollbetrag, tatsächlich bar erhaltenem Betrag, offenen Beträgen, Teilzahlungen und Korrekturen. Keine Online-Zahlungsanbieter; Buchung nur nach tatsächlicher Barzahlung
 - **Geplante Spielzeiten im Spielplan:** pro Runde sowie an jeder Begegnung Start-/Endzeit; Wechsel-/Pausenende aus Startzeit, Spieldauer und Pause berechnet
 - **Rundenuhr:** „Runde starten“, Pausieren, Fortsetzen, Beenden und bestätigtes Zurücksetzen. Sekunden-Countdown mit Überzeitanzeige; reale Zeitstempel bleiben bei Neuladen und JSON-Sicherung erhalten
+- **Live-Monitor (v0.6.0):** Eigene großformatige, schreibgeschützte Seite `site/live.html` für ein zweites Browserfenster auf einem angeschlossenen Bildschirm; Vollbildschaltfläche, aktuelle Platzpaarungen, markierte Sieger und Ergebnisse, laufende Rundenuhr, Schleifchen-Zwischenstand sowie Endrunde bis zum Sieger-Doppel
+- Live-Anzeige aktualisiert sich bei Änderungen in der Turnierleitung automatisch über gemeinsamen Browser-Speicher (`storage`-Ereignis mit zusätzlicher Prüfung jede Sekunde). Eine Runde kann gezielt auf den Monitor gelegt werden; alternativ Auswahl der laufenden Runde bzw. Endrunde automatisch. Aktive Monitor-Auswahl bleibt im JSON-Backup erhalten
+- **Einschränkung:** Funktioniert nur in weiteren Fenstern/Tabs **desselben Browsers/Profils auf demselben Gerät**. Nicht auf einem eigenständigen Laptop/Tablet/Smart-TV. Keine serverseitige Synchronisierung; auf dem Monitor werden keine Nenngeld- oder Anwesenheitsdaten gezeigt
 - Gleichzeitige laufende Rundenuhren desselben Turniers werden verhindert; eine erneute Auslosung verwirft die zugehörigen Uhren nach Bestätigung
 - Responsive Gestaltung für Smartphone, Tablet und Computer
 
@@ -75,7 +78,9 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/finals-ui.js` – Endrunden-Oberfläche mit Teilnehmerauswahl und Turniersieger
 - `site/assets/operations.js` – Nenngeld-Beträge, geplante Rundentermine und persistierte Uhrzeiten
 - `site/assets/operations-ui.js` – Kassenübersicht und Rundenuhr-Bedienoberfläche
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`, `tests/fee-tiers.test.mjs`, `tests/fee-tiers-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
+- `site/live.html`, `site/assets/live.css` – separate Vollbildansicht für den zweiten Monitor
+- `site/assets/live-model.js`, `site/assets/live-ui.js`, `site/assets/live.js` – Live-Anzeige, datensparsame Darstellung, Reaktion auf Spielstandänderungen
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`, `tests/fee-tiers.test.mjs`, `tests/fee-tiers-ui.test.mjs`, `tests/live.test.mjs`, `tests/live-ui.test.mjs`, `tests/live-controller.test.mjs`, `tests/live-sync.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -85,7 +90,7 @@ Frontend aktuell: HTML, CSS, JavaScript-Module; **kein React-Setup** und kein be
 
 1. In GitHub **Actions → Tennis-Schiri App manuell veröffentlichen** öffnen.
 2. **Run workflow** auswählen und `main` starten. Ein Commit allein veröffentlicht **nichts**.
-3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg werden `site/index.html` und die zehn ausdrücklich freigegebenen Dateien in `site/assets/`, die `site/index.html` und das vorhandene Favicon per FTPS übertragen.
+3. Der Workflow prüft zuerst `tests/*.test.mjs` mit Node.js. Nur bei Erfolg überträgt er **17 ausdrücklich freigegebene Dateien** per FTPS: bestehende App inklusive Index/Favicon sowie die neue Monitorseite und ihre fünf Assets. Andere Dateien, `.htaccess`, `index.htm` und WordPress bleiben unverändert.
 4. Nach erfolgreichem Upload: [https://app.tennis-schiri.de/index.html](https://app.tennis-schiri.de/index.html) aufrufen, Verzeichnispasswort eingeben und manuell testen.
 
 Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Verzeichnis mit HTTPS und Verzeichnisschutz eingerichtet. Die ursprüngliche `index.htm` kann noch vorhanden sein; deshalb zunächst `/index.html` direkt aufrufen. Die WordPress-Hauptseite `tennis-schiri.de` bleibt unabhängig.
@@ -94,6 +99,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Weiter **beim Schleifchenturnier bleiben**. Version 0.5.1 mit kombinierter Anwesenheits-/Nenngeldliste und Jugend-/Erwachsenentarifen manuell veröffentlichen und im Browser testen. Auch die Rundenuhr weiter prüfen; ein Doppelturnier-Modul ist zurückgestellt.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): **v0.6.0** manuell veröffentlichen, in der Turnierleitung „Live-Monitor öffnen“ anklicken und das zweite Fenster auf einen angeschlossenen Monitor ziehen. „Vollbild“ wählen, eine Runde starten und Ergebnisse speichern; automatische Synchronisierung testen. Weitere Schleifchenturnier-Anforderungen haben Vorrang, Doppelturnier bleibt zurückgestellt.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
