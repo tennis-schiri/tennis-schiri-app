@@ -7,7 +7,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 
 ## [0.4.0] – Endrunde für Schleifchenturniere (8 oder 16 Spieler)
 
-**Stand 2026-11-05: Im GitHub-Code umgesetzt und simuliert getestet. FTPS-Upload sowie Browsertest für v0.4.0 noch offen.**
+**Stand 2026-11-05:** v0.4.0 im manuellen [GitHub-Actions-Lauf 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677) erfolgreich geprüft und per FTPS übertragen. Der Nutzer berichtet, dass die Endrunde anscheinend funktioniert. **Vollständige Browser-, Turnier- und Sicherheitstests bleiben offen.**
 
 ### Neu
 - Eigener Bereich **Endrunde**, unabhängig von der vorherigen Schleifchen-Auslosung.
@@ -24,7 +24,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 
 ### Tests und Grenzen
 - **53 Logiktests + 3 simulierte UI-Tests bestanden**, inklusive früherer Auslosungs-, Schleifchen- und Auffüllrunden-Funktionen.
-- Erstes Deployment, echter Browser-/Mobiltest und Praxisfreigabe für v0.4.0 noch nicht bestätigt.
+- Deployment bestätigt; erster positiver manueller Funktionseindruck der Endrunde. Umfassende Browser-/Mobiltests und Praxisfreigabe für reale Turniere noch nicht bestätigt.
 - Die Endrunde ist kein eigenständiges Doppelturnier-Modul. Online-Synchronisierung und serverseitige Speicherung weiterhin offen.
 
 ## [0.3.3] – Auffüllrunde nach Schleifchen-V7
