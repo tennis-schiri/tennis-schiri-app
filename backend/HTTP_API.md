@@ -56,7 +56,7 @@ Die Routen sind **intern geprüft**, aber noch keine fertige nutzbare Browser-Ob
 - Passwort-Hashing bevorzugt Argon2id; Token sind 256 Bit kryptographisch zufällig und werden in der Datenbank ausschließlich als SHA-256 gespeichert. Passwort-Reset widerruft alle aktiven Sitzungen.
 - Persistente Quoten pro Quell-IP, E-Mail und Vereinsbenutzer; die Datenbank enthält nur HMACs, keine Klartext-IP/-E-Mail im Rate-Limit-Schlüssel. `TENNILO_RATE_HMAC_KEY` ist ein separates Server-Secret mit mindestens 32 Bytes.
 - `TENNILO_DB_HOST`, `TENNILO_DB_PORT`, `TENNILO_DB_NAME`, `TENNILO_DB_USER`, `TENNILO_DB_PASSWORD` gehören nur auf den Server bzw. in die kurzlebige CI-Testumgebung, niemals in GitHub-Frontend, URL oder Chat.
-- Mailversand erfordert `TENNILO_MAIL_FROM` und `TENNILO_PUBLIC_URL`. Die Einmal-Links verweisen auf **noch zu bauende** `konto.html`-Oberflächen; bis diese und die Mailzustellung getestet sind, darf die API nicht aktiviert werden.
+- Mailversand erfordert `TENNILO_MAIL_FROM` und `TENNILO_PUBLIC_URL`. Die Einmal-Links verweisen auf `konto.html`, die nun **nur als privater Prototyp** in [staging-ui/](staging-ui/README.md) vorliegt. Bis zu einer gesicherten Staging-Installation und überprüfter Mailzustellung darf die API nicht aktiviert werden.
 - `backend/` muss außerhalb des öffentlichen Webroots installiert werden; selbst wenn später ein eigener API-Einstieg veröffentlicht wird, dürfen `src/`, `migrations/`, `bin/` und `tests/` niemals frei abrufbar sein.
 - Bei fehlendem Origin/CSRF, ungültigem Token, gesperrter Mitgliedschaft oder Überschreitung der Quoten verweigert die API den Zugriff. Keine DB-Fehler, Passwort-Hashes oder Roh-Tokens in JSON-Fehlerantworten.
 - Benötigt weitere Review: E-Mail-Zustellbarkeit (SPF/DKIM, Bounces), Test-/Produktivtrennung, System-/Audit-Logging ohne Secrets, Formular-UX, Cookie-Path bei Hosting-Unterpfaden, Datensparsamkeit, Datenschutzinformationen und automatisierte Browser-End-to-End-Tests.
@@ -77,6 +77,6 @@ Die Migrationen B0.1 und B0.2 sind im Repository versioniert. Die CI-Zugangsdate
 
 ## Nächster Schritt
 
-**B0.2 – Staging und Konto-Oberfläche:** Separaten geschützten ALL-INKL-Testbereich samt Datenbankzugang und Mailtransport einrichten und kontrollieren. Danach Login-/Registrierungs-/E-Mail-Bestätigung-/Vereinsseiten entwickeln und die API in Staging testweise aktivieren. Noch keine echte Kundenregistrierung oder Zahlung verarbeiten. Anschließend folgt B0.3: zentrale Turnierdaten/JSON-Import und Mehrgeräte-Verwaltung, bevor Preise, Lizenzen und Checkout produktiv werden.
+**B0.2 – Staging und Konto-Oberfläche:** Isolierter Konto-/Vereinsseiten-Prototyp ist im Repository vorhanden und noch nicht veröffentlicht. Als Nächstes einen separaten geschützten ALL-INKL-Testbereich samt Datenbankzugang und Mailtransport einrichten und kontrollieren, dann den Prototyp dort mit der API verbinden und im Browser testen. Erst nach Sicherheitsprüfung die API ausschließlich im Staging testweise aktivieren. Noch keine echte Kundenregistrierung oder Zahlung verarbeiten. Anschließend folgt B0.3: zentrale Turnierdaten/JSON-Import und Mehrgeräte-Verwaltung, bevor Preise, Lizenzen und Checkout produktiv werden.
 
 **Wichtig:** Die bisherigen Schleifchenturnier-Daten liegen weiterhin lokal; die B0.2-Kontodienste verändern sie nicht.
