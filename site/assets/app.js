@@ -555,9 +555,39 @@ document.addEventListener("click", event => {
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
   if (action === "demo-filler") return run(showFillerDemo);
+  if (action === "fee-full" && t) return run(() => {
+    const p=t.participants.find(p=>p.id===trigger.dataset.id);
+    if(!p)throw Error("Teilnehmer nicht gefunden.");
+    const due=entryDue(t,p);
+    if(due<=0)throw Error("Für diesen Teilnehmer ist kein Nenngeld fällig.");
+    if(!confirm(`Für ${p.name} insgesamt ${euroText(due)} BAR erhalten und erfassen? Bitte nur bestätigen, wenn das Geld wirklich übergeben wurde.`))return;
+    store.recordCashPayment(t.id,p.id,due);
+    render();flash(`${p.name}: ${euroText(due)} bar erfasst.`);
+  });
+  if (action === "fee-edit" && t) {
+    const p=t.participants.find(p=>p.id===trigger.dataset.id);
+    if(!p)return;
+    showDialog({eyebrow:"BARZAHLUNG / KORREKTUR",title:`Nenngeld: ${p.name}`,
+      form:"cash-payment",submit:"Barbetrag speichern",
+      body:cashPaymentBody(t,p,{escapeHtml})});
+    return;
+  }
+  if (action === "round-clock" && t) return run(() => {
+    if(!t.draw||!verifyRibbonDraw(t,t.draw).ok)throw Error("Bitte zuerst eine gültige Auslosung erstellen.");
+    const index=Number(trigger.dataset.round),operation=trigger.dataset.clockAction;
+    if(operation==="reset"&&!confirm("Rundenuhr wirklich zurücksetzen? Der bisherige Zeitverlauf geht verloren."))return;
+    if(operation==="finish"&&!confirm("Runde beenden und Uhr anhalten? Ergebnisse bleiben unverändert."))return;
+    store.editTournament(t.id,{roundClocks:changeRoundClock(t,index,operation)});
+    drawOpenRound=index;render();
+    const messages={start:"Runde gestartet – die Uhr läuft.",pause:"Rundenuhr pausiert.",
+      resume:"Rundenuhr läuft weiter.",finish:"Runde beendet.",reset:"Rundenuhr zurückgesetzt."};
+    flash(messages[operation]||"Rundenuhr aktualisiert.");
+  });
   if (action === "draw-special-generate" && t) return run(() => {
     const draw=generateRibbonSpecialRound(t);
-    store.editTournament(t.id,{draw});
+    const clocks={...(t.roundClocks||{})};
+    delete clocks[String(draw.rounds.length)];
+    store.editTournament(t.id,{draw,roundClocks:clocks});
     drawOpenRound=draw.rounds.length;
     editingResult=null;
     render();
@@ -570,7 +600,9 @@ document.addEventListener("click", event => {
       "Auffüllrunde inklusive ihrer bereits erfassten Ergebnisse zurücknehmen? Die normalen Vorrundenergebnisse bleiben erhalten." :
       "Auffüllrunde zurücknehmen? Die normalen Vorrundenergebnisse bleiben erhalten.";
     if(!confirm(message))return;
-    store.editTournament(t.id,{draw:resetRibbonSpecialRound(t)});
+    const clocks={...(t.roundClocks||{})};
+    delete clocks[String(t.draw.rounds.length)];
+    store.editTournament(t.id,{draw:resetRibbonSpecialRound(t),roundClocks:clocks});
     drawOpenRound=Math.max(0,t.draw.rounds.length-1);
     editingResult=null;
     render();
@@ -585,7 +617,7 @@ document.addEventListener("click", event => {
       if (!confirm(warning)) return;
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
-    store.editTournament(t.id,{draw});
+    store.editTournament(t.id,{draw,roundClocks:{}});
     view="draw"; drawOpenRound=0; editingResult=null; editingFinal=null; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
   });
@@ -653,6 +685,15 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind === "cash-payment") return run(() => {
+    const t=store.active();
+    if(!t)throw Error("Turnier nicht gefunden.");
+    const data=new FormData(form);
+    const id=String(data.get("playerId")||""),cents=euroCents(data.get("cashPaid"));
+    store.recordCashPayment(t.id,id,cents);
+    closeDialog();view="fees";render();
+    flash("Barbetrag manuell gespeichert.");
+  });
   if(kind === "final-result") return run(() => {
     const t=store.active();
     if(!t)throw Error("Turnier nicht gefunden.");
@@ -704,4 +745,9 @@ document.addEventListener("submit", event => {
 });
 
 window.addEventListener("storage", event => { if (event.key === "tennis-schiri-tournaments-v1") { store.state = store.load(); render(); flash("Daten aus einem anderen Tab aktualisiert."); } });
+// Nur sichtbare Timer-Texte aktualisieren; Eingabeformulare nicht jede Sekunde neu aufbauen.
+if(typeof window.setInterval==="function"){
+  window.setInterval(()=>{ if(view==="draw")refreshClockDisplays(store.active(),document); },1000);
+}
+window.addEventListener("focus",()=>{ if(view==="draw")refreshClockDisplays(store.active(),document); });
 render();
