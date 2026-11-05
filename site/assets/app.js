@@ -132,8 +132,7 @@ function sidebar(t) {
     <nav class="nav-tabs" aria-label="Turnierbereich">
       <button data-action="home">${icon("home")} Startseite</button>
       <button data-action="tab" data-tab="overview" class="${view === "overview" ? "selected" : ""}">${icon("trophy")} Übersicht</button>
-      <button data-action="tab" data-tab="participants" class="${view === "participants" ? "selected" : ""}">${icon("users")} Teilnehmende</button>
-      <button data-action="tab" data-tab="fees" class="${view === "fees" ? "selected" : ""}">${icon("check")} Nenngeld</button>
+      <button data-action="tab" data-tab="participants" class="${view === "participants"||view === "fees" ? "selected" : ""}">${icon("users")} Check-in & Nenngeld</button>
       <button data-action="tab" data-tab="draw" class="${view === "draw" ? "selected" : ""}">${icon("court")} Auslosung</button>
       <button data-action="tab" data-tab="finals" class="${view === "finals" ? "selected" : ""}">${icon("trophy")} Endrunde</button>
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
@@ -184,7 +183,7 @@ function overview(t) {
     </div>
     <div class="fee-overview-line"><strong>Nenngeld (bar):</strong>
       ${euroText(feesOverview(t).received)} erhalten · ${euroText(feesOverview(t).open)} offen
-      <button class="text-action" data-action="tab" data-tab="fees">Kasse öffnen ${icon("arrow")}</button></div>
+      <button class="text-action" data-action="tab" data-tab="participants">Check-in & Kasse öffnen ${icon("arrow")}</button></div>
     ${readiness(t)}
     <div class="two-col">
       <section class="panel"><div class="panel-head"><h3>Turniereinstellungen</h3><button class="text-action" data-action="settings">Bearbeiten ${icon("arrow")}</button></div>
@@ -210,27 +209,60 @@ function overview(t) {
 }
 
 function playersMarkup(t) {
-  const filtered = t.participants.filter(p => p.name.toLocaleLowerCase("de-DE").includes(search.toLocaleLowerCase("de-DE")))
-    .sort((a, b) => Number(b.present) - Number(a.present) || a.name.localeCompare(b.name, "de"));
-  if (!filtered.length) return `<div class="empty-players">${icon("users")}<strong>${t.participants.length ? "Keine passenden Teilnehmenden" : "Noch keine Teilnehmenden"}</strong><p>${t.participants.length ? "Versuche einen anderen Suchbegriff." : "Lege den ersten Spieler an, um zu starten."}</p></div>`;
-  return `<div class="people-list"><div class="table-head"><span>NAME</span><span>STÄRKE</span><span>ANWESEND</span><span>AKTIONEN</span></div>
-    ${filtered.map(p => `<div class="person-row">
-      <div class="person-name"><span class="avatar">${escapeHtml(p.name.slice(0, 1).toLocaleUpperCase("de-DE"))}</span><strong>${escapeHtml(p.name)}</strong></div>
-      <div><span class="group-pill ${p.group}">${groupLabel(p.group)}</span></div>
-      <div><label class="presence"><input type="checkbox" data-action="presence" data-id="${escapeHtml(p.id)}" ${p.present ? "checked" : ""}><span>${p.present ? "Ja" : "Nein"}</span></label></div>
-      <div class="row-actions"><button class="icon-btn" title="Teilnehmer bearbeiten" aria-label="${escapeHtml(p.name)} bearbeiten" data-action="edit-player" data-id="${escapeHtml(p.id)}">${icon("edit")}</button><button class="icon-btn danger" title="Teilnehmer entfernen" aria-label="${escapeHtml(p.name)} entfernen" data-action="remove-player" data-id="${escapeHtml(p.id)}">${icon("trash")}</button></div>
-    </div>`).join("")}</div>`;
+  const all=feesOverview(t);
+  const payments=new Map(all.players.map(p=>[p.id,p]));
+  const tiers=t.feeCategories||[{id:"standard",name:"Standard",amountCents:t.entryFeeCents||0}];
+  const filtered=t.participants.filter(p=>p.name.toLocaleLowerCase("de-DE").includes(search.toLocaleLowerCase("de-DE")))
+    .sort((a,b)=>Number(b.present)-Number(a.present)||a.name.localeCompare(b.name,"de"));
+  if(!filtered.length)return `<div class="empty-players">${icon("users")}<strong>${t.participants.length?"Keine passenden Teilnehmenden":"Noch keine Teilnehmenden"}</strong><p>${t.participants.length?"Bitte andere Suchbegriffe verwenden.":"Lege zuerst einen Spieler an."}</p></div>`;
+  return `<div class="draw-table-scroll"><table class="draw-ranking-table unified-players-table">
+    <thead><tr><th>Teilnehmer</th><th>Stärke</th><th>Anwesend</th><th>Nenngeld-Kategorie</th><th>Soll</th><th>Bar erhalten</th><th>Offen / Status</th><th>Aktionen</th></tr></thead>
+    <tbody>${filtered.map(p=>{
+      const fee=payments.get(p.id);
+      const status={frei:"Kostenfrei",offen:"Offen",teilweise:"Teilzahlung",bezahlt:"Bar bezahlt",überzahlung:"Überzahlung"}[fee.status];
+      return `<tr class="${p.present?"player-is-present":"player-is-absent"}">
+        <td><div class="checkin-name"><span class="avatar">${escapeHtml(p.name.slice(0,1).toLocaleUpperCase("de-DE"))}</span><strong>${escapeHtml(p.name)}</strong></div></td>
+        <td><span class="group-pill ${p.group}">${groupLabel(p.group)}</span></td>
+        <td><label class="presence"><input type="checkbox" data-action="presence" data-id="${escapeHtml(p.id)}" ${p.present?"checked":""}><span>${p.present?"Ja":"Nein"}</span></label></td>
+        <td><label class="sr-only" for="tier-${escapeHtml(p.id)}">Nenngeld-Kategorie von ${escapeHtml(p.name)}</label>
+          <select id="tier-${escapeHtml(p.id)}" class="player-tier-select" data-action="participant-tier" data-id="${escapeHtml(p.id)}">
+            ${tiers.map(c=>`<option value="${escapeHtml(c.id)}" ${(p.feeTierId||"standard")===c.id?"selected":""}>${escapeHtml(c.name)} – ${euroText(c.amountCents)}</option>`).join("")}
+          </select>
+          ${fee.custom?'<small class="individual-fee-note">Individueller Betrag</small>':""}
+        </td>
+        <td>${euroText(fee.due)}</td>
+        <td>${euroText(fee.paid)}</td>
+        <td><div class="checkin-fee-status"><strong>${euroText(fee.open)}</strong><span class="fee-status ${fee.status}">${status}</span></div></td>
+        <td><div class="checkin-actions">
+          ${fee.open>0?`<button type="button" class="btn subtle small" data-action="fee-full" data-id="${escapeHtml(p.id)}">Rest bar erhalten</button>`:""}
+          <button type="button" class="draw-edit-btn" data-action="fee-edit" data-id="${escapeHtml(p.id)}">${icon("edit")} Zahlung</button>
+          <button type="button" class="icon-btn" title="Teilnehmer bearbeiten" aria-label="${escapeHtml(p.name)} bearbeiten" data-action="edit-player" data-id="${escapeHtml(p.id)}">${icon("edit")}</button>
+          <button type="button" class="icon-btn danger" title="Teilnehmer entfernen" aria-label="${escapeHtml(p.name)} entfernen" data-action="remove-player" data-id="${escapeHtml(p.id)}">${icon("trash")}</button>
+        </div></td>
+      </tr>`;
+    }).join("")}</tbody>
+  </table></div>`;
 }
-
 function participants(t) {
-  const c = count(t);
+  const c=count(t),a=feesOverview(t);
   return `<section class="screen">
-    <div class="section-header"><div><div class="eyebrow">SPIELERLISTE VERWALTEN</div><h2>Teilnehmende</h2><p class="section-sub">${c.total} erfasst · ${c.present} anwesend · ${c.absent} abwesend</p></div>
+    <div class="section-header"><div><div class="eyebrow">TEILNEHMER / CHECK-IN / BAR-KASSE</div><h2>Teilnehmende & Nenngeld</h2>
+      <p class="section-sub">${c.total} angemeldet · ${c.present} anwesend · ${c.absent} abwesend · Barzahlung vor Ort</p></div>
       <button class="btn primary" data-action="add-player">${icon("plus")} Teilnehmer hinzufügen</button></div>
-    <div class="panel participants-panel">
+    <div class="draw-summary checkin-stats">
+      ${stat("ANWESEND",c.present,`${c.total} angemeldet`)}
+      ${stat("NENNGELD SOLL",euroText(a.expected),"Alle Anmeldungen")}
+      ${stat("BAR ERHALTEN",euroText(a.received),`${a.paidCount} vollständig bezahlt`)}
+      ${stat("NOCH OFFEN",euroText(a.open),`${a.openCount} offene Beträge`)}
+    </div>
+    ${a.extra?`<div class="advice warn">${icon("alert")}<div><strong>Überzahlungen prüfen</strong><span>${euroText(a.extra)} über dem fälligen Betrag erfasst.</span></div></div>`:""}
+    <section class="panel participants-panel">
+      <div class="panel-head checkin-panel-head"><div><h3>Check-in & Kassenliste</h3><p>Anwesenheit, Nenngeld-Kategorie und tatsächliche Barzahlung direkt je Spieler verwalten.</p></div>
+        <button type="button" class="btn subtle small" data-action="tab" data-tab="settings">Kategorien verwalten</button></div>
       <div class="filter-row"><label class="search-wrap"><span class="sr-only">Teilnehmende suchen</span><input id="player-search" type="search" autocomplete="off" placeholder="Spieler suchen …" value="${escapeHtml(search)}"></label><span class="panel-count">${c.total} SPIELER</span></div>
       <div id="participant-results">${playersMarkup(t)}</div>
-    </div>
+      <p class="draw-table-note">Eine Person kann ihre Anwesenheit und ihre Zahlung unabhängig voneinander haben. Die Kategorie bestimmt den fälligen Betrag, sofern kein individueller Sonderbetrag eingetragen ist.</p>
+    </section>
     ${readiness(t)}
   </section>`;
 }
@@ -249,6 +281,21 @@ function settings(t) {
         <div><dt>Aktive Plätze</dt><dd>${courtSummary(t)}</dd></div>
          <div><dt>Nenngeld</dt><dd>${euroText(t.entryFeeCents||0)} Standardbetrag · bar</dd></div>
       </dl>
+    </section>
+    <section class="panel setting-panel fee-categories-panel">
+      <div class="panel-head"><div><h3>Nenngeld-Kategorien</h3><p>Beispiele: Jugend, Erwachsene, Mitglieder. Die Kategorien sind unabhängig von der Spielstärke.</p></div>
+        <button class="btn subtle small" data-action="fee-category-add">${icon("plus")} Kategorie hinzufügen</button></div>
+      <div class="fee-category-list">
+        ${(t.feeCategories||[]).map(c=>`<div class="fee-category-row">
+          <div><strong>${escapeHtml(c.name)}</strong><small>${c.id==="standard"?"Grundtarif":"Zusätzlicher Tarif"} · ${t.participants.filter(p=>(p.feeTierId||"standard")===c.id).length} Spieler</small></div>
+          <strong class="fee-category-price">${euroText(c.amountCents)}</strong>
+          <div class="fee-category-actions">
+            <button type="button" class="btn subtle small" data-action="fee-category-edit" data-id="${escapeHtml(c.id)}">${icon("edit")} Bearbeiten</button>
+            ${c.id!=="standard"?`<button type="button" class="btn ghost small" data-action="fee-category-remove" data-id="${escapeHtml(c.id)}">Entfernen</button>`:""}
+          </div>
+        </div>`).join("")}
+      </div>
+      <p class="draw-table-note">Bestehende Barzahlungen bleiben erhalten, wenn du einen Tarif änderst. Kategorien, die noch Spielern zugeordnet sind, können nicht gelöscht werden.</p>
     </section>
     <section class="panel setting-panel court-panel">
       <div class="panel-head court-panel-head"><div><h3>Platzbezeichnungen</h3><p>Standardmäßig Platz 1, Platz 2 usw. Die Namen kannst du beliebig anpassen.</p></div>
@@ -375,7 +422,7 @@ function drawPreview(t) {
 function render() {
   const t = store.active();
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
-    <main class="main-area">${appTop(t)}${view === "participants" ? participants(t) : view === "fees" ? renderFees(t,{icon,escapeHtml,stat}) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
+    <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
       ${browserNotice()}<footer>© Tennis-Schiri · Version 0.5.0 · Private Testversion</footer>
     </main></div>`);
 }
@@ -388,10 +435,10 @@ function settingsFields(t = {}) {
     <label class="field">Startzeit<input name="startTime" type="time" required value="${escapeHtml(t.startTime ?? "10:00")}"></label>
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
-    <label class="field wide">Nenngeld pro Spieler (€) · bar
+    <label class="field wide">Standard-Nenngeld (€) · bar
       <input name="entryFee" inputmode="decimal" pattern="[0-9]+([,.][0-9]{1,2})?" required
         value="${euroInput(t.entryFeeCents??0)}" placeholder="0,00">
-      <span class="field-hint">Standard 0,00 €. Zahlungen nur manuell und in bar bestätigen.</span></label>
+      <span class="field-hint">Betrag der Standard-Kategorie. Weitere Kategorien (z. B. Jugend, Erwachsene) unter Einstellungen hinzufügen.</span></label>
     <label class="field wide">Wertungsspiele je Spieler<select name="rounds" required>
       <option value="3" ${Number(t.rounds)===3?"selected":""}>3 Wertungsspiele</option>
       <option value="4" ${Number(t.rounds ?? 4)===4?"selected":""}>4 Wertungsspiele</option>
@@ -442,12 +489,29 @@ function showPlayerDialog(t, p = null) {
       <label class="field wide">Vor- und Nachname<input name="name" required maxlength="80" autocomplete="off" value="${escapeHtml(p?.name ?? "")}" placeholder="z. B. Alex Beispiel"></label>
       <label class="field">Spielstärke<select name="group"><option value="stark" ${p?.group === "stark" ? "selected" : ""}>Stark</option><option value="schwaecher" ${p?.group !== "stark" ? "selected" : ""}>Schwächer</option></select></label>
       <label class="field checkbox-field"><input name="present" type="checkbox" ${p ? (p.present ? "checked" : "") : "checked"}> Ist anwesend</label>
+      <label class="field wide">Nenngeld-Kategorie<select name="feeTierId">
+        ${(t.feeCategories||[{id:"standard",name:"Standard",amountCents:t.entryFeeCents||0}]).map(c=>
+          `<option value="${escapeHtml(c.id)}" ${(p?.feeTierId||"standard")===c.id?"selected":""}>${escapeHtml(c.name)} – ${euroText(c.amountCents)}</option>`).join("")}
+      </select></label>
       <label class="field wide">Individuelles Nenngeld (€) · optional
         <input name="feeOverride" inputmode="decimal" pattern="([0-9]+([,.][0-9]{1,2})?)?" placeholder="Standardbetrag" value="${p?.feeOverrideCents==null?"":euroInput(p.feeOverrideCents)}">
         <span class="field-hint">Leer = Standardbetrag · 0,00 € = kostenfrei.</span></label>
     </div>` });
 }
 
+function showFeeCategoryDialog(t,id=null) {
+  const cat=(t.feeCategories||[]).find(c=>c.id===id);
+  showDialog({eyebrow:"BAR-NENNGELD / TARIFE",title:cat?"Kategorie bearbeiten":"Neue Nenngeld-Kategorie",
+    form:"fee-category",submit:cat?"Änderungen speichern":"Kategorie hinzufügen",
+    body:`<input type="hidden" name="categoryId" value="${escapeHtml(cat?.id||"")}">
+      <div class="form-grid">
+        <label class="field wide">Kategorie-Bezeichnung
+          <input name="categoryName" required maxlength="40" value="${escapeHtml(cat?.name||"")}" placeholder="z. B. Jugend oder Erwachsene"></label>
+        <label class="field wide">Nenngeld (€) · nur Barzahlung
+          <input name="categoryAmount" required inputmode="decimal" pattern="[0-9]+([,.][0-9]{1,2})?"
+            value="${euroInput(cat?.amountCents??0)}"></label>
+      </div>`});
+}
 function readSettings(form) {
   const data = new FormData(form);
   const courtCount = Number(data.get("courtCount"));
@@ -551,10 +615,21 @@ document.addEventListener("click", event => {
   if (action === "close-dialog") return closeDialog();
   if (action === "home") { view = "home"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); return; }
   if (action === "open-tournament") return run(() => { store.setActive(trigger.dataset.id); view = "overview"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); });
-  if (action === "tab") { view = trigger.dataset.tab; search = ""; editingResult=null; editingFinal=null; render(); return; }
+  if (action === "tab") { view = trigger.dataset.tab==="fees"?"participants":trigger.dataset.tab; search = ""; editingResult=null; editingFinal=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
   if (action === "demo-filler") return run(showFillerDemo);
+  if (action === "fee-category-add" && t) return showFeeCategoryDialog(t);
+  if (action === "fee-category-edit" && t) return showFeeCategoryDialog(t,trigger.dataset.id);
+  if (action === "fee-category-remove" && t) return run(() => {
+    const c=t.feeCategories.find(c=>c.id===trigger.dataset.id);
+    if(!c)throw Error("Kategorie nicht gefunden.");
+    if(t.participants.some(p=>(p.feeTierId||"standard")===c.id))
+      throw Error("Zuerst die Teilnehmer dieser Nenngeld-Kategorie einer anderen Kategorie zuordnen.");
+    if(!confirm(`Die Nenngeld-Kategorie „${c.name}“ wirklich entfernen?`))return;
+    store.removeFeeCategory(t.id,c.id);
+    render();flash("Nenngeld-Kategorie entfernt.");
+  });
   if (action === "fee-full" && t) return run(() => {
     const p=t.participants.find(p=>p.id===trigger.dataset.id);
     if(!p)throw Error("Teilnehmer nicht gefunden.");
@@ -658,6 +733,17 @@ document.addEventListener("change", event => {
     store.editTournament(t.id,{finalOptOut:[...excluded]});
     render();
   });
+  if (target.matches("select[data-action='participant-tier']") && t) return run(() => {
+    const player=t.participants.find(p=>p.id===target.dataset.id);
+    const tier=t.feeCategories.find(c=>c.id===target.value);
+    if(!player||!tier)throw Error("Spieler oder Kategorie nicht gefunden.");
+    if(player.feeOverrideCents!=null &&
+      !confirm(`Für ${player.name} ist ein individueller Betrag eingestellt. Durch die neue Kategorie „${tier.name}“ wird dieser Sonderbetrag aufgehoben. Fortfahren?`)){
+      render();return;
+    }
+    store.setParticipantFeeTier(t.id,player.id,tier.id);
+    render();flash(`${player.name}: Nenngeld-Kategorie „${tier.name}“ ausgewählt.`);
+  });
   if (target.matches("input[data-action='presence']") && t) return run(() => {
     store.toggleParticipant(t.id, target.dataset.id); render();
   });
@@ -685,13 +771,24 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind === "fee-category") return run(() => {
+    const t=store.active();
+    if(!t)throw Error("Turnier nicht gefunden.");
+    const data=new FormData(form);
+    store.upsertFeeCategory(t.id,{
+      id:String(data.get("categoryId")||"")||null,
+      name:String(data.get("categoryName")||""),
+      amountCents:euroCents(data.get("categoryAmount"))
+    });
+    closeDialog();view="settings";render();flash("Nenngeld-Kategorie gespeichert.");
+  });
   if(kind === "cash-payment") return run(() => {
     const t=store.active();
     if(!t)throw Error("Turnier nicht gefunden.");
     const data=new FormData(form);
     const id=String(data.get("playerId")||""),cents=euroCents(data.get("cashPaid"));
     store.recordCashPayment(t.id,id,cents);
-    closeDialog();view="fees";render();
+    closeDialog();view="participants";render();
     flash("Barbetrag manuell gespeichert.");
   });
   if(kind === "final-result") return run(() => {
@@ -735,7 +832,7 @@ document.addEventListener("submit", event => {
     } else if (kind === "add-player" || kind === "edit-player") {
       const data = new FormData(form), t = store.active();
       store.upsertParticipant(t.id, {
-        name:data.get("name"), group:data.get("group"), present:data.has("present"),
+        name:data.get("name"), group:data.get("group"), present:data.has("present"),feeTierId:String(data.get("feeTierId")||"standard"),
         feeOverrideCents:String(data.get("feeOverride")??"").trim()===""?null:euroCents(data.get("feeOverride"))
       }, kind === "edit-player" ? String(data.get("playerId")) : null);
       view = "participants";
