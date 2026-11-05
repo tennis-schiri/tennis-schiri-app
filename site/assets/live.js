@@ -1,4 +1,4 @@
-import {BrowserTournamentStore} from "./storage.js?v=070";
+import {BrowserTournamentStore} from "./storage.js?v=080";
 import {buildLiveDisplay} from "./live-model.js?v=071";
 import {clockFor} from "./operations.js?v=061";
 import {renderLiveScreen} from "./live-ui.js?v=071";
