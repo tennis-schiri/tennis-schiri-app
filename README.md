@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.5.0** (Nenngeld und Rundenuhr, noch nicht live). **Letzter bestätigter FTPS-Upload:** **v0.4.0** vom 2026-11-05 ([GitHub Actions Run 42013798677](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42013798677)). Der Nutzer hat die Endrunde positiv angetestet; vollständige Praxis- und Sicherheitstests bleiben offen.
+**Aktueller GitHub-Code:** **v0.5.1** (gemeinsame Anwesenheits-/Nenngeldliste und mehrere Nenngeld-Kategorien; noch nicht hochgeladen). **Letzter bestätigter FTPS-Upload:** **v0.5.0** vom 2026-11-05 ([GitHub Actions Run 42020751117](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42020751117)). Für v0.5.1 stehen Upload und echter Browsertest noch aus.
 
 ## Einstieg und Projektdokumentation
 
@@ -27,7 +27,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 
 **GitHub bleibt maßgeblich für Code, Entscheidungen, Versionen und technische Projektstände; Drive für fachliche Vorlagen, Quellen und lesbare Projektkonzepte.** Die ursprünglichen Turnierformat-Dateien werden nicht verändert.
 
-## Aktuelle Funktionen (v0.5.0 im Repository)
+## Aktuelle Funktionen (v0.5.1 im Repository)
 
 - Mehrere Schleifchenturniere anlegen, bearbeiten, auswählen, löschen; Startseite mit vorhandenen Turnieren
 - Name, Datum, Startzeit, Spieldauer, Wechselzeit und Wertungsspiele je Person konfigurieren
@@ -51,7 +51,10 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - Sieger ziehen automatisch in die nächste Runde ein; Ergebnisse und Änderungen werden gespeichert. Das Sieger-Doppel wird am Ende hervorgehoben
 - Endrunde zurücknehmen, ohne die Vorrunden- oder Auffüllrunden-Ergebnisse zu verlieren; diese sind während einer aktiven Endrunde gegen Änderungen geschützt
 - **Bar-Nenngeld:** pro Turnier einen Standardbetrag einstellen (anfangs 0,00 €); bei jedem Teilnehmer einen individuellen Betrag bzw. 0,00 € für beitragsfrei erfassen
-- Eigener Bereich **Nenngeld** mit Sollbetrag, tatsächlich bar erhaltenem Betrag, offenen Beträgen, Teilzahlungen und Korrekturen. Keine Online-Zahlungsanbieter; Buchung nur nach tatsächlicher Barzahlung
+- **v0.5.1:** Anwesenheit und Nenngeld in **einer gemeinsamen Teilnehmer-/Check-in-Liste**: Stärkegruppe, Anwesenheits-Häkchen, Nenngeld-Kategorie, Soll, bar erhalten, offen und Korrekturen stehen pro Spieler nebeneinander
+- **Mehrere Nenngeld-Kategorien** (z. B. Jugend/Erwachsene), frei konfigurierbar unter Einstellungen, zuweisbar je Spieler; bisherige Turniere behalten ihren Betrag als Kategorie „Standard“
+- Zahlungsbeträge bleiben bei Kategorie-/Tarifänderungen erhalten; Kategorien, die noch Spielern zugeordnet sind, können nicht versehentlich gelöscht werden
+- Gemeinsame Teilnehmerliste mit Sollbetrag, tatsächlich bar erhaltenem Betrag, offenen Beträgen, Teilzahlungen und Korrekturen. Keine Online-Zahlungsanbieter; Buchung nur nach tatsächlicher Barzahlung
 - **Geplante Spielzeiten im Spielplan:** pro Runde sowie an jeder Begegnung Start-/Endzeit; Wechsel-/Pausenende aus Startzeit, Spieldauer und Pause berechnet
 - **Rundenuhr:** „Runde starten“, Pausieren, Fortsetzen, Beenden und bestätigtes Zurücksetzen. Sekunden-Countdown mit Überzeitanzeige; reale Zeitstempel bleiben bei Neuladen und JSON-Sicherung erhalten
 - Gleichzeitige laufende Rundenuhren desselben Turniers werden verhindert; eine erneute Auslosung verwirft die zugehörigen Uhren nach Bestätigung
@@ -72,7 +75,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 - `site/assets/finals-ui.js` – Endrunden-Oberfläche mit Teilnehmerauswahl und Turniersieger
 - `site/assets/operations.js` – Nenngeld-Beträge, geplante Rundentermine und persistierte Uhrzeiten
 - `site/assets/operations-ui.js` – Kassenübersicht und Rundenuhr-Bedienoberfläche
-- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
+- `site/package.json`, `tests/draw.test.mjs`, `tests/results.test.mjs`, `tests/result-ui.test.mjs`, `tests/special.test.mjs`, `tests/special-ui.test.mjs`, `tests/finals.test.mjs`, `tests/finals-ui.test.mjs`, `tests/operations.test.mjs`, `tests/operations-ui.test.mjs`, `tests/fee-tiers.test.mjs`, `tests/fee-tiers-ui.test.mjs` – automatisierte Logik- und UI-Regressionsprüfungen ohne Build-Prozess
 - `.github/workflows/deploy.yml` – manuell ausgelöster FTPS-Upload
 - `PROJEKTSTATUS.md`, `ENTSCHEIDUNGEN.md`, `CHANGELOG.md` – Projektdokumentation
 
@@ -91,6 +94,6 @@ Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals 
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Zunächst **beim Schleifchenturnier bleiben**. Version 0.5.0 mit Bar-Nenngeld, Spielzeiten und Rundenuhr manuell veröffentlichen und im Browser testen. Anschließend weitere Schleifchenturnier-Anforderungen und Praxisabläufe prüfen. Ein Doppelturnier-Modul ist aktuell **nicht** der nächste Schritt.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Weiter **beim Schleifchenturnier bleiben**. Version 0.5.1 mit kombinierter Anwesenheits-/Nenngeldliste und Jugend-/Erwachsenentarifen manuell veröffentlichen und im Browser testen. Auch die Rundenuhr weiter prüfen; ein Doppelturnier-Modul ist zurückgestellt.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
