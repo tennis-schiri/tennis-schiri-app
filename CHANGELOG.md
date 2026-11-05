@@ -5,9 +5,28 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.6.0] – Live-Ansicht für einen zweiten Monitor
+
+**Stand 2026-11-05:** In GitHub entwickelt und simuliert getestet, **FTPS-Veröffentlichung und echter Zwei-Monitor-Browsertest für v0.6.0 noch offen**. Zuletzt erfolgreich hochgeladen: v0.5.1 (Run 42033283559).
+
+### Neu
+- **Eigene schreibgeschützte `site/live.html`** im TENNILO-Branding: bildschirmfüllende, kontrastreiche TV-/Monitoransicht mit großen Doppel-Spielpaarungen, Platznamen, hervorgehobenen Siegern, eingetragenen Game-Ergebnissen und Schleifchen-Topliste.
+- Aktive Runde mit Countdown und Überzeit gemäß der vorhandenen Rundenuhr. Auch die Auffüllrunde mit gekennzeichneten Auffüllern und die Endrunde bis zum Sieger-Doppel lassen sich anzeigen.
+- **Live-Monitor öffnen** in der Turnierleitung öffnet die separate Seite in einem weiteren Browserfenster/Tab. Auf einen an denselben Rechner angeschlossenen Monitor ziehen und über „Vollbild“ bildschirmfüllend nutzen.
+- Über **„Diese Runde live zeigen“**, **„Endrunde auf Live-Monitor anzeigen“** oder **„Monitor auf Automatik stellen“** kann die Turnierleitung gezielt den angezeigten Turnierteil steuern. Automatik bevorzugt die laufende bzw. zuletzt gestartete Runde, später die Endrunde.
+- Änderungen an Spielplan, Ergebnissen oder Anzeigeauswahl aktualisieren die Live-Ansicht über den gemeinsamen Browser-Speicher (`storage`-Ereignis, zusätzlich Prüfung im Sekundenabstand). Der Countdown verändert nur die eingeblendete Uhrzeit, ohne ständig die gesamte Ansicht neu aufzubauen.
+- **Datensparsam:** Keine Nenngelder, Barzahlungen, Zahlungskategorien oder Anwesenheitsverwaltung auf der Zuschauerseite. Nutzereingaben werden in der Live-Anzeige als HTML-Text maskiert.
+- Manuelle Anzeigeauswahl `liveDisplay` wird im Turnier und JSON-Backup gespeichert, alte Turniere ohne dieses Feld bleiben im Automatikmodus kompatibel.
+- Neue Dateien: `site/live.html`, `site/assets/live.css`, `site/assets/live.js`, `site/assets/live-model.js`, `site/assets/live-ui.js`. Der weiter manuell auszulösende FTPS-Workflow prüft alle Tests und lädt ausschließlich 17 freigegebene App-/Monitor-Dateien hoch.
+
+### Prüfung / Grenze
+- **98 Logik- und Darstellungsprüfungen + 7 simulierte UI-Tests = 105 erfolgreich**, darunter 14 neue Live-Modelltests, 5 neue Monitor-Darstellungstests und je ein UI-Test für die Live-Steuerung und den zweiten Monitor.
+- **Keine Server-Synchronisierung:** Die Anzeige funktioniert nur in weiteren Tabs/Fenstern **desselben Browserprofils auf demselben Rechner**, also beispielsweise bei einem per HDMI/DisplayPort angeschlossenen zweiten Monitor. Ein zweiter Computer/Smart-TV mit eigenem Browser teilt nicht automatisch den Speicher. Diese Ausbaustufe benötigt später ein sicheres Backend.
+- Kein öffentlicher Mehrgerätebetrieb, kein echter TV-End-to-End-Test und keine Freigabe für produktive Turniere.
+
 ## [0.5.1] – Gemeinsamer Check-in und mehrere Nenngeld-Kategorien
 
-**Stand 2026-11-05:** In GitHub implementiert und simuliert getestet. **FTPS-Upload und echter Browsertest für v0.5.1 noch offen.** Letzter bestätigter Upload: v0.5.0.
+**Stand 2026-11-05:** Am 2026-11-05 per [GitHub-Actions-Lauf 42033283559](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42033283559) erfolgreich hochgeladen. Nutzer-Rückmeldung zur zusammengefassten Anwesenheits-/Nenngeldliste positiv; umfassender Browser- und Praxistest weiterhin offen.
 
 ### Änderungen
 - **Teilnehmende und Bar-Nenngeld in einer einzigen Liste:** Spieler, Stärkegruppe, Anwesenheit, Tarif, Sollbetrag, tatsächlich erhaltenes Bargeld, offener Betrag und Erfassungsaktionen gemeinsam sichtbar. Separater „Nenngeld“-Navigationspunkt entfernt; bisherige Menü-/Schnellaktionen führen zur vereinten Liste.
