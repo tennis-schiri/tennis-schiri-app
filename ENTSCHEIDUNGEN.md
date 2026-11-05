@@ -275,3 +275,11 @@
 - **Datenschutz:** Client und PHP erlauben nur öffentliche Anzeigefelder; Nenngelder, Barzahlungen, Anwesenheitslisten und administrative Daten bleiben ausgeschlossen. Bestehender Webspace-Passwortschutz bleibt aktiv.
 - **Sicherung:** Doppelturniere können JSON exportieren und importieren. Beim Import wird ausdrücklich vor dem Ersetzen aller Browser-Turniere gewarnt; Dateigrenze 3 MB; Datenmodell-Schema 1 bleibt kompatibel.
 - **Tests/Freigabe:** Neue doubles-live.test.mjs, doubles-remote-publisher-ui.test.mjs und erweiterte live-feed.test.mjs. Isolierte Live-Darstellungs- und Freigabefunktionen geprüft; vollständige GitHub-CI, PHP- und echte Zweitgeräte-/Browser-Tests noch nicht bestätigt. **Kein FTPS-Upload ausgelöst**, produktive App bleibt v0.6.1.
+
+## E-031 · Live-Monitor bei vielen Plätzen kompakter, Folgerunde plus Tabelle (2026-11-05)
+
+- **Nutzerwunsch:** Paarungskarten insbesondere bei mehr als vier Plätzen kleiner anzeigen; nächste bereits ausgeloste Runde mit Paarungen anzeigen; die Livetabelle muss stets erhalten bleiben.
+- **Darstellung:** Aktuelle Runde links in kompakteren Karten, ab fünf Spielen dichtes Raster. Direkt darunter die kommende Runde als kompakte Platz-/Paarungsliste mit Uhrzeit, sofern sie feststeht. Rechts die unveränderte Livetabelle; auf schmalen Bildschirmen wandert sie unter den Spielplan.
+- **Turnierarten:** Gemeinsame Live-Anzeige für Schleifchen und feste Doppel. Vorrunden zeigen die tatsächlich vorhandene nächste Runde; in der K.-o.-Phase nur feststehende nächste Paarungen. Keine vorgetäuschten Begegnungen.
+- **Sicherheit:** Nächste Paarungen durch denselben datensparsamen PHP-Allowlist-Filter; keine Nenngelder, Anwesenheitslisten oder vollständige Turnierdateien. Lokal und per Opt-in-Zuschauer-Link.
+- **Freigabe:** Nur GitHub-Code, **kein Upload**. Neue Tests für Next-Round, 6-Platz-Raster, Maskierung und PHP-Feldfilter; vollständige CI/Praxistests vor Veröffentlichung offen.
