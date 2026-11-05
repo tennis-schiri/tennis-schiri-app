@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller App-Code:** **v0.7.0 im privaten GitHub-Repository (noch nicht veröffentlicht)**. Vorherige **v0.6.1** am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller App-Code:** **v0.8.0 im privaten GitHub-Repository (noch nicht veröffentlicht)**. Drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Vorherige **v0.6.1** am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -11,7 +11,8 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | Datei | Zweck |
 | --- | --- |
 | [PROJEKTSTATUS.md](PROJEKTSTATUS.md) | Tatsächlicher Stand, offen/geplant, Hosting, Tests und nächste Aufgaben |
-| [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md) | Neu: Turnierart Doppelturnier – Fachregeln, Umsetzung, Grenzen, Tests |
+| [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md) | Turnierart Doppelturnier – Fachregeln, Umsetzung, Grenzen, Tests |
+| [ONE_POINT_KONZEPT.md](ONE_POINT_KONZEPT.md) | One Point Cup – Spielerfeld bis 64, Freilose, Ein-Punkt-K.-o., Kasse, Tests und Einschränkungen |
 | [ENTSCHEIDUNGEN.md](ENTSCHEIDUNGEN.md) | Produktanforderungen, begründete Entscheidungen und Randbedingungen |
 | [CHANGELOG.md](CHANGELOG.md) | Änderungen pro Version, inklusive Veröffentlichungs-/Teststatus |
 | [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md) | Google-Drive-Turnierbibliothek, formatbezogene Referenzen und gemeinsamer Dokumentationsordner |
@@ -35,6 +36,14 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 ## Privates Backend B0.1/B0.2 – nicht veröffentlicht
 
 Unter [backend/](backend/README.md) liegen Datenbanktabellen sowie die implementierten **privaten Registrierungs-, Login-, Vereins- und Einladungsschnittstellen**. Registrierung und E-Mail-Bestätigung, Sitzungen, Passwort-Reset, Mitgliedschafts- und Rollenprüfung wurden gegen temporäre MariaDB getestet. Die [HTTP-API](backend/HTTP_API.md) ist **standardmäßig deaktiviert**; bestehender FTPS-Deploy lädt **keine** Backend-Dateien hoch. Konto-Oberfläche als isolierter Prototyp unter `backend/staging-ui/` ist ergänzt; geprüfter Mailversand, ALL-INKL-Staging, zentrale Turnierdaten und Softwarezahlungen fehlen noch; verbindliche Preise sind offen.
+
+## Neue Turnierart v0.8.0 – One Point Cup (nur GitHub, noch nicht veröffentlicht)
+
+- Eigenständige One-Point-Cup-Seite mit Spieler-/Anwesenheitsliste, Bar-Nenngeld je Spieler (Standard/Jugend), Demoturnier und Übernahme anwesender Spieler aus anderen lokalen Turnieren
+- Zufällige K.-o.-Auslosung für 2–64 Spieler, Standard 32er-Feld, automatische echte Freilose, ein Punkt pro Match und Fortschreibung zum Turniersieger
+- Ergebniskorrekturen setzen bei Paarungswechsel abhängige Siege zurück; lokale JSON-Sicherung und Import für alle drei Formate
+- Fachtests `tests/one-point.test.mjs` (16 isoliert bestanden) und UI-Test `tests/one-point-ui.test.mjs` ergänzt. Vollständige CI/Browsertests und One-Point-Fernanzeige sind noch offen. [Konzept](ONE_POINT_KONZEPT.md)
+- Vier neue Dateien ausschließlich in die manuell auslösbare FTPS-Allowlist aufgenommen, jetzt 27 App-Dateien, **kein Upload**.
 
 ## Neue Turnierart v0.7.0 – Doppelturnier (nur GitHub, noch nicht veröffentlicht)
 
