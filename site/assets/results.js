@@ -38,12 +38,23 @@ function checkedDraw(t) {
 
 export function updateRibbonMatchResult(t,roundIndex,matchIndex,value) {
   const draw=checkedDraw(t);
-  if(!Number.isInteger(roundIndex)||!Number.isInteger(matchIndex)||roundIndex<0||matchIndex<0)throw new Error("Ungültige Runde oder Begegnung.");
-  const oldRound=draw.rounds[roundIndex], oldMatch=oldRound?.matches?.[matchIndex];
+  if(!Number.isInteger(roundIndex)||!Number.isInteger(matchIndex)||roundIndex<0||matchIndex<0)
+    throw new Error("Ungültige Runde oder Begegnung.");
+  const specialIndex=draw.rounds.length;
+  const inSpecial=!!draw.specialRound && roundIndex===specialIndex;
+  const oldRound=inSpecial?draw.specialRound:draw.rounds[roundIndex];
+  const oldMatch=oldRound?.matches?.[matchIndex];
   if(!oldMatch)throw new Error("Begegnung nicht gefunden.");
+  if(draw.specialRound&&!inSpecial)
+    throw new Error("Bitte zuerst die Auffüllrunde zurücknehmen, bevor normale Vorrundenergebnisse geändert werden.");
   const result=normalizeRibbonResult(value);
+  const update=match=>({...match,result:result.winner===null?null:result});
+  if(inSpecial){
+    const specialRound={...draw.specialRound,matches:draw.specialRound.matches.map((match,i)=>i===matchIndex?update(match):match)};
+    return {...draw,specialRound};
+  }
   const rounds=draw.rounds.map((round,ri)=>ri!==roundIndex?round:{
-    ...round, matches:round.matches.map((match,mi)=>mi!==matchIndex?match:{...match, result:result.winner===null?null:result})
+    ...round,matches:round.matches.map((match,mi)=>mi===matchIndex?update(match):match)
   });
   return {...draw,rounds};
 }
@@ -75,19 +86,56 @@ export function ribbonStandings(t) {
     }
     perRound.push({number:round.number,complete:roundComplete,total:round.matches.length});
   }
+  const complete=completeMatches===totalMatches;
+  const eligible={strong:[],weak:[]},special=spec.special;
+  // Auffüller müssen anhand der NORMALEN Ergebnisse gewählt werden.
+  // Ihre späteren Zusatzspiele verändern weder ihre Quote noch ihre Eignung.
+  if(special&&complete){
+    const excluded=new Set([...special.regularStrong,...special.regularWeak]);
+    for(const p of byId.values()){
+      if(excluded.has(p.id)||p.scheduled!==p.target||p.played<p.target||p.ribbons>1)continue;
+      (p.group==="stark"?eligible.strong:eligible.weak).push({...p});
+    }
+    for(const group of ["strong","weak"])
+      eligible[group].sort((a,b)=>a.ribbons-b.ribbons||a.name.localeCompare(b.name,"de")||a.id.localeCompare(b.id));
+  }
+  const fillerReady=!!special&&complete&&
+    eligible.strong.length>=special.fillerStrong&&eligible.weak.length>=special.fillerWeak;
+  let specialProgress=null;
+  if(draw.specialRound){
+    let specialComplete=0;
+    for(const match of draw.specialRound.matches){
+      const result=normalizeRibbonResult(match.result);
+      if(result.winner===null)continue;
+      specialComplete++;
+      for(let i=0;i<4;i++){
+        if(match.fillerMask[i])continue;
+        const p=byId.get(match.slots[i]);
+        if(!p)throw new Error("Unbekannter Spieler in der Auffüllrunde.");
+        p.played++;
+        const won=(result.winner===1&&i<2)||(result.winner===2&&i>=2);
+        if(won)p.ribbons++;
+        else p.losses++;
+      }
+    }
+    specialProgress={
+      completeMatches:specialComplete,
+      totalMatches:draw.specialRound.matches.length,
+      pendingMatches:draw.specialRound.matches.length-specialComplete,
+      complete:specialComplete===draw.specialRound.matches.length
+    };
+    perRound.push({
+      number:draw.specialRound.number,
+      complete:specialComplete,
+      total:draw.specialRound.matches.length,
+      special:true
+    });
+  }
   const participants=[...byId.values()].map(p=>({...p,quote:p.played?p.ribbons/p.played:0}))
     .sort((a,b)=>b.ribbons-a.ribbons||b.played-a.played||a.name.localeCompare(b.name,"de")||a.id.localeCompare(b.id));
-  const eligible={strong:[],weak:[]},special=spec.special;
-  if(special&&completeMatches===totalMatches){
-    const excluded=new Set([...special.regularStrong,...special.regularWeak]);
-    for(const p of participants){
-      if(excluded.has(p.id)||p.scheduled!==p.target||p.played<p.target||p.ribbons>1)continue;
-      (p.group==="stark"?eligible.strong:eligible.weak).push(p);
-    }
-    for(const group of ["strong","weak"])eligible[group].sort((a,b)=>a.ribbons-b.ribbons||a.name.localeCompare(b.name,"de")||a.id.localeCompare(b.id));
-  }
-  const fillerReady=!!special&&completeMatches===totalMatches&&
-    eligible.strong.length>=special.fillerStrong&&eligible.weak.length>=special.fillerWeak;
-  return {participants,perRound,totalMatches,completeMatches,pendingMatches:totalMatches-completeMatches,
-    complete:completeMatches===totalMatches,special,eligible,fillerReady};
+  return {
+    participants,perRound,totalMatches,completeMatches,pendingMatches:totalMatches-completeMatches,
+    complete,special,eligible,fillerReady,specialProgress,
+    finished:complete&&(!special||!!specialProgress?.complete)
+  };
 }
