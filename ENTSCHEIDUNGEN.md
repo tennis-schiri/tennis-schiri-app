@@ -249,3 +249,10 @@
 - **Nachweis:** CI prüft Syntax/alte Turnierfunktionen sowie echte Registrierungs-, Vereins- und API-Abläufe gegen temporäre MariaDB. Insbesondere Einmal-Links, CSRF, Rate-Limits, fehlende Rechte, Passwort-Reset, Session-Invalidierung und letzte Besitzerrolle.
 - **Nicht Gegenstand der Phase:** Öffentlicher Betrieb, echte Kundenregistrierungen, produktive Datenbank, Spielerdaten-/Turnierimport, Lizenzkäufe, Preise, Zahlungsanbieter oder Online-Nenngeld. Barausgleich des Teilnehmer-Nenngelds beim Verein bleibt bestehen.
 - **Nächste Phase:** Konto- und Vereinsoberfläche bauen und Mailzustellung an einer separat gesicherten ALL-INKL-Staging-Umgebung testen; erst nach positiven Sicherheits-/Datenschutz-/Backup-Tests API einschalten. Danach zentrale Turnierverwaltung und später Zahlungssystem.
+
+## E-028 · B0.2 Konto-UI ausschließlich im getrennten Staging (2026-11-05)
+
+- **Weiterentwicklung:** Die bestehenden API-Routen erhalten eine eigene, mobil nutzbare Oberfläche für Registrierung, Anmelden, Einmal-Link-Bestätigung, Passwort-Reset und Vereins-/Mitgliederverwaltung.
+- **Sicherheitsgrenze:** UI-Dateien bleiben unter `backend/staging-ui/` im privaten Repository und sind nicht Bestandteil der 19-Dateien-FTPS-Allowlist. Keine automatische Veröffentlichung, keine Aktivierung der standardmäßig gesperrten Konto-API.
+- **Integration:** Gleicher HTTPS-Origin und vorhandene serverseitige Session-/Rollen-/CSRF-Prüfung statt clientseitiger Rechtefreigabe. Keine Speicherung von Kennwörtern, Einmal-Tokens oder Sitzungen in LocalStorage.
+- **Freigabe offen:** Separate ALL-INKL-Testdatenbank, verifizierbare E-Mail-Zustellung, Browser-/Sicherheits-/Backup-Tests vor Einladung realer Testnutzer. Keine Produktivregistrierung, keine Lizenzzahlung.
