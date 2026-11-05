@@ -5,6 +5,22 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [Backend B0.2] – Private Registrierung und Vereinsverwaltung (nicht veröffentlicht)
+
+**Stand 2026-11-05:** Backend-Dienste und eine **standardmäßig deaktivierte** HTTP-API im privaten Repository implementiert. API, E-Mail-Kontoseiten und SQL-Migrationen wurden **nicht** in den produktiven Webspace übertragen. Keine öffentliche Registrierung oder TENNILO-Lizenzzahlung aktiv.
+
+### Implementiert
+- Benutzer registrieren sich mit E-Mail und sicher gehashtem Passwort. Konto bleibt bis zur E-Mail-Bestätigung gesperrt; Einmallink kann neu angefordert werden. Login, Logout, 12-Stunden-Sitzung/CSRF-Cookies und Passwort-Reset mit Sitzungswiderruf sind im Backend umgesetzt.
+- Verifizierte Nutzer können einen Verein anlegen: Verein und erstes Besitzer-Mitglied werden atomar gespeichert. Besitzer laden Organisatoren/Leser ein; die Einladung ist nur für das passende E-Mail-Konto gültig und nur einmal verwendbar. Rollen und Vereinsgrenzen werden serverseitig geprüft, der letzte aktive Besitzer kann nicht entfernt oder herabgestuft werden.
+- Geschützte JSON-API mit exakter HTTPS-Origin-Prüfung, CSRF-Schutz, sicheren Cookies, minimalen Fehlerantworten und persistentem HMAC-basiertem Rate-Limit für Registrierungen, Anmeldungen, Mails, Einladungen und Vereinsanlage.
+- SQL-Migration `002_auth_request_limits.sql`, private PHP-Dienste und `backend/public/index.php`, der ohne ausdrückliche Konfiguration (`TENNILO_API_ENABLED=1`) geschlossen bleibt. Optionaler `mail()`-Transport ist technisch vorbereitet, **noch nicht bei ALL-INKL getestet**.
+- CI-Prüfungen inklusive PHP-Syntax, SQL-Struktur, Vereins-/Auth-/API-Integration gegen temporäre MariaDB. [API- und Sicherheitsdokumentation](backend/HTTP_API.md).
+
+### Noch offen
+- Login-/Registrierungs-/Bestätigungs-/Vereinsseiten, nachweislich funktionierender Versand von Bestätigungs- und Einladungsmails, getrennte ALL-INKL-Testinstallation und Browser-End-to-End-Tests.
+- Persistente Vereins-/Turnierdaten, JSON-Migration der bisher lokal gespeicherten Turniere, freigegebene Softwarelizenzen, Zahlungsanbieter, Rechnungserstellung und endgültige Preise.
+- Unverändert: Schleifchenturnier-App v0.6.1 und der manuelle FTPS-Upload; Backend-Dateien werden nicht veröffentlicht. Nenngelder bleiben bar beim Verein.
+
 ## [Backend B0.1] – Vereins- und Kontodatenmodell (noch keine App-Veröffentlichung)
 
 **2026-11-05:** Im privaten Repository umgesetzt; keine neuen Produktivdateien oder Registrierungsseiten veröffentlicht. **Noch keine echten Kundenkonten oder ALL-INKL-Datenbank angelegt.**
