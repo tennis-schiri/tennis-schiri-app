@@ -266,3 +266,12 @@
 - **Speicherung:** Gemeinsames Browser-/JSON-Sicherungsmodell, diskriminiert durch `type: ribbon` bzw. `type: doubles`; keine automatische Migration alter Schleifchen-Ergebnisse.
 - **Validierung:** Fachlich unmögliche Spielzahlen (z. B. bei zu wenigen Gegnern oder ungerader Gesamtbegegnungszahl) werden abgewiesen. Ausgeloste Teams/Anwesenheit nur nach Rücknahme der Auslosung ändern. Nachrücker und Ergebnisfortschreibung konsistent.
 - **Freigabe:** Eigenständige Seite und vier neue Dateien in **manueller** FTPS-Allowlist; **keine Veröffentlichung**. Zuerst CI-/Browser-/Praxistests, dann ausdrücklich freigeben. Keine allgemeine Mehrgeräte-Bearbeitung und noch keine Doppel-Fernanzeige. Fachkonzept [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md).
+
+## E-030 · Gemeinsame Fernanzeige und JSON-Wiederherstellung für Doppelturniere (2026-11-05)
+
+- **Fortsetzung:** Die bestehende Zuschaueransicht wird auch für feste Doppelturniere verwendet. Keine zweite Live-Infrastruktur, keine neue Datenbank und keine öffentliche Registrierung; nur privater GitHub-Code.
+- **Freigabe/Widerruf:** Organisator aktiviert PHP-Fernanzeige bewusst, kopiert Link mit 192-Bit-Leseschlüssel und beendet die Übertragung per Widerruf. Separater Schreibschlüssel verbleibt außerhalb des JSON-Backups im lokalen Browser.
+- **Zuschaueransicht:** Feste Zweierteams, Games, Sieger, Rundenuhr, Siege/Game-Differenz der Rangliste und Top-8-Play-offs. Die vorhandene Monitorseite unterscheidet format: ribbon und format: doubles.
+- **Datenschutz:** Client und PHP erlauben nur öffentliche Anzeigefelder; Nenngelder, Barzahlungen, Anwesenheitslisten und administrative Daten bleiben ausgeschlossen. Bestehender Webspace-Passwortschutz bleibt aktiv.
+- **Sicherung:** Doppelturniere können JSON exportieren und importieren. Beim Import wird ausdrücklich vor dem Ersetzen aller Browser-Turniere gewarnt; Dateigrenze 3 MB; Datenmodell-Schema 1 bleibt kompatibel.
+- **Tests/Freigabe:** Neue doubles-live.test.mjs, doubles-remote-publisher-ui.test.mjs und erweiterte live-feed.test.mjs. Isolierte Live-Darstellungs- und Freigabefunktionen geprüft; vollständige GitHub-CI, PHP- und echte Zweitgeräte-/Browser-Tests noch nicht bestätigt. **Kein FTPS-Upload ausgelöst**, produktive App bleibt v0.6.1.
