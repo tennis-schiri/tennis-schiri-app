@@ -1,11 +1,11 @@
 # TENNILO – Projektstatus
 
 **Stand:** 2026-11-05  
-**Neuer unveröffentlichter Baustein:** B0.2 Konto-/Vereinsoberfläche im separaten `backend/staging-ui/` (kein FTPS-Upload, keine LIVE-Konten).  
+**Neue unveröffentlichte Bausteine:** Doppelturnier v0.7.0 unter `site/doppel.html` und `site/assets/doubles.js`; private B0.2 Konto-/Vereinsoberfläche weiterhin separat unter `backend/staging-ui/`. Keine Veröffentlichung der neuen Version und keine LIVE-Konten.  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.6.1**  
+**Version im GitHub-Code:** **0.7.0 (Doppelturnier hinzugefügt, noch nicht veröffentlicht)**  
 **FTPS-Upload zuletzt bestätigt:** **v0.6.1** – [GitHub Actions Run 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) vom **2026-11-05** erfolgreich; alle App- und Live-Dateien im manuellen FTPS-Job hochgeladen. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
@@ -79,11 +79,22 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 
 **Prüfstand:** Zuletzt bestätigter FTPS-Upload ist **v0.6.1** (Run `42044203175`) vom 2026-11-05. Die Funktion wurde zuvor im automatischen [GitHub-Testlauf 42042177880](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42042177880) mit **116 bestandenen Tests** und PHP-Syntaxprüfung lokal geprüft. **Ein echter ALL-INKL-/Smart-TV-/Zweitgeräte-Funktionstest fehlt weiterhin.** Der PHP-Dienst setzt PHP 8.2+ und beschreibbares Server-Temp-Verzeichnis voraus. Apache-Passwortschutz am externen Viewer bleibt vorläufig aktiv. Keine Freigabe für reale Turniere und keine Cloud-Mehrgeräte-Bearbeitung.
 
+## Doppelturnier v0.7.0 – neuer lokaler Modus, noch nicht veröffentlicht
+
+- [x] Eigene Doppelturnieroberfläche `site/doppel.html` und integrierter Zugang über die Hauptstartseite. Alte Turniere sind standardmäßig `type: ribbon`, neue Doppelturniere `type: doubles`; beide verbleiben im gemeinsamen JSON-/Browser-Sicherungssystem.
+- [x] Feste Zweierteams mit Anwesenheitskontrolle, Bar-Nenngeld pro Spieler (normal/ermäßigt), individuell gezahlten Beträgen und Korrekturen; Namen/Anwesenheit während bestehender Auslosung geschützt.
+- [x] Vorrunde mit 1–8 Spielen je Team (Standard 4), auch bei ungerader Teamzahl, soweit mathematisch lösbar; kein doppeltes Gegnerpaar, keine gleichzeitigen Teameinsätze, frei wählbare Plätze.
+- [x] Zeitblöcke, Start-/Endzeiten, Wechselpause, Rundenuhr, Game-Ergebnisse und Entscheidungspunkte mit expliziter Siegerauswahl.
+- [x] Livetabelle nach Siegen → Game-Differenz → Games+; Top-8-Play-offs mit Abwahl/Nachrücken, Viertel-/Halbfinale, Finale und Spiel um Platz 3; abhängige Ergebnisse werden bei Paarungsänderung gelöscht.
+- [x] `tests/doubles.test.mjs`: 18 Logikfälle im isolierten JavaScript-Testlauf bestanden. Syntax der neuen Module überprüft. `tests/doubles-ui.test.mjs` für Oberflächen-/Deployregression im Repository.
+- [ ] GitHub Actions gesamte CI, manuelle PC-/Mobilgerät-Browsertests und ALL-INKL-Funktionstests der Doppelvariante sind **noch offen**. Keine öffentlichen Konten, kein Datenbank-Mehrgerätebetrieb und keine eigenständige Doppel-Fernanzeige. Detailkonzept: [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md).
+- [ ] **Veröffentlichung:** Noch **kein** FTPS-Upload von v0.7.0 durchgeführt; neue vier Seiten-/Moduldateien nur in die explizite manuelle Allowlist aufgenommen. v0.6.1 ist der zuletzt bestätigte Upload.
+
 ## Nicht implementiert
 
-- [ ] Eigenständiger Doppelturniermodus und One Point Cup (Schleifchenturnier-Endrunde mit v0.4.0 veröffentlicht; erster positiver Funktionseindruck)
+- [ ] One Point Cup (als dritte Turnierart geplant); Doppelturnier v0.7.0 im GitHub-Code als Testversion umgesetzt, noch nicht hochgeladen
 - [ ] Vollständige zentrale Mehrgeräte-Datenbank und gemeinsame Turnierbearbeitung (die **lesende** PHP-Fernanzeige der Spielstände ist in v0.6.1 implementiert und wartet auf den Webhosting-Praxistest)
-- [ ] Eigenständige Verwaltung von Doppelturnieren mit dauerhaft festen Teams über alle Turnierrunden
+- [x] Doppelturnier v0.7.0: feste Zweierteams, Auslosung, Anwesenheit/Bar-Nenngeld, Game-Ergebnisse, Livetabelle, Top-8-Play-offs und lokale Spieluhr im privaten GitHub-Code; noch nicht veröffentlicht
 - [ ] Server-Datenbank, Benutzerkonten, Rollen/Rechte, Mehrgeräte-Synchronisierung
 - [ ] Mehrbenutzerbetrieb, Backups auf Serverebene, Datenschutz- und Sicherheitsfreigabe
 - [ ] Automatisierte Browser-/Integrationstests
@@ -100,12 +111,12 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Für v0.6.1 vorgesehene Upload-Dateien | 19 ausdrücklich freigegebene Dateien: `site/index.html`, `site/live.html`, `site/live-feed.php`, `site/favicon.png` sowie `site/assets/styles.css`, `storage.js`, `draw.js`, `results.js`, `special.js`, `finals.js`, `finals-ui.js`, `operations.js`, `operations-ui.js`, `app.js`, `live.css`, `live-model.js`, `live-ui.js`, `live.js`, `remote-live.js` |
+| Bisher live v0.6.1, neue v0.7.0-Upload-Allowlist | 23 ausdrücklich freigegebene Dateien (alte 19 plus `site/doppel.html`, `site/assets/doppel.css`, `doppel-ui.js`, `doubles.js`; noch nicht hochgeladen). Frühere Liste: `site/index.html`, `site/live.html`, `site/live-feed.php`, `site/favicon.png` sowie `site/assets/styles.css`, `storage.js`, `draw.js`, `results.js`, `special.js`, `finals.js`, `finals-ui.js`, `operations.js`, `operations-ui.js`, `app.js`, `live.css`, `live-model.js`, `live-ui.js`, `live.js`, `remote-live.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
 
-**Wichtig:** Der Workflow lädt ausschließlich 19 explizit freigegebene Dateien einschließlich Monitorseite und Live-Modulen hoch, ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
+**Wichtig:** Der Workflow lädt ausschließlich 23 explizit freigegebene Dateien einschließlich der neuen Doppelturnier-Seite, Monitorseite und Live-Modulen hoch (erst nach manuellem Start), ersetzt nicht `.htaccess` und löscht keine anderen Dateien. Die ursprüngliche ALL-INKL-`index.htm` kann noch bestehen; die App deshalb zunächst explizit mit `/index.html` öffnen. Passwortschutz nicht entfernen. Die Hauptwebsite `tennis-schiri.de` bleibt davon getrennt.
 
 ## SaaS-Backend, Registrierung und Abrechnung – B0.1/B0.2 im Repository
 
@@ -126,6 +137,10 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Zunächst S
 - Fachliche Reihenfolge: B0.1 und privater B0.2-Code **erledigt** → B0.2 Konto-UI als Prototyp **erledigt** → Staging-/Mail-/Browser-Prüfung → B0.3 serverseitige Turniere mit JSON-Import → Lizenzprüfung und Pilotzugang → Checkout/Rechnung/Zahlungen → Pilotbetrieb; den geräteübergreifenden v0.6.1-Live-Monitor parallel im Browser prüfen. Bis dahin keine Freigabe für echten SaaS-Vertrieb.
 
 ## Nächster sinnvoller Entwicklungsschritt
+
+**Priorität nach Nutzerentscheidung 2026-11-05:** ALL-INKL-Staging und Benutzerregistrierung zunächst zurückstellen; jetzt zuerst den Doppelturniermodus als nächste Turnierart entwickeln und prüfen. Die Implementation v0.7.0 liegt im GitHub-Code. Nächste Aufgabe ist die *vollständige* CI-/Browsertest- und Release-Prüfung des Doppelmodus; kein ungefragter FTPS-Upload. Anschließend bei Bedarf Doppel-Fernanzeige und später One Point Cup.
+
+### Aufgeschobene Backend-/Staging-Aufgaben
 
 1. **Getrennte ALL-INKL-Testumgebung prüfen:** Verfügbarkeit von PHP 8.2+, PDO-MySQL, Datenbank, sicheren privaten Verzeichnissen, Mailversand, Sicherung und ggf. CLI/SSH im konkreten Tarif klären. Keine Zugangsdaten ins Repository oder in den Chat schreiben.
 2. **B0.2-Oberfläche im echten Browser prüfen:** Der isolierte Prototyp unter `backend/staging-ui/` ist erstellt. Konto-/Anmeldeseiten, E-Mail-Bestätigung, Passwort-Reset, Vereinsanlage, Mitgliedereinladungen und Rollen sind mit den privaten API-Routen verdrahtet. Als Nächstes sind sichere Testinstallation und Browser-E2E-Prüfung nötig; `TENNILO_API_ENABLED` bleibt ausgeschaltet.
