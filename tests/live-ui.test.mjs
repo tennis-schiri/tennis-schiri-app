@@ -29,6 +29,40 @@ test("Personen und Turniernamen werden sicher maskiert",()=>{
   assert.match(html,/&lt;script&gt;/);
   assert.match(html,/&lt;img/);
 });
+test("Kompakte nächste Runde wird gezeigt, die Livetabelle bleibt immer im Layout",()=>{
+  const x=sample();
+  x.matches=[...x.matches,...x.matches.map((m,i)=>({...m,number:i+3})),
+    {...x.matches[0],number:5},{...x.matches[1],number:6}];
+  x.nextRound={title:"Runde 2",plannedStart:"10:30",
+    matches:[{court:"Platz 1",left:["Alex","Lea"],right:["Pat","Kim"]},
+      {court:"Platz 2",left:["Sven","Mika"],right:["Chris","Tom"]}]};
+  const html=renderLiveScreen(x);
+  assert.match(html,/live-matches-dense/);
+  assert.match(html,/Nächste Runde: Runde 2/);
+  assert.match(html,/10:30 Uhr/);
+  assert.match(html,/live-rankings/);
+  assert.match(html,/Schleifchen-Stand/);
+  assert.equal((html.match(/class="live-next-match"/g)||[]).length,2);
+});
+
+test("Nicht ausgeloste nächste Runde erzeugt keine Platzhalter oder leere Vorschau",()=>{
+  const x=sample();
+  x.nextRound=null;
+  const html=renderLiveScreen(x);
+  assert.doesNotMatch(html,/Nächste Runde:/);
+  assert.match(html,/Schleifchen-Stand/);
+});
+
+test("Nächste Paarung escaped auch HTML-ähnliche Teamnamen",()=>{
+  const x=sample();
+  x.nextRound={title:'<img src=x onerror="x">',plannedStart:"10:30",
+    matches:[{court:"Platz <5>",left:["<script>x</script>","Alex"],right:["Lea","Kim"]}]};
+  const html=renderLiveScreen(x);
+  assert.doesNotMatch(html,/<img|<script/);
+  assert.match(html,/&lt;script&gt;/);
+  assert.match(html,/&lt;img/);
+});
+
 test("Wartebild zeigt neutrale Hinweise und keinerlei alte Partien",()=>{
   const html=renderLiveScreen({mode:"waiting",message:"Noch keine Auslosung"});
   assert.match(html,/Warten auf die Auslosung/);
