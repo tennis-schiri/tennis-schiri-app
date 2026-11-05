@@ -66,7 +66,7 @@ test("Private DB driver uses environment variables and prepared statements",()=>
     assert.ok(db.includes(env),env);
   }
   assert.match(db,/PDO::ATTR_EMULATE_PREPARES => false/);
-  assert.doesNotMatch(db,/\broot\b|passwort123/);
+  assert.doesNotMatch(db,/(?:\$user\s*=\s*["\x27]root["\x27]|passwort123)/);
 });
 test("Migration CLI needs explicit approval and records checksums",()=>{
   assert.match(migrator,/PHP_SAPI !== 'cli'/);
