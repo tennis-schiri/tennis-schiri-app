@@ -283,3 +283,14 @@
 - **Turnierarten:** Gemeinsame Live-Anzeige für Schleifchen und feste Doppel. Vorrunden zeigen die tatsächlich vorhandene nächste Runde; in der K.-o.-Phase nur feststehende nächste Paarungen. Keine vorgetäuschten Begegnungen.
 - **Sicherheit:** Nächste Paarungen durch denselben datensparsamen PHP-Allowlist-Filter; keine Nenngelder, Anwesenheitslisten oder vollständige Turnierdateien. Lokal und per Opt-in-Zuschauer-Link.
 - **Freigabe:** Nur GitHub-Code, **kein Upload**. Neue Tests für Next-Round, 6-Platz-Raster, Maskierung und PHP-Feldfilter; vollständige CI/Praxistests vor Veröffentlichung offen.
+
+## E-032 · One Point Cup als dritte eigenständige Turnierart (2026-11-05)
+
+- **Fachquelle:** Unveränderte vorhandene Google-Tabelle „Turniere Verein – Auslosung & Livetabelle“, Reiter OPC-Spieler (max. 64, Standardfeld 32, Importoptionen) und One Point Cup (K.-o.-Tableau bis Finale).
+- **Wertung:** Je K.-o.-Begegnung reicht ein einzelner Punkt zur Siegerentscheidung. Keine Games/Sätze. Unterliegende Person scheidet aus, gewinnende Person rückt im Tableau weiter.
+- **Felder:** Feldgrößen 2, 4, 8, 16, 32 (Standard) oder 64. Nicht volle Felder erzeugen echte Freilose. Bei zu wenigen Spielern die Feldgröße reduzieren, damit nicht alle in der ersten Runde ausschließlich Freilos haben. Noch offene Vorgängermatches dürfen nicht als Freilos interpretiert werden.
+- **Spielerverwaltung:** Separate OPC-Spielerliste mit Anwesenheit und individuellem bar erhaltenem Nenngeld (Standard/Jugend). Auf Wunsch anwesende Spieler aus vorhandenen Schleifchen-/Doppelturnieren importieren, ohne bestehende Barzahlungen zu übernehmen.
+- **Korrekturen:** Ein-Punkt-Sieger kann geändert oder zurückgenommen werden; ungültige Folgeergebnisse müssen verschwinden. Spielerliste nach Auslosung gesperrt, Kasse weiterhin änderbar. Gesamtes Tableau lässt sich nach Bestätigung zurücksetzen.
+- **Datenmodell:** Neues type: opc sowie opc: {players,fieldSize,draw}; bei alten Sicherungen unverändert type: ribbon. Gemeinsame lokale Browser-Sicherung/JSON-Schema-Version 1 für alle drei Formate.
+- **Umsetzung v0.8.0:** Private One-Point-Oberfläche (opc.html, one-point-ui.js/css), Fachlogik (one-point.js) und Tests one-point.test.mjs / one-point-ui.test.mjs. Zunächst keine eigene Live-Fernanzeige für One Point Cup.
+- **Freigabe:** GitHub-Stand, **keine automatische Veröffentlichung**. Manuelle FTPS-Allowlist von 23 auf 27 Dateien erweitert, aber kein Upload ausgelöst. 16 Fachtests und simulierte Demo-Bedienung isoliert bestanden; vollständige CI-/Browser-/ALL-INKL-Tests offen. Backend-Staging bleibt zurückgestellt.
