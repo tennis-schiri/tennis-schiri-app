@@ -57,8 +57,35 @@ const normalizeClocks=v=>{
   return clocks;
 };
 
+const feeCategoriesOf=(list,standardCents)=>{
+  const categories=[{id:"standard",name:"Standard",amountCents:standardCents}];
+  if(!Array.isArray(list))return categories;
+  const usedNames=new Set();
+  const standard=list.find(x=>x?.id==="standard");
+  if(standard){
+    categories[0]={
+      id:"standard",
+      name:text(standard.name,40)||"Standard",
+      amountCents:money(standard.amountCents,standardCents)
+    };
+  }
+  usedNames.add(categories[0].name.toLocaleLowerCase("de-DE"));
+  const ids=new Set(["standard"]);
+  for(const x of list){
+    if(categories.length>=20)break;
+    const id=String(x?.id??"");
+    const name=text(x?.name,40);
+    if(!/^[a-z0-9_-]{1,80}$/i.test(id)||ids.has(id)||!name)continue;
+    if(usedNames.has(name.toLocaleLowerCase("de-DE")))continue;
+    categories.push({id,name,amountCents:money(x.amountCents)});
+    ids.add(id);
+    usedNames.add(name.toLocaleLowerCase("de-DE"));
+  }
+  return categories;
+};
 export function normalizeTournament(v) {
   const courts = courtsOf(v.courts);
+  const categories=feeCategoriesOf(v.feeCategories,money(v.entryFeeCents));
   return {
     id: text(v.id, 80) || uid(),
     name: text(v.name) || "Unbenanntes Turnier",
@@ -67,7 +94,8 @@ export function normalizeTournament(v) {
     duration: integer(v.duration, 10, 120, 20),
     breakMinutes: integer(v.breakMinutes, 0, 60, 10),
     rounds: integer(v.rounds, 1, 8, 4),
-    entryFeeCents: money(v.entryFeeCents),
+    entryFeeCents: categories[0].amountCents,
+    feeCategories:categories,
     roundClocks: normalizeClocks(v.roundClocks),
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
@@ -85,6 +113,7 @@ export function normalizeTournament(v) {
       name: text(p.name, 80),
       group: p.group === "stark" ? "stark" : "schwaecher",
       present: p.present === true,
+      feeTierId:categories.some(x=>x.id===p.feeTierId)?p.feeTierId:"standard",
       feeOverrideCents: p.feeOverrideCents==null ? null : money(p.feeOverrideCents),
       feePaidCents: money(p.feePaidCents),
       feePaidAt: typeof p.feePaidAt==="string"&&p.feePaidAt.length<=35 ? p.feePaidAt : null
@@ -98,6 +127,7 @@ export function newTournament(values = {}) {
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
+    feeCategories:values.feeCategories,
     roundClocks: {}, draw: null, participants: []
   });
 }
@@ -136,8 +166,53 @@ export class BrowserTournamentStore {
     return tournament;
   }
   editTournament(id, patch) {
-    this.save({ ...this.state, tournaments: this.list().map(t => t.id === id
-      ? normalizeTournament({ ...t, ...patch, participants: t.participants }) : t) });
+    this.save({ ...this.state, tournaments: this.list().map(t => {
+      if(t.id!==id)return t;
+      // Das bisherige Standard-Nenngeld bleibt in älteren Formularen bearbeitbar.
+      const categories=Object.prototype.hasOwnProperty.call(patch,"entryFeeCents")&&
+        !Object.prototype.hasOwnProperty.call(patch,"feeCategories")?
+        t.feeCategories.map(x=>x.id==="standard"?{...x,amountCents:patch.entryFeeCents}:x):
+        (patch.feeCategories??t.feeCategories);
+      return normalizeTournament({ ...t, ...patch,feeCategories:categories,participants:t.participants });
+    }) });
+  }
+  upsertFeeCategory(tournamentId,{id=null,name,amountCents}){
+    const current=this.list().find(t=>t.id===tournamentId);
+    if(!current)throw Error("Turnier nicht gefunden.");
+    const title=text(name,40);
+    if(!title||String(name??"").trim().length>40)throw Error("Bitte einen Kategorienamen mit maximal 40 Zeichen eingeben.");
+    if(!Number.isSafeInteger(amountCents)||amountCents<0||amountCents>9999999)
+      throw Error("Ungültiger Nenngeldbetrag.");
+    const categories=current.feeCategories;
+    if(categories.some(c=>c.id!==id&&c.name.toLocaleLowerCase("de-DE")===title.toLocaleLowerCase("de-DE")))
+      throw Error("Eine Nenngeld-Kategorie mit diesem Namen gibt es bereits.");
+    const found=id&&categories.find(c=>c.id===id);
+    if(id&&!found)throw Error("Nenngeld-Kategorie nicht gefunden.");
+    if(!id&&categories.length>=20)throw Error("Maximal 20 Nenngeld-Kategorien pro Turnier.");
+    const nextId=id||("tier_"+uid().replace(/[^a-zA-Z0-9_-]/g,"").slice(0,70));
+    const next=found?categories.map(c=>c.id===id?{...c,name:title,amountCents}:c):
+      [...categories,{id:nextId,name:title,amountCents}];
+    this.editTournament(tournamentId,{feeCategories:next,entryFeeCents:next[0].amountCents});
+    return nextId;
+  }
+  removeFeeCategory(tournamentId,id){
+    const current=this.list().find(t=>t.id===tournamentId);
+    if(!current)throw Error("Turnier nicht gefunden.");
+    if(!id||id==="standard")throw Error("Die Standard-Kategorie kann nicht entfernt werden.");
+    if(!current.feeCategories.some(c=>c.id===id))throw Error("Kategorie nicht gefunden.");
+    if(current.participants.some(p=>p.feeTierId===id))
+      throw Error("Diese Kategorie ist noch Spielern zugeordnet. Bitte zuerst deren Nenngeld-Kategorie ändern.");
+    this.editTournament(tournamentId,{feeCategories:current.feeCategories.filter(c=>c.id!==id)});
+  }
+  setParticipantFeeTier(tournamentId,participantId,tierId){
+    const current=this.list().find(t=>t.id===tournamentId);
+    if(!current?.feeCategories.some(c=>c.id===tierId))throw Error("Nenngeld-Kategorie nicht gefunden.");
+    if(!current.participants.some(p=>p.id===participantId))throw Error("Teilnehmer nicht gefunden.");
+    this.save({...this.state,tournaments:this.list().map(t=>t.id!==tournamentId?t:{
+      ...t,participants:t.participants.map(p=>p.id!==participantId?p:{
+        ...p,feeTierId:tierId,feeOverrideCents:null
+      })
+    })});
   }
   deleteTournament(id) {
     const tournaments = this.list().filter(t => t.id !== id);
@@ -159,6 +234,9 @@ export class BrowserTournamentStore {
       name,
       group: values.group === "stark" ? "stark" : "schwaecher",
       present: values.present === true,
+      feeTierId:Object.prototype.hasOwnProperty.call(values,"feeTierId")?
+        (current.feeCategories.some(c=>c.id===values.feeTierId)?values.feeTierId:"standard"):
+        (old?.feeTierId||"standard"),
       feeOverrideCents: Object.prototype.hasOwnProperty.call(values,"feeOverrideCents")
         ? (values.feeOverrideCents==null ? null : money(values.feeOverrideCents))
         : (old?.feeOverrideCents??null),
