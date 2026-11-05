@@ -45,6 +45,10 @@ export function normalizeTournament(v) {
     rounds: integer(v.rounds, 1, 8, 4),
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
+    // Endrunden-Optionen bleiben unabhängig von der Auslosung im Turnier gespeichert.
+    finalSize: [8,16].includes(Number(v.finalSize)) ? Number(v.finalSize) : 8,
+    finalOptOut: Array.isArray(v.finalOptOut) ?
+      [...new Set(v.finalOptOut.map(id=>text(id,80)).filter(Boolean))].slice(0,500) : [],
     // Auslosungen werden pro Turnier gespeichert. Die Signatur verhindert, dass ein
     // alter Plan nach Teilnehmer-/Platzänderungen als gültig dargestellt wird.
     draw: v.draw && typeof v.draw === "object" && !Array.isArray(v.draw) &&
@@ -63,7 +67,8 @@ export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
-    rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels, draw: null, participants: []
+    rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
+    finalSize: values.finalSize ?? 8, finalOptOut: [], draw: null, participants: []
   });
 }
 
