@@ -33,6 +33,30 @@ const courtLabelsOf = (v, courts) => {
   return labels;
 };
 
+// Organisation: Zahlungen nur als manuell erfasste BAR-Beträge; laufende
+// Rundenuhren als echte Zeitstempel für Reload / anderen Browser-Tab sichern.
+const money=(v,fallback=0)=>integer(v,0,9999999,fallback);
+const normalizeClocks=v=>{
+  const clocks=Object.create(null);
+  if(!v||typeof v!=="object"||Array.isArray(v))return clocks;
+  for(const [key,item] of Object.entries(v).slice(0,21)){
+    if(!/^(?:0|[1-9]\\d?)$/.test(key)||Number(key)>=21||!item||typeof item!=="object")continue;
+    const first=Number(item.firstStartedAt),start=item.startedAt==null?null:Number(item.startedAt);
+    const finished=item.finishedAt==null?null:Number(item.finishedAt);
+    if(!Number.isSafeInteger(first)||first<=0||
+       start!==null&&(!Number.isSafeInteger(start)||start<first)||
+       finished!==null&&(!Number.isSafeInteger(finished)||finished<first))continue;
+    clocks[key]={
+      firstStartedAt:first,
+      startedAt:finished===null?start:null,
+      finishedAt:finished,
+      elapsedMs:integer(item.elapsedMs,0,604800000,0),
+      durationMs:integer(item.durationMs,600000,7200000,1200000)
+    };
+  }
+  return clocks;
+};
+
 export function normalizeTournament(v) {
   const courts = courtsOf(v.courts);
   return {
@@ -43,6 +67,8 @@ export function normalizeTournament(v) {
     duration: integer(v.duration, 10, 120, 20),
     breakMinutes: integer(v.breakMinutes, 0, 60, 10),
     rounds: integer(v.rounds, 1, 8, 4),
+    entryFeeCents: money(v.entryFeeCents),
+    roundClocks: normalizeClocks(v.roundClocks),
     courts,
     courtLabels: courtLabelsOf(v.courtLabels, courts),
     // Endrunden-Optionen bleiben unabhängig von der Auslosung im Turnier gespeichert.
@@ -58,7 +84,10 @@ export function normalizeTournament(v) {
       id: text(p.id, 80) || uid(),
       name: text(p.name, 80),
       group: p.group === "stark" ? "stark" : "schwaecher",
-      present: p.present === true
+      present: p.present === true,
+      feeOverrideCents: p.feeOverrideCents==null ? null : money(p.feeOverrideCents),
+      feePaidCents: money(p.feePaidCents),
+      feePaidAt: typeof p.feePaidAt==="string"&&p.feePaidAt.length<=35 ? p.feePaidAt : null
     })).filter(p => p.name) : []
   };
 }
@@ -68,7 +97,8 @@ export function newTournament(values = {}) {
     id: uid(), name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
-    finalSize: values.finalSize ?? 8, finalOptOut: [], draw: null, participants: []
+    finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
+    roundClocks: {}, draw: null, participants: []
   });
 }
 
@@ -123,17 +153,33 @@ export class BrowserTournamentStore {
       throw new Error("Dieser Name ist im Turnier bereits vorhanden.");
     }
     if (!participantId && current.participants.length >= 500) throw new Error("Maximal 500 Teilnehmende pro Turnier.");
+    const old=current.participants.find(p=>p.id===participantId);
     const player = {
       id: participantId || uid(),
       name,
       group: values.group === "stark" ? "stark" : "schwaecher",
-      present: values.present === true
+      present: values.present === true,
+      feeOverrideCents: values.feeOverrideCents==null ? (old?.feeOverrideCents??null) :
+        money(values.feeOverrideCents),
+      feePaidCents: old?.feePaidCents||0,
+      feePaidAt: old?.feePaidAt||null
     };
     const participants = participantId
       ? current.participants.map(p => p.id === participantId ? player : p)
       : [...current.participants, player];
     const amended = this.list().map(t => t.id === tournamentId ? { ...t, participants } : t);
     this.save({ ...this.state, tournaments: amended });
+  }
+  recordCashPayment(tournamentId,participantId,paidCents) {
+    if(!Number.isInteger(paidCents)||paidCents<0||paidCents>9999999)
+      throw Error("Ungültiger Barbetrag.");
+    const tournament=this.list().find(t=>t.id===tournamentId);
+    if(!tournament?.participants.some(p=>p.id===participantId))throw Error("Teilnehmer nicht gefunden.");
+    this.save({...this.state,tournaments:this.list().map(t=>t.id!==tournamentId?t:{
+      ...t,participants:t.participants.map(p=>p.id!==participantId?p:{
+        ...p,feePaidCents:paidCents,feePaidAt:paidCents>0?new Date().toISOString():null
+      })
+    })});
   }
   removeParticipant(tournamentId, participantId) {
     this.save({ ...this.state, tournaments: this.list().map(t => t.id === tournamentId
