@@ -1,6 +1,6 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=031";
-import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=031";
-import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=031";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=032";
+import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=032";
+import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=032";
 
 const store = new BrowserTournamentStore();
 const root = document.getElementById("app");
