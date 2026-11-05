@@ -100,7 +100,7 @@
 - Hostingarchitektur der endgültigen Benutzerkonten
 - Turnierübergreifende Vorlagen und Vereinsverwaltung
 
-**Neue Entscheidung ergänzen:** `E-027 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
+**Neue Entscheidung ergänzen:** `E-028 · [Titel]` mit Datum, Anlass, Entscheidung, Begründung, technischen Auswirkungen und offenen Fragen. Änderungen an einer bestehenden Entscheidung ausdrücklich vermerken.
 
 ## E-015 · Schleifchen-Auslosung und Auffüllerprinzip (2026-11-05)
 
@@ -238,3 +238,14 @@
 - **Technische Tests:** PHP-Unit-/Rollenprüfungen, SQL-Strukturregression und echter MariaDB-Integrationstest in temporärer GitHub-Actions-Datenbank; dort niemals Produktiv-Credentials oder echte Kundendaten verwenden.
 - **Preis- und Zahlungsentscheidung ausdrücklich offen:** Bisherige Zahlen 14,90 € pro Turnier und 99 €/Jahr sind Ideenvorschläge, **keine verbindlichen Preise**. Zunächst kein Online-Nenngeld: Turnierteilnehmer zahlen beim Verein weiterhin bar. Softwarelizenz-Zahlungen an TENNILO werden später getrennt verarbeitet.
 - **Nächster Schritt B0.2:** Server-API für Registrierung mit bestätigter E-Mail, Login/Logout/Passwort-Reset, sichere Sitzungen, Vereine anlegen/erste Besitzerrolle atomar und weitere Organisatoren per Einladungslink. Vor echten Nutzern Datenschutz, Backups/Restore, Rechte-/CSRF-/Rate-Limit-Tests und Produktionskonfiguration sicherstellen.
+
+## E-027 · B0.2: Registrierung und Vereine als gesperrte, testbare API (2026-11-05)
+
+- **Anlass:** Nach B0.1 fordert der Nutzer die Fortsetzung des Backend-Ausbaus. Erste Zielstufe ist ein serverseitiges Benutzersystem mit Vereinen und Rollen. Bestehende Schleifchenturnier-App und Live-Anzeige bleiben unverändert.
+- **Implementiert im privaten Backend:** Registration mit Passwort-Hashing und gesperrtem Konto bis zur Mailbestätigung, erneute Bestätigungsmail, Login/Logout, 12-Stunden-Sessions, Passwort-Reset samt Widerruf alter Sitzungen. Verifikation, Session, Reset und Einladung verwenden 256-Bit-Zufallstoken, die ausschließlich gehasht in MariaDB gespeichert werden.
+- **Vereine:** Erstbesitzer-Mitgliedschaft und Verein werden in derselben Datenbanktransaktion erstellt; verifizierter Benutzer kann mehreren Vereinen angehören. Besitzer können Organisatoren/Leser einladen, deren Rollenzuweisung ändern und Mitglieder entfernen. Fremde Konten können fremde Einladungstoken nicht annehmen; letzter aktiver Besitzer ist vor Entfernung/Herabstufung geschützt.
+- **API-Grenze:** `backend/src/ApiKernel.php` bietet vorbereitete JSON-Routen. Mutationen erfordern exakt erlaubten HTTPS-Origin und für angemeldete Sitzungen einen validen CSRF-Header; Cookies `Secure`, `HttpOnly` (Session), `SameSite=Strict`, Host-Prefix. Persistente Limits durch `RateLimiter` und Migration `002_auth_request_limits.sql` verwenden HMAC-Schlüssel statt Klartext-IP/E-Mail.
+- **Betriebsschutz:** `backend/public/index.php` ist ohne `TENNILO_API_ENABLED=1` geschlossen und wird **nicht** vom bisherigen FTPS-Workflow verteilt. Die gesamte Backend-Codebasis wird nicht auf dem produktiven Webroot installiert. PHP-Mailtransport ist nur optional vorbereitet; reale ALL-INKL-Zustellung, Konto-UI, Staging und Datenschutzprüfungen fehlen.
+- **Nachweis:** CI prüft Syntax/alte Turnierfunktionen sowie echte Registrierungs-, Vereins- und API-Abläufe gegen temporäre MariaDB. Insbesondere Einmal-Links, CSRF, Rate-Limits, fehlende Rechte, Passwort-Reset, Session-Invalidierung und letzte Besitzerrolle.
+- **Nicht Gegenstand der Phase:** Öffentlicher Betrieb, echte Kundenregistrierungen, produktive Datenbank, Spielerdaten-/Turnierimport, Lizenzkäufe, Preise, Zahlungsanbieter oder Online-Nenngeld. Barausgleich des Teilnehmer-Nenngelds beim Verein bleibt bestehen.
+- **Nächste Phase:** Konto- und Vereinsoberfläche bauen und Mailzustellung an einer separat gesicherten ALL-INKL-Staging-Umgebung testen; erst nach positiven Sicherheits-/Datenschutz-/Backup-Tests API einschalten. Danach zentrale Turnierverwaltung und später Zahlungssystem.
