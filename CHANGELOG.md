@@ -5,6 +5,12 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [Backend B0.2 UI-Prototyp] – Konto- und Vereinsoberflächen (nicht veröffentlicht)
+
+**2026-11-05:** Unter `backend/staging-ui/` eine eigenständige, responsive Kontoseite im TENNILO-Farbschema erstellt. Sie bedient die bestehende private Konto-/Vereins-API: Registrierung, Mail-Bestätigung und erneuter Link, Login/Logout, Passwort-Reset, Verein anlegen/wechseln, Mitglieder lesen, Einladungen versenden/annehmen sowie Rollenänderung/Entfernen durch Besitzer. Einmal-Link-Tokens werden aus dem Browser-URL-Fragment entfernt; keine Credentials im Browser-Speicher; Darstellung untrusted Daten als Text.
+
+Neue Sicherheits-/Syntaxregressionen unter `tests/account-staging-ui.test.mjs`. Die vier UI-Dateien sind **nicht** in der 19-Dateien-Allowlist des manuellen FTPS-Deployments. Staging-Datenbank, Mailzustellung und echte Browser-End-to-End-Tests fehlen weiterhin; API standardmäßig deaktiviert. **Keine Veröffentlichung, keine Freischaltung für reale Benutzer.** [Staging-UI-Dokumentation](backend/staging-ui/README.md).
+
 ## [Backend B0.2] – Private Registrierung und Vereinsverwaltung (nicht veröffentlicht)
 
 **Stand 2026-11-05:** Backend-Dienste und eine **standardmäßig deaktivierte** HTTP-API im privaten Repository implementiert. API, E-Mail-Kontoseiten und SQL-Migrationen wurden **nicht** in den produktiven Webspace übertragen. Keine öffentliche Registrierung oder TENNILO-Lizenzzahlung aktiv.
@@ -17,7 +23,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - CI-Prüfungen inklusive PHP-Syntax, SQL-Struktur, Vereins-/Auth-/API-Integration gegen temporäre MariaDB. [API- und Sicherheitsdokumentation](backend/HTTP_API.md).
 
 ### Noch offen
-- Login-/Registrierungs-/Bestätigungs-/Vereinsseiten, nachweislich funktionierender Versand von Bestätigungs- und Einladungsmails, getrennte ALL-INKL-Testinstallation und Browser-End-to-End-Tests.
+- Bereits als isolierter unveröffentlichter Prototyp erstellte Login-/Registrierungs-/Bestätigungs-/Vereinsseiten benötigen noch Browser-E2E-Tests; nachweislich funktionierender Versand von Bestätigungs- und Einladungsmails, getrennte ALL-INKL-Testinstallation und Browser-End-to-End-Tests.
 - Persistente Vereins-/Turnierdaten, JSON-Migration der bisher lokal gespeicherten Turniere, freigegebene Softwarelizenzen, Zahlungsanbieter, Rechnungserstellung und endgültige Preise.
 - Unverändert: Schleifchenturnier-App v0.6.1 und der manuelle FTPS-Upload; Backend-Dateien werden nicht veröffentlicht. Nenngelder bleiben bar beim Verein.
 
