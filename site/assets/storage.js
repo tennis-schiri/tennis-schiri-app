@@ -107,13 +107,33 @@ const doublesOf=(value,categories)=>{
     [...new Set(raw.playoffOptOut.map(id=>text(id,80)).filter(Boolean))].slice(0,100):[]};
 };
 
+// One Point Cup: eigenes Teilnehmerfeld, Freilose und K.-o.-Tableau.
+const onePointOf=(value,categories)=>{
+  const raw=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+  const allowed=new Set(categories.map(x=>x.id));
+  const players=(Array.isArray(raw.players)?raw.players:[]).slice(0,64).map(player=>({
+    id:text(player?.id,80)||uid(),
+    name:text(player?.name,80),
+    present:player?.present===true,
+    feeTierId:allowed.has(player?.feeTierId)?player.feeTierId:"standard",
+    paidCents:money(player?.paidCents)
+  })).filter(player=>player.name);
+  const size=[2,4,8,16,32,64].includes(Number(raw.fieldSize))?Number(raw.fieldSize):32;
+  const draw=raw.draw?.format==="one-point-v1"&&
+    typeof raw.draw.signature==="string"&&raw.draw.signature.length<12000&&
+    Array.isArray(raw.draw.rounds)&&raw.draw.rounds.length<=6&&
+    raw.draw.rounds.every(r=>Array.isArray(r)&&r.length<=32)?raw.draw:null;
+  return {players,fieldSize:size,draw};
+};
+
 export function normalizeTournament(v) {
   const courts = courtsOf(v.courts);
   const categories=feeCategoriesOf(v.feeCategories,money(v.entryFeeCents));
   return {
     id: text(v.id, 80) || uid(),
-    type:v.type==="doubles"?"doubles":"ribbon",
+    type:v.type==="doubles"?"doubles":v.type==="opc"?"opc":"ribbon",
     doubles:doublesOf(v.doubles,categories),
+    opc:onePointOf(v.opc,categories),
     name: text(v.name) || "Unbenanntes Turnier",
     date: /^\d{4}-\d{2}-\d{2}$/.test(v.date ?? "") ? v.date : todayLocal(),
     startTime: /^\d{2}:\d{2}$/.test(v.startTime ?? "") ? v.startTime : "10:00",
@@ -154,7 +174,7 @@ export function normalizeTournament(v) {
 
 export function newTournament(values = {}) {
   return normalizeTournament({
-    id: uid(), type:values.type, doubles:values.doubles, name: values.name, date: values.date, startTime: values.startTime,
+    id: uid(), type:values.type, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
