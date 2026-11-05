@@ -78,7 +78,7 @@ function nav(t) {
     '<button type="button" data-act="home">Alle Doppelturniere</button>'+
     tabs.map(([id,title])=>'<button type="button" data-act="tab" data-tab="'+id+'" class="'+(view===id?"active":"")+'">'+title+'</button>').join("")+
     '<hr style="border:0;border-top:1px solid #d6e0d8;width:100%">'+
-    '<button data-act="new">+ Neues Doppelturnier</button></nav>';
+    '<button data-act="new">+ Neues Doppelturnier</button><button data-act="backup">Daten sichern (JSON)</button></nav>';
 }
 function sectionHead(labelText,title,description,actions="") {
   return '<div class="section-header"><div><div class="eyebrow">'+labelText+'</div><h2>'+title+'</h2>'+
@@ -147,7 +147,7 @@ function teams(t) {
 }
 function matchMarkup(t,m,index,{playoff=null,stage="",round=0}={}) {
   const a=label(t,m.team1),b=label(t,m.team2),ready=!!(m.team1&&m.team2),result=m.result,has=hasResult(m);
-  const planned=playoff!==null?true:ready;
+  const planned=ready;
   return '<article class="double-match"><div class="double-match-head"><span>'+(!playoff?'Spiel '+(index+1)+' · '+esc(courtName(t,m.court)):
       esc(courtName(t,m.court||t.courts[0])))+'</span>'+
     '<span class="double-tag '+(has?"winner":"pending")+'">'+(has?"Ergebnis gespeichert":"Offen")+'</span></div>'+
