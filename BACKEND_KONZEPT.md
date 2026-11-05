@@ -1,6 +1,6 @@
 # TENNILO – Plattform-Backend, Benutzer, Lizenzierung und Preismodell
 
-**Status: Phase B0.1 (Datenbank- und Kontomodell) in GitHub implementiert und mit MariaDB getestet. Registrierung, Login, Produktivdatenbank und Zahlungen sind noch nicht aktiv. Preise weiterhin unverbindlich.**  
+**Status: Backend B0.1/B0.2 in GitHub vorbereitet und mit Wegwerf-MariaDB getestet: Datenmodell, Registrierung/E-Mail-Bestätigung, Login, sichere Sessions, Vereine und Einladungen. HTTP-API bleibt deaktiviert; Konto-Oberfläche, ALL-INKL-Produktivdatenbank und Zahlungen sind noch nicht aktiv. Preise unverbindlich.**  
 **Stand:** 2026-11-05  
 **Aktueller App-Code:** v0.6.1 mit bestätigtem manuellem FTPS-Upload (Run 42044203175); echter geräteübergreifender Zuschauer-Test auf ALL-INKL weiterhin offen. **Neu:** private Dateien in [backend/](backend/README.md), vom FTPS-Upload ausdrücklich ausgeschlossen. Die bestehende App wird durch diese Phase nicht verändert.
 
@@ -26,9 +26,9 @@ Der derzeitige PHP-Live-Snapshot-Dienst ist **kein vollständiges Backend**: Er 
 - Plattformadministrator für Support, Freischaltungen, Sperren und ggf. zeitlich befristete Beta-Lizenzen; besonders schützenswerte Aktionen protokollieren.
 - Keine automatische Registrierung der Tennis-Teilnehmer erforderlich: Ein Turnierteilnehmer ist zunächst lediglich ein Eintrag im Turnier, **nicht** automatisch ein TENNILO-Benutzer.
 
-## Implementierungsstand – Backend Phase B0.1
+## Implementierungsstand – Backend B0.1/B0.2
 
-Die erste, bislang rein private Backend-Stufe wurde im GitHub-Repository implementiert:
+Die ersten beiden, weiterhin rein privaten Backend-Stufen wurden im GitHub-Repository implementiert:
 
 - **[backend/migrations/001_accounts_organizations.sql](backend/migrations/001_accounts_organizations.sql):** 12 Tabellen für Personen, Vereine, Vereinsmitgliedschaften, Einladungen, sichere Token, Sessions, Lizenzpläne/-zuordnungen und Audit.
 - **[backend/src/AccountPolicy.php](backend/src/AccountPolicy.php):** Rollenprüfungen (Besitzer, Organisator, Leser), E-Mail-/Slug-Validierung, Passwort-Hashing, kryptographisch zufällige Tokens und organisationsbezogene Lizenzgültigkeit.
@@ -37,7 +37,9 @@ Die erste, bislang rein private Backend-Stufe wurde im GitHub-Repository impleme
 - **[backend/README.md](backend/README.md):** Sicherheitsgrenzen, Datenmodell, Rollen und künftiger Installationsablauf.
 - **Tests:** 13 PHP-Unit-Tests, zwölf SQL-Strukturprüfungen und ein realer Installationstest gegen eine **temporäre CI-MariaDB** in GitHub Actions. Keine produktive Datenbank benötigt oder geändert.
 
-**Noch nicht implementiert:** Registrierung/Login/E-Mail-Workflow, API-Routen, Vereinsanlage im Browser, serverseitige Turnierdaten, verbindliche Preise, Lizenzkauf, Rechnungserstellung, Zahlungsanbieter und Datenschutz-/Sicherheitsfreigabe. Weiteres Ziel: B0.2 mit Authentifizierung und Vereinsverwaltung; danach zentrale Turnierdaten und schließlich Bezahlabläufe.
+**B0.2 – ergänzt und getestet:** [AuthService.php](backend/src/AuthService.php) für Registrierung, Bestätigung, Login/Logout, Passwort-Reset; [ClubService.php](backend/src/ClubService.php) für Vereine, Einladungen, Rollen und Last-Owner-Schutz; [ApiKernel.php](backend/src/ApiKernel.php) und [RateLimiter.php](backend/src/RateLimiter.php) als geschützte, noch deaktivierte HTTP-Schicht mit zweiter [SQL-Migration](backend/migrations/002_auth_request_limits.sql). CI testet die Abläufe einschließlich HTTP-Origin/CSRF und Mandantenkontrolle gegen eine temporäre MariaDB. [Vollständige Routendokumentation](backend/HTTP_API.md).
+
+**Weiterhin offen:** Nutzbare Registrierungs-/Vereinsseite im Browser, nachweislich funktionierender E-Mail-Versand, abgesicherte separate ALL-INKL-Staging-Datenbank, serverseitige Turnierdaten, verbindliche Preise, Lizenzkauf, Rechnungen, Zahlungsanbieter und Datenschutz-/Sicherheitsfreigabe. Erst Staging und Kontoseiten fertigstellen, dann zentrale Turnierdaten und schließlich Bezahlabläufe.
 
 ## 3. Technisches Zielbild für ALL-INKL
 
