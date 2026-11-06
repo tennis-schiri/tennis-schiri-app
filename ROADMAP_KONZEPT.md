@@ -1,6 +1,6 @@
 # TENNILO – gemeinsame Roadmap und Ideensammlung
 
-**Stand:** 2026-11-06 · **GitHub und Testseite:** v0.8.4, 34 Dateien erfolgreich übertragen · **Browser- und Zwei-Geräte-Praxistest:** offen.
+**Stand:** 2026-11-06 · **GitHub-Arbeitsstand:** v0.8.7 (persönliche Roadmap-Konten, noch nicht veröffentlicht) · **Testseiten-App:** v0.8.4 · **Roadmap-Inhalt:** 27 Themen, zuletzt unabhängig aktualisiert.
 
 ## Ziel und Oberfläche
 
@@ -24,6 +24,14 @@ Die anfänglichen 18 Einträge in `site/roadmap-seed.json` beruhen auf `PROJEKTS
 Die 18 bestehenden Themen besitzen fünf eigenständige Detailfelder. Neue Nutzerideen können ohne sie erstellt werden und die Projektleitung ergänzt sie später. Bereits bestehende Feldwerte – auch bewusst leere – bleiben beim Seed-Merge unverändert. Einträge ohne ausformulierte Details zeigen im Detailfenster einen neutralen Hinweis. Die Übersicht zeigt weiter nur Titel, Kurzbeschreibung, Priorität und Meilenstein.
 
 **Roadmap aktualisiert und veröffentlicht (2026-11-06):** [GitHub-Actions-Roadmap-Upload 42198172057](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42198172057) erfolgreich: **259/259 Node-Tests**, PHP-Prüfung und **6/6 Roadmap-Dateien** per FTPS übertragen. Das Board umfasst **26 Themen**, darunter neue ausführliche Planung der vier Zählweisen Zeit, Punkte, Games und Sätze mit Tiebreak-/FAST4-/No-Ad-Unterformen. Diese erweiterten Game- und Satz-Zählweisen sind **geplant**, nicht bereits in der App verfügbar. Der separate Upload hat **keinen App-Code, kein Benutzerkontobackend und keine .htaccess** übertragen. Die zuletzt vollständig bestätigte App-Version bleibt **v0.8.4**; v0.8.6 ist nur in GitHub. Tests auf echtem Browser/Hosting sowie ein dauerhaft privater Roadmap-Speicher stehen weiterhin aus.
+
+## Persönliche Benutzerkonten (v0.8.7, noch nicht hochgeladen)
+
+**Roadmap-Nutzerverwaltung v0.8.7 (GitHub, noch nicht veröffentlicht):** Die umständlichen Zugangscodes werden durch persönliche Konten mit Benutzernamen und Passwort ersetzt. Die Projektleitung erstellt einmalige, sieben Tage gültige Einladungslinks; eingeladene Nutzer vergeben ihre Zugangsdaten selbst, können sie später ändern und werden in der Nutzerverwaltung als aktiv oder noch eingeladen angezeigt. Rollen (nur lesen/kommentieren) können geändert und Zugänge sofort gesperrt werden. Alte Admin- und Einladungscodes bleiben für eine **einmalige Migration** nutzbar, ohne Kommentare oder Status zu verlieren. Passwörter werden nur über PHP `password_hash` gespeichert, Einladungs-Tokens nur als Hash; bestehender Testseiten-Passwortschutz bleibt erhalten. Kein automatischer E-Mail-Versand, noch kein produktiver TENNILO-Account. **Release-Schutz:** Ein GitHub-Push mit geänderten Roadmap-Inhalten überträgt jetzt nur `site/roadmap-seed.json`; PHP-Authentifizierung, JavaScript und Styles dürfen ausschließlich über den ausdrücklich manuell gestarteten Roadmap-Workflow veröffentlicht werden. **Vor dem Release:** privaten, dauerhaften Server-Speicher einrichten und testen; bestehende Admin-Sitzung/Code sichern und dann umstellen. Die Roadmap-Idee `roadmap-accounts` ist als **Code fertig, nicht online** markiert.
+
+**Bedienablauf:** Projektleitung meldet sich an bzw. wandelt den bestehenden Admin-Code über „Benutzerkonto einrichten“ um. Unter „Nutzer verwalten“ Anzeigename/Rolle wählen, Einladungslink einmalig kopieren und privat teilen. Einladungslink enthält den Registrierungstoken nur im URL-Fragment und entfernt ihn nach Öffnen aus der Adresszeile. Nach Registrierung sind Benutzername/Passwort ausreichend; unter „Mein Konto“ Passwort ändern. Gesperrte Konten verlieren sofort ihre Zugriffsrechte. Alt-Zugänge können in der Anmeldung einmalig den bisherigen Code eingeben und dann ein Konto anlegen.
+
+**Wichtige Grenzen:** Keine Anmeldung ohne den weiterhin vorhandenen übergeordneten Passwortschutz der Testseite. Keine selbsttätige E-Mail-Einladung, kein E-Mail-basierter Passwort-Reset. Der reguläre Nutzer kann sein Passwort ändern, solange er angemeldet ist; bei verlorenen Passwörtern muss die Projektleitung den Zugang neu einrichten. Das ist bewusst getrennt vom zukünftigen Vereins-/Kunden-Backend. Mehrgeräte-Browser- und Sicherheitspraxistests auf dem Hosting stehen noch aus.
 
 ## Berechtigungen
 
