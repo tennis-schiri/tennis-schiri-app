@@ -3,8 +3,8 @@
 import {verifyRibbonDraw} from "./draw.js?v=061";
 import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=061";
 import {verifyRibbonFinals} from "./finals.js?v=061";
-import {plannedRound,clockFor} from "./operations.js?v=061";
-import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=070";
+import {plannedRound,clockFor} from "./operations.js?v=082";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=082";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
