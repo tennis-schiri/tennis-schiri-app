@@ -32,7 +32,7 @@ function run(fn) {try{return fn();}catch(error){flash(error?.message||"Aktion fe
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
     '<a class="doubles-logo" href="./index.html">TENN<span>I</span>LO <small style="font-size:.48em;letter-spacing:.02em;color:#c9dcda"> / ONE POINT CUP</small></a>'+
-    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.0</span></div></header>';
+    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.2</span></div></header>';
 }
 function hint() {
   return '<div class="browser-notice"><div><strong>Lokaler One Point Cup – Testversion</strong>'+
@@ -229,7 +229,7 @@ function draw() {
     '<h1>'+esc(t.name)+'</h1><p class="opc-summary">'+dateLabel(t.date)+' · '+t.opc.fieldSize+
     'er Feld · '+playerCount(t)+' anwesend</p></div>'+
     '<div class="double-content">'+nav()+'<section class="double-main">'+(pages[view]||overview)(t)+
-    '</section></div><footer class="double-footer">© Tennis-Schiri · One Point Cup v0.8.0 · geschützte Testversion · lokale Speicherung</footer></main>';
+    '</section></div><footer class="double-footer">© Tennis-Schiri · One Point Cup v0.8.2 · geschützte Testversion · lokale Speicherung</footer></main>';
 }
 function showDialog({eyebrow,title,body,kind,submit="Speichern"}) {
   dialogRoot.innerHTML='<dialog class="app-dialog" aria-labelledby="opc-dialog-title">'+
