@@ -1,7 +1,7 @@
 import {BrowserTournamentStore} from "./storage.js?v=082";
 import {buildLiveDisplay} from "./live-model.js?v=082";
 import {clockFor} from "./operations.js?v=082";
-import {renderLiveScreen} from "./live-ui.js?v=071";
+import {renderLiveScreen} from "./live-ui.js?v=082";
 import {fetchLive,remoteClockAt,liveKeyValid} from "./remote-live.js?v=082";
 
 const root=document.getElementById("live-root");
