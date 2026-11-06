@@ -138,7 +138,10 @@ export function normalizeTournament(v) {
     date: /^\d{4}-\d{2}-\d{2}$/.test(v.date ?? "") ? v.date : todayLocal(),
     startTime: /^\d{2}:\d{2}$/.test(v.startTime ?? "") ? v.startTime : "10:00",
     endTime: typeof v.endTime==="string"&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v.endTime)?v.endTime:null,
-    timeMode:v.timeMode==="fit"?"fit":"fixed",
+    timeMode:v.matchMode==="points"&&v.type!=="opc"?"fixed":v.timeMode==="fit"?"fit":"fixed",
+    matchMode:v.type==="opc"?"points":v.matchMode==="points"?"points":"time",
+    pointTarget:v.type==="opc"?1:integer(v.pointTarget,1,99,7),
+    pointWinByTwo:v.type!=="opc"&&v.matchMode==="points"&&v.pointWinByTwo===true,
     reserveFinals:v.reserveFinals===true,
     reservePlayoffs:v.reservePlayoffs!==false,
     opcMinutes:integer(v.opcMinutes,1,15,3),
@@ -180,7 +183,7 @@ export function normalizeTournament(v) {
 export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), type:values.type, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
-    endTime:values.endTime,timeMode:values.timeMode,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,opcMinutes:values.opcMinutes,
+    endTime:values.endTime,timeMode:values.timeMode,matchMode:values.matchMode,pointTarget:values.pointTarget,pointWinByTwo:values.pointWinByTwo,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,opcMinutes:values.opcMinutes,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
