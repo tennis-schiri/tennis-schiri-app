@@ -5,14 +5,9 @@ name: TENNILO – Roadmap-Inhalte automatisch aktualisieren
 on:
   push:
     branches: [main]
+    # Fachliche Roadmap-Inhalte automatisch synchronisieren; Auth-Code nur nach manueller Freigabe.
     paths:
       - 'site/roadmap-seed.json'
-      - 'site/roadmap.html'
-      - 'site/roadmap-lib.php'
-      - 'site/roadmap-api.php'
-      - 'site/assets/roadmap.js'
-      - 'site/assets/roadmap.css'
-      - '.github/workflows/roadmap-sync.yml'
   workflow_dispatch:
 
 permissions:
