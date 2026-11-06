@@ -88,7 +88,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.0</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.2</span>
   </div></header>`;
 }
 
@@ -127,9 +127,9 @@ function intro() {
     </div>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.6.1</span></article>
-      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.7.0</span></article>
-      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.0</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.8.2</span></article>
+      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.8.2</span></article>
+      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.2</span></article>
     </div>
     ${browserNotice()}
   </main>`;
@@ -480,7 +480,7 @@ function render() {
   if(t?.type==="opc"&&view!=="home") {window.location.assign("./opc.html");return;}
   root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.7.0 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.2 · Private Testversion</footer>
     </main></div>`);
 }
 
