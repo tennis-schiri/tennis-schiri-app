@@ -28,7 +28,9 @@ function rm_is_https(): bool {
 }
 
 function rm_basic_user(): ?string {
-    foreach (['PHP_AUTH_USER','REMOTE_USER','REDIRECT_REMOTE_USER'] as $key) {
+    // Only trust the identity of an Apache-authenticated request, never a raw Basic header.
+    if (strtolower((string) ($_SERVER['AUTH_TYPE'] ?? '')) !== 'basic') return null;
+    foreach (['REMOTE_USER','REDIRECT_REMOTE_USER','PHP_AUTH_USER'] as $key) {
         $value = $_SERVER[$key] ?? null;
         if (is_string($value) && trim($value) !== '') return $value;
     }
