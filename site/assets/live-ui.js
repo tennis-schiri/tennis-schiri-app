@@ -71,7 +71,7 @@ export function renderLiveScreen(data) {
       <div class="live-event-date">${escapeLiveText(dateLabel(data.date))} · Beginn ${escapeLiveText(data.startTime)} Uhr</div></div>
       <div class="live-phase">${data.mode==="finals"?"ENDRUNDE":"VORRUNDE"}</div></div>
     <div class="live-stage-head"><div><h2>${escapeLiveText(data.title)}</h2>
-      <p>${escapeLiveText(data.subtitle)}${data.mode==="round"?` · Geplant ${escapeLiveText(data.plannedStart)}–${escapeLiveText(data.plannedEnd)} Uhr`:""}</p>
+      <p>${escapeLiveText(data.subtitle)}${data.plannedStart&&data.plannedEnd?` · Geplant ${escapeLiveText(data.plannedStart)}–${escapeLiveText(data.plannedEnd)} Uhr`:""}</p>
       <div class="live-progress">${data.progress} von ${data.total} Begegnungen entschieden</div>
     </div>${timer}</div>
     ${champ}
