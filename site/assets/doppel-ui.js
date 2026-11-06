@@ -269,6 +269,22 @@ function playoffStage(t,title,id,matches) {
   return '<section class="double-panel"><h3>'+title+'</h3>'+
     matches.map((m,i)=>matchMarkup(t,m,i,{playoff:true,stage:id})).join("")+'</section>';
 }
+function playoffTimeNote(t) {
+  if(!t.doubles.draw)return "";
+  if(t.reservePlayoffs===false)return '<p class="muted">Play-off-Zeiten sind nicht in der Wunsch-Endzeit enthalten. Bei Bedarf unter Einstellungen aktivieren.</p>';
+  if(t.doubles.teams.filter(x=>x.present).length<8)return "";
+  try{
+    const plan=tournamentSchedule(t),courtCount=t.courts.length;
+    let cursor=t.doubles.draw.rounds.length;
+    return '<section class="double-panel"><h3>Reservierte Zeitfenster der Endrunde</h3>'+
+      [['Viertelfinale',Math.ceil(4/courtCount)],['Halbfinale',Math.ceil(2/courtCount)],
+       ['Finale und Platz 3',Math.ceil(2/courtCount)]].map(([title,blocks])=>{
+         const first=plan.rounds[cursor],last=plan.rounds[cursor+blocks-1];
+         cursor+=blocks;
+         return '<p><strong>'+title+':</strong> '+esc(first.start)+'–'+esc(last.end)+' Uhr ('+blocks+' Zeitblock'+(blocks===1?'':'e')+')</p>';
+       }).join("")+'</section>';
+  }catch(e){return '<div class="double-warning">'+esc(e.message)+'</div>';}
+}
 function playoffsPage(t) {
   const head=sectionHead("DOPPELTURNIER / ENDRUNDE","Top-8-Play-offs",
     "Gesetzt nach der Livetabelle, abwählbare Teams und automatische Nachrücker.");
@@ -279,7 +295,7 @@ function playoffsPage(t) {
   if(t.doubles.playoffs) {
     if(!stage.ready)return head+'<div class="double-warning">'+esc(stage.error||"Play-offs nicht verfügbar.")+'</div>';
     const p=stage.playoffs;
-    return head+livePanel(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
+    return head+livePanel(t)+playoffTimeNote(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
       '<button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
       (stage.champion?'<div class="double-success"><strong>Turniersieger: '+esc(label(t,stage.champion))+'</strong>'+
         (stage.third?'<br>Platz 3: '+esc(label(t,stage.third)):'')+'</div>':'')+
@@ -292,7 +308,7 @@ function playoffsPage(t) {
   const selection=preview.ranking.map((x,i)=>'<label class="double-checkbox">'+
     '<input type="checkbox" data-act="playoff-eligible" data-id="'+esc(x.id)+'" '+(!excluded.has(x.id)?"checked":"")+'>'+
     '<span>Rang '+(i+1)+' · '+esc(x.name)+'</span></label>').join("");
-  return head+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
+  return head+playoffTimeNote(t)+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
     (preview.ready?"Play-offs sind bereit. Acht Teams werden nach Rangliste gesetzt.":esc(preview.reason))+'</div>'+
     '<section class="double-panel"><h3>Teilnahme an der Endrunde</h3><p>Häkchen entfernen, falls ein Team nicht teilnehmen kann. Das nächste zugelassene Team rückt nach.</p>'+
     selection+'<div class="double-actions" style="margin-top:17px"><button class="btn primary" data-act="playoffs-generate" '+(preview.ready?"":"disabled")+'>Top 8 auslosen</button></div></section>';
