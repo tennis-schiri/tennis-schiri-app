@@ -1,4 +1,5 @@
 // TENNILO One Point Cup – erster Fachkern, noch keine Bedienoberfläche.
+import {tournamentSchedule} from "./operations.js?v=082";
 // Quelle: "Turniere Verein – Auslosung & Livetabelle", OPC-Spieler und One Point Cup.
 // K.-o.-System: ein entscheidender Punkt je Begegnung, Sieger rückt weiter.
 const validSize=n=>[2,4,8,16,32,64].includes(Number(n));
@@ -132,4 +133,28 @@ export function onePointRoundName(size,index) {
   if(remaining===16)return "Sechzehntelfinale";
   if(remaining===32)return "Zweiunddreißigstelfinale";
   return "Runde "+(index+1);
+}
+
+/** Planned court slots for single-point matches; knockout stages stay sequential. */
+export function onePointTimePlan(t) {
+  const info=checkOnePointSetup(t);
+  if(!info.ok)throw Error(info.errors[0]);
+  const courts=Math.max(1,t.courts?.length||1);
+  const perStage=[];
+  for(let count=info.fieldSize/2,stage=0;count>=1;count=Math.floor(count/2),stage++){
+    const matches=stage===0?info.selected-info.fieldSize/2:count;
+    perStage.push({name:onePointRoundName(info.fieldSize,stage),matches,
+      slots:Math.ceil(matches/courts)});
+  }
+  const blocks=perStage.reduce((n,stage)=>n+stage.slots,0);
+  const plan=tournamentSchedule({...t,duration:t.opcMinutes||3,breakMinutes:0},
+    blocks,{minDuration:1,maxDuration:15});
+  let next=0;
+  const stages=perStage.map(stage=>{
+    const first=plan.rounds[next];
+    next+=stage.slots;
+    const last=plan.rounds[next-1];
+    return {...stage,start:first?.start,end:last?.end};
+  });
+  return {...plan,stages,courts,matchMinutes:plan.rounds[0]?.duration};
 }
