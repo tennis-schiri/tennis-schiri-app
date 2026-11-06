@@ -24,7 +24,7 @@ test("Roadmap hat eigene geschützte Unterseite und behält TENNILO-Branding",()
 });
 test("Fünf transparente Status für fertige, geplante und vorgeschlagene Funktionen",()=>{
   assert.deepEqual([...new Set(seed.items.map(x=>x.status))].sort(),
-    ["idea","online","planned","progress"]);
+    ["idea","online","planned","progress","test"]);
   assert.match(ui,/Auf Testseite/);
   assert.match(ui,/Code fertig/);
   assert.match(ui,/Ideensammlung/);
@@ -53,6 +53,15 @@ test("Ausführliche Inhalte stehen ausschließlich in der Detailansicht und blei
   assert.match(lib,/array_key_exists\(\$field, \$item\)/);
   assert.match(css,/\.rm-details-grid/);
   assert.match(css,/\.rm-detail-section/);
+  assert.match(ui,/rm-detail-sources/);
+  assert.match(lib,/RM_OFFICIAL_FIELDS/);
+  assert.match(lib,/officialBaseline/);
+  assert.match(lib,/rm_references/);
+  assert.ok(seed.items.length>=25,"Drive-Formatideen und Zählweise im Seed erwartet");
+  for(const id of ["score-modes","rr","ko-consolation","updown","stop","eight-v-eight","ladder"])
+    assert.ok(seed.items.some(x=>x.id===id),"Roadmap-Thema fehlt: "+id);
+  assert.ok(seed.items.filter(x=>Array.isArray(x.references)&&x.references.length).length>=6);
+
   const overview=ui.split("function card(x)")[1].split("function renderResults()")[0];
   for(const key of fields)assert.equal(overview.includes("x."+key),false,
     "Detailtext darf nicht in der Board-Karte erscheinen");
