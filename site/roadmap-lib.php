@@ -7,6 +7,9 @@ declare(strict_types=1);
  */
 const RM_STATUSES = ['idea', 'planned', 'progress', 'test', 'online'];
 const RM_PRIORITIES = ['low', 'medium', 'high'];
+// Ausschließlich Detailansicht, niemals Bestandteil der kompakten Karten.
+const RM_DETAIL_FIELDS = ['benefit'=>900, 'scope'=>1400, 'currentState'=>1400,
+    'openPoints'=>1400, 'doneWhen'=>1000];
 const RM_CATEGORIES = [
     'Turnierformate', 'Turnierbetrieb', 'Live & Anzeige',
     'Plattform & Zugang', 'Produkt & Bedienung'
@@ -25,6 +28,11 @@ function rm_text(mixed $value, int $maxBytes, string $name): string {
         rm_error(422, $name . ': Bitte einen gültigen Text mit maximal ' . $maxBytes . ' Bytes angeben.');
     }
     return $text;
+}
+
+function rm_optional_text(mixed $value, int $maxBytes, string $name): string {
+    if ($value === null || $value === '') return '';
+    return rm_text($value, $maxBytes, $name);
 }
 
 function rm_enum(mixed $value, array $allowed, string $name): string {
@@ -56,6 +64,25 @@ function rm_seed(string $file): array {
 
 function rm_merge(array $saved, array $seed): array {
     $items = is_array($saved['items'] ?? null) ? $saved['items'] : [];
+    // Beim ersten Upgrade werden neue, offizielle Detailfelder ergänzt, ohne
+    // existierende Kommentare, manuelle Änderungen oder Status zu überschreiben.
+    $seedById = [];
+    foreach ($seed as $base) $seedById[$base['id']] = $base;
+    foreach ($items as &$existing) {
+        if (!is_array($existing) || !is_string($existing['id'] ?? null)) continue;
+        if (isset($seedById[$existing['id']])) {
+            foreach (RM_DETAIL_FIELDS as $field=>$maxBytes) {
+                if (!array_key_exists($field, $existing))
+                    $existing[$field] = $seedById[$existing['id']][$field] ?? '';
+            }
+        }
+        // Migration der ursprünglichen deutschen Prioritäts-Seed-Werte.
+        $oldPriorities = ['hoch'=>'high','mittel'=>'medium','niedrig'=>'low'];
+        if (is_string($existing['priority'] ?? null) &&
+            isset($oldPriorities[$existing['priority']]))
+            $existing['priority'] = $oldPriorities[$existing['priority']];
+    }
+    unset($existing);
     $ids = [];
     foreach ($items as $item) {
         if (is_array($item) && is_string($item['id'] ?? null)) $ids[$item['id']] = true;
@@ -76,7 +103,7 @@ function rm_merge(array $saved, array $seed): array {
 
 function rm_public_item(array $item): array {
     $allowed = ['id','title','description','category','status','priority',
-        'milestone','nextStep','updatedAt','origin'];
+        'milestone','nextStep','updatedAt','origin',...array_keys(RM_DETAIL_FIELDS)];
     $out = [];
     foreach ($allowed as $key) $out[$key] = $item[$key] ?? '';
     $out['comments'] = [];
@@ -113,6 +140,11 @@ function rm_new_item(array $input, string $author, string $now): array {
         'priority' => 'medium',
         'milestone' => 'Neu eingereicht',
         'nextStep' => 'Sichtung durch die Projektleitung',
+        'benefit' => '',
+        'scope' => '',
+        'currentState' => '',
+        'openPoints' => '',
+        'doneWhen' => '',
         'updatedAt' => $now,
         'origin' => $author,
         'comments' => []
@@ -142,6 +174,10 @@ function rm_update_item(array &$state, string $id, array $data, string $now): ar
         if (isset($data['category'])) $item['category'] = rm_enum($data['category'], RM_CATEGORIES, 'Bereich');
         foreach (['title'=>140,'description'=>2500,'milestone'=>140,'nextStep'=>500] as $field=>$limit) {
             if (isset($data[$field])) $item[$field] = rm_text($data[$field], $limit, $field);
+        }
+        foreach (RM_DETAIL_FIELDS as $field=>$limit) {
+            if (array_key_exists($field, $data))
+                $item[$field] = rm_optional_text($data[$field], $limit, $field);
         }
         $item['updatedAt'] = $now;
         return rm_public_item($item);
