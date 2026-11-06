@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller App-Code:** **v0.8.0 im privaten GitHub-Repository (noch nicht veröffentlicht)**. Drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Vorherige **v0.6.1** am 2026-11-05 manuell via FTPS veröffentlicht ([GitHub-Lauf 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175)); der reale Zweitgeräte-Test auf ALL-INKL ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller GitHub-Code:** **v0.8.2, noch nicht veröffentlicht** (optionale Endzeit, angepasste Spielzeiten und 1–8-Doppelmatch-Machbarkeitsprüfung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -130,8 +130,14 @@ Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Ve
 
 Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals ihre Werte, private Kennwörter oder echte Spielerdaten in GitHub-Dokumentationen oder Commits speichern.** Die vorhandene `.htaccess` und der Passwortschutz dürfen beim Deployment nicht überschrieben werden.
 
+## Zeitplanung v0.8.2 – aktuell nur im privaten GitHub-Code
+
+Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren Modus **„Spielzeiten bis zur Endzeit anpassen“**. Im festen Modus bleiben die gewählten Spielminuten erhalten und eine mögliche Zeitüberschreitung wird angezeigt. Der automatische Modus teilt die Zeit zwischen Start und Ende auf reale Spielblöcke und Pausen auf; zu enge Zeitfenster werden abgelehnt. Beim Doppelturnier erscheint eine Übersicht für 1–8 Spiele pro Team auf Basis echter Probeauslosungen, Platzanzahl und Endzeit, auf Wunsch mit Top-8-Play-off-Reserve. One Point Cup unterstützt planbare Minuten je Ballwechsel und parallele Plätze. Bestandsdaten bleiben kompatibel. Details: [Projektstatus](PROJEKTSTATUS.md), [Entscheidungen E-033](ENTSCHEIDUNGEN.md).
+
+**Diese neuen Änderungen sind noch nicht online.** Die letzte bestätigte produktive Testversion ist v0.8.0. CI/Praxistests v0.8.2 und eine ausdrückliche Freigabe sind vor dem nächsten manuellen FTPS-Upload nötig.
+
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): **v0.6.1** nach Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan von **v0.8.2** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
