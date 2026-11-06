@@ -1,6 +1,6 @@
 # TENNILO – Entscheidungen und Anforderungen
 
-**Stand:** 2026-11-05  
+**Stand:** 2026-11-06  
 **Status:** Verbindliche Projektnotizen für die weitere Entwicklung. Neue Festlegungen mit Datum und Begründung ergänzen; nicht ohne Rücksprache bestehende Produktanforderungen ändern.
 
 ## Produkt und Marke
@@ -294,3 +294,15 @@
 - **Datenmodell:** Neues type: opc sowie opc: {players,fieldSize,draw}; bei alten Sicherungen unverändert type: ribbon. Gemeinsame lokale Browser-Sicherung/JSON-Schema-Version 1 für alle drei Formate.
 - **Umsetzung v0.8.0:** Private One-Point-Oberfläche (opc.html, one-point-ui.js/css), Fachlogik (one-point.js) und Tests one-point.test.mjs / one-point-ui.test.mjs. Zunächst keine eigene Live-Fernanzeige für One Point Cup.
 - **Freigabe:** GitHub-Stand, **keine automatische Veröffentlichung**. Manuelle FTPS-Allowlist von 23 auf 27 Dateien erweitert, aber kein Upload ausgelöst. 16 Fachtests und simulierte Demo-Bedienung isoliert bestanden; vollständige CI-/Browser-/ALL-INKL-Tests offen. Backend-Staging bleibt zurückgestellt.
+
+## E-033 · Startzeit, optionale Endzeit und echte Machbarkeitsprüfung (2026-11-06)
+
+- **Geltungsbereich:** Die Zeitregel ist für alle bereits entwickelten (Schleifchen, feste Doppel, One Point Cup) und zukünftige Turnierarten gedacht. Startzeit bleibt verpflichtend, die Endzeit ist optional; frühere Turniere bleiben ohne Endzeit im bisherigen festen Modus.
+- **Auswahl:** Turnierleitung entscheidet ausdrücklich zwischen „feste Spielzeiten“ und „Spielzeiten bis zur Endzeit anpassen“. Ohne Endzeit darf keine Automatik aktiviert werden. Endzeiten nach Mitternacht zählen zum Folgetag. Die Ende-zu-Ende-Zeit ist eine **Planung**, keine Echtzeitgarantie; tatsächliche Spiele können überziehen.
+- **Zeitverteilung:** Tatsächliche Spielblöcke und Wechselpausen bestimmen die verfügbare Netto-Spielzeit. Feste Vorgaben bleiben im Modus `fixed` unverändert; die App warnt bei Überschreitung. `fit` verteilt Minuten und lehnt Zeitfenster ab, die keine minimale Spieldauer ermöglichen. Nie stillschweigend Spiele oder Ergebnisse entfernen. Begonnene Rundenuhren behalten ihre gespeicherte Startdauer.
+- **Doppel:** 1–8 Begegnungen pro anwesendem Team und die realen Team-/Court-Grenzen bleiben maßgeblich. Machbarkeitsübersicht erzeugt eine echte Probeauslosung je Option und prüft die notwendigen Blöcke inklusive optional reservierter Top-8-Play-offs. Bei ungerader Anzahl Teams sind nur gerade Matchzahlen pro Team möglich. 4 und 5 Spiele je Team sind ausdrücklich zu unterscheiden.
+- **Schleifchen:** Regulierter Plan und ggf. Auffüllrunde, dazu bei ausdrücklicher Option reservierte K.-o.-Endrundenblöcke.
+- **One Point Cup:** Einzelne Punktbegegnungen erhalten einen konfigurierbaren Zeit-Slot (1–15 Minuten) und eine konfigurierbare Zahl parallel bespielbarer Plätze; die K.-o.-Stufen bleiben sequenziell und Freilose belegen keinen Slot.
+- **Daten:** Optionales `endTime`, `timeMode` und Formatoptionen im gemeinsamen bestehenden Turnierdatensatz; Schema-Version 1 bleibt für Alt-JSON erhalten. Keine neue Backend-/Zahlungsfunktion.
+- **Freigabe:** v0.8.2 derzeit nur in GitHub; letzte erfolgreich veröffentlichte App ist v0.8.0 (05.11.2026; Run 42085118679, 200/200 Tests, 27 hochgeladene Dateien). Zeitänderung erst nach CI- und Browserprüfung manuell veröffentlichen.
+
