@@ -44,10 +44,10 @@ Die Datei `site/roadmap-api.php` speichert eine JSON-Datenbank außerhalb des ö
 ## Test- und Veröffentlichungsgrenze
 
 - Dateien: `site/roadmap.html`, `site/assets/roadmap.js`, `site/assets/roadmap.css`, `site/roadmap-api.php`, `site/roadmap-lib.php`, `site/roadmap-seed.json`.
-- Tests: `tests/roadmap-ui.test.mjs` und `tests/roadmap.php`.
+- Tests: `tests/roadmap-ui.test.mjs`, `tests/roadmap.php` und `tests/roadmap-http.test.mjs` (PHP-HTTP-Testserver mit simulierter Apache-Authentifizierung, nicht öffentlich deployt). Der HTTP-Test prüft Bootstrap, Sessions, CSRF-/Origin-Ablehnung, Einladungen, Kommentare, Statusänderungen, Widerruf und private Hash-Speicherung.
 - PHP-Syntax und Modelldatentests sind in Prüf- und **manuellen** Veröffentlichungsworkflow eingebunden.
 - FTPS-Whitelist: **34 statt 28 Dateien**. Bestehender Passwortschutz, WordPress, `.htaccess`, Backend-Konto-API und Turnierdaten bleiben unangetastet.
-- Die **volle CI-Prüfung** des GitHub-Standes und eine tatsächliche ALL-INKL-/Browser-/Zweitgeräte-Prüfung müssen vor einer Aussage über den Live-Erfolg bestätigt werden.
+- **CI bestätigt:** GitHub-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) vom 2026-11-06: **244/244 Node-Tests**, PHP-Syntax, Roadmap-Fachtests und simulierte PHP-HTTP-Integration bestanden. Die tatsächliche ALL-INKL-/Browser-/Zweitgeräte-Prüfung steht weiter aus.
 - **Kein Upload durch GitHub-Commits**. Nur `workflow_dispatch` startet die bestehende FTPS-Veröffentlichung.
 
 ## Mögliche Erweiterungen
