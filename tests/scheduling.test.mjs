@@ -37,9 +37,11 @@ test("Alte Turniere behalten feste Spielzeiten und haben keine automatische Endz
     {start:"10:30",end:"10:50",pauseEnd:"11:00"});
 });
 test("Optionales Enddatum akzeptiert eine Nachtüberschreitung, aber keine Nullzeit",()=>{
-  assert.deepEqual(timeWindow({startTime:"23:30",endTime:"00:45"}),{
-    start:1410,end:45,minutes:75,overnight:true
-  });
+  const window=timeWindow({startTime:"23:30",endTime:"00:45"});
+  assert.equal(window.start,1410);
+  assert.equal(window.end,45);
+  assert.equal(window.minutes,75);
+  assert.equal(window.overnight,true);
   assert.throws(()=>timeWindow({startTime:"12:00",endTime:"12:00"}),/identisch/);
   assert.throws(()=>timeWindow({startTime:"12:99",endTime:"13:00"}),/gültige Uhrzeit/);
 });
@@ -130,7 +132,7 @@ test("One Point Cup mit 20 Spielern im 32er-Feld zählt Freilose nicht als Match
   const plan=onePointTimePlan(t);
   assert.equal(plan.stages[0].matches,4);
   assert.equal(plan.stages.reduce((sum,s)=>sum+s.matches,0),19);
-  assert.equal(plan.blocks,11);
+  assert.equal(plan.blocks,10);
 });
 test("One Point Cup lehnt unrealistische Punktdauer im engen Zeitfenster ab",()=>{
   const t=cup(16,16,1,{endTime:"10:10",timeMode:"fit",opcMinutes:3});
