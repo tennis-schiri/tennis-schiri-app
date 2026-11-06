@@ -38,7 +38,7 @@ function live_names($v): array {
     return array_map(static fn($x) => live_str($x, 90), array_slice($v, 0, 2));
 }
 function live_scores($v): ?int {
-    return is_int($v) && $v >= 0 && $v <= 99 ? $v : null;
+    return is_int($v) && $v >= 0 && $v <= 999 ? $v : null;
 }
 
 function public_live_matches($matches): array {
