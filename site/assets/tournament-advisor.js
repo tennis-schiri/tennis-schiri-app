@@ -1,9 +1,9 @@
 // TENNILO v0.8.3 – erweiterbarer Turnierberater.
 // Nur Vorplanung mit anonymen Modellteilnehmern: keine realen Spieler, Zahlungen
 // oder veröffentlichten Zuschauer-Links werden verarbeitet oder erzeugt.
-import {newTournament} from "./storage.js?v=082";
+import {newTournament} from "./storage.js?v=086";
 import {generateRibbonDraw} from "./draw.js?v=061";
-import {doublesMatchOptions,generateDoublesDraw} from "./doubles.js?v=082";
+import {doublesMatchOptions,generateDoublesDraw} from "./doubles.js?v=086";
 import {onePointTimePlan} from "./one-point.js?v=082";
 import {timeWindow,tournamentSchedule} from "./operations.js?v=082";
 
