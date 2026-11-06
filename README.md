@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.8.2, noch nicht veröffentlicht** (optionale Endzeit, angepasste Spielzeiten und 1–8-Doppelmatch-Machbarkeitsprüfung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller GitHub-Code:** **v0.8.3, noch nicht veröffentlicht** (Turnierberater mit Formatvergleich und direkter Neuanlage sowie v0.8.2-Zeitplanung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -12,7 +12,7 @@ Die GitHub-Dateien sind die verbindliche Arbeitsgrundlage, auch wenn ein Chat ni
 | --- | --- |
 | [PROJEKTSTATUS.md](PROJEKTSTATUS.md) | Tatsächlicher Stand, offen/geplant, Hosting, Tests und nächste Aufgaben |
 | [DOPPEL_KONZEPT.md](DOPPEL_KONZEPT.md) | Turnierart Doppelturnier – Fachregeln, Umsetzung, Grenzen, Tests |
-| [ONE_POINT_KONZEPT.md](ONE_POINT_KONZEPT.md) | One Point Cup – Spielerfeld bis 64, Freilose, Ein-Punkt-K.-o., Kasse, Tests und Einschränkungen |
+| [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md) | Formatfinder: Eckdaten, echte Modell-Prüfungen, Ranking, Grenzen, Erweiterbarkeit |\n| [ONE_POINT_KONZEPT.md](ONE_POINT_KONZEPT.md) | One Point Cup – Spielerfeld bis 64, Freilose, Ein-Punkt-K.-o., Kasse, Tests und Einschränkungen |
 | [ENTSCHEIDUNGEN.md](ENTSCHEIDUNGEN.md) | Produktanforderungen, begründete Entscheidungen und Randbedingungen |
 | [CHANGELOG.md](CHANGELOG.md) | Änderungen pro Version, inklusive Veröffentlichungs-/Teststatus |
 | [QUELLEN_TURNIERFORMATE.md](QUELLEN_TURNIERFORMATE.md) | Google-Drive-Turnierbibliothek, formatbezogene Referenzen und gemeinsamer Dokumentationsordner |
@@ -130,6 +130,10 @@ Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Ve
 
 Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals ihre Werte, private Kennwörter oder echte Spielerdaten in GitHub-Dokumentationen oder Commits speichern.** Die vorhandene `.htaccess` und der Passwortschutz dürfen beim Deployment nicht überschrieben werden.
 
+## Turnierberater v0.8.3 – aktuell nur in GitHub
+
+Auf der Startseite können Nutzer **„Welches Turnier passt zu euch?“** wählen: Teilnehmerzahl, Plätze, Datum, Startzeit/optionale Endzeit, Ziel und Partnerwunsch eingeben, dann Schleifchen, Doppel und One Point Cup vergleichen. Die Vorauswahl nutzt die bestehenden echten Auslosungs-/Zeitmodelle, zeigt Spiel- und Zeitbedarf sowie Ausschlussgründe und ermöglicht **Turnier mit übernommenen Einstellungen anlegen**. Es werden keine anonymen Modellspieler dauerhaft gespeichert. Der Berater ist über die Adapterliste `FORMAT_ADVISORS` für neue Turnierarten erweiterbar. Einzelheiten: [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md).
+
 ## Zeitplanung v0.8.2 – aktuell nur im privaten GitHub-Code
 
 Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren Modus **„Spielzeiten bis zur Endzeit anpassen“**. Im festen Modus bleiben die gewählten Spielminuten erhalten und eine mögliche Zeitüberschreitung wird angezeigt. Der automatische Modus teilt die Zeit zwischen Start und Ende auf reale Spielblöcke und Pausen auf; zu enge Zeitfenster werden abgelehnt. Beim Doppelturnier erscheint eine Übersicht für 1–8 Spiele pro Team auf Basis echter Probeauslosungen, Platzanzahl und Endzeit, auf Wunsch mit Top-8-Play-off-Reserve. One Point Cup unterstützt planbare Minuten je Ballwechsel und parallele Plätze. Bestandsdaten bleiben kompatibel. Details: [Projektstatus](PROJEKTSTATUS.md), [Entscheidungen E-033](ENTSCHEIDUNGEN.md).
@@ -138,6 +142,6 @@ Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren M
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan von **v0.8.2** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan **und den Turnierberater aus v0.8.3** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
