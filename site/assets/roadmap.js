@@ -16,6 +16,11 @@ let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],offline:false};
 let view="board",query="",filterStatus="all",filterCategory="all",filterPriority="all";
 let activeItem=null;
+let pendingInviteToken=null;
+if(/^#einladung=[a-f0-9]{48}$/.test(window.location.hash||"")){
+  pendingInviteToken=window.location.hash.slice("#einladung=".length);
+  window.history.replaceState(null,"",window.location.pathname+window.location.search);
+}
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const statusOf=id=>STATUS.find(x=>x.key===id)||STATUS[0];
 const canComment=()=>["admin","commenter"].includes(state.session.role);
@@ -109,21 +114,24 @@ function render(){
   const user=role==="admin"?"Projektleitung":role==="commenter"?"Mitwirkend":role==="viewer"?"Nur lesen":"Lesemodus";
   root.innerHTML='<main class="rm-container"><div class="rm-top"><a href="./index.html" class="rm-back">← Zur TENNILO-App</a>'+
     '<div class="rm-access"><span class="rm-role-dot '+role+'"></span><span>'+esc(user)+(role!=="guest"?" · "+esc(state.session.label):"")+'</span>'+
-    (role==="guest"?'<button class="btn subtle small" data-action="login">Zugangscode</button>':
+    (role==="guest"?'<button class="btn subtle small" data-action="login">Anmelden</button>':
       '<button class="btn subtle small" data-action="logout">Abmelden</button>')+
-    (isAdmin()?'<button class="btn ghost small" data-action="members">Zugänge verwalten</button>':'')+'</div></div>'+
+    (role!=="guest"?(state.session.account?
+      '<button class="btn ghost small" data-action="profile">Mein Konto</button>':
+      '<button class="btn ghost small" data-action="upgrade">Benutzerkonto einrichten</button>'):'')+
+    (isAdmin()?'<button class="btn ghost small" data-action="members">Nutzer verwalten</button>':'')+'</div></div>'+
     '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / ROADMAP & IDEEN</div>'+
     '<h1>Was kommt als <em>Nächstes?</em></h1>'+
     '<p>Entwicklung verfolgen, Prioritäten erkennen und gemeinsam Ideen sammeln. Jeder Punkt zeigt den aktuellen Stand – vom ersten Gedanken bis zur Testversion.</p>'+
     '<div class="rm-hero-actions">'+(canComment()?
       '<button class="btn rm-lime" data-action="idea">+ Neue Idee einreichen</button>':
-      '<button class="btn rm-lime" data-action="login">Idee oder Kommentar einreichen</button>')+
+      '<button class="btn rm-lime" data-action="login">Anmelden und mitmachen</button>')+
     '<a class="btn rm-outline" href="./index.html">Zur Turnier-App</a></div></div>'+
     '<div class="rm-hero-decoration" aria-hidden="true"><span></span><span></span><span></span></div></section>'+
     summary()+
     (state.offline?'<div class="rm-alert"><strong>Nur vorläufige Ansicht.</strong> Der gemeinsame Kommentarserver ist gerade nicht erreichbar. Änderungen sind momentan nicht möglich.</div>':'')+
     (!state.storagePersistent&&!state.offline?'<div class="rm-data-note"><strong>Testbetrieb:</strong> Die Beiträge liegen derzeit in einem privaten Server-Temp-Verzeichnis. Für eine dauerhaft verlässliche Ideensammlung muss ein persistenter privater Speicherpfad auf dem Hosting eingerichtet werden.</div>':'')+
-    (state.bootstrapAvailable?'<div class="rm-setup"><div><strong>Einmalige Einrichtung</strong><p>Die Projektleitung muss den Administrator-Zugang einmal einrichten. Dafür ist der bestehende Passwortschutz der Testseite erforderlich.</p></div><button class="btn primary" data-action="bootstrap">Admin-Zugang einrichten</button></div>':'')+
+    (state.bootstrapAvailable?'<div class="rm-setup"><div><strong>Einmalige Einrichtung</strong><p>Lege deinen eigenen Benutzernamen und ein sicheres Passwort für die Projektleitung fest.</p></div><button class="btn primary" data-action="bootstrap-account">Projektleitung einrichten</button></div>':'')+
     controls()+'<section id="rm-results" class="rm-results"></section>'+
     '<div class="rm-foot"><p><strong>Was bedeuten die Status?</strong> „Code fertig“ heißt: in GitHub implementiert, aber noch nicht auf der Testseite. „Auf Testseite“ bedeutet veröffentlicht und weiter im Praxistest.</p>'+
     '<p>Der Entwicklungsstatus wird redaktionell gepflegt. Ideen und Kommentare sind Beiträge der eingeladenen Testgruppe, keine verbindlichen Funktionszusagen.</p></div>'+
@@ -188,10 +196,51 @@ function detail(id){
       '<p class="rm-readonly">Zum Kommentieren benötigst du einen persönlichen Schreibzugang.</p>')+'</div>';
   showModal(x.title,body,{wide:true});
 }
+function credentialsForm(kind,button,{username="",needsOld=false}={}){
+  return '<form data-form="'+kind+'" class="rm-account-form">'+
+    (needsOld?'<label class="rm-field">Bisheriges Passwort<input name="oldPassword" type="password" autocomplete="current-password" required></label>':
+      '<label class="rm-field">Benutzername<input name="username" type="text" autocomplete="username" minlength="3" maxlength="40" pattern="[a-zA-Z0-9._-]{3,40}" value="'+esc(username)+'" required placeholder="z. B. vorname.nachname"></label>')+
+    '<label class="rm-field">'+(needsOld?'Neues Passwort':'Passwort')+'<input name="'+(needsOld?'newPassword':'password')+'" type="password" autocomplete="'+(kind==="login-account"?"current-password":"new-password")+'" minlength="'+(kind==="login-account"?1:12)+'" required></label>'+
+    (kind==="login-account"?'':'<label class="rm-field">Passwort wiederholen<input name="passwordAgain" type="password" autocomplete="new-password" minlength="12" required></label>')+
+    '<button class="btn primary" type="submit">'+button+'</button></form>';
+}
 function loginModal(){
-  showModal("Zugangscode eingeben",'<p class="rm-modal-note">Die Roadmap ist für alle Personen mit Zugang zur geschützten Testseite lesbar. Für eigene Ideen und Kommentare benötigst du zusätzlich einen persönlichen Einladungscode.</p>'+
-    '<form data-form="login"><label class="rm-field">Persönlicher Zugangscode<input name="code" type="password" autocomplete="off" pattern="[a-f0-9]{48}" minlength="48" maxlength="48" required></label>'+
-    '<button class="btn primary" type="submit">Zugang freischalten</button></form>');
+  showModal("Bei TENNILO Roadmap anmelden",
+    '<p class="rm-modal-note">Mit deinem persönlichen Benutzernamen und Passwort kannst du jederzeit Ideen einreichen oder kommentieren.</p>'+
+    credentialsForm("login-account","Anmelden")+
+    '<details class="rm-legacy"><summary>Noch einen alten Zugangscode?</summary>'+
+      '<p>Den bisherigen Code einmal eingeben und anschließend dauerhaft auf Benutzername und Passwort umstellen.</p>'+
+      '<form data-form="login"><label class="rm-field">Bisheriger Zugangscode<input name="code" type="password" autocomplete="off" pattern="[a-f0-9]{48}" minlength="48" maxlength="48" required></label>'+
+      '<button type="submit" class="btn subtle">Mit altem Code anmelden</button></form></details>');
+}
+function registrationModal(){
+  if(!pendingInviteToken)return;
+  showModal("Willkommen bei der TENNILO-Roadmap",
+    '<p class="rm-modal-note">Du wurdest eingeladen. Lege einmalig einen Benutzernamen und ein sicheres Passwort fest. Den Link brauchst du danach nicht mehr.</p>'+
+    credentialsForm("register-invite","Konto erstellen & anmelden"));
+}
+function bootstrapAccountModal(){
+  showModal("Projektleitung einrichten",
+    '<p class="rm-modal-note">Du verwaltest die Roadmap künftig mit einem persönlichen Benutzernamen und Passwort.</p>'+
+    credentialsForm("bootstrap-account","Projektleitungskonto erstellen"));
+}
+function upgradeAccountModal(){
+  showModal("Alten Zugang auf Benutzerkonto umstellen",
+    '<p class="rm-modal-note">Dein bisheriger Zugang wird durch Benutzername und Passwort ersetzt. Kommentare, Rechte und Ideen bleiben erhalten.</p>'+
+    credentialsForm("upgrade-account","Alten Zugang umstellen"));
+}
+function profileModal(){
+  showModal("Mein Roadmap-Konto",
+    '<p class="rm-modal-note">Angemeldet als <strong>'+esc(state.session.username||"")+
+      '</strong>. Dein Konto gilt nur für die geschützte Roadmap.</p>'+
+    credentialsForm("change-password","Passwort ändern",{needsOld:true}));
+}
+function invitationModal(token){
+  const link=window.location.origin+window.location.pathname+"#einladung="+token;
+  showModal("Persönlicher Einladungslink",
+    '<p class="rm-token-warning"><strong>Nur einmal sichtbar.</strong> Kopiere den Link und schicke ihn der Person privat. Er gilt sieben Tage für genau eine Registrierung.</p>'+
+    '<label class="rm-field">Einladungslink<textarea id="rm-invite-url" class="rm-code" rows="3" readonly>'+esc(link)+'</textarea></label>'+
+    '<button class="btn primary" type="button" data-action="copy-invite">Einladungslink kopieren</button>');
 }
 function ideaModal(){
   showModal("Neue Idee einreichen",'<p class="rm-modal-note">Gib deinem Vorschlag einen klaren Titel und beschreibe den Nutzen für die Turnierleitung. Neue Ideen starten im Status „Ideensammlung“ und können anschließend priorisiert werden.</p>'+
