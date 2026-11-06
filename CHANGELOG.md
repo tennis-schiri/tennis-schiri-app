@@ -1,9 +1,24 @@
 # TENNILO – Änderungsverlauf (Changelog)
 
-**Stand:** 2026-11-05  
+**Stand:** 2026-11-06  
 **Produktname:** TENNILO (Arbeitstitel) · frühere UI-Bezeichnung „Tennis-Schiri Turniermanager“
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
+
+## [0.8.2] – Optionale Endzeit und Spielzeit-Automatik (nur GitHub; kein neuer Upload)
+
+**2026-11-06:** In allen drei bestehenden Turnierarten neue Eingaben für Startzeit und eine optionale Endzeit sowie zwei wählbare Planungsmodi: feste Spielzeiten oder **an Endzeit anpassen**. Die Automatik verteilt die verfügbare Dauer auf die tatsächlich ausgelosten Zeitblöcke mit Pausen, schlägt keine Matchanzahl stillschweigend herunter und meldet unmachbare Zeitfenster explizit. Frühere Turniere ohne Endzeit bleiben unverändert. Laufende Uhren behalten ihre beim Start festgelegte Dauer.
+
+- **Doppelturnier:** Machbarkeitsübersicht für 1–8 Spiele/Team auf Grundlage echter Probeauslosungen, Teamzahl, Platzanzahl, Spielblöcken und Endzeit; 4 vs. 5 Matches werden konkret geprüft. Ungerade Teamzahlen erzwingen gerade Spielzahlen je Team. Auf Wunsch inklusive Zeitreserve für Top-8-Viertelfinale, Halbfinale, Finale und Platz 3. Endrunden-Zeitfenster werden angezeigt.
+- **Schleifchenturnier:** Zeitplan nach fertiger Auslosung an Endzeit ausrichten; mögliche Endrunde reservierbar.
+- **One Point Cup:** Einstellbare gleichzeitige Plätze und Zeitbedarf je Ein-Punkt-Match (1–15 Minuten), seriell geplante K.-o.-Stufen und mögliche Endzeit-Automatik.
+- **Kompatibilität:** `endTime`, `timeMode`, `reserveFinals`, `reservePlayoffs`, `opcMinutes` werden im bestehenden lokalen/JSON-Datenmodell gespeichert; alte Daten behalten feste Zeiten, JSON-Schema-Version 1.
+- **Tests:** Neues `tests/scheduling.test.mjs` mit 15 isoliert bestandenen Fachfällen sowie `tests/scheduling-ui.test.mjs` mit Formular-/Kompatibilitätsprüfungen. Vollständige GitHub-CI/Browser-Tests für diese Version noch offen.
+- **Release:** Die letzte bestätigte FTPS-Veröffentlichung bleibt **v0.8.0** vom 05.11.2026, nicht diese Änderung. Kein automatischer Upload.
+
+## [0.8.0 – Veröffentlichung bestätigt] – Alle drei Turnierarten (2026-11-05)
+
+Der manuelle GitHub-Actions-Lauf [42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) hat nach einer aktualisierten veralteten Testprüfung **200 von 200 Tests** einschließlich PHP-Live-Integration und PHP-Syntax bestanden und anschließend **27 App-Dateien per FTPS erfolgreich übertragen**. Die drei Turnierarten sind damit auf die passwortgeschützte Testseite geladen. Ein echter Ende-zu-Ende-Test in verschiedenen Browsern/auf einem zweiten Gerät ist noch nicht bestätigt.
 
 ## [0.8.0] – One Point Cup als dritte Turnierart (nur GitHub, nicht veröffentlicht)
 
