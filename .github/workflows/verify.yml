@@ -32,6 +32,9 @@ jobs:
           php -v
           php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2+ erforderlich.\n"); exit(1); }'
           php -l site/live-feed.php
+          php -l site/roadmap-lib.php
+          php -l site/roadmap-api.php
+          php tests/roadmap.php
       - name: Alle App- und Live-Tests ausführen
         run: node --test tests/*.test.mjs
       - name: PHP-Kontomodell auf Syntax und Rollen testen
