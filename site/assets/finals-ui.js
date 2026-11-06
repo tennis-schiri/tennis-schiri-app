@@ -1,6 +1,7 @@
 // Darstellung der Schleifchen-Endrunde. Fachlogik bleibt in finals.js.
 import { ribbonFinalPreview, verifyRibbonFinals } from "./finals.js";
 import { normalizeRibbonResult } from "./results.js";
+import { plannedRound } from "./operations.js?v=082";
 
 export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}){
   let preview=null,reason=null;
@@ -51,10 +52,18 @@ export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editi
     <strong>Gespeicherte Endrunde ist nicht gültig</strong>
     <span>${escapeHtml(check?.errors?.[0]||"Bitte Endrunde zurücknehmen und erneut auslosen.")}</span>
   </div></div>`:"";
+  const finalTime=stageIndex=>{
+    if(!t.reserveFinals)return "";
+    try{
+      const before=(t.draw?.rounds?.length||0)+(t.draw?.specialRound?1:0);
+      const p=plannedRound(t,before+stageIndex);
+      return " · Geplant "+escapeHtml(p.start)+"–"+escapeHtml(p.end)+" Uhr";
+    }catch{return "";}
+  };
   const bracket=valid?`<div class="finals-rounds">${saved.rounds.map((round,stageIndex)=>`
     <section class="panel finals-stage">
       <div class="panel-head"><div><h3>${round.label}</h3>
-        <p>${round.matches.filter(m=>m.result?.winner===1||m.result?.winner===2).length} von ${round.matches.length} Ergebnissen erfasst</p></div></div>
+        <p>${round.matches.filter(m=>m.result?.winner===1||m.result?.winner===2).length} von ${round.matches.length} Ergebnissen erfasst${finalTime(stageIndex)}</p></div></div>
       <div class="finals-match-list">${round.matches.map((match,matchIndex)=>{
         const result=normalizeRibbonResult(match.result);
         const finished=result.winner!==null;
