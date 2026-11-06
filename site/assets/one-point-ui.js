@@ -1,4 +1,5 @@
-import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=082";
+import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=088";
+import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {euroCents,euroText,euroInput,timeWindow} from "./operations.js?v=082";
 import {
   checkOnePointSetup,onePointTimePlan,drawOnePointCup,checkOnePointDraw,
@@ -222,14 +223,26 @@ function settingsFields(t=null) {
     '<label class="field">Nenngeld Jugend (€) · bar<input name="feeYouth" inputmode="decimal" required pattern="[0-9]+([,.][0-9]{1,2})?" value="'+euroInput(youth)+'"></label>'+
     '</div>';
 }
+function demoPanel(t){
+  return '<section class="demo-panel"><div><strong>'+(t.demoMode?"DEMO-MODUS · Testdaten":"Demo-Kopie erstellen")+
+    '</strong><p>'+(t.demoMode?"Zufallssieger nur für den Test-Cup; keine simulierten Barzahlungen.":"Neue unabhängige Testkopie mit zufälligen Spielern für die eingestellte Feldgröße.")+
+    '</p></div><div class="demo-panel-actions"><button class="btn subtle small" data-act="demo-copy">Zufallsteilnehmer generieren</button>'+
+    (t.demoMode?'<button class="btn primary small" data-act="demo-fill" '+(t.opc.draw?"":'disabled title="Bitte zuerst auslosen"')+'>Offene Ergebnisse auswürfeln</button>':"")+'</div></section>';
+}
+function demoCopyDialog(t){
+  const n=demoCountLimits(t);
+  showDialog({eyebrow:"DEMO-MODUS",title:"Zufallsteilnehmer generieren",kind:"demo-copy",submit:"Demo-Kopie anlegen",
+    body:'<p>Neue Testkopie; bestehende Cup-Daten bleiben unverändert.</p><label class="field">Anzahl Spieler<input type="number" name="demoCount" required min="'+n.min+'" max="'+n.max+'" step="1" value="'+n.defaultCount+'"></label>'+
+      '<p class="field-hint">Feldgröße '+t.opc.fieldSize+': '+n.min+'–'+n.max+' Spieler, mit Freilosen falls nötig.</p>'});
+}
 function draw() {
   if(view==="home"||!active()) {root.innerHTML=header()+home();return;}
   const t=active(),pages={overview,players,bracket,settings};
   root.innerHTML=header()+'<main class="double-shell"><div class="double-hero"><div class="eyebrow opc-kicker">EIN PUNKT ENTSCHEIDET</div>'+
     '<h1>'+esc(t.name)+'</h1><p class="opc-summary">'+dateLabel(t.date)+' · '+t.opc.fieldSize+
     'er Feld · '+playerCount(t)+' anwesend</p></div>'+
-    '<div class="double-content">'+nav()+'<section class="double-main">'+(pages[view]||overview)(t)+
-    '</section></div><footer class="double-footer">© Tennis-Schiri · One Point Cup v0.8.2 · geschützte Testversion · lokale Speicherung</footer></main>';
+    '<div class="double-content">'+nav()+'<section class="double-main">'+demoPanel(t)+(pages[view]||overview)(t)+
+    '</section></div><footer class="double-footer">© Tennis-Schiri · One Point Cup v0.8.8 · geschützte Testversion · lokale Speicherung</footer></main>';
 }
 function showDialog({eyebrow,title,body,kind,submit="Speichern"}) {
   dialogRoot.innerHTML='<dialog class="app-dialog" aria-labelledby="opc-dialog-title">'+
@@ -336,7 +349,7 @@ function saveImport(t,form){
   closeDialog();view="players";draw();flash(added.length+" Spieler übernommen; keine Barzahlungen importiert.");
 }
 function showDemo(){
-  const t=store.create({type:"opc",name:"Demo – One Point Cup",date:todayLocal(),
+  const t=store.create({type:"opc",demoMode:true,name:"Demo – One Point Cup",date:todayLocal(),
     startTime:"10:00",courts:[1],entryFeeCents:500,
     feeCategories:[{id:"standard",name:"Standard",amountCents:500},
       {id:"jugend",name:"Jugend",amountCents:250}],
@@ -364,6 +377,12 @@ document.addEventListener("click",event=>{
   if(act==="new")return showDialog({eyebrow:"NEUER ONE POINT CUP",title:"One Point Cup anlegen",
     body:settingsFields(),kind:"create",submit:"Cup anlegen"});
   if(act==="demo")return run(showDemo);
+  if(act==="demo-copy"&&t)return demoCopyDialog(t);
+  if(act==="demo-fill"&&t)return run(()=>{
+    const {patch,filled}=fillDemoResults(t);
+    if(filled)store.editTournament(t.id,patch);
+    draw();flash(filled?filled+" offene Spiele mit Zufallsentscheidungen gefüllt.":"Alle Paarungen bereits entschieden.");
+  });
   if(act==="open")return run(()=>{store.setActive(trigger.dataset.id);selectedRound=0;view="overview";draw();});
   if(act==="tab"){view=trigger.dataset.tab;draw();return;}
   if(act==="settings"){view="settings";draw();return;}
@@ -437,6 +456,11 @@ document.addEventListener("submit",event=>{
   event.preventDefault();
   const t=active();
   run(()=>{
+    if(form.dataset.form==="demo-copy"){
+      if(!t)throw Error("Kein One Point Cup ausgewählt.");
+      const copy=store.create(makeDemoCopy(t,new FormData(form).get("demoCount")));
+      closeDialog();view="overview";selectedRound=0;draw();flash(copy.name+" erstellt. Jetzt auslosen und Ergebnisse auswürfeln.");return;
+    }
     if(form.dataset.form==="create")return saveSettings(null,form,true);
     if(!t)throw Error("Kein One Point Cup gewählt.");
     if(form.dataset.form==="settings")return saveSettings(t,form);

@@ -1,4 +1,5 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=086";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=088";
+import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {normalizeAdvisorInput,recommendTournamentFormats,advisorTournamentValues} from "./tournament-advisor.js?v=086";
 import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=086";
@@ -92,7 +93,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.4</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.8</span>
   </div></header>`;
 }
 
@@ -542,13 +543,26 @@ function drawPreview(t) {
     <div class="browser-notice">${icon("info")}<div><strong>Testversion der Auslosung</strong><p>Die normalen Vorrunden können ausgelost und Ergebnisse sowie Schleifen erfasst werden. Eine lesende Server-Fernanzeige ist nach bewusster Freigabe möglich, aber die Turnierverwaltung bleibt lokal und nicht gemeinsam bearbeitbar. Die Endrunde findest du in einem eigenen Menüpunkt. Auffüller spielen ohne eigene Wertung. Bitte noch nicht für ein echtes Turnier verwenden.</p></div></div>
   </section>`;
 }
+function demoPanel(t) {
+  return `<section class="demo-panel" aria-label="Demo-Werkzeuge"><div><strong>${t.demoMode?"DEMO-MODUS · Testdaten":"Demo-Kopie erstellen"}</strong>
+    <p>${t.demoMode?"Nur Testdaten, keine simulierten Barzahlungen.":"Neue Testkopie mit identischen Turniereinstellungen und zufälligen Teilnehmenden. Das Original bleibt unverändert."}</p></div>
+    <div class="demo-panel-actions"><button type="button" class="btn subtle small" data-action="demo-copy">Zufallsteilnehmer generieren</button>
+    ${t.demoMode?`<button type="button" class="btn primary small" data-action="demo-fill" ${t.draw?"":'disabled title="Bitte zuerst auslosen"'}>Offene Ergebnisse auswürfeln</button>`:""}</div></section>`;
+}
+function showDemoCopyDialog(t) {
+  const n=demoCountLimits(t);
+  showDialog({eyebrow:"DEMO-MODUS",title:"Zufallsteilnehmer generieren",form:"demo-copy",submit:"Demo-Kopie anlegen",
+    body:`<p>Dein aktuelles Turnier bleibt unverändert. Alle Testteilnehmer werden ohne Barzahlungen angelegt.</p>
+    <label class="field">Anzahl ${escapeHtml(n.unit)}<input type="number" name="demoCount" min="${n.min}" max="${n.max}" step="1" required value="${n.defaultCount}"></label>
+    <p class="field-hint">Die Vorgaben des Turnierformats werden geprüft. Bei Schleifchen gibt es zwei gleich große Stärkegruppen.</p>`});
+}
 function render() {
   const t = store.active();
   if(t?.type==="doubles"&&view!=="home"&&view!=="advisor") {window.location.assign("./doppel.html");return;}
   if(t?.type==="opc"&&view!=="home"&&view!=="advisor") {window.location.assign("./opc.html");return;}
   root.innerHTML = header() + (view==="advisor"?advisorPage():!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
-    <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.6 · Private Testversion</footer>
+    <main class="main-area">${appTop(t)}${demoPanel(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.8 · Private Testversion</footer>
     </main></div>`);
 }
 
@@ -664,7 +678,7 @@ function readSettings(form) {
   };
 }
 function showDemo() {
-  const t = store.create({ name:"Demo – Sommer-Schleifchenturnier", date:todayLocal(), startTime:"10:00", duration:20, breakMinutes:10, rounds:4, courts:[1,2,3,4] });
+  const t = store.create({ demoMode:true, name:"Demo – Sommer-Schleifchenturnier", date:todayLocal(), startTime:"10:00", duration:20, breakMinutes:10, rounds:4, courts:[1,2,3,4] });
   const strong = ["Alex Bauer","Robin Fischer","Kim Hartmann","Toni Berger","Mika Vogel","Luca Beck","Jana Hoffmann","Sam Keller"];
   const weak = ["Chris Sommer","Nina Seidel","Pat Winter","Max Schulz","Lea König","Flo Neumann","Jules Meyer","Elli Brandt"];
   for (const name of strong) store.upsertParticipant(t.id, {name,group:"stark",present:true});
@@ -673,7 +687,7 @@ function showDemo() {
 }
 
 function showFillerDemo() {
-  const t=store.create({name:"Demo – Auffüllrunde",date:todayLocal(),startTime:"10:00",
+  const t=store.create({demoMode:true,name:"Demo – Auffüllrunde",date:todayLocal(),startTime:"10:00",
     duration:20,breakMinutes:10,rounds:3,courts:[1,2,3]});
   for(let i=1;i<=5;i++){
     store.upsertParticipant(t.id,{name:"Stark "+i,group:"stark",present:true});
@@ -765,6 +779,12 @@ document.addEventListener("click", event => {
   if (action === "tab") { view = trigger.dataset.tab==="fees"?"participants":trigger.dataset.tab; search = ""; editingResult=null; editingFinal=null; render(); return; }
   if (action === "new") return showTournamentDialog();
   if (action === "demo") return run(showDemo);
+  if (action === "demo-copy" && t) return showDemoCopyDialog(t);
+  if (action === "demo-fill" && t) return run(() => {
+    const {patch,filled}=fillDemoResults(t);
+    if(filled)store.editTournament(t.id,patch);
+    render();flash(filled?`${filled} offene Begegnungen mit Zufallsergebnissen gefüllt.`:"Keine offenen Begegnungen mehr vorhanden.");
+  });
   if (action === "demo-filler") return run(showFillerDemo);
   if (action === "fee-category-add" && t) return showFeeCategoryDialog(t);
   if (action === "fee-category-edit" && t) return showFeeCategoryDialog(t,trigger.dataset.id);
@@ -973,6 +993,13 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind==="demo-copy")return run(()=>{
+    const current=store.active();
+    if(!current)throw Error("Kein Turnier ausgewählt.");
+    const copy=store.create(makeDemoCopy(current,new FormData(form).get("demoCount")));
+    closeDialog();view="overview";search="";drawOpenRound=0;editingResult=null;editingFinal=null;render();
+    flash(`Demo-Kopie „${copy.name}“ erstellt. Jetzt auslosen und Ergebnisse auswürfeln.`);
+  });
   if(kind==="advisor") return run(() => {
     const d=new FormData(form);
     advisorState=normalizeAdvisorInput({participants:d.get("participants"),courtCount:d.get("courtCount"),

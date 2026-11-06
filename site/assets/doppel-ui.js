@@ -1,4 +1,5 @@
-import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=086";
+import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=088";
+import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=082";
 import {
@@ -68,7 +69,7 @@ function run(fn) {
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
     '<a class="doubles-logo" href="./index.html">TENN<span>I</span>LO <small style="font-size:.48em;letter-spacing:.02em;color:#c9dcda"> / DOPPELTURNIER</small></a>'+
-    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.6</span></div></header>';
+    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.8</span></div></header>';
 }
 function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
@@ -354,6 +355,19 @@ function settingsFields(t=null,inline=false) {
     '<p class="muted" style="margin-top:17px">Nach der Auslosung können Platzanzahl und Spiele je Team nur nach Rücknahme des Spielplans verändert werden.</p>'+
     '<div class="double-actions"><button class="btn primary" type="submit">Einstellungen speichern</button></div></form>';
 }
+function demoPanel(t){
+  return '<section class="demo-panel"><div><strong>'+(t.demoMode?"DEMO-MODUS · Testdaten":"Demo-Kopie erstellen")+
+    '</strong><p>'+(t.demoMode?"Zufallsergebnisse nur für dieses Testturnier; keine erfundenen Barzahlungen.":"Neue Testkopie mit denselben Turniereinstellungen und zufälligen festen Doppelteams.")+
+    '</p></div><div class="demo-panel-actions"><button class="btn subtle small" data-act="demo-copy">Zufallsteams generieren</button>'+
+    (t.demoMode?'<button class="btn primary small" data-act="demo-fill" '+(t.doubles.draw?"":'disabled title="Bitte zuerst auslosen"')+'>Offene Ergebnisse auswürfeln</button>':"")+'</div></section>';
+}
+function demoCopyDialog(t){
+  const n=demoCountLimits(t);
+  showDialog({eyebrow:"DEMO-MODUS",title:"Zufällige Teams erstellen",form:"demo-copy",submit:"Demo-Kopie anlegen",
+    body:'<p>Es entsteht eine separate Kopie. Bisherige Teams, Ergebnisse und die Kasse bleiben unverändert.</p>'+
+      '<label class="field">Anzahl Doppelteams<input type="number" name="demoCount" required min="'+n.min+'" max="'+n.max+'" step="1" value="'+n.defaultCount+'"></label>'+
+      '<p class="field-hint">Je Team zwei Beispielspieler; Spielanzahl und verfügbare Plätze werden übernommen.</p>'});
+}
 function render() {
   const t=active();
   if(view==="home"||!t) {
@@ -363,8 +377,8 @@ function render() {
   const tabs={overview,teams,draw:drawPage,table:tablePage,playoffs:playoffsPage,settings:settingsPage};
   root.innerHTML=header()+'<main class="double-shell"><div class="double-hero"><div class="eyebrow">FESTE DOPPELPARTNER · TURNIERLEITUNG</div>'+
     '<h1>'+esc(t.name)+'</h1><p>'+dateText(t.date)+' · '+t.courts.length+' Plätze · '+t.rounds+' Spiele pro Team</p></div>'+
-    '<div class="double-content">'+nav(t)+'<section class="double-main">'+(tabs[view]||overview)(t)+'</section></div>'+
-    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.8.6 · Geschützte Testversion · Daten nur lokal</footer></main>';
+    '<div class="double-content">'+nav(t)+'<section class="double-main">'+demoPanel(t)+(tabs[view]||overview)(t)+'</section></div>'+
+    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.8.8 · Geschützte Testversion · Daten nur lokal</footer></main>';
 }
 function showDialog({eyebrow,title,form,body,submit="Speichern"}) {
   dialogRoot.innerHTML='<dialog class="app-dialog" aria-labelledby="double-dialog-title">'+
@@ -433,7 +447,7 @@ function courtDialog(t) {
       '<label class="field">Platz '+c+'<input name="court-'+c+'" maxlength="60" value="'+esc(courtName(t,c))+'"></label>').join("")+'</div>'});
 }
 function showDemo() {
-  const t=store.create({type:"doubles",name:"Demo – Fun-Doppelturnier",date:todayLocal(),
+  const t=store.create({type:"doubles",demoMode:true,name:"Demo – Fun-Doppelturnier",date:todayLocal(),
     startTime:"10:00",duration:20,breakMinutes:10,rounds:4,courts:[1,2,3,4],
     entryFeeCents:500,feeCategories:[{id:"standard",name:"Standard",amountCents:500},
       {id:"ermaessigt",name:"Ermäßigt",amountCents:250}]});
@@ -547,6 +561,12 @@ document.addEventListener("click",event=>{
   if(act==="home"){view="home";render();return;}
   if(act==="new")return newDialog();
   if(act==="demo")return run(showDemo);
+  if(act==="demo-copy"&&t)return demoCopyDialog(t);
+  if(act==="demo-fill"&&t)return run(()=>{
+    const {patch,filled}=fillDemoResults(t);
+    if(filled)store.editTournament(t.id,patch);
+    render();flash(filled?filled+" offene Spiele mit Zufallsergebnissen gefüllt.":"Keine offenen Begegnungen vorhanden.");
+  });
   if(act==="import")return document.getElementById("doubles-import")?.click();
   if(act==="open")return run(()=>{store.setActive(trigger.dataset.id);view="overview";render();});
   if(act==="tab"){view=trigger.dataset.tab;render();return;}
@@ -717,6 +737,11 @@ document.addEventListener("submit",event=>{
   event.preventDefault();
   const t=active(),kind=form.dataset.form;
   run(()=>{
+    if(kind==="demo-copy"){
+      if(!t)throw Error("Kein Doppelturnier gewählt.");
+      const copy=store.create(makeDemoCopy(t,new FormData(form).get("demoCount")));
+      closeDialog();view="overview";currentRound=0;render();flash(copy.name+" erstellt. Jetzt auslosen und Ergebnisse auswürfeln.");return;
+    }
     if(kind==="create")return saveSettings(null,form,true);
     if(!t)throw Error("Kein Doppelturnier gewählt.");
     if(kind==="settings")return saveSettings(t,form,false);

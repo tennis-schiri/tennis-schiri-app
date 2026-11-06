@@ -132,6 +132,7 @@ export function normalizeTournament(v) {
   return {
     id: text(v.id, 80) || uid(),
     type:v.type==="doubles"?"doubles":v.type==="opc"?"opc":"ribbon",
+    demoMode:v.demoMode===true,
     doubles:doublesOf(v.doubles,categories),
     opc:onePointOf(v.opc,categories),
     name: text(v.name) || "Unbenanntes Turnier",
@@ -182,7 +183,7 @@ export function normalizeTournament(v) {
 
 export function newTournament(values = {}) {
   return normalizeTournament({
-    id: uid(), type:values.type, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
+    id: uid(), type:values.type, demoMode:values.demoMode===true, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
     endTime:values.endTime,timeMode:values.timeMode,matchMode:values.matchMode,pointTarget:values.pointTarget,pointWinByTwo:values.pointWinByTwo,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,opcMinutes:values.opcMinutes,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
