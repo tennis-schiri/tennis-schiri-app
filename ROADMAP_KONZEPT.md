@@ -23,6 +23,8 @@ Die anfänglichen 18 Einträge in `site/roadmap-seed.json` beruhen auf `PROJEKTS
 
 Die 18 bestehenden Themen besitzen fünf eigenständige Detailfelder. Neue Nutzerideen können ohne sie erstellt werden und die Projektleitung ergänzt sie später. Bereits bestehende Feldwerte – auch bewusst leere – bleiben beim Seed-Merge unverändert. Einträge ohne ausformulierte Details zeigen im Detailfenster einen neutralen Hinweis. Die Übersicht zeigt weiter nur Titel, Kurzbeschreibung, Priorität und Meilenstein.
 
+**Roadmap aktualisiert und veröffentlicht (2026-11-06):** [GitHub-Actions-Roadmap-Upload 42198172057](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42198172057) erfolgreich: **259/259 Node-Tests**, PHP-Prüfung und **6/6 Roadmap-Dateien** per FTPS übertragen. Das Board umfasst **26 Themen**, darunter neue ausführliche Planung der vier Zählweisen Zeit, Punkte, Games und Sätze mit Tiebreak-/FAST4-/No-Ad-Unterformen. Diese erweiterten Game- und Satz-Zählweisen sind **geplant**, nicht bereits in der App verfügbar. Der separate Upload hat **keinen App-Code, kein Benutzerkontobackend und keine .htaccess** übertragen. Die zuletzt vollständig bestätigte App-Version bleibt **v0.8.4**; v0.8.6 ist nur in GitHub. Tests auf echtem Browser/Hosting sowie ein dauerhaft privater Roadmap-Speicher stehen weiterhin aus.
+
 ## Berechtigungen
 
 Der bestehende HTTP-Basic-Passwortschutz der **gesamten Testseite** bleibt die erste Zugangsschranke. Die Roadmap erfordert eine geprüfte Apache-`AUTH_TYPE=Basic`-Identität und HTTPS. Die Roadmap-API liefert bei fehlendem Server-Passwortschutz keine gespeicherten Beiträge aus.
