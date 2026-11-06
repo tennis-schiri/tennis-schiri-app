@@ -3,6 +3,7 @@
 // Der Sieger wird wie in der Tabelle ausdrücklich erfasst. Ein Sieg gibt jedem Spieler
 // des Siegerteams ein Schleifchen. Game-Zahlen sind optional und nicht die Wertung.
 import { analyzeRibbonDraw, verifyRibbonDraw } from "./draw.js";
+import {normalizePointResult,scoringRules} from "./match-scoring.js";
 
 const integerScore = value => {
   if (value === null || value === undefined || value === "") return null;
@@ -12,7 +13,11 @@ const integerScore = value => {
   return n;
 };
 
-export function normalizeRibbonResult(value) {
+export function normalizeRibbonResult(value,t=null) {
+  if(t&&scoringRules(t).mode==="points"){
+    const result=normalizePointResult(value,t);
+    return result||{score1:null,score2:null,winner:null};
+  }
   if (value === undefined || value === null) return {score1:null, score2:null, winner:null};
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Ergebnisdaten sind ungültig.");
   const score1=integerScore(value.score1);
@@ -48,7 +53,7 @@ export function updateRibbonMatchResult(t,roundIndex,matchIndex,value) {
   if(!oldMatch)throw new Error("Begegnung nicht gefunden.");
   if(draw.specialRound&&!inSpecial)
     throw new Error("Bitte zuerst die Auffüllrunde zurücknehmen, bevor normale Vorrundenergebnisse geändert werden.");
-  const result=normalizeRibbonResult(value);
+  const result=normalizeRibbonResult(value,t);
   const update=match=>({...match,result:result.winner===null?null:result});
   if(inSpecial){
     const specialRound={...draw.specialRound,matches:draw.specialRound.matches.map((match,i)=>i===matchIndex?update(match):match)};
@@ -72,7 +77,7 @@ export function ribbonStandings(t) {
     let roundComplete=0;
     for(const match of round.matches){
       totalMatches++;
-      const result=normalizeRibbonResult(match.result);
+      const result=normalizeRibbonResult(match.result,t);
       if(result.winner===null)continue;
       completeMatches++;roundComplete++;
       for(const id of match.slots){
@@ -106,7 +111,7 @@ export function ribbonStandings(t) {
   if(draw.specialRound){
     let specialComplete=0;
     for(const match of draw.specialRound.matches){
-      const result=normalizeRibbonResult(match.result);
+      const result=normalizeRibbonResult(match.result,t);
       if(result.winner===null)continue;
       specialComplete++;
       for(let i=0;i<4;i++){
