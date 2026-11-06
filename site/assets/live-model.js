@@ -114,7 +114,7 @@ function selectedDoublesRound(t) {
   return open>=0?open:rounds.length-1;
 }
 function doublesLiveDisplay(t,now) {
-  const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now,format:"doubles"};
+  const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now,format:"doubles",scoreUnit:t.matchMode==="points"?"points":"games"};
   if(!t.doubles?.draw)return {...base,mode:"waiting",message:"Das Doppelturnier ist noch nicht ausgelost."};
   const verification=verifyDoublesDraw(t);
   if(!verification.ok)return {...base,mode:"invalid",message:verification.errors[0]};
