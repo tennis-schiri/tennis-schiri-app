@@ -137,6 +137,11 @@ export function normalizeTournament(v) {
     name: text(v.name) || "Unbenanntes Turnier",
     date: /^\d{4}-\d{2}-\d{2}$/.test(v.date ?? "") ? v.date : todayLocal(),
     startTime: /^\d{2}:\d{2}$/.test(v.startTime ?? "") ? v.startTime : "10:00",
+    endTime: typeof v.endTime==="string"&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v.endTime)?v.endTime:null,
+    timeMode:v.timeMode==="fit"?"fit":"fixed",
+    reserveFinals:v.reserveFinals===true,
+    reservePlayoffs:v.reservePlayoffs!==false,
+    opcMinutes:integer(v.opcMinutes,1,15,3),
     duration: integer(v.duration, 10, 120, 20),
     breakMinutes: integer(v.breakMinutes, 0, 60, 10),
     rounds: integer(v.rounds, 1, 8, 4),
@@ -175,6 +180,7 @@ export function normalizeTournament(v) {
 export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), type:values.type, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
+    endTime:values.endTime,timeMode:values.timeMode,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,opcMinutes:values.opcMinutes,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
