@@ -62,6 +62,9 @@ const stageToDisplay=(t,standing)=>{
   let index=stages.findIndex(stage=>stage.matches.some(m=>!validResult(m.result)));
   if(index<0)index=stages.length-1;
   const stage=stages[index];
+  const preliminaryBlocks=t.draw.rounds.length+(t.draw.specialRound?1:0);
+  let stagePlan=null;
+  if(t.reserveFinals)try{stagePlan=plannedRound(t,preliminaryBlocks+index);}catch{}
   const following=stages[index+1];
   const nextRound=following?.matches?.length&&following.matches.every(m=>
     Array.isArray(m.team1)&&m.team1.length===2&&Array.isArray(m.team2)&&m.team2.length===2)?
@@ -70,6 +73,7 @@ const stageToDisplay=(t,standing)=>{
   return {
     mode:"finals",title:stage.label,subtitle:"K.-o.-Endrunde · feste Doppel",
     nextRound,stageIndex:index,stageCount:stages.length,
+    plannedStart:stagePlan?.start||null,plannedEnd:stagePlan?.end||null,
     progress:stage.matches.filter(m=>validResult(m.result)).length,
     total:stage.matches.length,
     matches:stage.matches.map((m,i)=>normalizeMatch(t,m,{roundFinal:true,number:i+1})),
