@@ -78,6 +78,7 @@ jobs:
           echo "Alle vierunddreißig App-Dateien wurden hochgeladen."
 
   # Einmaliger genehmigter Release; nach Abschluss vollständig entfernen.
+  # Wiederholung nach präzisierter statischer Allowlist-Testprüfung.
 
   deploy_once:
     if: >-
