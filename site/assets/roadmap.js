@@ -153,11 +153,18 @@ function detailsHtml(item){
   const available=DETAIL_SECTIONS.filter(([key])=>String(item[key]||"").trim().length);
   if(!available.length)return '<div class="rm-detail-awaiting"><strong>Details werden noch ergänzt.</strong>'+
     '<p>Dieser Vorschlag wurde eingereicht. Die Projektleitung kann Ziel, Umfang und konkrete Prüfpunkte noch ausarbeiten.</p></div>';
+  const sourceLinks=(Array.isArray(item.references)?item.references:[])
+    .filter(ref=>ref&&typeof ref.title==="string"&&typeof ref.url==="string"&&
+      /^https:\/\/(?:drive\\.google\\.com|docs\\.google\\.com)\//.test(ref.url))
+    .slice(0,5);
+  const sources=sourceLinks.length?
+    '<section class="rm-detail-sources"><h3>Fachquellen aus Google Drive</h3><p>Grundlagen und mögliche Varianten – nicht automatisch verbindliche TENNILO-Regeln.</p>'+
+    '<div class="rm-detail-source-links">'+sourceLinks.map(ref=>'<a href="'+esc(ref.url)+'" target="_blank" rel="noopener noreferrer">'+esc(ref.title)+' ↗</a>').join("")+'</div></section>':'';
   return '<div class="rm-details-grid">'+available.map(([key,title,hint])=>
     '<section class="rm-detail-section detail-'+key+'"><div class="rm-detail-section-title">'+
     '<span class="rm-detail-section-marker" aria-hidden="true"></span>'+
     '<div><h3>'+title+'</h3><small>'+hint+'</small></div></div>'+
-    '<p>'+esc(item[key])+'</p></section>').join("")+'</div>';
+    '<p>'+esc(item[key])+'</p></section>').join("")+'</div>'+sources;
 }
 function detail(id){
   const x=itemById(id);
