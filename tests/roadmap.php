@@ -16,7 +16,31 @@ $seed = rm_seed(__DIR__ . '/../site/roadmap-seed.json');
 tassert(count($seed) >= 15, 'Mindestens 15 dokumentierte Roadmap-Einträge');
 tassert(count(array_unique(array_column($seed, 'id'))) === count($seed), 'IDs eindeutig');
 tassert(count(array_filter($seed, fn($item) => $item['status'] === 'online')) >= 4, 'Veröffentlichte Funktionen klar markiert');
-tassert(count(array_filter($seed, fn($item) => $item['status'] === 'test')) >= 2, 'Unveröffentlichte Funktionen markiert');
+tassert(count(array_filter($seed, fn($item) => $item['status'] === 'planned')) >= 2, 'Geplante Funktionen vorhanden');
+$fields = array_keys(RM_DETAIL_FIELDS);
+tassert(count($fields) === 5, 'Fünf eigene Informationsfelder');
+foreach ($seed as $record) foreach ($fields as $field)
+    tassert(is_string($record[$field] ?? null) && trim($record[$field]) !== '',
+        'Vollständige Detailinformationen in allen offiziellen Roadmap-Einträgen');
+$legacy = $seed[0];
+foreach ($fields as $field) unset($legacy[$field]);
+$legacy['status'] = 'planned'; // Redaktionelle Änderung darf nicht überschrieben werden.
+$legacy['priority'] = 'hoch'; // Frühere Seed-Daten verwenden deutsche Werte.
+$legacy['comments'] = [['id'=>'c-alt','author'=>'Verein','text'=>'Kommentar erhalten','createdAt'=>'2026-11-06']];
+$oldState = rm_merge(['items'=>[$legacy],'adminHash'=>'hashed',
+    'invites'=>[['id'=>'i-alt','label'=>'Testzugang','hash'=>'hashed-member','role'=>'commenter']]], $seed);
+$updatedOld = $oldState['items'][0];
+tassert($updatedOld['status'] === 'planned' && $updatedOld['comments'][0]['id'] === 'c-alt',
+    'Status und Kommentare aus bestehender Serverdatenbank nicht überschreiben');
+tassert($updatedOld['priority'] === 'high', 'Alte Priorität ins gültige Format migrieren');
+tassert($updatedOld['benefit'] === $seed[0]['benefit'], 'Fehlende Detailfelder für existierende Themen ergänzen');
+tassert($oldState['adminHash'] === 'hashed' && count($oldState['invites']) === 1,
+    'Projektleitungs- und Einladungscodes unverändert lassen');
+$legacyWithOwnDetails = $seed[1];
+$legacyWithOwnDetails['benefit'] = 'Eigener redaktioneller Text';
+$mergedOwn = rm_merge(['items'=>[$legacyWithOwnDetails]], $seed);
+tassert($mergedOwn['items'][0]['benefit'] === 'Eigener redaktioneller Text',
+    'Eigene Detailänderungen durch neue Seed-Version nicht überschreiben');
 
 $state = rm_merge([], $seed);
 tassert($state['adminHash'] === null && $state['invites'] === [], 'Keine Zugangscodes im Seed');
@@ -41,6 +65,22 @@ $edit = rm_update_item($state, $item['id'], [
 ], $now);
 tassert($edit['status'] === 'planned' && $edit['priority'] === 'high', 'Statusänderung');
 tassert($edit['comments'][0]['id'] === $comment['id'], 'Kommentare bleiben bei Statusänderung erhalten');
+$full = rm_update_item($state, $item['id'], [
+  'benefit'=>'Turnierleitung spart Rückfragen',
+  'scope'=>"• QR-Code anzeigen\n• Sicheren Link teilen",
+  'currentState'=>'Noch ein Vorschlag',
+  'openPoints'=>'Datenschutz prüfen',
+  'doneWhen'=>'Verein bestätigt einen erfolgreichen Test'
+],$now);
+tassert($full['scope'] === "• QR-Code anzeigen\n• Sicheren Link teilen",
+    'Mehrzeilige Funktionsdetails werden gespeichert');
+tassert(rm_public_item($full)['openPoints'] === 'Datenschutz prüfen',
+    'Ausführliche Felder sind für Lesende verfügbar');
+$cleared = rm_update_item($state, $item['id'], ['openPoints'=>''], $now);
+tassert($cleared['openPoints'] === '', 'Optionales Detailfeld kann geleert werden');
+expectedError(fn()=>rm_update_item($state, $item['id'], ['benefit'=>str_repeat('x', 901)],$now),
+    'benefit');
+
 
 $merged = rm_merge($state, $seed);
 tassert(count($merged['items']) === count($seed)+1, 'Seed-Merge erhält neue Ideen');
@@ -62,4 +102,4 @@ expectedError(fn()=>rm_new_item(['title'=>'Gültig','description'=>'B','category
 expectedError(fn()=>rm_update_item($state,$item['id'],['status'=>'online-ungeprüft'],$now), 'Status');
 expectedError(fn()=>rm_add_comment($state, $item['id'], 'A', str_repeat('x', 2001), $now), 'Kommentar');
 expectedError(fn()=>rm_delete_comment($state,$item['id'],'nicht-da',$now), 'nicht gefunden');
-echo "Roadmap: 20 Prüfungen erfolgreich.\n";
+echo "Roadmap: Detailfelder, Altbestand, Berechtigungen und Modelle erfolgreich geprüft.\n";
