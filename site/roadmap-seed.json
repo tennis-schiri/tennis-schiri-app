@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "updated": "2026-11-06",
-  "source": "TENNILO Projektstatus und konkrete Google-Drive-Regelvorlagen. Technischer Stand und vorgeschlagene Formate sind getrennt.",
+  "source": "TENNILO Projektstatus, geplante hierarchische Zählweisen und konkrete Google-Drive-Regelvorlagen. Technischer Stand und vorgeschlagene Formate sind getrennt.",
   "items": [
     {
       "id": "schleifchen",
@@ -544,6 +544,38 @@
         {
           "title": "Anleitung zur Ergebniserfassung und Zählweisen",
           "url": "https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view"
+        }
+      ]
+    },
+    {
+      "id": "scoring-presets",
+      "title": "Erweiterte Matchzählweisen: Games, Sätze und Kurzformate",
+      "description": "Übersichtliche Auswahl zwischen Zeit, Punkten, Games und Sätzen mit passenden Regelvarianten.",
+      "category": "Turnierbetrieb",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Nach v0.8.6 · Fachkonzept & Umsetzung",
+      "nextStep": "Fachregeln und Ergebnismodelle für klassische Games, No-Ad, Kurzsätze, FAST4 sowie Match-Tiebreaks ausarbeiten und getrennt testen.",
+      "updatedAt": "2026-11-06T10:40:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Vereine wählen die passende Matchwertung an einer Stelle, ohne für jede Turnierart eine eigene Ergebnisoberfläche lernen zu müssen. Standard-Tennisspiele und Sonderformate sind klar getrennt.",
+      "scope": "• Oberauswahl: Auf Zeit, auf Punkte, auf Games oder auf Sätze.\n• Punkt-Presets: 1, 3, 5, Tiebreak bis 7, Match-Tiebreak bis 10, 11, 15, 21 und freier Zielwert; optional zwei Punkte Vorsprung.\n• Game-Regeln: einzelnes Tennis-Game, Vorteil/No-Ad, zwei oder drei Gewinn-Games, Kurzsatz bis 4, Satz bis 6.\n• Satz-Regeln: 1 Gewinnsatz, 2 Gewinnsätze, Kurzsätze, 2 Sätze mit Match-Tiebreak; FAST4 als eigenständige geprüfte Variante.\n• Zeitregeln: Games oder Ballwechsel nach Minuten, Siegerregel und definierter Gleichstand; STOPP als gesonderter globaler Spezialmodus.\n• Zusatzoptionen: Entscheidungspunkt, Punkt-Cap, Tiebreak-Auslöser, unentschieden oder Entscheidung, passende Tabellenwertung.",
+      "currentState": "Die erste Stufe mit Zeitspielen und Punktspielen bis zu einem frei einstellbaren Zielwert (1–99, optional zwei Punkte Vorsprung) ist in GitHub v0.8.6 implementiert und getestet, aber noch nicht als vollständiges App-Update veröffentlicht. One Point Cup ist weiterhin fest auf einen Punkt eingestellt. Die hier beschriebenen Game-, Satz- und FAST4-Varianten sind noch nicht programmiert.",
+      "openPoints": "Für jede Variante müssen Ablauf, Abbruchbedingungen, Gleichstände, Ergebnisstruktur, Auslosungs-/Rundenplanung und Ranglistenwertung eindeutig festgelegt werden. Unterschiedliche Drive-Regelvarianten und Sonderfälle nicht vermischen. Tests und Migration vorhandener Zeit-/Punktergebnisse sind Pflicht.",
+      "doneWhen": "Alle freigegebenen Zählweisen stehen in einer verständlichen hierarchischen Auswahl, verhindern ungültige Resultate, berechnen Sieger und Tabellen korrekt und ändern vorhandene gespeicherte Turnierergebnisse nicht. Der Turnierberater kann Planungsdauer und Zählweise nachvollziehbar unterscheiden.",
+      "references": [
+        {
+          "title": "Drive: Anleitung zur Ergebniserfassung und Regelvarianten",
+          "url": "https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view"
+        },
+        {
+          "title": "Drive: Turnierformat-Bibliothek",
+          "url": "https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs"
+        },
+        {
+          "title": "Drive: Turniere Verein – Auslosung & Livetabelle",
+          "url": "https://docs.google.com/spreadsheets/d/1aNwzYXmHhpONZURtufkDg6qZHX1-ywOYgyRd_u_LHCY/edit"
         }
       ]
     }
