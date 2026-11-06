@@ -38,28 +38,11 @@ function rm_basic_user(): ?string {
 }
 
 function rm_storage(): array {
-    // Operator may provide a persistent PRIVATE directory outside any webroot.
-    // The default mirrors the existing live-feed's private /tmp storage model;
-    // /tmp is test-only and might be purged by the hosting provider.
+    // Existing ALL-INKL FTP sibling folder: no SSH and no server env var needed.
+    // If the operator intentionally sets a private absolute path, honor it.
     $custom = trim((string) (getenv('TENNILO_ROADMAP_STORAGE_DIR') ?: ''));
-    if ($custom !== '' && $custom[0] !== '/') {
-        rm_error(503, 'Roadmap-Speicherpfad muss absolut sein.');
-    }
-    $path = $custom !== '' ? rtrim($custom, '/') :
-        rtrim(sys_get_temp_dir(), '/') . '/tennilo-roadmap-' .
-        substr(hash('sha256', __DIR__), 0, 24);
-    if (!is_dir($path) && !@mkdir($path, 0700, true) && !is_dir($path)) {
-        rm_error(503, 'Privater Roadmap-Speicher konnte nicht angelegt werden.');
-    }
-    $real = realpath($path);
-    $web = realpath((string) ($_SERVER['DOCUMENT_ROOT'] ?? __DIR__));
-    $app = realpath(__DIR__);
-    if ($real === false || !is_writable($real) || $app === false ||
-        $real === $app || str_starts_with($real, $app . DIRECTORY_SEPARATOR) ||
-        ($web !== false && ($real === $web || str_starts_with($real, $web . DIRECTORY_SEPARATOR)))) {
-        rm_error(503, 'Roadmap-Speicher muss außerhalb des öffentlich erreichbaren Webverzeichnisses liegen.');
-    }
-    return [$real, $custom !== ''];
+    return rm_storage_location(__DIR__, (string) ($_SERVER['DOCUMENT_ROOT'] ?? __DIR__),
+        $custom, sys_get_temp_dir());
 }
 
 function rm_load_state(string $file, array $seed): array {
@@ -159,10 +142,14 @@ try {
     ]);
     if (!session_start()) rm_error(503, 'Sitzung konnte nicht gestartet werden.');
     if (!isset($_SESSION['roadmapCsrf'])) $_SESSION['roadmapCsrf'] = bin2hex(random_bytes(24));
-    [$dir, $persistent] = rm_storage();
+    [$dir, $persistent, $legacyDir] = rm_storage();
     $seed = rm_seed(__DIR__ . '/roadmap-seed.json');
     $lock = @fopen($dir . '/.state.lock', 'c');
     if ($lock === false || !flock($lock, LOCK_EX)) rm_error(503, 'Roadmap-Speicherung gesperrt.');
+    // First access migrates the complete old private JSON, including accounts,
+    // invitations, comments and manual edits. Keep the old file for rollback.
+    // This happens before any bootstrap: missing or corrupt legacy data fails closed.
+    if ($legacyDir !== null) rm_migrate_legacy_state($dir, $legacyDir);
     $state = rm_load_state($dir . '/state.json', $seed);
     $identity = rm_identity($state);
 

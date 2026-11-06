@@ -37,6 +37,7 @@ jobs:
           php -l site/roadmap-lib.php
           php -l site/roadmap-api.php
           php tests/roadmap.php
+          php tests/roadmap-storage.php
       - name: Alle App- und Roadmap-Tests vor automatischem Inhaltssync prüfen
         run: node --test tests/*.test.mjs
       - name: Roadmap-Inhalte automatisch, Benutzerzugänge nur nach manueller Freigabe hochladen

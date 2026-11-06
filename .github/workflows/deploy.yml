@@ -45,6 +45,7 @@ jobs:
           php -l site/roadmap-lib.php
           php -l site/roadmap-api.php
           php tests/roadmap.php
+          php tests/roadmap-storage.php
 
       - name: Alle Node-Tests inklusive PHP-Live-Integration prüfen
         run: node --test tests/*.test.mjs

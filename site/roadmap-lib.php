@@ -274,3 +274,77 @@ function rm_delete_comment(array &$state, string $itemId, string $commentId, str
     unset($item);
     rm_error(404, 'Roadmap-Eintrag nicht gefunden.');
 }
+
+// The actual PHP directory is discovered at runtime, rather than guessing
+// the provider's absolute filesystem prefix from its WebFTP virtual path.
+function rm_storage_location(string $appDir, string $documentRoot,
+    string $customDir, string $tempDir): array {
+    $app = realpath($appDir);
+    if ($app === false) rm_error(503, 'App-Verzeichnis nicht verfügbar.');
+    $customDir = trim($customDir);
+    $automatic = $customDir === '';
+    if (!$automatic && $customDir[0] !== '/') {
+        rm_error(503, 'Roadmap-Speicherpfad muss absolut sein.');
+    }
+    $path = $automatic ? dirname($app) . '/tennilo-roadmap-private' : rtrim($customDir, '/');
+    if ($automatic) {
+        // Never auto-create a possibly publicly served folder; WebFTP operator
+        // must deliberately create it and put this access denial inside.
+        if (!is_dir($path) || is_link($path))
+            rm_error(503, 'Privater Roadmap-Ordner fehlt oder ist kein reguläres Verzeichnis.');
+        $deny = $path . '/.htaccess';
+        if (!is_file($deny) || is_link($deny) ||
+            trim((string) @file_get_contents($deny)) !== 'Require all denied')
+            rm_error(503, 'Privater Roadmap-Ordner braucht eine .htaccess mit Require all denied.');
+    } elseif (!is_dir($path) && !@mkdir($path, 0700, true) && !is_dir($path)) {
+        rm_error(503, 'Privater Roadmap-Speicher konnte nicht angelegt werden.');
+    }
+    $real = realpath($path);
+    $web = realpath($documentRoot);
+    if ($real === false || !is_writable($real) || $real === $app ||
+        str_starts_with($real, $app . DIRECTORY_SEPARATOR) ||
+        ($web !== false && ($real === $web || str_starts_with($real, $web . DIRECTORY_SEPARATOR)))) {
+        rm_error(503, 'Roadmap-Speicher muss außerhalb des öffentlich erreichbaren Webverzeichnisses liegen.');
+    }
+    if ($automatic && ((@fileperms($real) & 0077) !== 0)) {
+        rm_error(503, 'Privater Roadmap-Ordner benötigt Rechte 0700.');
+    }
+    $legacy = $automatic ?
+        rtrim($tempDir, '/') . '/tennilo-roadmap-' . substr(hash('sha256', $app), 0, 24)
+        : null;
+    return [$real, true, $legacy];
+}
+
+// Called with the NEW storage lock held. The legacy application uses the
+// old directory's .state.lock, so an in-flight write cannot be copied midway.
+// Refuse to overwrite a current persistent database and never delete old data.
+function rm_migrate_legacy_state(string $targetDir, string $legacyDir): bool {
+    if (is_file($targetDir . '/state.json')) return false;
+    if (!is_dir($legacyDir) || is_link($legacyDir)) return false;
+    $source = $legacyDir . '/state.json';
+    if (!is_file($source)) return false;
+    $oldLock = @fopen($legacyDir . '/.state.lock', 'c');
+    if ($oldLock === false || !@flock($oldLock, LOCK_EX))
+        rm_error(503, 'Bisheriger Roadmap-Speicher konnte nicht gesperrt werden.');
+    try {
+        if (is_file($targetDir . '/state.json')) return false;
+        if (!is_file($source)) return false;
+        $raw = @file_get_contents($source);
+        $data = is_string($raw) && strlen($raw) <= 3000000 ? json_decode($raw, true) : null;
+        if (!is_array($data) || ($data['schemaVersion'] ?? null) !== 1 ||
+            !is_array($data['items'] ?? null)) {
+            rm_error(503, 'Bisherige Roadmap-Daten sind ungültig; Migration wurde gestoppt.');
+        }
+        $tmp = @tempnam($targetDir, '.roadmap-migration-');
+        if ($tmp === false || !@chmod($tmp, 0600) ||
+            @file_put_contents($tmp, $raw) !== strlen($raw) ||
+            !@rename($tmp, $targetDir . '/state.json')) {
+            if (is_string($tmp)) @unlink($tmp);
+            rm_error(503, 'Roadmap-Migration fehlgeschlagen; Quelldaten bleiben erhalten.');
+        }
+        return true;
+    } finally {
+        flock($oldLock, LOCK_UN);
+        fclose($oldLock);
+    }
+}
