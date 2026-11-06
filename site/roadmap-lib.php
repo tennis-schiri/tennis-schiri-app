@@ -10,6 +10,22 @@ const RM_PRIORITIES = ['low', 'medium', 'high'];
 // Ausschließlich Detailansicht, niemals Bestandteil der kompakten Karten.
 const RM_DETAIL_FIELDS = ['benefit'=>900, 'scope'=>1400, 'currentState'=>1400,
     'openPoints'=>1400, 'doneWhen'=>1000];
+const RM_OFFICIAL_FIELDS = ['title','description','category','status','priority','milestone',
+    'nextStep','benefit','scope','currentState','openPoints','doneWhen','references'];
+
+function rm_references(mixed $raw): array {
+    if (!is_array($raw)) return [];
+    $result = [];
+    foreach (array_slice($raw, 0, 5) as $source) {
+        if (!is_array($source)) continue;
+        $title = trim((string) ($source['title'] ?? ''));
+        $url = trim((string) ($source['url'] ?? ''));
+        if ($title === '' || strlen($title) > 140) continue;
+        if (!preg_match('~^https://(?:drive\.google\.com|docs\.google\.com)/[a-zA-Z0-9/_?=.&%-]+$~D', $url)) continue;
+        $result[] = ['title'=>$title,'url'=>$url];
+    }
+    return $result;
+}
 const RM_CATEGORIES = [
     'Turnierformate', 'Turnierbetrieb', 'Live & Anzeige',
     'Plattform & Zugang', 'Produkt & Bedienung'
@@ -64,39 +80,52 @@ function rm_seed(string $file): array {
 
 function rm_merge(array $saved, array $seed): array {
     $items = is_array($saved['items'] ?? null) ? $saved['items'] : [];
-    // Beim ersten Upgrade werden neue, offizielle Detailfelder ergänzt, ohne
-    // existierende Kommentare, manuelle Änderungen oder Status zu überschreiben.
+    $ids = [];
+    $prior = is_array($saved['officialBaseline'] ?? null) ? $saved['officialBaseline'] : [];
     $seedById = [];
-    foreach ($seed as $base) $seedById[$base['id']] = $base;
-    foreach ($items as &$existing) {
-        if (!is_array($existing) || !is_string($existing['id'] ?? null)) continue;
-        if (isset($seedById[$existing['id']])) {
-            foreach (RM_DETAIL_FIELDS as $field=>$maxBytes) {
-                if (!array_key_exists($field, $existing))
-                    $existing[$field] = $seedById[$existing['id']][$field] ?? '';
+    $currentBaseline = [];
+    foreach ($seed as $base) {
+        $seedById[$base['id']] = $base;
+        $currentBaseline[$base['id']] = [];
+        foreach (RM_OFFICIAL_FIELDS as $field) {
+            $currentBaseline[$base['id']][$field] = $base[$field] ??
+                ($field === 'references' ? [] : '');
+        }
+    }
+    foreach ($items as &$item) {
+        if (!is_array($item) || !is_string($item['id'] ?? null)) continue;
+        $id = $item['id'];
+        if (isset($seedById[$id])) {
+            // Nur unveränderte Offizialfelder werden von GitHub aktualisiert.
+            // Beiträge und manuelle Bearbeitungen behalten Vorrang.
+            foreach (RM_OFFICIAL_FIELDS as $field) {
+                $next = $currentBaseline[$id][$field];
+                if (!array_key_exists($field, $item) ||
+                    (is_array($prior[$id] ?? null) &&
+                     array_key_exists($field, $prior[$id]) &&
+                     $item[$field] === $prior[$id][$field]))
+                    $item[$field] = $next;
             }
         }
-        // Migration der ursprünglichen deutschen Prioritäts-Seed-Werte.
+        // Alte Seed-Prioritäten ohne Umbenennung der redaktionellen Priorität.
         $oldPriorities = ['hoch'=>'high','mittel'=>'medium','niedrig'=>'low'];
-        if (is_string($existing['priority'] ?? null) &&
-            isset($oldPriorities[$existing['priority']]))
-            $existing['priority'] = $oldPriorities[$existing['priority']];
+        if (is_string($item['priority'] ?? null) &&
+            isset($oldPriorities[$item['priority']]))
+            $item['priority'] = $oldPriorities[$item['priority']];
+        $ids[$id] = true;
     }
-    unset($existing);
-    $ids = [];
-    foreach ($items as $item) {
-        if (is_array($item) && is_string($item['id'] ?? null)) $ids[$item['id']] = true;
-    }
-    foreach ($seed as $item) {
-        if (!isset($ids[$item['id']])) {
-            $items[] = $item;
-            $ids[$item['id']] = true;
+    unset($item);
+    foreach ($seed as $base) {
+        if (!isset($ids[$base['id']])) {
+            $items[] = $base;
+            $ids[$base['id']] = true;
         }
     }
     return [
         'schemaVersion' => 1,
         'adminHash' => is_string($saved['adminHash'] ?? null) ? $saved['adminHash'] : null,
         'invites' => is_array($saved['invites'] ?? null) ? $saved['invites'] : [],
+        'officialBaseline' => $currentBaseline,
         'items' => array_values($items)
     ];
 }
@@ -106,6 +135,7 @@ function rm_public_item(array $item): array {
         'milestone','nextStep','updatedAt','origin',...array_keys(RM_DETAIL_FIELDS)];
     $out = [];
     foreach ($allowed as $key) $out[$key] = $item[$key] ?? '';
+    $out['references'] = rm_references($item['references'] ?? []);
     $out['comments'] = [];
     foreach (is_array($item['comments'] ?? null) ? $item['comments'] : [] as $comment) {
         if (!is_array($comment)) continue;
@@ -145,6 +175,7 @@ function rm_new_item(array $input, string $author, string $now): array {
         'currentState' => '',
         'openPoints' => '',
         'doneWhen' => '',
+        'references' => [],
         'updatedAt' => $now,
         'origin' => $author,
         'comments' => []
