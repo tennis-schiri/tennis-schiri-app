@@ -109,6 +109,7 @@ function rm_members(array $state): array {
 
 try {
     if (!rm_is_https()) rm_error(403, 'Roadmap erfordert HTTPS.');
+    if (rm_basic_user() === null) rm_error(403, 'Roadmap benötigt den Passwortschutz der Testseite.');
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     if (!in_array($method, ['GET','POST'], true)) {
         header('Allow: GET, POST');
@@ -211,6 +212,11 @@ try {
             } elseif ($action === 'delete-comment') {
                 rm_delete_comment($state, rm_text($data['itemId'] ?? null, 80, 'Eintrag'),
                     rm_text($data['commentId'] ?? null, 80, 'Kommentar'), $now);
+            } elseif ($action === 'rotate-owner') {
+                $ownerCode = rm_secret();
+                $state['adminHash'] = hash('sha256', $ownerCode);
+                $_SESSION['roadmapHash'] = $state['adminHash'];
+                $response['ownerCode'] = $ownerCode;
             } elseif ($action === 'invite') {
                 if (count($state['invites']) >= 40) rm_error(422, 'Maximal 40 Zugänge.');
                 $label = rm_text($data['label'] ?? null, 70, 'Name');
