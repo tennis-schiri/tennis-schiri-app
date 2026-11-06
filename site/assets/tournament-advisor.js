@@ -7,16 +7,7 @@ import {doublesMatchOptions,generateDoublesDraw} from "./doubles.js?v=082";
 import {onePointTimePlan} from "./one-point.js?v=082";
 import {timeWindow,tournamentSchedule} from "./operations.js?v=082";
 
-const formatTime=(n)=>{
-  const h=Math.floor(n/60)%24,m=n%60;
-  return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");
-};
 const courtsFor=n=>Array.from({length:n},(_,i)=>i+1);
-const interval=(start,end)=>{
-  const startMin=Number(start.slice(0,2))*60+Number(start.slice(3));
-  const endMin=Number(end.slice(0,2))*60+Number(end.slice(3));
-  return (endMin-startMin+1440)%1440;
-};
 
 export function normalizeAdvisorInput(raw) {
   const players=Number(raw.participants),courts=Number(raw.courtCount);
@@ -42,15 +33,6 @@ export function normalizeAdvisorInput(raw) {
     goal,teamStyle,availableMinutes:window.minutes};
 }
 
-const basic=t=>({
-  type:t.type,
-  name:t.name,
-  startTime:t.startTime,endTime:t.endTime,timeMode:t.timeMode,
-  date:t.date,courts:t.courts,
-  duration:t.duration,breakMinutes:t.breakMinutes,rounds:t.rounds,
-  reservePlayoffs:t.reservePlayoffs,reserveFinals:t.reserveFinals,
-  opcMinutes:t.opcMinutes
-});
 function scenario(input,type,extra={}) {
   return newTournament({type,name:"Vorplanung",date:input.date,
     startTime:input.startTime,endTime:input.endTime,
@@ -161,6 +143,25 @@ function affinity(input,format) {
     input.teamStyle==="singles"&&format.id!=="opc"?-50:-20;
   return (goalWeights[input.goal][format.id]||0)+style;
 }
+function reasonFor(input,format) {
+  const reasons=[];
+  if(input.teamStyle!=="any"){
+    if(input.teamStyle===format.teamStyle)
+      reasons.push("Passt zur gewünschten Partner- bzw. Einzelspielweise.");
+    else
+      reasons.push("Abweichung beim Partnerwunsch: "+(format.id==="ribbon"?
+        "Hier wechseln die Doppelpartner.":format.id==="doubles"?
+        "Hier bleiben Zweierteams fest zusammen.":"Hier spielen alle einzeln im K.-o.-System."));
+  }
+  const goals={
+    social:{ribbon:"Starker Fokus auf Abwechslung.",doubles:"Wettbewerb mit festen Partnern.",opc:"Kurzer Ausscheidungswettbewerb."},
+    many:{ribbon:"Mehrere Begegnungen je Person.",doubles:"Mehrere Matches je festem Team.",opc:"Pro Ausscheiden nur ein Punktduell garantiert."},
+    competitive:{ribbon:"Freundschaftlicher Wettbewerb mit Wertung.",doubles:"Tabellenwertung und mögliche Play-offs.",opc:"Direkte K.-o.-Entscheidung."},
+    quick:{ribbon:"Wechselnde Partner brauchen mehrere Runden.",doubles:"Mehrere feste Doppelbegegnungen.",opc:"Wenige kurze Punkte bis zum Turniersieg."}
+  };
+  reasons.push(goals[input.goal][format.id]);
+  return reasons.join(" ");
+}
 export function recommendTournamentFormats(raw) {
   const input=normalizeAdvisorInput(raw);
   const choices=FORMAT_ADVISORS.map(format=>{
@@ -169,7 +170,7 @@ export function recommendTournamentFormats(raw) {
     catch(error){reason=error?.message||"Unter diesen Bedingungen nicht sinnvoll planbar.";}
     const possible=!!estimate;
     return {id:format.id,title:format.title,description:format.description,
-      feasible:possible,reason,estimate,score:possible?100+affinity(input,format):-1000};
+      feasible:possible,reason,estimate,why:reasonFor(input,format),score:possible?100+affinity(input,format):-1000};
   });
   choices.sort((a,b)=>(Number(b.feasible)-Number(a.feasible))||(b.score-a.score)||
     a.title.localeCompare(b.title,"de"));
