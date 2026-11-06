@@ -548,7 +548,7 @@ function render() {
   if(t?.type==="opc"&&view!=="home"&&view!=="advisor") {window.location.assign("./opc.html");return;}
   root.innerHTML = header() + (view==="advisor"?advisorPage():!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.4 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.6 · Private Testversion</footer>
     </main></div>`);
 }
 
