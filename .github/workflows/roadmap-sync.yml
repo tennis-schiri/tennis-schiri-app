@@ -39,7 +39,7 @@ jobs:
           php tests/roadmap.php
       - name: Alle App- und Roadmap-Tests vor automatischem Inhaltssync prüfen
         run: node --test tests/*.test.mjs
-      - name: Ausschließlich sechs Roadmap-Dateien per FTPS hochladen
+      - name: Roadmap-Inhalte automatisch, Benutzerzugänge nur nach manueller Freigabe hochladen
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
@@ -52,7 +52,14 @@ jobs:
           : "${FTP_PASSWORD:?FTP_PASSWORD fehlt}"
           # Kein App-JavaScript, keine Benutzerkonten, keine Konfiguration,
           # keine .htaccess, keine Löschbefehle oder privaten Serverdaten.
-          for file in site/roadmap-lib.php site/roadmap-api.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js site/roadmap.html; do
+          # Push aktualisiert nur Fach-/Statusdaten. Änderungen an Login/API/HTML
+          # bleiben bis zum manuell freigegebenen workflow_dispatch in GitHub.
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            files=(site/roadmap-seed.json)
+          else
+            files=(site/roadmap-lib.php site/roadmap-api.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js site/roadmap.html)
+          fi
+          for file in "${files[@]}"; do
             test -f "$file"
             remote="${file#site/}"
             echo "Roadmap aktualisieren: $remote"
@@ -61,4 +68,4 @@ jobs:
               --upload-file "$file" \
               "ftp://${FTP_HOST}:21/$remote"
           done
-          echo "Sechs geschützte Roadmap-Dateien erfolgreich aktualisiert."
+          echo "${#files[@]} geschützte Roadmap-Dateien erfolgreich aktualisiert."
