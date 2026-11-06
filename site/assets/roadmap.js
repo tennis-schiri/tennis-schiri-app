@@ -421,7 +421,7 @@ document.addEventListener("submit",event=>{
     milestone:d.get("milestone"),nextStep:d.get("nextStep"),
     ...Object.fromEntries(DETAIL_SECTIONS.map(([key])=>[key,d.get(key)]))},
     ()=>{closeModal();detail(form.dataset.id);toast("Status und Details aktualisiert.");});
-  if(kind==="invite")return run("invite",{label:d.get("label"),role:d.get("role")},
-    result=>{if(result.inviteCode)codeModal("Persönlicher Einladungscode",result.inviteCode);});
+  if(kind==="invite-link")return run("invite-link",{label:d.get("label"),role:d.get("role")},
+    result=>{if(result.inviteToken)invitationModal(result.inviteToken);});
 });
-load();
+load().then(()=>{if(pendingInviteToken&&!state.offline)registrationModal();});
