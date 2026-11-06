@@ -332,6 +332,21 @@ document.addEventListener("click",event=>{
   if(act==="detail"){detail(id);return;}
   if(act==="close"){closeModal();return;}
   if(act==="login"){loginModal();return;}
+  if(act==="bootstrap-account"){bootstrapAccountModal();return;}
+  if(act==="upgrade"){upgradeAccountModal();return;}
+  if(act==="profile"){profileModal();return;}
+  if(act==="copy-invite"){
+    const value=document.getElementById("rm-invite-url")?.value;
+    if(!value)return;
+    if(navigator.clipboard?.writeText)
+      navigator.clipboard.writeText(value).then(()=>toast("Link kopiert.")).catch(()=>toast("Bitte Link markieren."));
+    else toast("Bitte Link markieren.");
+    return;
+  }
+  if(act==="toggle-role"){
+    if(!confirm("Berechtigung ändern?"))return;
+    return run("set-role",{inviteId:id,role:b.dataset.role},()=>membersModal());
+  }
   if(act==="idea"){if(canComment())ideaModal();else loginModal();return;}
   if(act==="edit"){editModal(id);return;}
   if(act==="members"){membersModal();return;}
