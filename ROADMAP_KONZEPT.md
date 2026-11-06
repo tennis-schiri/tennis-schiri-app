@@ -17,6 +17,12 @@ Statusbedeutung:
 
 Die anfänglichen 18 Einträge in `site/roadmap-seed.json` beruhen auf `PROJEKTSTATUS.md` und bereits besprochenen Ideen. Keine erfundenen Veröffentlichungszusagen. Einmal auf dem Server gespeicherte Änderungen der Projektleitung werden durch spätere GitHub-Uploads nicht überschrieben; neu in der Seed-Datei hinzugefügte Einträge werden ergänzt. Die Roadmap ist **nicht automatisch** mit GitHub-Issues/Commits synchronisiert.
 
+## Ausführliche Detailansicht v0.8.5 (in GitHub)
+
+**Roadmap-Detailausbau v0.8.5 (noch nicht veröffentlicht):** In GitHub wurden alle 18 bestehenden Einträge um Ziel und Nutzen, Funktionsumfang, Umsetzungsstand, offene Punkte und klare Fertig-Kriterien ergänzt. Die Übersicht bleibt kurz; die Details sind nur im geöffneten Eintrag sichtbar und von der Projektleitung bearbeitbar. Altbestand wird ohne Überschreiben von Kommentaren, Rollen oder redaktionellen Statusänderungen ergänzt. [CI 42192449800](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42192449800): **245/245 Node-Tests** plus PHP- und MariaDB-Prüfungen erfolgreich. Die letzte Testseiten-Veröffentlichung bleibt **v0.8.4**. Der neue Detailausbau wurde noch nicht hochgeladen.
+
+Die 18 bestehenden Themen besitzen fünf eigenständige Detailfelder. Neue Nutzerideen können ohne sie erstellt werden und die Projektleitung ergänzt sie später. Bereits bestehende Feldwerte – auch bewusst leere – bleiben beim Seed-Merge unverändert. Einträge ohne ausformulierte Details zeigen im Detailfenster einen neutralen Hinweis. Die Übersicht zeigt weiter nur Titel, Kurzbeschreibung, Priorität und Meilenstein.
+
 ## Berechtigungen
 
 Der bestehende HTTP-Basic-Passwortschutz der **gesamten Testseite** bleibt die erste Zugangsschranke. Die Roadmap erfordert eine geprüfte Apache-`AUTH_TYPE=Basic`-Identität und HTTPS. Die Roadmap-API liefert bei fehlendem Server-Passwortschutz keine gespeicherten Beiträge aus.
