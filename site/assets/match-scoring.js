@@ -27,7 +27,7 @@ export function normalizePointResult(input,t) {
   if(one===two)throw Error("Bei einem Punktspiel muss es einen Sieger geben.");
   if(high<target)throw Error("Das Punktziel von "+target+" wurde noch nicht erreicht.");
   if(winByTwo){
-    if(high-low!==2||(high>target&&low<target-1))
+    if(high===target ? high-low<2 : high-low!==2||low<target-1)
       throw Error("Das Match endet erst mit "+target+" Punkten und zwei Punkten Vorsprung.");
   }else if(high!==target){
     throw Error("Ohne Zwei-Punkte-Vorsprung endet das Match bei genau "+target+" Punkten.");
