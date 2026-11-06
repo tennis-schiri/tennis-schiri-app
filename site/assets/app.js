@@ -91,7 +91,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.2</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.3</span>
   </div></header>`;
 }
 
@@ -131,9 +131,9 @@ function intro() {
     <section class="advisor-invite" aria-label="Turnierberater"><div><div class="eyebrow">DER TENNILO TURNIERBERATER</div><h2>Welches Turnier passt zu euch?</h2><p>Personen, Plätze, Zeitfenster und Ziel eingeben. Machbarkeit und Formate vergleichen.</p></div><button type="button" class="btn primary" data-action="advisor-open">Turnierberater starten ${icon("arrow")}</button></section>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.8.2</span></article>
-      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.8.2</span></article>
-      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.2</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.8.3</span></article>
+      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.8.3</span></article>
+      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.3</span></article>
     </div>
     ${browserNotice()}
   </main>`;
@@ -539,7 +539,7 @@ function render() {
   if(t?.type==="opc"&&view!=="home"&&view!=="advisor") {window.location.assign("./opc.html");return;}
   root.innerHTML = header() + (view==="advisor"?advisorPage():!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
-      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.2 · Private Testversion</footer>
+      ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.3 · Private Testversion</footer>
     </main></div>`);
 }
 
