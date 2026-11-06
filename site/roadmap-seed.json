@@ -616,6 +616,29 @@
       "openPoints": "Vor dem Release UI im echten Browser prüfen, insbesondere kleine/hohe Teilnehmerzahlen, ungerade Teamzahlen, die Auffüllrunde, enge Zeitpläne und vorhandene Play-offs. Endrunden und Play-offs werden zunächst normal ausgelost und danach befüllt.",
       "doneWhen": "In jedem Turnierformat kann eine sichere Demo-Kopie erzeugt und eine Auslosung anschließend mit gültigen zufälligen Ergebnissen bis zum Sieger durchgespielt werden.",
       "references": []
+    },
+    {
+      "id": "crowdfunding-founders",
+      "title": "TENNILO Founders – Crowdfunding und Early-Access-Kampagne",
+      "description": "Belohnungsbasiertes Crowdfunding als optionaler Vorverkauf und Markttest für Vereins- und Freizeitturniere; kein Investment und keine Beteiligungen.",
+      "category": "Plattform & Zugang",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Launch-Vorbereitung 2027",
+      "nextStep": "Zunächst Beta und Preismodell validieren; 10–15 Vereins-/Turnierleiter-Interviews, Landingpage-Warteliste und konkrete Kostenkalkulation vorbereiten. Danach Go/No-Go über Kampagnenstart.",
+      "updatedAt": "2026-11-06T15:54:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "TENNILO gewinnt erste zahlende Veranstalter, reale Produkt-Rückmeldungen, Reichweite und einen begrenzten Beitrag zu Backend, Betrieb und Fertigstellung. Entscheidend ist die Zahl nutzbarer Pilotkunden, nicht allein die Finanzierungssumme.",
+      "scope": "• Positionierung: „Tennilo mit den Vereinen fertigstellen“ statt Spendenapp; Fokus Vereins-, Schleifchen-, Doppel- und Freizeitturniere.\n• Reward-Crowdfunding/Vorverkauf ohne Eigenkapital oder Umsatzbeteiligung; Startnext als erste Plattformoption prüfen, Alternativen vergleichen.\n• Vorläufiger Zielkorridor 5.000–10.000 € brutto (kein beschlossener Finanzierungsplan). Zielbetrag erst nach Kosten-, Gebühren-, Steuer- und Leistungskalkulation festlegen.\n• Entwurf Unterstützerpakete: 10 € Unterstützer/Founders-Dank; 29 € Beta-/Early-Access-Paket; 49 € einjährige Einzellizenz; 99 € Vereins-Funder-Paket; 199 € Vereins-Paket plus Onboarding; 500 € Förderpartner; 1.000 €+ Entwicklungspartner. Preise, Zugangsrechte und Verfügbarkeit nur beispielhaft, keine Angebote.\n• Keine unbefristeten Lifetime-Lizenzen, keine zugesicherten Features ohne Budget oder geprüfte Liefertermine. Normalpreise, Vereins-/Einzellizenz und Paket-Gegenwerte vorab verbindlich abstimmen.\n• Kampagnenunterlagen: kurze funktionierende Produktdemo (Turnier anlegen → Personen → Plan → Monitor → Ergebnis → Auswertung), klare Roadmap, Nutzenbeispiele, Budget und transparente Risiken.\n• Reichweite über Tennis-Schiri, Tennilo-Webseite, Instagram, WhatsApp-Turnier-Community, Partnervereine und persönliche Turnierkontakte aufbauen. Ungefragte Kontaktaufnahme vermeiden.\n• Vorbereitungsphasen als Orientierung: Winter 2026/27 Beta und Interviews; danach 4–6 Wochen Wartelisten-/Kommunikationsphase; Kampagne erst nach Go-Entscheidung und realistisch belegtem Lieferplan.\n• Förderer, Early Access und echte Softwarelizenzen getrennt behandeln; keine zahlungspflichtigen Buchungen oder Zahlungsschnittstellen in der Turnier-App voraussetzen.",
+      "currentState": "Strategische Idee und unverbindlicher Kampagnenentwurf am 06.11.2026 aufgenommen. Es gibt keine gestartete Crowdfunding-Kampagne, keine verbindlichen Pakete, keine zugesagten Termine und keine bestätigten Unterstützer. Aktuelle TENNILO-App ist noch in der Test-/Backendentwicklung.",
+      "openPoints": "• Zahlungsbereitschaft bei Vereinsverantwortlichen und Turnierleitungen prüfen; Zielgruppen- und Kanalgröße realistisch schätzen.\n• Normalpreise, Lizenzmodell und Leistungsumfang mit Roadmap-Punkt „Preise, Lizenzen und Abrechnung“ abstimmen.\n• Plattformgebühren, Zahlungsabwicklung, MwSt./Ertragsteuer, Rechnungsstellung, Widerruf/Verbraucherinformationen, Datenschutz und Gegenleistungsbedingungen rechtlich/steuerlich prüfen.\n• Machbare Nutzung vor Lieferbeginn, Zugangsverwaltung, Hostingkosten, Supportaufwand und mögliche Lieferverzögerungen absichern.\n• Prüfen, ob Partnerlogonennung/öffentliche Founders-Seite ausdrücklich erlaubt und optional ist; keine automatischen Namensveröffentlichungen.\n• Mindestzahl unverbindlich Interessierter und konkrete Kosten-/Umsatzrechnung vor einer Veröffentlichung festlegen.\n• Kanal- und Kampagnentexte, Demo-Video, Landingpage, FAQ und Supportprozesse erst nach Beta-Reife ausarbeiten.",
+      "doneWhen": "Eine dokumentierte Go/No-Go-Entscheidung liegt vor: validierte Nachfrage bei Veranstaltern, funktionierende Demo und Pilotturniere, verabschiedetes Preis-/Lizenzmodell, belastbares Netto-Budget einschließlich Plattformkosten und Steuern, verständliche und erfüllbare Rewards, Rechtsprüfung sowie realistische Lieferung. Erst danach darf eine externe Kampagne live gehen.",
+      "dependencies": [
+        "accounts",
+        "licensing",
+        "multidevice"
+      ]
     }
   ]
 }
