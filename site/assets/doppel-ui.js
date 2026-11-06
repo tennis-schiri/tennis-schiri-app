@@ -1,14 +1,14 @@
-import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=080";
+import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=082";
 import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=082";
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
   doublesPlayoffStatus,doublesPlanRound,changeDoublesClock,normalizeDoublesResult
-} from "./doubles.js?v=070";
+} from "./doubles.js?v=082";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
   clearLiveSecrets,publishLive,remoteLiveUrl
-} from "./remote-live.js?v=071";
+} from "./remote-live.js?v=082";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
