@@ -3,7 +3,7 @@
 // Top 8/16 nach Schleifchenzahl; Abwahl und Nachrücker; gemischte Teams bevorzugen;
 // bei ungleichen Stärkegruppen gleichgruppige Restpaare; feste Teams bis zum Finale.
 import { verifyRibbonDraw, ribbonNormalResultsKey, ribbonStableHash } from "./draw.js";
-import { normalizeRibbonResult, ribbonStandings } from "./results.js";
+import { normalizeRibbonResult, ribbonStandings } from "./results.js?v=086";
 
 const hasWinner = r => r?.winner === 1 || r?.winner === 2;
 const sameTeam=(a,b)=>Array.isArray(a)&&Array.isArray(b)&&a.length===2&&b.length===2&&a[0]===b[0]&&a[1]===b[1];
