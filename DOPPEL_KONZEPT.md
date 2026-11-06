@@ -1,7 +1,7 @@
 # TENNILO – Doppelturnier mit festen Zweierteams (v0.7.0)
 
-**Stand:** 2026-11-05  
-**Status:** Im privaten GitHub-Code implementierte lokale Testversion, **nicht veröffentlicht**. Die produktive App auf `app.tennis-schiri.de` bleibt bis zur ausdrücklich ausgelösten FTPS-Veröffentlichung bei v0.6.1. Keine Benutzerregistrierung und keine gemeinsame Cloud-Bearbeitung. Eine **explizit aktivierte, schreibgeschützte Fernanzeige** für Doppelturniere ist nun im GitHub-Code ergänzt; noch nicht online getestet.
+**Stand:** 2026-11-06  
+**Status:** Doppelturnier und schreibgeschützte Fernanzeige wurden am 05.11.2026 als v0.8.0 erfolgreich auf die passwortgeschützte Testseite veröffentlicht ([GitHub-Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679), 200 Tests bestanden). Noch kein unabhängiger Zweitgeräte-Praxistest bestätigt. **Neue Zeitplanung v0.8.2 nur GitHub**, kein erneuter Upload. Backend und gemeinsame Cloud-Bearbeitung bleiben zurückgestellt.
 
 ## Fachliche Quelle
 
@@ -18,6 +18,15 @@ Die eigene Google-Tabelle [„Turniere Verein – Auslosung & Livetabelle“](ht
 - Änderungen früherer Play-off-Sieger, die die Paarungen ändern, setzen die davon abhängigen Endrundenergebnisse zurück.
 - Teilnahme/Check-in pro Team. Bar-Nenngeld wird je *Spieler* mit Normal- und Ermäßigt-Kategorie sowie tatsächlich gezahltem Betrag dokumentiert. Die Softwarelizenzzahlung ist getrennt.
 - Einstellbare Spielzeit, Pause, frei wählbare Anzahl und Namen von Plätzen; Start-/Endzeiten je tatsächlichem Spielblock. Start/Pause/Fortsetzen/Beenden/Zurücksetzen der Uhr.
+
+### Zeitplanung und Machbarkeit v0.8.2 (nur GitHub)
+
+- Weiterhin 1–8 Spiele je Team und ein **mathematischer Gegner-/Paritätscheck**: Teams müssen mindestens die gewünschte Gegnerzahl haben, kein Gegner wiederholt sich; bei ungerader Anzahl Teams sind **fünf** Spiele pro Team nicht möglich (vier oder sechs können möglich sein).
+- Neue **Machbarkeitsanzeige** im Bereich Einstellungen und Spielplan: jede Option 1–8 wird durch eine echte Probeauslosung geprüft. Diese liefert tatsächliche Begegnungen und die benötigten Zeitblöcke für die aktuelle Zahl verfügbarer Plätze.
+- **Endzeit ist optional.** Im festen Modus bleiben Spieldauer und Wechselzeit unverändert und Überschreitungen werden gemeldet. Mit der ausdrücklich gewählten Option „Spielzeiten bis zur Endzeit anpassen“ wird die vorhandene Zeit auf die benötigten Blöcke inklusive Wechselpausen aufgeteilt. Wenn weniger als 10 Spielminuten pro Block verbleiben, wird nicht ausgelost bzw. wird die Planung zurückgewiesen.
+- **Top-8-Play-offs** sind bei mindestens acht Teams für die Zeitplanung standardmäßig reserviert (separat abschaltbar). Viertelfinale, Halbfinale sowie Finale/Platz 3 werden entsprechend der Platzanzahl in weitere Spielblöcke verteilt. Die entsprechenden geplanten Zeitfenster sind in der Play-off-Ansicht einsehbar.
+- Die bereits gestarteten Rundenuhren behalten ihre ursprünglich gespeicherten Minuten. Das Enddatum kann bei Uhrzeiten nach Mitternacht am Folgetag liegen. Die Endzeit ist ein realistischer **Plan**, kein Versprechen, dass laufende Spiele tatsächlich punktgenau enden.
+- Geändert: `site/assets/operations.js`, `doubles.js`, `doppel-ui.js`, `storage.js`; neue Tests `tests/scheduling.test.mjs` und `tests/scheduling-ui.test.mjs`. Vollständiger GitHub-/Browser-Test und FTPS-Upload von v0.8.2 stehen noch aus.
 
 ### Technische Umsetzung
 
@@ -54,4 +63,4 @@ Bevor v0.7.0 online geht: GitHub-CI für alte Schleifchen- und neue Doppel-/Live
 
 Die bestehende `site/live.html` zeigt bei `type: doubles` nach dem Auslosen Teamnamen, Platz, Game-Ergebnisse, Sieger, Zeitplan und laufende Rundenuhr. Die Rangliste heißt **Doppel-Livetabelle** und zeigt Siege und Game-Differenz, statt Schleifchenzahlen. Nach Erstellung der Play-offs erscheinen die aktuelle Endrunde und später das Siegerdoppel. Über die Doppelturnierleitung stehen „Monitor öffnen“, „Fernanzeige aktivieren“, „Zuschauer-Link kopieren“, „Freigabe beenden“, „Diese Runde auf Monitor zeigen“ und „Play-offs auf Monitor zeigen“ bereit.
 
-Der vorhandene `live-feed.php`-Dienst wurde um einen erlaubten Wert `format: doubles`, die Ranglistenfelder `wins`, `gameDiff`, `gamesFor` und Rundennummern bis 499 erweitert. Er filtert unabhängig vom Browser sämtliche privaten Kassen-, Anwesenheits- und Teamverwaltungsfelder aus dem Snapshot. Der zufällige Schreibschlüssel wird nicht in den Zuschauerdaten oder im JSON-Turnierbackup gespeichert. **Ein echter zweiter Monitor und die serverseitige PHP-Erweiterung sind vor dem Upload noch zu testen.**
+Der vorhandene `live-feed.php`-Dienst wurde um einen erlaubten Wert `format: doubles`, die Ranglistenfelder `wins`, `gameDiff`, `gamesFor` und Rundennummern bis 499 erweitert. Er filtert unabhängig vom Browser sämtliche privaten Kassen-, Anwesenheits- und Teamverwaltungsfelder aus dem Snapshot. Der zufällige Schreibschlüssel wird nicht in den Zuschauerdaten oder im JSON-Turnierbackup gespeichert. **Die Fernanzeige wurde mit v0.8.0 hochgeladen; ein echter zweiter Monitor im Praxisbetrieb muss noch bestätigt werden.**
