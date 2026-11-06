@@ -1,6 +1,6 @@
 # TENNILO – Quellen, Turnierformate und Drive-Ablage
 
-**Stand:** 2026-11-05  
+**Stand:** 2026-11-06  
 **Status:** Quellenverzeichnis – keine neue Produktfunktion und keine automatische Übernahme fremder Spielregeln.
 
 ## Ablageorte
@@ -64,12 +64,25 @@ Die dritte TENNILO-Turnierart basiert auf den Reitern `OPC-Spieler` und `One Poi
 
 Die Bibliothek enthält darüber hinaus weitere Einzel-PDFs und Excel-Varianten. Dieses Verzeichnis ist bewusst eine **thematische Auswahl**, keine vollständige Dateiliste.
 
+## Neu verifiziert am 6. November 2026: Matchdauer vs. Punktziel
+
+Die Inhalte der über Google Drive gelesenen PDF-Vorlagen bestätigen, dass **Zählweise** und **Turnierformat** unabhängig voneinander sind. Das ist für die TENNILO-Auswahl **„Matches auf Zeit oder auf Punkte“** entscheidend.
+
+- Im [Rotations-Überblick](https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view) empfiehlt „Rauf und Runter“ **Tiebreaks bis 7 oder 10 Punkte**. „Wie ein Profi“ beschreibt dagegen **3-Minuten-Matches**. „STOPP“ ist ein eigenständiges Sonderformat: Sobald ein Match z. B. 5 Punkte erreicht, enden **alle parallelen Matches**, deren führendes Team dann gewertet wird. Diese globale STOPP-Logik ist ausdrücklich *nicht* dasselbe wie normale Einzelmatches bis zum Punktziel.
+- Der [Überblick Jeder gegen Jeden](https://drive.google.com/file/d/1XmxC21CPF7UBANC4laGFXjtlMDZE2eIA/view) beschreibt typischerweise Gruppen aus 4–5 Personen und empfiehlt **kurze Sätze mit Tiebreak bis 4**, bei jüngeren Teilnehmern reine Tiebreaks. Punkte, Games, gewonnene Sätze und Siege sind dabei unterschiedliche Werte.
+- In den [Mannschaftsformaten](https://drive.google.com/file/d/1-VWCPpZ4xS5LyKBYXQrReqj9G_IIdtBE/view) spielt „8 gegen 8 Doppel“ einzelne Matches **bis 5 Punkte**, die Mannschafts-Wertung erfolgt aber **nach den Nummern der besiegten Gegner** – die Matchpunkte dürfen deshalb nicht automatisch als Mannschaftspunkte addiert werden.
+- Die [Anleitung Ergebniserfassung](https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view) lässt alternative Zählweisen wie Matchtiebreaks, lange Sätze oder verkürzte Sätze ausdrücklich zu. Diese komplexeren Varianten bleiben **eigene spätere Fachmodule** und werden nicht unbemerkt in einfache Punktspiele umgedeutet.
+
+**Konsequenz für v0.8.6:** Für die vorhandenen Schleifchen- und festen Doppelturniere gibt es zunächst **Zeitspiel** (bisherige Game-/Siegererfassung) und **Punktspiel bis zu einem Ziel von 1–99 Punkten**, optional mit zwei Punkten Vorsprung. Der Gewinner wird bei Punktspielen aus beiden Punktzahlen automatisch berechnet. Die voraussichtliche Matchdauer ist dann nur eine Schätzung; eine feste Endzeit kann nicht exakt garantiert werden. **One Point Cup** bleibt definitionsgemäß ein einzelner Entscheidungspunkt. Diese Regel ist eine TENNILO-Basisfunktion, **keine pauschale Umsetzung** aller PDF-Sonderformate.
+
+**Neue Roadmap-Kandidaten aus verifizierten Drive-Vorlagen:** Jeder gegen jeden, K.-o.-System mit Trostrunde, Rauf und Runter, STOPP, 8 gegen 8 und Ranglisten-/Leitersystem. Im offiziellen Roadmap-Seed sind sie als Ideen mit klaren offenen Regeln und referenzierten Quellen geführt. Die Originale im Drive bleiben unverändert.
+
 ## Arbeitsregel für neue Turnierformate
 
 1. Passendes Original im Drive-Ordner lesen, inklusive Varianten, Sonderfällen und Auswertung.
 2. Fachliche Anforderungen und Abweichungen vom bestehenden TENNILO-Modell in einer eigenen, kurzen Konzeptnotiz festhalten.
 3. Regeln mit konkreten Testfällen bestätigen; eine bloße PDF-Titelähnlichkeit ist kein Regelsatz.
 4. Separates Auslosungs- oder Wertungsmodul implementieren und automatisiert prüfen.
-5. GitHub-Projektstatus, Entscheidungen und Changelog aktualisieren.
+5. GitHub-Projektstatus, Entscheidungen, Changelog **und die offizielle Roadmap-Seed-Datei** aktualisieren. Bei Änderungen an der Roadmap veröffentlicht der getrennte Prüfworkflow nur die geschützte Roadmap. App-Versionen werden weiterhin ausschließlich nach Freigabe manuell hochgeladen.
 
 **Keine bestehenden Dateien im Drive-Ordner „Turnierformate“ verändern.** Neue TENNILO-Konzeptdokumente in „TENNILO – Dokumentation“ ablegen.
