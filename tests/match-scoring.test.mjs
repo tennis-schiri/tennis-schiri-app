@@ -32,6 +32,8 @@ test("Punktmatch ermittelt Sieger aus dem Zielstand",()=>{
 });
 test("Zwei-Punkte-Vorsprung verhindert falsches vorzeitiges Ergebnis",()=>{
   assert.throws(()=>normalizePointResult({score1:7,score2:6},points(7,true)),/zwei Punkten Vorsprung/);
+  assert.equal(normalizePointResult({score1:7,score2:0},points(7,true)).winner,1);
+  assert.equal(normalizePointResult({score1:7,score2:4},points(7,true)).winner,1);
   assert.equal(normalizePointResult({score1:8,score2:6},points(7,true)).winner,1);
   assert.equal(normalizePointResult({score1:9,score2:7},points(7,true)).winner,1);
   assert.throws(()=>normalizePointResult({score1:9,score2:6},points(7,true)),/zwei Punkten Vorsprung/);
