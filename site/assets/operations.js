@@ -114,7 +114,9 @@ export function plannedRound(t,index) {
   if(t.timeMode==="fit"&&!scheduleBlockCount(t))
     throw Error("Spielzeiten lassen sich nach der Auslosung an die Endzeit anpassen.");
   const plan=tournamentSchedule(t,blocks);
-  return plan.rounds[index];
+  const r=plan.rounds[index];
+  return {start:r.start,end:r.end,pauseEnd:r.pauseEnd,duration:r.duration,
+    breakMinutes:t.timeMode==="fit"?r.breakMinutes:t.breakMinutes};
 }
 export function clockFor(t,index,now=Date.now()) {
   const c=t?.roundClocks?.[String(index)]||null;
