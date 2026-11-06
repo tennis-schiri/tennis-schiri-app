@@ -17,8 +17,8 @@ const app=read("site/assets/app.js");
 test("Roadmap hat eigene geschützte Unterseite und behält TENNILO-Branding",()=>{
   assert.match(page,/noindex,nofollow/);
   assert.match(page,/roadmap-app/);
-  assert.match(page,/roadmap\.js\?v=086/);
-  assert.match(page,/roadmap\.css\?v=086/);
+  assert.match(page,/roadmap\.js\?v=087/);
+  assert.match(page,/roadmap\.css\?v=087/);
   assert.match(page,/Content-Security-Policy/);
   assert.match(app,/roadmap\.html/);
 });
