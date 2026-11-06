@@ -1,6 +1,6 @@
 // Darstellung der Schleifchen-Endrunde. Fachlogik bleibt in finals.js.
-import { ribbonFinalPreview, verifyRibbonFinals } from "./finals.js";
-import { normalizeRibbonResult } from "./results.js";
+import { ribbonFinalPreview, verifyRibbonFinals } from "./finals.js?v=086";
+import { normalizeRibbonResult } from "./results.js?v=086";
 import {scoringRules} from "./match-scoring.js";
 import { plannedRound } from "./operations.js?v=082";
 
