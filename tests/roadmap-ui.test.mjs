@@ -17,14 +17,14 @@ const app=read("site/assets/app.js");
 test("Roadmap hat eigene geschützte Unterseite und behält TENNILO-Branding",()=>{
   assert.match(page,/noindex,nofollow/);
   assert.match(page,/roadmap-app/);
-  assert.match(page,/roadmap\.js\?v=084/);
-  assert.match(page,/roadmap\.css\?v=084/);
+  assert.match(page,/roadmap\.js\?v=085/);
+  assert.match(page,/roadmap\.css\?v=085/);
   assert.match(page,/Content-Security-Policy/);
   assert.match(app,/roadmap\.html/);
 });
 test("Fünf transparente Status für fertige, geplante und vorgeschlagene Funktionen",()=>{
   assert.deepEqual([...new Set(seed.items.map(x=>x.status))].sort(),
-    ["idea","online","planned","progress","test"]);
+    ["idea","online","planned","progress"]);
   assert.match(ui,/Auf Testseite/);
   assert.match(ui,/Code fertig/);
   assert.match(ui,/Ideensammlung/);
@@ -35,6 +35,29 @@ test("Fünf transparente Status für fertige, geplante und vorgeschlagene Funkti
   assert.match(ui,/rm-filter-category/);
   assert.match(css,/@media\(max-width:620px\)/);
 });
+test("Ausführliche Inhalte stehen ausschließlich in der Detailansicht und bleiben bearbeitbar",()=>{
+  const fields=["benefit","scope","currentState","openPoints","doneWhen"];
+  for(const item of seed.items){
+    for(const key of fields){
+      assert.equal(typeof item[key],"string",item.id+" fehlt "+key);
+      assert.ok(item[key].length>25,item.id+": "+key+" zu knapp beschrieben");
+    }
+    assert.ok(["high","medium","low"].includes(item.priority),"Priorität ungültig: "+item.id);
+  }
+  assert.match(ui,/function detailsHtml\(item\)/);
+  assert.match(ui,/detailsHtml\(x\)/);
+  assert.match(ui,/DETAIL_SECTIONS\.map/);
+  assert.match(ui,/Object\.fromEntries\(DETAIL_SECTIONS\.map/);
+  assert.match(ui,/data-action="edit"/);
+  assert.match(lib,/RM_DETAIL_FIELDS/);
+  assert.match(lib,/array_key_exists\(\$field, \$existing\)/);
+  assert.match(css,/\.rm-details-grid/);
+  assert.match(css,/\.rm-detail-section/);
+  const overview=ui.split("function card(x)")[1].split("function renderResults()")[0];
+  for(const key of fields)assert.equal(overview.includes("x."+key),false,
+    "Detailtext darf nicht in der Board-Karte erscheinen");
+});
+
 test("Echte getrennte Rechte statt bloßer lokaler Kommentar-Demo",()=>{
   for(const x of ["login","logout","bootstrap","invite","revoke","idea","comment","update","delete-comment","rotate-owner"])
     assert.ok(api.includes("'"+x+"'"),"Fehlende Server-Aktion: "+x);
