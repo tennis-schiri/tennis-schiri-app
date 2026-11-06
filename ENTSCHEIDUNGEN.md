@@ -306,3 +306,12 @@
 - **Daten:** Optionales `endTime`, `timeMode` und Formatoptionen im gemeinsamen bestehenden Turnierdatensatz; Schema-Version 1 bleibt für Alt-JSON erhalten. Keine neue Backend-/Zahlungsfunktion.
 - **Freigabe:** v0.8.2 derzeit nur in GitHub; letzte erfolgreich veröffentlichte App ist v0.8.0 (05.11.2026; Run 42085118679, 200/200 Tests, 27 hochgeladene Dateien). Zeitänderung erst nach CI- und Browserprüfung manuell veröffentlichen.
 
+
+## E-034 · Empfehlung einer Turnierart (2026-11-06)
+
+- **Entscheidung:** Die Turnierleitung muss die passende Turnierart nicht vorab kennen. TENNILO bietet auf der Startseite einen optionalen Berater mit Teilnehmerzahl, Plätzen, Zeitfenster, Turnierziel und Partnerwunsch. Direkter Einstieg in eine konkrete Turnierart bleibt erhalten.
+- **Prüfung statt reiner KI-Behauptung:** Formatadapter verwenden dieselben Auslosungs- und Zeitplanmodelle wie das Turnier; zuerst echte Machbarkeit prüfen, dann nach Vorlieben sortieren. Begründungen und konkrete Planwerte statt abstrakter Prozent-Rankings. Modellannahmen (gleichmäßige Spielstärken, vorgebildete Doppel-Teams) transparent benennen.
+- **Konkret:** V0.8.3 empfiehlt zwischen Schleifchen, festem Doppel und One Point Cup; ungerade Personenzahl kann kein vollständiges festes Zweier-Teamfeld bilden; Freilose belegen keine Matchzeiten. Empfehlung ist eine unverbindliche Planungsgrundlage und ersetzt Check-in und echte Auslosung nicht.
+- **Umsetzung:** Neues erweiterbares `FORMAT_ADVISORS`-Register, responsive Startseiten-Navigation und Vergleich. Einen Vorschlag mit den empfohlenen Turnierparametern als echtes, **noch leeres** Turnier anlegen, ohne die anonymen Modellsimulatoren zu speichern.
+- **Grenzen:** Der Berater prüft derzeit 4–128 Personen und 1–24 Plätze; Schleifchen-Probeauslosung bis 80, One Point Cup bis 64. Neue Formate benötigen Adapter und vorhandene Fach-/Neuanlage-Unterstützung. Keine personenbezogenen Daten oder Echtgeldtransaktionen bei der Beratung.
+- **Freigabe:** Nur GitHub v0.8.3; bisherige Online-Version v0.8.0 unverändert. Manuelles FTPS nach bestätigter CI-/Browserprüfung, keine automatische Veröffentlichung.
