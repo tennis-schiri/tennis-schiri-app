@@ -14,6 +14,17 @@ function expectedError(callable $action, string $pattern): void {
 }
 $seed = rm_seed(__DIR__ . '/../site/roadmap-seed.json');
 tassert(count($seed) >= 15, 'Mindestens 15 dokumentierte Roadmap-Einträge');
+tassert(count($seed)>=25, 'Drive-Formate und Punktmodus ergänzt');
+$ids = array_column($seed,'id');
+tassert(in_array('score-modes',$ids,true),'Match-Zählweise in der Roadmap');
+tassert(in_array('stop',$ids,true)&&in_array('updown',$ids,true),'Drive-Rotationsformate berücksichtigt');
+$refs = rm_references([
+ ['title'=>'Drive-Vorlage','url'=>'https://drive.google.com/file/d/1XmxC21CPF7UBANC4laGFXjtlMDZE2eIA/view'],
+ ['title'=>'Falsch','url'=>'javascript:alert(1)'],
+ ['title'=>'Falsche Domain','url'=>'https://drive.google.com.evil.example/file/d/123']
+]);
+tassert(count($refs)===1,'Nur echte Google-Drive-Domains');
+
 tassert(count(array_unique(array_column($seed, 'id'))) === count($seed), 'IDs eindeutig');
 tassert(count(array_filter($seed, fn($item) => $item['status'] === 'online')) >= 4, 'Veröffentlichte Funktionen klar markiert');
 tassert(count(array_filter($seed, fn($item) => $item['status'] === 'planned')) >= 2, 'Geplante Funktionen vorhanden');
@@ -38,6 +49,24 @@ tassert($oldState['adminHash'] === 'hashed' && count($oldState['invites']) === 1
     'Projektleitungs- und Einladungscodes unverändert lassen');
 $legacyWithOwnDetails = $seed[1];
 $legacyWithOwnDetails['benefit'] = 'Eigener redaktioneller Text';
+$baselineState=rm_merge([], $seed);
+$nextSeed=$seed;
+$nextSeed[0]['currentState']='Offizieller neuer Stand';
+$nextSeed[0]['status']='test';
+$autoMerged=rm_merge($baselineState,$nextSeed);
+tassert($autoMerged['items'][0]['currentState']==='Offizieller neuer Stand',
+    'GitHub aktualisiert unveränderte offizielle Felder');
+tassert($autoMerged['items'][0]['status']==='test',
+    'Unveränderter offizieller Status wird synchronisiert');
+$custom=$baselineState;
+$custom['items'][0]['currentState']='Redaktionelle Anmerkung';
+$custom['items'][0]['status']='planned';
+$custom['items'][0]['comments']=[['id'=>'c1','author'=>'Person','text'=>'Vereinsidee','createdAt'=>'2026']];
+$customMerged=rm_merge($custom,$nextSeed);
+tassert($customMerged['items'][0]['currentState']==='Redaktionelle Anmerkung'&&
+    $customMerged['items'][0]['status']==='planned'&&
+    count($customMerged['items'][0]['comments'])===1,
+    'Eigene Inhalte, Status und Kommentare haben Vorrang');
 $mergedOwn = rm_merge(['items'=>[$legacyWithOwnDetails]], $seed);
 tassert($mergedOwn['items'][0]['benefit'] === 'Eigener redaktioneller Text',
     'Eigene Detailänderungen durch neue Seed-Version nicht überschreiben');
