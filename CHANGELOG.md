@@ -12,7 +12,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - **Echte gemeinsame Beiträge:** 18 seed-basierte Roadmap-Themen plus PHP-API mit serverseitiger JSON-Speicherung, kommentierbaren Einzelkarten und neuen Vorschlägen.
 - **Rollen:** Bestehender Testseiten-Passwortschutz für alle Leser, persönlicher zusätzlicher Code für Ideen/Kommentare, separater Projektleitungs-Code für Statusänderungen und Einladungen. Codes werden nie im Klartext persistiert. CSRF, Session, HTTPS, Same-Origin, Eingabelimits, atomisches Schreiben.
 - **Hosting-Grenze:** Standardmäßig privater Server-Temp-Speicher, der vom Hosting gelöscht werden kann; dauerhafte, private Ablage muss vor regelmäßiger Nutzung eingerichtet werden. Erste Besucher mit Testseiten-Passwort können die Administration übernehmen, solange der Code noch nicht eingerichtet wurde – daher vor weiteren Einladungen zuerst selbst einrichten.
-- **Tests:** PHP-Lint, `tests/roadmap.php`, `tests/roadmap-ui.test.mjs`, bisher 243/243 Node-Tests in GitHub-Prüflauf 42187058485; echter Browser-/ALL-INKL-/Zweitgeräte-Test noch offen.
+- **Tests:** PHP-Lint, `tests/roadmap.php`, `tests/roadmap-ui.test.mjs`, 244/244 Node-Tests plus PHP-Lint und PHP-Modelldatentest in GitHub-Prüflauf 42188294342 erfolgreich. Zusätzlich ein HTTP-Integrationstest (simulierte Apache-HTTPS-Umgebung) für Bootstrap, Einladungen, Kommentare, Status und Widerruf. Echter Browser-/ALL-INKL-/Zweitgeräte-Test noch offen.
 - **Deployment:** Sechs neue Dateien für den bisherigen ausschließlich manuellen FTPS-Upload freigegeben (34 statt 28 Dateien); kein Upload automatisch ausgelöst. Online bleibt v0.8.0.
 
 ## [0.8.3] – Turnierberater mit Formatvergleich und direkter Neuanlage (nur GitHub; kein Upload)
