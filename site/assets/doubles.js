@@ -1,4 +1,5 @@
 // TENNILO Doppelturnier: feste Zweierteams, Vorrunde, Rangliste und Top-8-Play-offs.
+import {plannedRound,tournamentSchedule} from "./operations.js?v=082";
 // Fachliche Vorlage: "Turniere Verein – Auslosung & Livetabelle", Doppel-Setup,
 // Doppel-Auslosung, Doppel-Livetabelle und Doppel-Play-Offs (03.10.2026).
 const key = (a,b) => a < b ? a + "|" + b : b + "|" + a;
@@ -250,16 +251,35 @@ export function doublesPlayoffStatus(t) {
 }
 
 export function doublesPlanRound(t,index) {
-  const match=/^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(t.startTime));
-  if(!match||!Number.isInteger(index)||index<0||index>=500)throw Error("Ungültige Zeitplanung.");
-  const minutes=Number(match[1])*60+Number(match[2])+index*(t.duration+t.breakMinutes);
-  const format=n=>{
-    const day=Math.floor(n/1440),x=n%1440;
-    return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")+
-      (day>0?" (+"+day+" Tag"+(day===1?"":"e")+")":"");
-  };
-  return {start:format(minutes),end:format(minutes+t.duration),
-    pauseEnd:format(minutes+t.duration+t.breakMinutes)};
+  return plannedRound(t,index);
+}
+
+// Try each requested match count with the same real draw generator that is used
+// for the tournament; avoid claiming a time fit from an optimistic court estimate.
+export function doublesMatchOptions(t,{seed=37}={}) {
+  const options=[];
+  for(let games=1;games<=8;games++){
+    const candidate={...t,rounds:games,doubles:{...t.doubles,draw:null,playoffs:null}};
+    const setup=analyzeDoublesSetup(candidate);
+    if(!setup.ok){
+      options.push({games,possible:false,reason:setup.errors[0],blocks:null});continue;
+    }
+    try{
+      const draw=generateDoublesDraw(candidate,{seed});
+      const scheduled={...candidate,doubles:{...candidate.doubles,draw}};
+      const plan=tournamentSchedule(scheduled);
+      options.push({games,possible:!plan.overTarget,
+        blocks:draw.rounds.length,totalFixtures:setup.fixtures,
+        preliminaryEnd:plannedRound(scheduled,draw.rounds.length-1).end,
+        plannedEnd:plan.end,perBlockMinutes:plan.rounds[0].duration,
+        reason:plan.overTarget?
+          "Der feste Spielplan endet nach der gewünschten Endzeit.":""
+      });
+    }catch(e){
+      options.push({games,possible:false,blocks:null,reason:e.message});
+    }
+  }
+  return options;
 }
 
 export function changeDoublesClock(t,index,action,now=Date.now()) {
@@ -273,7 +293,7 @@ export function changeDoublesClock(t,index,action,now=Date.now()) {
     throw Error("Eine andere Rundenuhr läuft noch.");
   if(action==="start"){
     if(previous)throw Error("Diese Runde wurde bereits gestartet.");
-    clocks[key]={firstStartedAt:now,startedAt:now,finishedAt:null,elapsedMs:0,durationMs:t.duration*60000};
+    clocks[key]={firstStartedAt:now,startedAt:now,finishedAt:null,elapsedMs:0,durationMs:plannedRound(t,index).duration*60000};
   }else if(action==="pause"){
     if(!running)throw Error("Die Rundenuhr läuft nicht.");
     clocks[key]={...previous,startedAt:null,elapsedMs:previous.elapsedMs+now-previous.startedAt};
