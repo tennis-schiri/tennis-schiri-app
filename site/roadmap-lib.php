@@ -124,6 +124,10 @@ function rm_merge(array $saved, array $seed): array {
     return [
         'schemaVersion' => 1,
         'adminHash' => is_string($saved['adminHash'] ?? null) ? $saved['adminHash'] : null,
+        'ownerAccount' => is_array($saved['ownerAccount'] ?? null) &&
+            is_string($saved['ownerAccount']['username'] ?? null) &&
+            is_string($saved['ownerAccount']['passwordHash'] ?? null)
+            ? $saved['ownerAccount'] : null,
         'invites' => is_array($saved['invites'] ?? null) ? $saved['invites'] : [],
         'officialBaseline' => $currentBaseline,
         'items' => array_values($items)
@@ -147,6 +151,46 @@ function rm_public_item(array $item): array {
         ];
     }
     return $out;
+}
+
+// Accounts belong only to this private Roadmap; they do not grant TENNILO app access.
+function rm_username(mixed $value): string {
+    if (!is_string($value)) rm_error(422, 'Benutzername fehlt.');
+    $name = strtolower(trim($value));
+    if (!preg_match('/^[a-z0-9][a-z0-9._-]{2,39}$/D', $name) ||
+        in_array($name, ['gast','admin','system'], true)) {
+        rm_error(422, 'Benutzername: 3–40 Zeichen, Buchstaben a–z, Zahlen, Punkt, Minus oder Unterstrich.');
+    }
+    return $name;
+}
+
+function rm_password(mixed $value): string {
+    if (!is_string($value) || strlen($value) < 12 || strlen($value) > 72 ||
+        preg_match('//u', $value) !== 1 ||
+        preg_match('/[\\x00-\\x1f\\x7f]/', $value) === 1) {
+        rm_error(422, 'Passwort: mindestens 12 Zeichen, höchstens 72 Bytes, keine Steuerzeichen.');
+    }
+    return $value;
+}
+
+function rm_user_exists(array $state, string $username): bool {
+    if (($state['ownerAccount']['username'] ?? null) === $username) return true;
+    foreach ($state['invites'] as $member) {
+        if (($member['username'] ?? null) === $username) return true;
+    }
+    return false;
+}
+
+function rm_authenticate(array $state, string $username, string $password): ?string {
+    $owner = $state['ownerAccount'] ?? null;
+    if (is_array($owner) && $owner['username'] === $username &&
+        password_verify($password, $owner['passwordHash'])) return 'owner';
+    foreach ($state['invites'] as $member) {
+        if (($member['username'] ?? null) === $username &&
+            is_string($member['passwordHash'] ?? null) &&
+            password_verify($password, $member['passwordHash'])) return $member['id'];
+    }
+    return null;
 }
 
 function rm_valid_code(mixed $code): bool {
