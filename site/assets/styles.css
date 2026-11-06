@@ -380,3 +380,5 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .advisor-result .btn{margin-top:auto;width:100%;text-align:center;font-size:12px;padding:12px;white-space:normal}
 @media(max-width:1050px){.advisor-result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.advisor-shell{padding:32px 17px 65px}.advisor-invite{flex-direction:column;align-items:stretch;padding:24px 20px}.advisor-invite .btn{white-space:normal}.advisor-heading{flex-direction:column}.advisor-heading h1{font-size:2.6rem}.advisor-fields{grid-template-columns:1fr}.advisor-result-grid{grid-template-columns:1fr}.advisor-description{min-height:0}.advisor-numbers strong{font-size:1.15rem}}
+
+.advisor-why{border-left:3px solid var(--orange);padding:5px 0 5px 11px;margin:1px 0 14px;font-size:12px;line-height:1.55;color:#365b57}
