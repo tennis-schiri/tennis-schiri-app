@@ -336,3 +336,47 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .schedule-option-ok{background:#eff8ec;border-color:#bbdcc0;color:#215e43}
 .schedule-option-no{background:#fcf3ed;border-color:#e9d6c7;color:#7b3f2c}
 @media(max-width:620px){.schedule-option-list{grid-template-columns:1fr}}
+
+/* TENNILO Turnierberater v0.8.3 */
+.advisor-invite{margin:7px 0 38px;padding:30px clamp(20px,3vw,35px);border-radius:17px;background:#103b45;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;box-shadow:0 8px 25px rgba(8,43,53,.10)}
+.advisor-invite .eyebrow{color:var(--lime)}
+.advisor-invite h2{font-size:clamp(1.4rem,2.5vw,2.1rem);line-height:1.15;letter-spacing:-.055em;margin:8px 0}
+.advisor-invite p{max-width:690px;color:#d2e0dd;line-height:1.6;font-size:13px;margin:0}
+.advisor-invite .btn{white-space:nowrap;background:var(--lime);color:#0a303a}
+.advisor-shell{max-width:1330px;margin:0 auto;padding:52px 27px 90px}
+.advisor-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:31px}
+.advisor-heading>div{max-width:830px}
+.advisor-heading h1{font-size:clamp(2.2rem,5.8vw,4.5rem);letter-spacing:-.075em;line-height:1.05;margin:11px 0 21px}
+.advisor-heading h1 em{font-style:normal;color:#df633b}
+.advisor-heading p{font-size:15px;line-height:1.7;color:var(--muted);margin:0}
+.advisor-form-panel{background:#fff;border:1px solid #d6e3dc;border-radius:18px;padding:clamp(20px,3vw,34px);box-shadow:var(--shadow)}
+.advisor-panel-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:22px}
+.advisor-panel-heading h2{font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.055em;margin:5px 0 0}
+.advisor-panel-heading>span{font-size:11px;letter-spacing:.07em;color:#698480;font-weight:850}
+.advisor-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:23px;row-gap:20px}
+.advisor-fields .advisor-wide{grid-column:1/-1}
+.advisor-fields .field small{font-weight:500;line-height:1.45;color:var(--muted);font-size:11px}
+.advisor-form-actions{margin-top:27px;display:flex;gap:19px;align-items:center;flex-wrap:wrap}
+.advisor-form-actions p{font-size:11px;color:var(--muted);line-height:1.6;max-width:540px;margin:0}
+.advisor-results{margin-top:48px;scroll-margin-top:24px}
+.advisor-disclaimer{font-size:13px;line-height:1.65;color:#536e6c;max-width:940px;margin:0 0 22px}
+.advisor-result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:15px}
+.advisor-result{border-radius:16px;background:#fff;border:1px solid var(--line);padding:23px;display:flex;flex-direction:column;gap:0;min-width:0}
+.advisor-result.recommended{border:2px solid #257461;box-shadow:0 9px 25px rgba(21,73,57,.09)}
+.advisor-result-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.advisor-best,.advisor-status{font-size:10px;font-weight:850;color:#41685e;white-space:normal}
+.advisor-best{background:var(--lime);border-radius:6px;padding:6px 8px;color:var(--navy)}
+.advisor-status.not-feasible{color:#995e46}
+.advisor-result h3{font-size:clamp(1.2rem,2vw,1.55rem);margin:17px 0 8px;letter-spacing:-.045em}
+.advisor-description{color:var(--muted);font-size:13px;line-height:1.55;min-height:61px}
+.advisor-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:9px 0 15px}
+.advisor-numbers>div{background:#f0f5f0;border-radius:9px;padding:10px 7px;min-width:0}
+.advisor-numbers small{display:block;font-weight:750;font-size:10px;color:#68817c}
+.advisor-numbers strong{display:block;font-size:clamp(.85rem,1.6vw,1.25rem);letter-spacing:-.04em;color:var(--navy);margin-top:5px}
+.advisor-matches{font-weight:850;color:#214c47;font-size:13px}
+.advisor-detail{font-size:12px;line-height:1.6;color:#345a55}
+.advisor-note{font-size:11px;line-height:1.65;color:#6d8580;margin-bottom:23px}
+.advisor-unavailable{margin:12px 0 0;padding:14px;border-radius:9px;background:#fff1e8;color:#804e39;font-size:12px;line-height:1.65}
+.advisor-result .btn{margin-top:auto;width:100%;text-align:center;font-size:12px;padding:12px;white-space:normal}
+@media(max-width:1050px){.advisor-result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.advisor-shell{padding:32px 17px 65px}.advisor-invite{flex-direction:column;align-items:stretch;padding:24px 20px}.advisor-invite .btn{white-space:normal}.advisor-heading{flex-direction:column}.advisor-heading h1{font-size:2.6rem}.advisor-fields{grid-template-columns:1fr}.advisor-result-grid{grid-template-columns:1fr}.advisor-description{min-height:0}.advisor-numbers strong{font-size:1.15rem}}
