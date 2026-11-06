@@ -4,7 +4,7 @@ import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.j
 import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=061";
 import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetRibbonFinals, ribbonFinalPreview } from "./finals.js?v=061";
 import { renderRibbonFinals } from "./finals-ui.js?v=061";
-import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock } from "./operations.js?v=061";
+import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock,timeWindow,tournamentSchedule } from "./operations.js?v=082";
 import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=061";
 import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=071";
 
@@ -205,6 +205,18 @@ function readiness(t) {
   return `<div class="advice good">${icon("check")} <div><strong>Teilnehmerübersicht ausgeglichen.</strong><span>Die Stärkegruppen sind gleich groß. Die normale Vorrunde kann im Bereich „Auslosung“ erstellt werden.</span></div></div>`;
 }
 
+function ribbonTimeNote(t) {
+  if(!t.draw)return t.endTime?
+    '<p class="schedule-note">Endzeit '+escapeHtml(t.endTime)+' Uhr vorgemerkt. Die tatsächlichen Zeitblöcke werden nach der Auslosung berechnet.</p>':"";
+  try{
+    const plan=tournamentSchedule(t);
+    return '<p class="schedule-note '+(plan.overTarget?"schedule-warning":"")+'"><strong>Geplantes Ende: '+escapeHtml(plan.end)+' Uhr</strong>'+
+      (t.endTime?' · Wunschende: '+escapeHtml(t.endTime)+' Uhr':'')+
+      (plan.mode==="fit"?' · Spielzeiten automatisch verteilt':' · feste Spielzeiten')+
+      (plan.overTarget?' · Achtung: Endzeit wird überschritten.':'')+
+      (t.reserveFinals?' · Endrunden-Zeitblöcke reserviert':'')+'</p>';
+  }catch(e){return '<p class="schedule-note schedule-warning">'+escapeHtml(e.message)+'</p>';}
+}
 function overview(t) {
   const c = count(t);
   return `<section class="screen">
@@ -220,10 +232,13 @@ function overview(t) {
       ${euroText(feesOverview(t).received)} erhalten · ${euroText(feesOverview(t).open)} offen
       <button class="text-action" data-action="tab" data-tab="participants">Check-in & Kasse öffnen ${icon("arrow")}</button></div>
     ${readiness(t)}
+    ${ribbonTimeNote(t)}
     <div class="two-col">
       <section class="panel"><div class="panel-head"><h3>Turniereinstellungen</h3><button class="text-action" data-action="settings">Bearbeiten ${icon("arrow")}</button></div>
         <dl class="detail-list">
           <div><dt>Datum & Start</dt><dd>${dateDisplay(t.date)} · ${escapeHtml(t.startTime)} Uhr</dd></div>
+           <div><dt>Endzeit</dt><dd>${t.endTime?escapeHtml(t.endTime)+" Uhr":"Offen"}</dd></div>
+           <div><dt>Zeitplanung</dt><dd>${t.timeMode==="fit"?"Bis zur Endzeit optimieren":"Feste Spielzeiten"}</dd></div>
           <div><dt>Spielzeit</dt><dd>${t.duration} Minuten</dd></div>
           <div><dt>Pause / Wechsel</dt><dd>${t.breakMinutes} Minuten</dd></div>
           <div><dt>Wertungsspiele je Spieler</dt><dd>${t.rounds}</dd></div>
@@ -310,6 +325,8 @@ function settings(t) {
         <div><dt>Turniername</dt><dd>${escapeHtml(t.name)}</dd></div>
         <div><dt>Datum</dt><dd>${dateDisplay(t.date)}</dd></div>
         <div><dt>Startzeit</dt><dd>${escapeHtml(t.startTime)} Uhr</dd></div>
+         <div><dt>Endzeit (optional)</dt><dd>${t.endTime?escapeHtml(t.endTime)+" Uhr":"Nicht gesetzt"}</dd></div>
+         <div><dt>Zeitmodus</dt><dd>${t.timeMode==="fit"?"Bis zur Endzeit anpassen":"Feste Spieldauer"}</dd></div>
         <div><dt>Spieldauer</dt><dd>${t.duration} Minuten</dd></div>
         <div><dt>Wechselzeit</dt><dd>${t.breakMinutes} Minuten</dd></div>
         <div><dt>Vorrundenspiele pro Spieler</dt><dd>${t.rounds}</dd></div>
@@ -317,6 +334,7 @@ function settings(t) {
          <div><dt>Nenngeld</dt><dd>${euroText(t.entryFeeCents||0)} Standardbetrag · bar</dd></div>
       </dl>
     </section>
+    ${ribbonTimeNote(t)}
     <section class="panel setting-panel fee-categories-panel">
       <div class="panel-head"><div><h3>Nenngeld-Kategorien</h3><p>Beispiele: Jugend, Erwachsene, Mitglieder. Die Kategorien sind unabhängig von der Spielstärke.</p></div>
         <button class="btn subtle small" data-action="fee-category-add">${icon("plus")} Kategorie hinzufügen</button></div>
@@ -472,6 +490,12 @@ function settingsFields(t = {}) {
     <label class="field wide">Turniername<input name="name" required minlength="2" maxlength="90" value="${escapeHtml(t.name ?? "")}" placeholder="z. B. Sommer-Schleifchenturnier"></label>
     <label class="field">Datum<input name="date" type="date" required value="${escapeHtml(t.date ?? todayLocal())}"></label>
     <label class="field">Startzeit<input name="startTime" type="time" required value="${escapeHtml(t.startTime ?? "10:00")}"></label>
+    <label class="field">Endzeit (optional)<input name="endTime" type="time" value="${escapeHtml(t.endTime??"")}"><span class="field-hint">Kann auch nach Mitternacht liegen. Leer lassen für ein offenes Ende.</span></label>
+    <label class="field wide">Zeitplanung<select name="timeMode">
+      <option value="fixed" ${t.timeMode!=="fit"?"selected":""}>Feste Spielzeit und Pausen beibehalten</option>
+      <option value="fit" ${t.timeMode==="fit"?"selected":""}>Spielzeit an die Endzeit anpassen</option>
+    </select><span class="field-hint">Nach der Auslosung werden die möglichen Spielminuten pro Runde errechnet. Unter 10 Minuten je Spielblock wird die Planung abgelehnt.</span></label>
+    <label class="field wide checkbox-field"><input type="checkbox" name="reserveFinals" ${t.reserveFinals?"checked":""}> Zeitblöcke für eine mögliche K.-o.-Endrunde mitplanen</label>
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
     <label class="field wide">Standard-Nenngeld (€) · bar
@@ -563,7 +587,8 @@ function readSettings(form) {
     ? [...existing] : Array.from({length: courtCount}, (_, i) => i + 1);
   return {
     name: String(data.get("name") ?? "").trim(), date: String(data.get("date") ?? ""),
-    startTime: String(data.get("startTime") ?? ""), duration: Number(data.get("duration")),
+    startTime: String(data.get("startTime") ?? ""),endTime:String(data.get("endTime")||"")||null,
+    timeMode:data.get("timeMode")==="fit"?"fit":"fixed",reserveFinals:data.has("reserveFinals"),duration: Number(data.get("duration")),
     breakMinutes: Number(data.get("breakMinutes")), rounds: Number(data.get("rounds")), entryFeeCents:euroCents(data.get("entryFee")), courts
   };
 }
@@ -784,6 +809,7 @@ document.addEventListener("click", event => {
       if (!confirm(warning)) return;
     }
     const draw=generateRibbonDraw(t,{seed:Math.floor(Math.random()*2147483647)});
+    tournamentSchedule({...t,draw});
     store.editTournament(t.id,{draw,roundClocks:{},liveDisplay:null});
     view="draw"; drawOpenRound=0; editingResult=null; editingFinal=null; render();
     flash(draw.special ? "Normale Vorrunden ausgelost. Auffüllrunde bleibt offen." : "Vorrunde vollständig ausgelost.");
@@ -913,6 +939,10 @@ document.addEventListener("submit", event => {
     if (kind === "create" || kind === "settings") {
       const values = readSettings(form);
       if (values.name.length < 2) throw new Error("Der Turniername muss mindestens 2 Zeichen haben.");
+      const preview={...(kind==="create"?{}:store.active()),...values};
+      timeWindow(preview);
+      if(preview.timeMode==="fit"&&!preview.endTime)throw Error("Für die automatische Zeitplanung bitte eine Endzeit eintragen.");
+      if(kind==="settings"&&store.active()?.draw)tournamentSchedule(preview);
       if (kind === "create") store.create(values);
       else store.editTournament(store.active().id, values);
       view = "overview";
