@@ -142,6 +142,23 @@ function showModal(title,body,{wide=false}={}){
   dialog.showModal();
 }
 function closeModal(){modalRoot.querySelector("dialog")?.close()}
+const DETAIL_SECTIONS=[
+  ["benefit","Ziel & Nutzen","Warum ist dieser Punkt sinnvoll?"],
+  ["scope","Funktionsumfang","Was soll die Funktion konkret leisten?"],
+  ["currentState","Aktueller Umsetzungsstand","Was ist schon vorhanden?"],
+  ["openPoints","Noch offen / Voraussetzungen","Was fehlt für den nächsten Schritt?"],
+  ["doneWhen","Fertig, wenn …","Woran erkennen wir, dass es funktioniert?"]
+];
+function detailsHtml(item){
+  const available=DETAIL_SECTIONS.filter(([key])=>String(item[key]||"").trim().length);
+  if(!available.length)return '<div class="rm-detail-awaiting"><strong>Details werden noch ergänzt.</strong>'+
+    '<p>Dieser Vorschlag wurde eingereicht. Die Projektleitung kann Ziel, Umfang und konkrete Prüfpunkte noch ausarbeiten.</p></div>';
+  return '<div class="rm-details-grid">'+available.map(([key,title,hint])=>
+    '<section class="rm-detail-section detail-'+key+'"><div class="rm-detail-section-title">'+
+    '<span class="rm-detail-section-marker" aria-hidden="true"></span>'+
+    '<div><h3>'+title+'</h3><small>'+hint+'</small></div></div>'+
+    '<p>'+esc(item[key])+'</p></section>').join("")+'</div>';
+}
 function detail(id){
   const x=itemById(id);
   if(!x)return;
@@ -150,10 +167,10 @@ function detail(id){
   let body='<div class="rm-detail-meta"><span class="rm-status-chip status-'+esc(x.status)+'">'+esc(statusOf(x.status).short)+'</span>'+
     '<span class="rm-priority '+esc(x.priority)+'">'+esc(PRIORITY[x.priority]||"Offen")+'</span>'+
     '<span>'+esc(x.category)+'</span></div>'+
-    '<p class="rm-detail-description">'+esc(x.description)+'</p>'+
+    '<div class="rm-detail-intro"><span class="rm-detail-eyebrow">KURZBESCHREIBUNG</span><p class="rm-detail-description">'+esc(x.description)+'</p></div>'+
     '<div class="rm-detail-facts"><div><small>Meilenstein</small><strong>'+esc(x.milestone||"Offen")+'</strong></div>'+
     '<div><small>Nächster Schritt</small><strong>'+esc(x.nextStep||"Noch nicht festgelegt")+'</strong></div>'+
-    '<div><small>Aktualisiert</small><strong>'+esc(niceDate(x.updatedAt))+'</strong></div></div>'+
+    '<div><small>Aktualisiert</small><strong>'+esc(niceDate(x.updatedAt))+'</strong></div></div>'+    detailsHtml(x)+
     (isAdmin()?'<div class="rm-detail-admin"><button class="btn subtle small" data-action="edit" data-id="'+esc(id)+'">Status und Details bearbeiten</button></div>':'')+
     '<div class="rm-comments"><div class="rm-comments-head"><h3>Diskussion</h3><span>'+comments.length+' Kommentar'+(comments.length===1?'':'e')+'</span></div>'+
     (comments.length?comments.map(c=>'<article class="rm-comment"><div><strong>'+esc(c.author)+'</strong><small>'+esc(niceDate(c.createdAt))+'</small>'+
@@ -180,12 +197,16 @@ function editModal(id){
   const x=itemById(id);if(!x||!isAdmin())return;
   showModal("Eintrag bearbeiten: "+x.title,'<form data-form="edit" data-id="'+esc(id)+'">'+
     '<label class="rm-field">Titel<input name="title" maxlength="140" required value="'+esc(x.title)+'"></label>'+
-    '<label class="rm-field">Beschreibung<textarea name="description" maxlength="2500" required rows="4">'+esc(x.description)+'</textarea></label>'+
+    '<label class="rm-field">Kurzbeschreibung (Board & Liste)<textarea name="description" maxlength="2500" required rows="4">'+esc(x.description)+'</textarea></label>'+
     '<div class="rm-form-grid"><label class="rm-field">Status'+formValue("status",x.status,STATUS.map(v=>[v.key,v.title]))+'</label>'+
     '<label class="rm-field">Priorität'+formValue("priority",x.priority,[["high","Hoch"],["medium","Mittel"],["low","Niedrig"]])+'</label></div>'+
     '<label class="rm-field">Bereich'+categorySelect(x.category)+'</label>'+
     '<label class="rm-field">Meilenstein<input name="milestone" maxlength="140" required value="'+esc(x.milestone)+'"></label>'+
     '<label class="rm-field">Nächster Schritt<textarea name="nextStep" rows="3" maxlength="500" required>'+esc(x.nextStep)+'</textarea></label>'+
+    '<div class="rm-edit-details-head"><h3>Ausführliche Details</h3><p>Diese Felder erscheinen ausschließlich nach dem Öffnen eines Roadmap-Punktes. Sie sind optional und können jederzeit erweitert werden.</p></div>'+
+    DETAIL_SECTIONS.map(([key,title,hint])=>
+      '<label class="rm-field">'+title+'<small>'+hint+'</small>'+
+      '<textarea name="'+key+'" rows="'+(key==="scope"||key==="openPoints"?5:4)+'" maxlength="'+({benefit:900,scope:1400,currentState:1400,openPoints:1400,doneWhen:1000}[key])+'" placeholder="Hier die ausführlichen Informationen eintragen …">'+esc(x[key]||"")+'</textarea></label>').join("")+
     '<button class="btn primary" type="submit">Änderungen speichern</button></form>',{wide:true});
 }
 function membersModal(){
@@ -303,7 +324,8 @@ document.addEventListener("submit",event=>{
   if(kind==="edit")return run("update",{itemId:form.dataset.id,
     title:d.get("title"),description:d.get("description"),status:d.get("status"),
     priority:d.get("priority"),category:d.get("category"),
-    milestone:d.get("milestone"),nextStep:d.get("nextStep")},
+    milestone:d.get("milestone"),nextStep:d.get("nextStep"),
+    ...Object.fromEntries(DETAIL_SECTIONS.map(([key])=>[key,d.get(key)]))},
     ()=>{closeModal();detail(form.dataset.id);toast("Status und Details aktualisiert.");});
   if(kind==="invite")return run("invite",{label:d.get("label"),role:d.get("role")},
     result=>{if(result.inviteCode)codeModal("Persönlicher Einladungscode",result.inviteCode);});
