@@ -105,7 +105,7 @@ export function verifyRibbonFinals(t) {
       if(m.team1!==null&&(!Array.isArray(m.team1)||m.team1.length!==2)||m.team2!==null&&(!Array.isArray(m.team2)||m.team2.length!==2))
         errors.push("Ein Endrunden-Team ist ungültig.");
       try{
-        const r=normalizeRibbonResult(m.result);
+        const r=normalizeRibbonResult(m.result,t);
         if(r.winner!==null&&(!m.team1||!m.team2))errors.push("Ein Endrunden-Ergebnis hat noch keine vollständigen Teams.");
       }catch(e){errors.push(e.message);}
     }
@@ -157,7 +157,7 @@ export function updateRibbonFinalResult(t,stageIndex,matchIndex,value){
   const match=finals.rounds?.[stageIndex]?.matches?.[matchIndex];
   if(!match)throw Error("Endrunden-Begegnung nicht gefunden.");
   if(!match.team1||!match.team2)throw Error("Beide vorherigen Begegnungen müssen zunächst entschieden sein.");
-  const result=normalizeRibbonResult(value);
+  const result=normalizeRibbonResult(value,t);
   const rounds=finals.rounds.map((stage,i)=>i!==stageIndex?stage:{
     ...stage,matches:stage.matches.map((m,j)=>j!==matchIndex?m:{...m,result:result.winner===null?null:result})
   });
