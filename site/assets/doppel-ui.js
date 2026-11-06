@@ -72,7 +72,7 @@ function header() {
 function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
     '<p>Teams, Barzahlungen und Ergebnisse werden im Browser dieses Geräts gespeichert. '+
-    'Sichere die Daten regelmäßig als JSON. Eine öffentliche Fernanzeige und die gemeinsame Bearbeitung auf anderen Geräten sind für diesen Doppelmodus noch nicht freigeschaltet.</p></div></div>';
+    'Sichere die Daten regelmäßig als JSON. Eine lesbare Fernanzeige kann ausdrücklich aktiviert und widerrufen werden. Die gemeinsame Bearbeitung des Turniers auf mehreren Geräten ist noch nicht freigeschaltet.</p></div></div>';
 }
 function livePanel(t) {
   const keys=readLiveSecrets(t.id);
@@ -315,10 +315,12 @@ function playoffsPage(t) {
 }
 function settingsPage(t) {
   return sectionHead("DOPPELTURNIER / EINSTELLUNGEN","Turnier konfigurieren",
-    "Platzanzahl und Spielzeit anpassen. Die Paarungen bleiben nach der Auslosung geschützt.")+
+    "Start- und Endzeit, Platzanzahl und Spielzeit anpassen. Die Paarungen bleiben nach der Auslosung geschützt.")+
     '<section class="double-panel">'+settingsFields(t,true)+
     '<div class="double-actions" style="margin-top:20px"><button class="btn subtle" data-act="edit-courts">Plätze benennen</button>'+
-    '<button class="btn double-danger" data-act="delete">Turnier löschen</button></div></section>';
+    '<button class="btn double-danger" data-act="delete">Turnier löschen</button></div></section>'+
+    '<p class="muted">Machbarkeitscheck für die aktuell gespeicherten Einstellungen. Änderungen oben erst speichern.</p>'+
+    doublesOptions(t);
 }
 function settingsFields(t=null,inline=false) {
   const current=t||{},categories=current.feeCategories||[
