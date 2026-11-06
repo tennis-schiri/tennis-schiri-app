@@ -51,7 +51,7 @@ export function renderLiveScreen(data) {
   }
   const doubles=data.format==="doubles";
   const standings=data.ranking.length?`<aside class="live-rankings" aria-label="${doubles?"Doppel-Livetabelle":"Schleifchen-Zwischenstand"}">
-      <h3>${doubles?"Doppel-Livetabelle":"Schleifchen-Stand"}</h3><p>${doubles?"Siege · Game-Differenz":"Vorrunde · Top "+data.ranking.length}</p>
+      <h3>${doubles?"Doppel-Livetabelle":"Schleifchen-Stand"}</h3><p>${doubles?"Siege · Differenz":"Vorrunde · Top "+data.ranking.length}</p>
       ${data.ranking.map(p=>`<div class="live-standing-line"><span class="live-standing-rank">${p.place}.</span>
         <span class="live-standing-name">${escapeLiveText(p.name)}</span>
         <span class="live-standing-ribbons">${doubles?`${escapeLiveText(p.wins)} S · ${escapeLiveText(p.gameDiff)} Diff`:`${p.ribbons} ◉`}</span>
