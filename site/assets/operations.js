@@ -53,9 +53,22 @@ export function timeWindow(t) {
     overnight:end<start};
 }
 export function scheduleBlockCount(t) {
-  if(t?.type==="doubles")return t.doubles?.draw?.rounds?.length||null;
-  if(t?.type==="opc")return null; // Point Cup uses its own match-slot planner.
-  return t?.draw?.rounds?.length+(t?.draw?.specialRound?1:0)||null;
+  if(t?.type==="doubles"){
+    const preliminary=t.doubles?.draw?.rounds?.length||0;
+    if(!preliminary)return null;
+    const present=(t.doubles.teams||[]).filter(x=>x.present).length;
+    const courts=Math.max(1,t.courts?.length||1);
+    const playoffs=t.reservePlayoffs!==false&&present>=8?
+      Math.ceil(4/courts)+Math.ceil(2/courts)+Math.ceil(2/courts):0;
+    return preliminary+playoffs;
+  }
+  if(t?.type==="opc")return null; // One-point matches use their own time slots.
+  const preliminary=t?.draw?.rounds?.length||0;
+  if(!preliminary)return null;
+  const special=t.draw?.specialRound?1:0;
+  const finals=t.reserveFinals===true?(
+    t.draw?.finals?.rounds?.length|| (t.finalSize===16?3:2)):0;
+  return preliminary+special+finals;
 }
 export function tournamentSchedule(t,blocks=scheduleBlockCount(t),{minDuration=10,maxDuration=120}={}) {
   const window=timeWindow(t);
@@ -80,7 +93,7 @@ export function tournamentSchedule(t,blocks=scheduleBlockCount(t),{minDuration=1
     const d=durations[i],start=cursor;
     cursor+=d;
     rounds.push({index:i,start:timeText(start),end:timeText(cursor),
-      pauseEnd:timeText(cursor+(i<gapCount?pause:0)),
+      pauseEnd:timeText(cursor+(i<gapCount||!fit?pause:0)),
       startMinutes:start,endMinutes:cursor,duration:d,
       breakMinutes:i<gapCount?pause:0});
     if(i<gapCount)cursor+=pause;
