@@ -389,3 +389,10 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Zufallsresultate nutzen die bestehenden Fachvalidatoren und befüllen nur offene Matches inklusive vorhandener Endrunden / Play-offs.
 - Dauerhaftes Demo-Kennzeichen, eigene Bedienflächen, keine erfundenen Barzahlungen, keine Änderung des Originals.
 - Neue Unit-Tests, versionsgebundene UI-Assets und FTPS-Whitelist; Roadmap-Status im Seed nachgeführt.
+
+
+### v0.8.9 – Roadmap sicherer Dauer-Speicher auf ALL-INKL (GitHub, 06.11.2026)
+
+- Kein SSH nötig: privater Schwesterordner der App wird anhand des tatsächlichen Serverpfads aufgelöst und auf .htaccess, Ordnerrechte, Webroot und Symlinks geprüft.
+- Automatische verlustarme Kopie eines vorhandenen alten Temp-`state.json` vor der ersten Nutzung des neuen Speichers, mit Sperren, Validierung und unverändertem Altbestand.
+- PHP-Integrationstests in Prüf- und Veröffentlichungsworkflow; neue Zugänge weiterhin nur bei manuellem Upload.

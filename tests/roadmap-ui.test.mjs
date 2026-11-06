@@ -92,7 +92,7 @@ test("Keine Roh-Tokens im Seed oder außerhalb privaten Serverspeichers",()=>{
   assert.match(api,/hash\('sha256',\s*\$ownerCode\)/);
   assert.match(api,/sys_get_temp_dir/);
   assert.match(api,/DOCUMENT_ROOT/);
-  assert.match(api,/str_starts_with\(\$real, \$web/);
+  assert.match(lib,/str_starts_with\(\$real, \$web/);
   assert.match(api,/file_put_contents/);
   assert.match(api,/flock/);
 });

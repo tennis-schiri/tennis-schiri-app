@@ -230,3 +230,11 @@ Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Version
 
 
 **Prüfung Demo v0.8.8:** Der erste vollständige CI-Lauf nach Integration der UI-Module und Korrektur des lokalen Demo-Speichers war mit 270/270 automatisierten Node-Tests erfolgreich (Prüflauf 42204790925). Zusätzlich ist nun eine direkte Machbarkeitsprüfung der generierten Gruppen/Teams/Felder eingebaut; der folgende Prüflauf enthält ergänzende UI- und Grenzfalltests. Die Seed-Datei löst ausschließlich den geschützten Roadmap-Datensync aus; dies ist kein App-Release.
+
+
+## v0.8.9 – gesicherter Roadmap-Speicher ohne SSH (GitHub, 06.11.2026)
+
+- ALL-INKL-WebFTP-Struktur geklärt: `/app.tennis-schiri.de/` als App-Ziel, die Hauptwebsite zeigt auf `/tennis-schiri-live/`. Der Betreiber hat daneben `/tennilo-roadmap-private/` mit `0700` und `.htaccess` angelegt (Serverzugriffsschutz im Live-Browser noch zu prüfen).
+- Neue PHP-Speicherauflösung nutzt automatisch das Geschwisterverzeichnis anhand des PHP-Skriptpfades. Kein SSH oder Server-Umgebungswert nötig. Verweigert fehlende `.htaccess`, unsichere Berechtigungen, Webroot-Ziel und Symlinks.
+- Beim ersten API-Aufruf wird eine existierende alte `state.json` unter zwei Sperren als Ganzes in den persistenten Ordner kopiert. Weder vorhandene neue Daten noch ursprüngliche Temp-Daten werden überschrieben bzw. gelöscht; korrupte Altdateien stoppen den Vorgang.
+- Neue reine PHP-Fachtests: `tests/roadmap-storage.php` durch beide Deployment-Prüfpfade integriert. **Noch keine neue App- oder Roadmap-Authentifizierungs-Veröffentlichung.** Vor externen Testern beide Veröffentlichungs-Workflows manuell anstoßen und per Browser Speichersignal, bestehende Admin-Daten und Einladungen prüfen.

@@ -344,3 +344,6 @@
 
 
 **E-038 – Demo-Daten nur in isolierten Kopien (06.11.2026):** Neue Testfunktionen dürfen niemals echte Teilnehmerlisten, Barzahlungen oder Ergebnisse heimlich ersetzen. Der Nutzer erzeugt pro Turnier eine separate, gekennzeichnete Kopie; die Teilnehmerzahl wird formatabhängig validiert. Zufallsergebnisse werden ausschließlich auf offenen Matches nach der realen Turnier-Zählweise erzeugt. Auslosung und Endrundenbildung bleiben bewusste eigene Aktionen. Kein Auto-Deployment der App.
+
+
+**E-039 – Roadmap-Daten dauerhaft im privaten Geschwisterordner (06.11.2026):** Bei ALL-INKL ohne SSH wird das via WebFTP angelegte Verzeichnis `tennilo-roadmap-private` relativ zum echten App-Verzeichnis gefunden. Die Anwendung verweigert Betrieb bei fehlendem wirksamen Dateischutz/Rechten anstatt in ein unzuverlässiges `/tmp` zurückzufallen. Ein bestehender Temp-Datenbestand wird automatisch unter Dateisperren kopiert und als Rückfallsicherung nicht entfernt. Die neue Roadmap-Authentifizierung bleibt bis zum manuell freigegebenen Roadmap-Release in GitHub; allgemeine TENNILO-Benutzerregistrierung und Zahlungsabwicklung werden nicht aktiviert.

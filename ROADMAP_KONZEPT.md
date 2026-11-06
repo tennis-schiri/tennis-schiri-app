@@ -81,3 +81,12 @@ Die Datei `site/roadmap-api.php` speichert eine JSON-Datenbank außerhalb des ö
 
 
 **Update 06.11.2026 – Demo-Funktionen:** Die Roadmap-Karte `demo-testdaten` dokumentiert den neuen, noch nicht freigegebenen v0.8.8-Code für formatabhängige Zufallsteilnehmer und Ergebnisse. Der automatische Roadmap-Inhaltssync darf die Statuskarte aktualisieren, jedoch weder die Demo-Oberflächen noch die neue Roadmap-Anmeldetechnik auf die Testseite veröffentlichen. Der App-Upload bleibt manuell.
+
+
+## ALL-INKL WebFTP: dauerhafter Roadmap-Speicher ohne SSH (06.11.2026)
+
+Der Betreiber hat bei ALL-INKL im FTP-Hauptverzeichnis **neben** `app.tennis-schiri.de/` den Ordner `tennilo-roadmap-private/` mit Rechten `0700` und einer `.htaccess` mit `Require all denied` angelegt. Die App sucht den Ordner ab dem nächsten **manuellen** Roadmap-Release anhand des tatsächlichen PHP-Verzeichnisnamens: `dirname(__DIR__) . '/tennilo-roadmap-private'`. Der komplette Provider-Dateisystempfad muss nicht geraten und keine PHP-Umgebungsvariable gesetzt werden. Abgelehnt werden fehlender Zugriffsschutz, falsche Rechte, Symlinks, öffentliche Webroots und nicht beschreibbare Ordner. Eine ausdrücklich gesetzte absolute `TENNILO_ROADMAP_STORAGE_DIR` überschreibt die automatische Auflösung für weitere Umgebungen (wie Integrationstests).
+
+**Sichere Übernahme:** Bei der ersten API-Anfrage nach dem manuellen Upload wird eine vorhandene `state.json` aus dem bisherigen privaten Temp-Speicher unter Dateisperre kopiert, ohne sie dort zu löschen. Ein schon existierender neuer Stand wird niemals überschrieben. Ungültige Altdateien brechen ab, statt Accounts/Kommentare unbemerkt zurückzusetzen. Erst danach werden Anmeldung oder Roadmap-Daten ausgeliefert. Die übliche PHP-API liefert dann `storagePersistent:true`. Die vollständige Migration einschließlich Zugangs-Hashes und Kommentaren kann **nicht** aus dem öffentlichen GitHub eingesehen werden; vor realen Einladungen im authentifizierten Browser prüfen, dass Login und vorhandene Beiträge erhalten sind. GitHub-Actions-Tests enthalten zusätzlich `php tests/roadmap-storage.php`.
+
+**Wichtig:** Die vom Nutzer angelegte `.htaccess` außerhalb des App-Webroots wird von GitHub nicht übertragen; sie bleibt unverändert. Werden Ordner oder Zugriffsschutz umbenannt/entfernt, antwortet die neue API mit HTTP 503, statt auf unsicheren Temp-Speicher zurückzufallen. Für die gesamte App gilt weiter der bestehende Passwortschutz. Die Version 0.8.8 einschließlich Demo-UI wird weiterhin nur nach manuellem `workflow_dispatch` veröffentlicht.
