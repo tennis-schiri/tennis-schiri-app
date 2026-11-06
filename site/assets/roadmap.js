@@ -267,16 +267,21 @@ function editModal(id){
 }
 function membersModal(){
   if(!isAdmin())return;
-  showModal("Zugänge verwalten",'<p class="rm-modal-note">Jede eingeladene Person bekommt einen eigenen Code. Du kannst ihn jederzeit widerrufen. Der bestehende Passwortschutz der Testseite gilt zusätzlich.</p>'+
+  showModal("Nutzer verwalten",'<p class="rm-modal-note">Persönliche Konten, Einladungslinks und widerrufbare Berechtigungen.</p>'+
     '<div class="rm-members">'+(state.members.length?state.members.map(m=>
-      '<div class="rm-member"><div><strong>'+esc(m.label)+'</strong><small>'+(m.role==="commenter"?"Kommentare und Ideen":"Nur lesen")+' · seit '+esc(niceDate(m.createdAt))+'</small></div>'+
-      '<button type="button" class="btn ghost small" data-action="revoke" data-id="'+esc(m.id)+'">Widerrufen</button></div>').join(""):
-      '<p class="rm-no-comments">Noch keine persönlichen Zugänge.</p>')+'</div>'+
-    '<h3>Person einladen</h3><form data-form="invite"><label class="rm-field">Name / Bezeichnung<input name="label" maxlength="70" required placeholder="z. B. Testteam Verein A"></label>'+
-    '<label class="rm-field">Berechtigung'+formValue("role","commenter",[["commenter","Ideen und Kommentare"],["viewer","Nur lesen"]])+'</label>'+
-    '<button type="submit" class="btn primary">Einladungscode erstellen</button></form>'+
-    '<div class="rm-export"><a href="./roadmap-api.php?export=1" rel="nofollow">Roadmap inklusive Kommentare als JSON sichern</a></div>'+
-    '<div class="rm-export"><button type="button" class="btn ghost small" data-action="rotate-owner">Projektleitungs-Code erneuern</button></div>',{wide:true});
+      '<div class="rm-member"><div><strong>'+esc(m.label)+'</strong><small>'+
+      (m.username?'@'+esc(m.username)+' · ':'')+
+      (m.status==="active"?'Aktiv':m.status==="invited"?'Einladung offen':'Alter Zugang')+
+      ' · '+esc(niceDate(m.createdAt))+'</small></div><div class="rm-member-actions">'+
+      '<button class="btn ghost small" data-action="toggle-role" data-id="'+esc(m.id)+'" data-role="'+
+      (m.role==="viewer"?"commenter":"viewer")+'">'+(m.role==="viewer"?"Schreibrecht geben":"Nur lesen")+'</button>'+
+      '<button class="btn ghost small" data-action="revoke" data-id="'+esc(m.id)+'">Sperren</button>'+
+      '</div></div>').join(""):'<p>Noch keine Personen eingeladen.</p>')+'</div>'+
+    '<h3>Einladung erstellen</h3><form data-form="invite-link">'+
+    '<label class="rm-field">Anzeigename<input name="label" maxlength="70" required></label>'+
+    '<label class="rm-field">Rolle'+formValue("role","commenter",[['commenter','Ideen und Kommentare'],['viewer','Nur lesen']])+'</label>'+
+    '<button class="btn primary" type="submit">Einladungslink erstellen</button></form>'+
+    '<div class="rm-export"><a href="./roadmap-api.php?export=1" rel="nofollow">Roadmap sichern</a></div>',{wide:true});
 }
 function codeModal(title,code){
   showModal(title,'<p class="rm-token-warning"><strong>Nur einmal sichtbar.</strong> Diesen Code jetzt sicher kopieren und aufbewahren. Er wird ausschließlich als Hash auf dem Server gespeichert.</p>'+
