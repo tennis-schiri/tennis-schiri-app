@@ -1,6 +1,7 @@
 // Darstellung der Schleifchen-Endrunde. Fachlogik bleibt in finals.js.
 import { ribbonFinalPreview, verifyRibbonFinals } from "./finals.js";
 import { normalizeRibbonResult } from "./results.js";
+import {scoringRules} from "./match-scoring.js";
 import { plannedRound } from "./operations.js?v=082";
 
 export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}){
@@ -65,7 +66,7 @@ export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editi
       <div class="panel-head"><div><h3>${round.label}</h3>
         <p>${round.matches.filter(m=>m.result?.winner===1||m.result?.winner===2).length} von ${round.matches.length} Ergebnissen erfasst${finalTime(stageIndex)}</p></div></div>
       <div class="finals-match-list">${round.matches.map((match,matchIndex)=>{
-        const result=normalizeRibbonResult(match.result);
+        const result=normalizeRibbonResult(match.result,t);
         const finished=result.winner!==null;
         const both=!!match.team1&&!!match.team2;
         const editing=editingFinal?.tournamentId===t.id&&editingFinal.stage===stageIndex&&editingFinal.match===matchIndex;
@@ -91,13 +92,13 @@ export function renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editi
               <button class="draw-edit-btn" type="button" data-action="final-edit-result" data-stage="${stageIndex}" data-match="${matchIndex}">${icon("edit")} Ergebnis ändern</button>
             </div>`:""}
           ${both&&(!finished||editing)?`<form class="draw-result-form finals-score-form" data-form="final-result" data-stage="${stageIndex}" data-match="${matchIndex}">
-            <label>Games Team 1<input name="score1" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score1??""}"></label>
-            <label>Games Team 2<input name="score2" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score2??""}"></label>
-            <label>Siegerteam<select name="winner">
+            <label>${scoringRules(t).mode==="points"?"Punkte":"Games"} Team 1<input name="score1" type="number" min="0" max="${scoringRules(t).mode==="points"?999:99}" step="1" inputmode="numeric" ${scoringRules(t).mode==="points"?"required":""} placeholder="–" value="${result.score1??""}"></label>
+            <label>${scoringRules(t).mode==="points"?"Punkte":"Games"} Team 2<input name="score2" type="number" min="0" max="${scoringRules(t).mode==="points"?999:99}" step="1" inputmode="numeric" ${scoringRules(t).mode==="points"?"required":""} placeholder="–" value="${result.score2??""}"></label>
+            ${scoringRules(t).mode==="points"?`<p class="muted">Bis ${scoringRules(t).target} Punkte${scoringRules(t).winByTwo?", mit 2 Punkten Vorsprung":""}. Sieger wird automatisch berechnet.</p>`:`<label>Siegerteam<select name="winner">
               <option value="" ${result.winner===null?"selected":""}>Noch offen</option>
               <option value="1" ${result.winner===1?"selected":""}>Team 1</option>
               <option value="2" ${result.winner===2?"selected":""}>Team 2</option>
-            </select></label>
+            </select></label>`}
             <div class="draw-result-actions">
               <button type="submit" class="btn subtle small">Ergebnis speichern</button>
               ${editing?'<button type="button" class="btn ghost small" data-action="final-cancel-edit">Abbrechen</button>':""}
