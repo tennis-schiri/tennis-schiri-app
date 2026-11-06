@@ -37,20 +37,75 @@ function timeText(minutes) {
   const day=Math.floor(minutes/1440),n=((minutes%1440)+1440)%1440;
   return `${pad(Math.floor(n/60))}:${pad(n%60)}${day>0?" (+1 Tag)":""}`;
 }
+// One shared schedule for Schleifchen, fixed doubles and future formats.
+// An end time is an optional target; fixed durations remain unchanged until
+// organisers explicitly opt into 'fit' mode. No silent shortening of matches.
+const minuteOf=value=>{
+  const m=/^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(value??""));
+  if(!m)throw Error("Bitte eine gültige Uhrzeit im Format HH:MM eingeben.");
+  return Number(m[1])*60+Number(m[2]);
+};
+export function timeWindow(t) {
+  const start=minuteOf(t.startTime),end=t.endTime==null||t.endTime===""?null:minuteOf(t.endTime);
+  if(end===null)return {start,minutes:null,end:null,overnight:false};
+  if(end===start)throw Error("Start- und Endzeit dürfen nicht identisch sein.");
+  return {start,minutes:(end-start+1440)%1440,end,
+    overnight:end<start};
+}
+export function scheduleBlockCount(t) {
+  if(t?.type==="doubles")return t.doubles?.draw?.rounds?.length||null;
+  if(t?.type==="opc")return null; // Point Cup uses its own match-slot planner.
+  return t?.draw?.rounds?.length+(t?.draw?.specialRound?1:0)||null;
+}
+export function tournamentSchedule(t,blocks=scheduleBlockCount(t),{minDuration=10,maxDuration=120}={}) {
+  const window=timeWindow(t);
+  if(!Number.isInteger(blocks)||blocks<1||blocks>500)throw Error("Bitte zuerst einen gültigen Spielplan erstellen.");
+  const pause=Number(t.breakMinutes),duration=Number(t.duration);
+  if(!Number.isInteger(pause)||pause<0||pause>60||
+     !Number.isInteger(duration)||duration<minDuration||duration>maxDuration)
+     throw Error("Ungültige Spiel- oder Wechselzeit.");
+  const fit=t.timeMode==="fit";
+  if(fit&&!t.endTime)throw Error("Für die automatische Endzeitanpassung bitte eine Endzeit eingeben.");
+  const gapCount=blocks-1;
+  const spare=window.minutes===null?null:window.minutes-gapCount*pause;
+  if(fit&&spare<blocks*minDuration)
+    throw Error("Die Endzeit ist zu knapp für "+blocks+" Spielblöcke mit mindestens "+
+      minDuration+" Minuten Spielzeit und "+pause+" Minuten Wechselpause. Bitte weniger Spiele, mehr Plätze, kürzere Pausen oder eine spätere Endzeit wählen.");
+  const base=fit?Math.min(maxDuration,Math.floor(spare/blocks)):duration;
+  const extra=fit&&base<maxDuration?Math.min(blocks,Math.max(0,spare-base*blocks)):0;
+  const durations=Array.from({length:blocks},(_,i)=>base+(i<extra?1:0));
+  const rounds=[];
+  let cursor=window.start;
+  for(let i=0;i<blocks;i++){
+    const d=durations[i],start=cursor;
+    cursor+=d;
+    rounds.push({index:i,start:timeText(start),end:timeText(cursor),
+      pauseEnd:timeText(cursor+(i<gapCount?pause:0)),
+      startMinutes:start,endMinutes:cursor,duration:d,
+      breakMinutes:i<gapCount?pause:0});
+    if(i<gapCount)cursor+=pause;
+  }
+  const last=rounds.at(-1);
+  return {blocks,rounds,start:rounds[0].start,end:last.end,
+    targetEnd:t.endTime||null,mode:fit?"fit":"fixed",
+    plannedMinutes:last.endMinutes-window.start,
+    windowMinutes:window.minutes,overnight:window.overnight,
+    overTarget:window.minutes!==null&&last.endMinutes-window.start>window.minutes,
+    usesFullWindow:window.minutes!==null&&last.endMinutes-window.start===window.minutes};
+}
 export function plannedRound(t,index) {
-  if(!Number.isInteger(index)||index<0||index>=21)throw Error("Ungültige Rundennummer.");
-  const match=/^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(t.startTime||""));
-  if(!match)throw Error("Bitte eine gültige Startzeit einstellen.");
-  const start=Number(match[1])*60+Number(match[2])+index*(t.duration+t.breakMinutes);
-  return {
-    start:timeText(start),end:timeText(start+t.duration),
-    pauseEnd:timeText(start+t.duration+t.breakMinutes),
-    duration:t.duration,breakMinutes:t.breakMinutes
-  };
+  if(!Number.isInteger(index)||index<0||index>=500)throw Error("Ungültige Rundennummer.");
+  const blocks=Math.max(index+1,scheduleBlockCount(t)||index+1);
+  // Without a draw there is no reliable global match count. Fixed mode still
+  // supports its historical index-based calculation. Fit waits for a draw.
+  if(t.timeMode==="fit"&&!scheduleBlockCount(t))
+    throw Error("Spielzeiten lassen sich nach der Auslosung an die Endzeit anpassen.");
+  const plan=tournamentSchedule(t,blocks);
+  return plan.rounds[index];
 }
 export function clockFor(t,index,now=Date.now()) {
   const c=t?.roundClocks?.[String(index)]||null;
-  const durationMs=c?.durationMs??t.duration*60000;
+  const durationMs=c?.durationMs??(t?.timeMode==="fit"&&scheduleBlockCount(t)?plannedRound(t,index).duration:t.duration)*60000;
   const elapsedMs=c?Math.max(0,c.elapsedMs+(c.startedAt==null?0:Math.max(0,now-c.startedAt))):0;
   const remainingMs=Math.max(0,durationMs-elapsedMs);
   const overtimeMs=Math.max(0,elapsedMs-durationMs);
@@ -78,7 +133,7 @@ export function changeRoundClock(t,index,action,now=Date.now()) {
     if(previous)throw Error("Diese Runde wurde bereits gestartet. Bitte fortsetzen oder zurücksetzen.");
     const competing=Object.entries(clocks).find(([key,x])=>key!==id&&x?.startedAt!=null&&!x?.finishedAt);
     if(competing)throw Error(`Runde ${Number(competing[0])+1} läuft noch. Bitte diese Uhr zuerst pausieren oder beenden.`);
-    clocks[id]={firstStartedAt:now,startedAt:now,elapsedMs:0,durationMs:t.duration*60000,finishedAt:null};
+    clocks[id]={firstStartedAt:now,startedAt:now,elapsedMs:0,durationMs:plannedRound(t,index).duration*60000,finishedAt:null};
   }else if(action==="pause"){
     if(!live)throw Error("Diese Rundenuhr läuft nicht.");
     clocks[id]={...previous,elapsedMs:previous.elapsedMs+Math.max(0,now-previous.startedAt),startedAt:null};
