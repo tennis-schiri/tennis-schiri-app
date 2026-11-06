@@ -21,7 +21,7 @@ test("Alle drei Turnierformulare enthalten Startzeit, optionale Endzeit und anpa
 });
 test("Schleifchen und Doppel richten die echte Auslosung gegen die gewünschte Endzeit aus",()=>{
   assert.match(ribbon,/tournamentSchedule\(\{\.\.\.t,draw\}\)/);
-  assert.match(doubles,/tournamentSchedule\(\{\.\.\.t,doubles:\{\.\.\.t\.doubles,draw\}\}\)/);
+  assert.match(doubles,/tournamentSchedule\(\{\.\.\.t,doubles:\{\.\.\.t\.doubles,draw:candidate\}\}\)/);
   assert.match(ribbon,/name="reserveFinals"/);
   assert.match(doubles,/name="reservePlayoffs"/);
   assert.match(doubles,/doublesMatchOptions\(t\)/);
