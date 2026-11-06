@@ -381,3 +381,11 @@ Bei einer neuen Version ergänzen:
 5. **Offene Probleme** – keine behobenen Fehler behaupten, bevor sie geprüft sind.
 
 Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklungsverlauf rekonstruiert; die Überschriften stellen keine bestätigten Einzel-Veröffentlichungstermine dar.
+
+
+### v0.8.8 – Demo-Kopien und Zufallsergebnisse (GitHub, noch nicht veröffentlicht)
+
+- Neues Fachmodul `demo-data.js` erzeugt unabhängige Demo-Kopien mit passenden Beispielteilnehmern für Schleifchen, Doppel und One Point Cup.
+- Zufallsresultate nutzen die bestehenden Fachvalidatoren und befüllen nur offene Matches inklusive vorhandener Endrunden / Play-offs.
+- Dauerhaftes Demo-Kennzeichen, eigene Bedienflächen, keine erfundenen Barzahlungen, keine Änderung des Originals.
+- Neue Unit-Tests, versionsgebundene UI-Assets und FTPS-Whitelist; Roadmap-Status im Seed nachgeführt.

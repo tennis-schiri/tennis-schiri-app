@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in site/favicon.png site/index.html site/doppel.html site/assets/doppel.css site/assets/doppel-ui.js site/assets/doubles.js site/opc.html site/assets/one-point.css site/assets/one-point-ui.js site/assets/one-point.js site/assets/tournament-advisor.js site/roadmap.html site/roadmap-api.php site/roadmap-lib.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js site/assets/styles.css site/assets/match-scoring.js site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php; do
+          for file in site/favicon.png site/index.html site/doppel.html site/assets/doppel.css site/assets/doppel-ui.js site/assets/doubles.js site/opc.html site/assets/one-point.css site/assets/one-point-ui.js site/assets/one-point.js site/assets/tournament-advisor.js site/roadmap.html site/roadmap-api.php site/roadmap-lib.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js site/assets/styles.css site/assets/demo-data.js site/assets/match-scoring.js site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php; do
             test -f "$file"
           done
           : "${FTP_HOST:?FTP_HOST ist nicht als GitHub Secret hinterlegt}"
@@ -67,7 +67,7 @@ jobs:
           # Der FTP-Nutzer ist auf das App-Verzeichnis beschränkt.
           # Nur ausdrücklich zugelassene Dateien, KEINE Server-Dateien löschen.
           # .htaccess, index.htm und WordPress bleiben unverändert.
-          for file in site/assets/styles.css site/assets/match-scoring.js site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php site/favicon.png site/index.html site/doppel.html site/assets/doppel.css site/assets/doppel-ui.js site/assets/doubles.js site/opc.html site/assets/one-point.css site/assets/one-point-ui.js site/assets/one-point.js site/assets/tournament-advisor.js site/roadmap.html site/roadmap-api.php site/roadmap-lib.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js; do
+          for file in site/assets/styles.css site/assets/demo-data.js site/assets/match-scoring.js site/assets/storage.js site/assets/draw.js site/assets/results.js site/assets/special.js site/assets/finals.js site/assets/finals-ui.js site/assets/operations.js site/assets/operations-ui.js site/assets/live-model.js site/assets/live-ui.js site/assets/live.js site/assets/live.css site/assets/remote-live.js site/assets/app.js site/live.html site/live-feed.php site/favicon.png site/index.html site/doppel.html site/assets/doppel.css site/assets/doppel-ui.js site/assets/doubles.js site/opc.html site/assets/one-point.css site/assets/one-point-ui.js site/assets/one-point.js site/assets/tournament-advisor.js site/roadmap.html site/roadmap-api.php site/roadmap-lib.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js; do
             remote="${file#site/}"
             echo "Übertrage $remote …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
@@ -75,4 +75,4 @@ jobs:
               --upload-file "$file" \
               "ftp://${FTP_HOST}:21/$remote"
           done
-          echo "Alle fünfunddreißig App-Dateien wurden hochgeladen."
+          echo "Alle sechsunddreißig App-Dateien wurden hochgeladen."

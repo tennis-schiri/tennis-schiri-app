@@ -159,3 +159,8 @@ Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren M
 Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Zuerst die Roadmap als Projektleitung aktivieren, den generierten Admin-Code sicher aufbewahren und vor externen Einladungen einen persistenten privaten Roadmap-Speicherort einrichten. Danach Zeitplanung, Formatberater und Roadmap im echten Browser testen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
+
+
+### Demo-Funktionen v0.8.8 (GitHub, noch nicht veröffentlicht)
+
+In jeder Turnieransicht lässt sich aus dem aktuellen Turnier eine **unabhängige Demo-Kopie** mit denselben Formateinstellungen und einer frei wählbaren passenden Anzahl zufälliger Teilnehmender erstellen. Die Demo trägt ein dauerhaft gespeichertes Kennzeichen und enthält keine Barzahlungen des Originals. Nach manueller Auslosung füllt „Offene Ergebnisse auswürfeln“ nur noch nicht entschiedene Spiele anhand der definierten Punkt-/Zeitwertung. Die Funktion kann auch bereits erstellte Endrunden / Play-offs und den One Point Cup durchspielen. Der Testcode liegt in `tests/demo-data.test.mjs`. **Veröffentlichung nur über den manuellen FTPS-Workflow nach ausdrücklicher Freigabe**.

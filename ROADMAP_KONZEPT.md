@@ -78,3 +78,6 @@ Die Datei `site/roadmap-api.php` speichert eine JSON-Datenbank außerhalb des ö
 - Echte dauerhafte Datenbank, automatische Sicherungen und revisionssichere Ereignisse.
 - GitHub-Issue-Synchronisierung für bereits freigegebene Entwicklungsvorhaben.
 - Abstimmung/„Gefällt mir“, Anhänge, Benachrichtigungen und Moderatorfreigabe.
+
+
+**Update 06.11.2026 – Demo-Funktionen:** Die Roadmap-Karte `demo-testdaten` dokumentiert den neuen, noch nicht freigegebenen v0.8.8-Code für formatabhängige Zufallsteilnehmer und Ergebnisse. Der automatische Roadmap-Inhaltssync darf die Statuskarte aktualisieren, jedoch weder die Demo-Oberflächen noch die neue Roadmap-Anmeldetechnik auf die Testseite veröffentlichen. Der App-Upload bleibt manuell.

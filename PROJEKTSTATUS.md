@@ -218,3 +218,12 @@ Bestehende Google-Tabelle: [„Turniere Verein – Auslosung & Livetabelle“](h
 Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Versionsstand im Code, tatsächlich bestätigter Live-Stand, fertig vs. offen, Testergebnisse, konkrete nächste Aufgabe. Entscheidungen und Versionsänderungen zusätzlich in `ENTSCHEIDUNGEN.md` und `CHANGELOG.md` eintragen.
 
 **Doppel-Fernanzeige als Teil des v0.8.0-Uploads:** Gemeinsamer Monitor `site/live.html` zeigt nun bei Doppelturnieren Spielblöcke, feste Partner, Games, Sieger, Countdown, Teamrangliste (Siege/Game-Differenz) und Top-8-Play-offs. In `site/assets/doppel-ui.js` ist die bewusste Server-Freigabe mit eigenem Leselink und Stop-/Widerruffunktion ergänzt. `site/live-feed.php` und seine bestehende datensparsame Allowlist wurden für den Doppelmodus erweitert, dabei keine Bar-/Anwesenheitsdaten. Tests `tests/doubles-live.test.mjs`, `tests/doubles-remote-publisher-ui.test.mjs` und erweiterter `tests/live-feed.test.mjs`. **FTPS-Upload mit v0.8.0 bestätigt; echter ALL-INKL-/Mobilgeräte-Zweitgerätetest weiterhin offen.**
+
+
+## v0.8.8 – Demo-Kopien und Zufallsergebnisse (GitHub, noch nicht online; 06.11.2026)
+
+- Alle drei Turnierformate: separat angelegte Demo-Kopie mit übernommenen Einstellungen und zufälligen Beispielteilnehmern. Schleifchen: balancierte Stärkegruppen; feste Doppel: zulässige Teams; One Point Cup: Feldgrößen/Freilose.
+- Neue Demo-Kopie hat persistentes `demoMode`-Kennzeichen; keine Barzahlungen, Ergebnisse oder andere persönliche Daten des Originals werden kopiert.
+- Auf dem Demo-Turnier: Nach regulärer Auslosung „Offene Ergebnisse auswürfeln“ – nur noch offene Partien erhalten gültige Resultate aus der hinterlegten Zeit-/Punktwertung; bereits entschiedene Partien bleiben unverändert. Unterstützt Vorrunden, bereits angelegte Endrunden/Play-offs und One-Point-K.-o.-Fortschritt. Auslosungen selbst bleiben explizite Handlungen.
+- `site/assets/demo-data.js`, `tests/demo-data.test.mjs`, Bedienflächen, Cache-Versionen, Storage-Modell und FTPS-Whitelist ergänzt. CI und Browser-Praxistests prüfen; **kein App-Upload ohne Freigabe**.
+- Offizielle Roadmap-Karte `demo-testdaten` gleichzeitig gepflegt. Automatischer Roadmap-Inhaltssync enthält keine App-Codefreigabe.

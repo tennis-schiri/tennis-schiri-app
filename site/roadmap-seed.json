@@ -597,6 +597,25 @@
       "openPoints": "Vor externer Nutzung ist das aktuelle temporäre Roadmap-Datenverzeichnis durch dauerhaften, privaten Speicher zu ersetzen und zu sichern. Danach Tests im echten Browser mit zwei Benutzerprofilen, Einladungslink, Anmeldung, Rollenwechsel, Sperrung und Passwortänderung. Einladungslinks müssen privat geteilt werden. Separater App-Account und automatischer E-Mail-Versand sind noch nicht Teil dieses Moduls.",
       "doneWhen": "Mitwirkende können ohne Codeverwaltung ihren persönlichen Account anlegen und wiederholt nutzen. Einladungen funktionieren genau einmal, abgelaufene oder widerrufene Links nicht; alte Zugänge werden ohne Datenverlust umgestellt und Unberechtigte können keine Kommentare oder Status ändern.",
       "references": []
+    },
+    {
+      "id": "demo-testdaten",
+      "title": "Demo-Modus: Zufallsteilnehmer und Zufallsergebnisse",
+      "description": "Separate Testturniere mit zufälligen, zu den jeweiligen Turniervorgaben passenden Teilnehmern sowie regelkonformen Match-Ergebnissen.",
+      "category": "Tests & Qualität",
+      "status": "test",
+      "priority": "high",
+      "milestone": "v0.8.8 – im GitHub-Code, noch nicht auf der Testseite",
+      "nextStep": "App-Upload manuell freigeben und Bedienabläufe im Browser für alle drei Turnierarten prüfen.",
+      "updatedAt": "2026-11-06T12:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Turniere schneller mit realistischen Teilnehmerlisten und Ergebnissen durchspielen, um Ranglisten, Aufsteiger, Endrunden und Anzeige zu prüfen.",
+      "scope": "• Eigene Demo-Kopie mit allen aktuellen Turniereinstellungen.\n• Frei wählbare Anzahl mit Plausibilitätsprüfung: Stärkegruppen im Schleifchenturnier, feste Zweierteams im Doppel, Spieler und Freilose im One Point Cup.\n• Eigene Schaltfläche für Zufallsergebnisse nach der Auslosung.\n• Nur offene Partien ausfüllen, manuell erfasste Entscheidungen erhalten.\n• Zeit-/Punktewertung gemäß Turniervorgabe; auch bestehende Endrunden und Play-offs befüllen.\n• Keine fiktiven Barzahlungen; Originalsätze bleiben unverändert.",
+      "currentState": "Fachmodul, UI für alle drei Formate, lokales Demo-Kennzeichen und automatisierte Tests in GitHub implementiert. App-Veröffentlichung bewusst noch nicht durchgeführt.",
+      "openPoints": "Praxistests im Browser, Sonderfälle enger Zeitpläne und Umgang mit speziellen Auffüllrunden vor Freigabe prüfen. Endrunden/Play-offs werden von der Turnierleitung zunächst normal ausgelost und anschließend mit Zufallsergebnissen gefüllt.",
+      "doneWhen": "In jedem Turnierformat kann eine sichere Demo-Kopie erzeugt und eine Auslosung anschließend mit gültigen zufälligen Ergebnissen bis zum Sieger durchgespielt werden.",
+      "references": []
     }
   ]
 }
