@@ -189,7 +189,9 @@ export function newTournament(values = {}) {
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,
     feeCategories:values.feeCategories,
-    roundClocks: {}, liveDisplay:null, draw: null, participants: []
+    roundClocks: {}, liveDisplay:null, draw: null,
+    // Nur explizite Demo-Kopien dürfen bereits beim Anlegen Testspieler mitbringen.
+    participants: values.demoMode===true&&Array.isArray(values.participants)?values.participants:[]
   });
 }
 
