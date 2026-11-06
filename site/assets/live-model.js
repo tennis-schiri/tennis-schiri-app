@@ -37,7 +37,7 @@ const normalizeMatch=(t,m,{roundFinal=false,number=1}={})=>{
     ["Sieger der vorherigen Runde"];
   const left=roundFinal?names(m.team1):names(m.slots.slice(0,2));
   const right=roundFinal?names(m.team2):names(m.slots.slice(2,4));
-  const result=normalizeRibbonResult(m.result);
+  const result=normalizeRibbonResult(m.result,t);
   return {
     number,
     court:t.courtLabels?.[m.court]||`Platz ${m.court}`,
