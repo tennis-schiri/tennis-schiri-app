@@ -5,6 +5,15 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.8.3] – Turnierberater mit Formatvergleich und direkter Neuanlage (nur GitHub; kein Upload)
+
+**2026-11-06:** Neuer Startseiten-Einstieg **„Welches Turnier passt zu euch?“**. Eckdaten erfassen (Teilnehmende, Plätze, Datum, Start-/Endzeit, Wunsch für Partner und Turnierziel), drei Turnierformate auf Basis anonym simulierter echter Auslosungen und Zeitpläne vergleichen, ungeeignete Varianten begründen und einen Vorschlag direkt als neues Turnier mit vorausgefüllten Einstellungen übernehmen. Keine Modellspieler werden gespeichert.
+
+- **Architektur:** `site/assets/tournament-advisor.js` mit erweiterbarem `FORMAT_ADVISORS`-Register, realer Doppel-Matchanzahlprüfung (1–8), Schleifchen-Probeauslosung und One-Point-K.-o.-Zeitplanung inklusive Freilosen.
+- **Oberfläche:** Formatfinder auf der Startseite, responsive Formular- und Ergebniskarten, Begründung des Rankings, sichere Übernahme in das bestehende Browser-Datenmodell ohne Backend.
+- **Tests:** Neue Dateien `tests/tournament-advisor.test.mjs` und `tests/tournament-advisor-ui.test.mjs`; Fachmodelle für 4–66 Personen, knappe Zeitfenster, ungerade Doppelanzahl und Freilose isoliert ausgeführt. GitHub-CI und Browser-Praxistest dieser Version noch ausstehend.
+- **Release:** FTPS-Allowlist manuell von 27 auf 28 Dateien erweitert, kein Upload ausgelöst. Live bleibt v0.8.0.
+
 ## [0.8.2] – Optionale Endzeit und Spielzeit-Automatik (nur GitHub; kein neuer Upload)
 
 **2026-11-06:** In allen drei bestehenden Turnierarten neue Eingaben für Startzeit und eine optionale Endzeit sowie zwei wählbare Planungsmodi: feste Spielzeiten oder **an Endzeit anpassen**. Die Automatik verteilt die verfügbare Dauer auf die tatsächlich ausgelosten Zeitblöcke mit Pausen, schlägt keine Matchanzahl stillschweigend herunter und meldet unmachbare Zeitfenster explizit. Frühere Turniere ohne Endzeit bleiben unverändert. Laufende Uhren behalten ihre beim Start festgelegte Dauer.
