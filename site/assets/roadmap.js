@@ -138,7 +138,7 @@ function showModal(title,body,{wide=false}={}){
     '<div class="rm-dialog-body">'+body+'</div></dialog>';
   const dialog=modalRoot.querySelector("dialog");
   dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close()});
-  dialog.addEventListener("close",()=>{modalRoot.innerHTML="";activeItem=null},{once:true});
+  dialog.addEventListener("close",()=>{if(modalRoot.contains(dialog)){modalRoot.innerHTML="";activeItem=null;}},{once:true});
   dialog.showModal();
 }
 function closeModal(){modalRoot.querySelector("dialog")?.close()}
@@ -251,7 +251,7 @@ document.addEventListener("click",event=>{
   if(act==="close"){closeModal();return;}
   if(act==="login"){loginModal();return;}
   if(act==="idea"){if(canComment())ideaModal();else loginModal();return;}
-  if(act==="edit"){closeModal();editModal(id);return;}
+  if(act==="edit"){editModal(id);return;}
   if(act==="members"){membersModal();return;}
   if(act==="bootstrap")return run("bootstrap",{},result=>{
     if(result.ownerCode)codeModal("Dein Projektleitungs-Zugang",result.ownerCode);
