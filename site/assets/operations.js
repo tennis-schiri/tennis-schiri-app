@@ -65,7 +65,7 @@ export function scheduleBlockCount(t) {
   if(t?.type==="opc")return null; // One-point matches use their own time slots.
   const preliminary=t?.draw?.rounds?.length||0;
   if(!preliminary)return null;
-  const special=t.draw?.specialRound?1:0;
+  const special=t.draw?.special||t.draw?.specialRound?1:0;
   const finals=t.reserveFinals===true?(
     t.draw?.finals?.rounds?.length|| (t.finalSize===16?3:2)):0;
   return preliminary+special+finals;
