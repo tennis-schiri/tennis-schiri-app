@@ -1,7 +1,7 @@
 import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=080";
-import {euroCents,euroText,euroInput,clockFor} from "./operations.js?v=061";
+import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=082";
 import {
-  analyzeDoublesSetup,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
+  analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
   doublesPlayoffStatus,doublesPlanRound,changeDoublesClock,normalizeDoublesResult
 } from "./doubles.js?v=070";
@@ -128,6 +128,29 @@ function stats(t) {
     ["NENNGELD OFFEN",euroText(totals.open),"Barzahlungen"]
   ].map(([title,value,sub])=>'<div class="double-stat"><small>'+title+'</small><strong>'+value+'</strong><span class="muted">'+sub+'</span></div>').join("")+'</div>';
 }
+function doublesTimeNote(t){
+  if(!t.doubles.draw)return t.endTime?'<p class="double-warning">Endzeit '+esc(t.endTime)+' Uhr vorgemerkt. Die benötigten Zeitblöcke werden anhand der anwesenden Teams geprüft.</p>':"";
+  try{
+    const plan=tournamentSchedule(t);
+    return '<div class="'+(plan.overTarget?"double-warning":"double-success")+'"><strong>Geplantes Turnierende: '+
+      esc(plan.end)+' Uhr</strong>'+(t.endTime?' · Ziel: '+esc(t.endTime)+' Uhr':'')+
+      (plan.mode==="fit"?' · angepasste Spielzeiten':' · feste Spielzeiten')+
+      (t.reservePlayoffs!==false&&t.doubles.teams.filter(x=>x.present).length>=8?
+       ' · Top-8-Play-offs eingeplant':'')+
+      (plan.overTarget?' · Zielzeit wird überschritten!':'')+'</div>';
+  }catch(e){return '<div class="double-warning">'+esc(e.message)+'</div>';}
+}
+function doublesOptions(t){
+  if(t.doubles.teams.filter(x=>x.present).length<2)return "";
+  const options=doublesMatchOptions(t);
+  return '<section class="double-panel"><h3>Wie viele Matches pro Team sind machbar?</h3>'+
+    '<p class="muted">Geprüft anhand der anwesenden Teams, verfügbaren Plätze, echten Probeauslosungen und – falls gesetzt – der Endzeit. Bei 8+ Teams ist die Top-8-Endrunde standardmäßig mit eingeplant.</p>'+
+    '<div class="schedule-option-list">'+options.map(o=>
+      '<div class="schedule-option '+(o.possible?"schedule-option-ok":"schedule-option-no")+'">'+
+      '<strong>'+o.games+' Match'+(o.games===1?"":"es")+' / Team'+(o.games===t.rounds?' · gewählt':'')+'</strong>'+
+      '<span>'+(o.possible?'✓ Machbar · '+o.blocks+' Vorrunden-Blöcke · Ende ca. '+esc(o.plannedEnd)+' Uhr':
+        'Nicht machbar · '+esc(o.reason))+'</span></div>').join("")+'</div></section>';
+}
 function overview(t) {
   const draw=t.doubles.draw,valid=draw?verifyDoublesDraw(t):null;
   let progress=null;
@@ -136,10 +159,10 @@ function overview(t) {
   return sectionHead("DOPPELTURNIER / ZENTRALE","Turnierübersicht",
     "Feste Teams, Vorrunde und die besten acht Teams in den Play-offs.",
     '<button class="btn subtle" data-act="settings">Turniereinstellungen</button>')+
-    stats(t)+livePanel(t)+
+    stats(t)+doublesTimeNote(t)+livePanel(t)+
     '<div class="double-grid"><section class="double-panel"><h3>Turnierstatus</h3>'+
     '<p><strong>Turnier:</strong> '+esc(t.name)+'<br><strong>Datum:</strong> '+dateText(t.date)+
-    '<br><strong>Start:</strong> '+esc(t.startTime)+' Uhr<br><strong>Spieldauer:</strong> '+t.duration+
+    '<br><strong>Start:</strong> '+esc(t.startTime)+' Uhr<br><strong>Endzeit:</strong> '+(t.endTime?esc(t.endTime)+' Uhr':'offen')+'<br><strong>Zeitmodus:</strong> '+(t.timeMode==="fit"?'An Endzeit anpassen':'Feste Spielzeiten')+'<br><strong>Spieldauer:</strong> '+t.duration+
     ' Minuten + '+t.breakMinutes+' Minuten Wechselpause</p>'+
     '<div class="double-actions">'+
     '<button class="btn primary" data-act="'+(draw?"tab":"draw-generate")+'" data-tab="draw">'+(draw?"Spielplan öffnen":"Vorrunde auslosen")+'</button>'+
@@ -213,14 +236,14 @@ function drawPage(t) {
   const controls='<button class="btn '+(draw?"double-danger":"primary")+'" data-act="'+(draw?"draw-reset":"draw-generate")+'">'+(draw?"Neu auslosen":"Vorrunde auslosen")+'</button>';
   const top=sectionHead("DOPPELTURNIER / VORRUNDE","Spielplan",
     "Jedes anwesende Team erhält "+t.rounds+" Begegnungen ohne Wiederholung. Pro Zeitblock spielt ein Team höchstens einmal.",controls);
-  if(!draw)return top+(setup.ok?'<div class="double-success">'+setup.teams+' anwesende Teams · '+setup.fixtures+' Begegnungen · '+t.courts.length+' Plätze. Auslosung bereit.</div>':
+  if(!draw)return top+doublesOptions(t)+(setup.ok?'<div class="double-success">'+setup.teams+' anwesende Teams · '+setup.fixtures+' Begegnungen · '+t.courts.length+' Plätze. Auslosung bereit.</div>':
     '<div class="double-warning">'+esc(setup.errors.join(" · "))+'</div>')+
     '<section class="double-panel"><h3>Spielmodus</h3><p>1 Satz · No-Ad · bei Game-Gleichstand Entscheidungspunkte. Rangliste: Siege, danach Game-Differenz, dann gewonnene Games.</p></section>';
   if(check&&!check.ok)return top+'<div class="double-warning">'+esc(check.errors.join(" · "))+'</div>';
   const index=Math.min(currentRound,draw.rounds.length-1),r=draw.rounds[index];
   const done=r.matches.filter(hasResult).length;
   const all=draw.rounds.flatMap(x=>x.matches);
-  return top+livePanel(t)+'<div class="double-success">'+all.filter(hasResult).length+' von '+all.length+' Begegnungen erfasst. '+draw.rounds.length+' zeitliche Spielblöcke.</div>'+
+  return top+doublesTimeNote(t)+livePanel(t)+'<div class="double-success">'+all.filter(hasResult).length+' von '+all.length+' Begegnungen erfasst. '+draw.rounds.length+' zeitliche Spielblöcke.</div>'+
     '<div class="double-round-list" aria-label="Runde auswählen">'+
     draw.rounds.map((item,i)=>'<button data-act="round" data-round="'+i+'" class="'+(i===index?"active":"")+'">Runde '+(i+1)+
       (item.matches.every(hasResult)?" ✓":"")+'</button>').join("")+'</div>'+
@@ -291,6 +314,12 @@ function settingsFields(t=null,inline=false) {
     '<label class="field wide">Turniername<input name="name" required minlength="2" maxlength="90" value="'+esc(current.name||"")+'" placeholder="z. B. Sommer-Doppelturnier"></label>'+
     '<label class="field">Datum<input name="date" type="date" required value="'+esc(current.date||todayLocal())+'"></label>'+
     '<label class="field">Startzeit<input name="startTime" type="time" required value="'+esc(current.startTime||"10:00")+'"></label>'+
+    '<label class="field">Endzeit (optional)<input name="endTime" type="time" value="'+esc(current.endTime||"")+'"></label>'+
+    '<label class="field wide">Zeitplanung<select name="timeMode">'+
+    '<option value="fixed" '+(current.timeMode!=="fit"?"selected":"")+'>Feste Spielzeit und Pausen</option>'+
+    '<option value="fit" '+(current.timeMode==="fit"?"selected":"")+'>Spielzeiten bis zur Endzeit anpassen</option></select>'+
+    '<span class="field-hint">Berechnet die Dauer pro Zeitblock, ohne die Zahl der Matches zu ändern. Unter 10 Min. je Block nicht machbar.</span></label>'+
+    '<label class="field wide checkbox-field"><input type="checkbox" name="reservePlayoffs" '+(current.reservePlayoffs!==false?"checked":"")+'> Top-8-Play-offs im Endzeitplan berücksichtigen</label>'+
     '<label class="field">Spieldauer (Min.)<input name="duration" type="number" min="10" max="120" required value="'+(current.duration??20)+'"></label>'+
     '<label class="field">Wechselpause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="'+(current.breakMinutes??10)+'"></label>'+
     '<label class="field">Spiele pro Team<select name="rounds">'+
@@ -428,9 +457,14 @@ function saveSettings(t,form,isCreate) {
   ];
   const values={
     name,date:String(d.get("date")),startTime:String(d.get("startTime")),
-    duration:Number(d.get("duration")),breakMinutes:Number(d.get("breakMinutes")),
+    endTime:String(d.get("endTime")||"")||null,timeMode:d.get("timeMode")==="fit"?"fit":"fixed",
+    reservePlayoffs:d.has("reservePlayoffs"),duration:Number(d.get("duration")),breakMinutes:Number(d.get("breakMinutes")),
     rounds:games,courts,entryFeeCents:standard,feeCategories:cats
   };
+  const preview={...(t||{}),...values,type:"doubles"};
+  timeWindow(preview);
+  if(preview.timeMode==="fit"&&!preview.endTime)throw Error("Für die Zeitoptimierung bitte eine Endzeit einstellen.");
+  if(t?.doubles.draw)tournamentSchedule(preview);
   if(isCreate) {
     store.create({type:"doubles",...values});
   } else {
@@ -567,6 +601,7 @@ document.addEventListener("click",event=>{
   if(act==="draw-generate")return run(()=>{
     if(t.doubles.draw&&!confirm("Bisherige Auslosung mit allen Ergebnissen ersetzen?"))return;
     const draw=generateDoublesDraw(t,{seed:Math.floor(Math.random()*2147483647)});
+    tournamentSchedule({...t,doubles:{...t.doubles,draw}});
     store.editTournament(t.id,{doubles:{...t.doubles,draw,playoffs:null},roundClocks:{}});
     currentRound=0;view="draw";render();flash("Vorrunde ausgelost. Alle Begegnungen sind ohne Wiederholung.");
   });
