@@ -1,23 +1,34 @@
 # TENNILO – Projektstatus
 
 **Stand:** 2026-11-06  
-**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderungen:** v0.8.2 Zeitplanung und v0.8.3 Turnierberater mit Formatvergleich. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
+**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderungen:** v0.8.2 Zeitplanung, v0.8.3 Turnierberater und v0.8.4 gemeinsame Roadmap/Ideensammlung. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.8.3 (Turnierberater + Zeitplanung, noch nicht veröffentlicht)**  
-**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanungsänderungen v0.8.2 und der Formatfinder v0.8.3 liegen ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
+**Version im GitHub-Code:** **0.8.4 (Roadmap/Ideensammlung + Turnierberater + Zeitplanung, noch nicht veröffentlicht)**  
+**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanung v0.8.2, der Formatfinder v0.8.3 und die gemeinsame Roadmap v0.8.4 liegen ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
 ## Produktidee
 
-Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanung v0.8.2 und Turnierberater v0.8.3 sind ausschließlich in GitHub, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
+Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanung v0.8.2, Turnierberater v0.8.3 und Roadmap v0.8.4 sind ausschließlich in GitHub, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
 
 **Claim:** „Weniger Orga. Mehr Tennis.“  
 **Aktuelle URL:** https://app.tennis-schiri.de/index.html  
 **Arbeitsname:** TENNILO; UI und Repository tragen derzeit noch überwiegend „Tennis-Schiri/Turniermanager“. Eine komplette Umbenennung wurde **nicht** beauftragt.
 
+
+## Roadmap & Ideensammlung v0.8.4 (nur GitHub, 2026-11-06)
+
+- [x] Eigene `site/roadmap.html`-Unterseite, in TENNILO auf der Startseite verlinkt. Fünf Status-Spalten: **Ideensammlung, Geplant, In Arbeit, Code fertig, Auf Testseite**. Karten mit Priorität, Kommentarzahl, Kategorie, Meilenstein und nächstem Schritt; Suche, Status- und Bereichsfilter, Listenansicht. Responsive gestaltet.
+- [x] **18 echte Start-Einträge** aus Projektstatus und Ideen, mit klarer Abgrenzung zwischen bereits auf Testseite hochgeladen (v0.8.0) und nur im GitHub-Code fertig (v0.8.2/v0.8.3).
+- [x] Zusätzlicher PHP-Kommentardienst `roadmap-api.php` und reine Datenlogik `roadmap-lib.php`; gemeinsame Speicherung serverseitig, nicht browserlokal. Eingeladene mit persönlichem Code dürfen Ideen einreichen und kommentieren; Projektleitung darf Status, Priorität, Texte und Einladungen verwalten sowie Kommentare entfernen. Neue Ideen starten in „Ideensammlung“.
+- [x] **Sicherheitsgrenze:** Bestehender Apache-Basic-Passwortschutz der Testseite weiterhin Pflicht fürs Lesen; zusätzliche gehashte 192-Bit-Zugangscodes, Sitzungen, CSRF, Same-Origin, HTTPS, Eingabegrenzen, HTML-Escaping, atomische private JSON-Datei mit Dateisperre. Backend B0.2 bleibt deaktiviert.
+- [x] `tests/roadmap-ui.test.mjs` und `tests/roadmap.php` in CI und manuellen FTPS-Workflow eingebaut. GitHub-CI-Prüflauf [42187058485](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42187058485) hat **243/243 Node-Tests**, PHP-Syntax und Roadmap-PHP-Modell erfolgreich geprüft (Stand vor späteren Versionstext-Änderungen).
+- [ ] **Haltbarkeit vor Einladung:** Standard-Speicher derzeit im privaten Server-Temp-Verzeichnis, kann vom Hosting gelöscht werden. Dauerhaften `TENNILO_ROADMAP_STORAGE_DIR` außerhalb aller Webroots serverseitig konfigurieren und Backup-Prozess festlegen; UI weist auf das Problem hin.
+- [ ] **Ersteinrichtung vor Einladungen:** Erste Person mit dem Testseiten-Passwort kann den Admin-Code einmalig erzeugen. Besitzer muss deshalb unmittelbar nach Upload zuerst selbst starten und Code sicher aufbewahren. Freigabe eines Schreibcodes allein erlaubt keinen Zugang an der bestehenden Testseiten-HTTP-Auth vorbei.
+- [ ] Noch nicht veröffentlicht; bestehende manuelle FTPS-Allowlist auf **34 Dateien** erweitert. Ein kompletter ALL-INKL-Test mit echten Nutzer-Sitzungen, zwei Geräten und langzeitstabiler Speicherung steht aus. Details [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
 
 ## Turnierberater v0.8.3 (nur GitHub; 2026-11-06)
 
