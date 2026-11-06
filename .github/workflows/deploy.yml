@@ -80,7 +80,9 @@ jobs:
   # Einmaliger genehmigter Release; nach Abschluss vollständig entfernen.
 
   deploy_once:
-    if: github.event_name == 'push' && github.event.head_commit.message == 'release: ONE-SHOT TENNILO v0.8.4 approved'
+    if: >-
+      github.event_name == 'push' &&
+      github.event.head_commit.message == 'release: ONE-SHOT TENNILO v0.8.4 approved'
     name: Einmaliger freigegebener TENNILO v0.8.4 Upload
     runs-on: ubuntu-24.04
     timeout-minutes: 10
