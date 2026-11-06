@@ -158,6 +158,8 @@ function bracket(t) {
   const valid=checkOnePointDraw(t);
   if(!valid.ok)return head+'<div class="double-warning">'+esc(valid.errors.join(" · "))+'</div>';
   const progress=onePointProgress(t),round=Math.min(selectedRound,progress.stages.length-1),selected=progress.stages[round];
+  let phasePlan=null;
+  try{phasePlan=onePointTimePlan(t).stages[round];}catch{}
   const stages=progress.stages.map(s=>'<button data-act="stage" data-stage="'+s.index+'" class="'+(s.index===round?"active":"")+'">'+
     esc(s.roundName)+' · '+s.decided+'/'+s.total+'</button>').join("");
   const matches=selected.matches.map((m,i)=>{
@@ -181,7 +183,9 @@ function bracket(t) {
   return head+opcTimeNote(t)+(progress.finished?'<section class="opc-award"><span>GEWINNER DES ONE POINT CUPS</span><strong>'+
     esc(label(t,progress.champion))+'</strong></section>':"")+
     '<div class="opc-round-nav">'+stages+'</div>'+
-    '<section class="double-panel"><h3>'+esc(selected.roundName)+'</h3><p class="opc-panel-note">'+
+    '<section class="double-panel"><h3>'+esc(selected.roundName)+'</h3>'+(
+      phasePlan?'<p class="opc-panel-note">Geplantes Zeitfenster: '+esc(phasePlan.start)+'–'+esc(phasePlan.end)+' Uhr · '+phasePlan.slots+' Spielblock'+(phasePlan.slots===1?'':'e')+'</p>':'')+
+    '<p class="opc-panel-note">'+
       selected.decided+' von '+selected.total+' Begegnungen entschieden (einschließlich Freilosen).</p>'+
     '<div class="opc-bracket">'+matches+'</div></section>'+
     '<p class="muted">Bei einer geänderten Entscheidung werden ungültige Folgeergebnisse automatisch zurückgenommen.</p>';
