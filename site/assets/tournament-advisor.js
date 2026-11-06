@@ -29,14 +29,22 @@ export function normalizeAdvisorInput(raw) {
   const date=String(raw.date||"");
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))
     throw Error("Bitte ein gültiges Turnierdatum wählen.");
+  const matchMode=String(raw.matchMode||"time");
+  const pointTarget=Number(raw.pointTarget??7);
+  if(!["time","points"].includes(matchMode)||!Number.isInteger(pointTarget)||pointTarget<1||pointTarget>99)
+    throw Error("Bitte eine gültige Zählweise und ein Punktziel zwischen 1 und 99 wählen.");
   return {participants:players,courtCount:courts,date,startTime,endTime,
-    goal,teamStyle,availableMinutes:window.minutes};
+    goal,teamStyle,matchMode,pointTarget,pointWinByTwo:raw.pointWinByTwo===true,
+    availableMinutes:window.minutes};
 }
 
 function scenario(input,type,extra={}) {
   return newTournament({type,name:"Vorplanung",date:input.date,
     startTime:input.startTime,endTime:input.endTime,
-    timeMode:input.endTime?"fit":"fixed",
+    timeMode:input.matchMode==="points"?"fixed":input.endTime?"fit":"fixed",
+    matchMode:type==="opc"?"points":input.matchMode,
+    pointTarget:type==="opc"?1:input.pointTarget,
+    pointWinByTwo:type!=="opc"&&input.matchMode==="points"&&input.pointWinByTwo,
     courts:courtsFor(input.courtCount),duration:20,breakMinutes:5,
     rounds:4,entryFeeCents:0,...extra});
 }
@@ -186,7 +194,10 @@ export function advisorTournamentValues(raw,recommendation) {
     type:recommendation.id,
     name:"Vereinsturnier – "+recommendation.title,
     date:input.date,startTime:input.startTime,endTime:input.endTime,
-    timeMode:input.endTime?"fit":"fixed",
+    timeMode:input.matchMode==="points"?"fixed":input.endTime?"fit":"fixed",
+    matchMode:recommendation.id==="opc"?"points":input.matchMode,
+    pointTarget:recommendation.id==="opc"?1:input.pointTarget,
+    pointWinByTwo:recommendation.id!=="opc"&&input.matchMode==="points"&&input.pointWinByTwo,
     courts:courtsFor(input.courtCount),
     duration:e.settings.duration||20,
     breakMinutes:e.settings.breakMinutes??5,
