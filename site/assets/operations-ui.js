@@ -1,6 +1,6 @@
 // Oberfläche für Bar-Nenngeld und die gespeicherte Rundenuhr.
 // Die Berechnung liegt getrennt in operations.js.
-import {entryDue,feesOverview,euroText,euroInput,plannedRound,clockFor} from "./operations.js";
+import {entryDue,feesOverview,euroText,euroInput,plannedRound,clockFor} from "./operations.js?v=082";
 
 export function renderFees(t,{icon,escapeHtml,stat}) {
   const a=feesOverview(t);
