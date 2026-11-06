@@ -125,6 +125,7 @@ function intro() {
       <button class="btn primary" data-action="new">${icon("plus")} ${tournaments.length ? "Neues Turnier anlegen" : "Erstes Turnier anlegen"}</button>
       <button class="btn ghost" data-action="doppel-new">Doppelturnier anlegen</button>
       <button class="btn ghost" data-action="opc-new">One Point Cup anlegen</button>
+      <a class="btn ghost" href="./roadmap.html">Roadmap &amp; Ideen</a>
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
       <button class="btn ghost" data-action="demo-filler">Auffüllrunde testen</button>
     </div>
