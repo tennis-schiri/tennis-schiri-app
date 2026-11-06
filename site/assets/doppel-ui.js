@@ -618,8 +618,20 @@ document.addEventListener("click",event=>{
   });
   if(act==="draw-generate")return run(()=>{
     if(t.doubles.draw&&!confirm("Bisherige Auslosung mit allen Ergebnissen ersetzen?"))return;
-    const draw=generateDoublesDraw(t,{seed:Math.floor(Math.random()*2147483647)});
-    tournamentSchedule({...t,doubles:{...t.doubles,draw}});
+    let draw=null,reason=null;
+    // Random draws may need different block counts. Retry until a valid
+    // end-time plan is found; seed 37 mirrors the feasibility preview.
+    for(let attempt=0;attempt<8;attempt++){
+      const seed=attempt===7?37:Math.floor(Math.random()*2147483647);
+      const candidate=generateDoublesDraw(t,{seed});
+      try{
+        const plan=tournamentSchedule({...t,doubles:{...t.doubles,draw:candidate}});
+        if(plan.overTarget&&t.timeMode==="fit")throw Error("Endzeit ist zu knapp.");
+        draw=candidate;
+        break;
+      }catch(e){reason=e;}
+    }
+    if(!draw)throw reason||Error("Für dieses Zeitfenster ist keine passende Auslosung möglich.");
     store.editTournament(t.id,{doubles:{...t.doubles,draw,playoffs:null},roundClocks:{}});
     currentRound=0;view="draw";render();flash("Vorrunde ausgelost. Alle Begegnungen sind ohne Wiederholung.");
   });
