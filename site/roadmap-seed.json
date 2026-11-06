@@ -264,9 +264,9 @@
       "origin": "official",
       "comments": [],
       "benefit": "Projektleitung und ausgewählte Testpersonen sollen transparent sehen, welche Funktionen vorhanden sind, was geplant ist und wo Rückmeldungen besonders hilfreich sind.",
-      "scope": "• Roadmap-Board mit Status, Priorität und Bereichen.\n• Such- und Filterfunktion sowie Detailkarten.\n• Gemeinsame Ideen und Kommentare.\n• Persönliche Einladungscodes für Mitwirkende und Projektleitung.\n• Ausführliche Ziele, Umfang, Entwicklungsstand und offene Punkte.\n• Offizielle Projektänderungen aus GitHub automatisch ins Board übernehmen, ohne manuelle Änderungen zu überschreiben.",
+      "scope": "• Roadmap-Board mit Status, Priorität und Bereichen.\n• Such- und Filterfunktion sowie Detailkarten.\n• Gemeinsame Ideen und Kommentare.\n• Persönliche Einladungscodes für Mitwirkende und Projektleitung.\n• Ausführliche Ziele, Umfang, Entwicklungsstand und offene Punkte.\n• Offizielle Projektänderungen aus GitHub automatisch ins Board übernehmen, ohne manuelle Änderungen zu überschreiben.\n• Roadmap-Zugänge künftig als persönliche Konten mit Einladungslink, Benutzername und Passwort; frühere Codes migrierbar.",
       "currentState": "Die Roadmap mit Kommentardienst wurde in v0.8.4 auf die passwortgeschützte Testseite hochgeladen. Automatisierte PHP- und JavaScript-Tests waren erfolgreich. Ein realer Browser-/ALL-INKL-Funktionstest ist noch offen.",
-      "openPoints": "Der Admin-Zugang muss zuerst von der Projektleitung eingerichtet werden. Der derzeitige private temporäre Server-Speicher ist nicht dauerhaft garantiert; vor externen Einladungen ist eine persistente private Ablage nötig.",
+      "openPoints": "Der Admin-Zugang muss zuerst von der Projektleitung eingerichtet werden. Der derzeitige private temporäre Server-Speicher ist nicht dauerhaft garantiert; vor externen Einladungen ist eine persistente private Ablage nötig. Neue Roadmap-Konten und Anmeldung liegen in GitHub, aber die Testseite nutzt bis zur ausdrücklichen Freigabe weiterhin die alten Codes.",
       "doneWhen": "Eingeladene Personen können aktuelle Stände zuverlässig lesen und kommentieren; die Projektleitung kann Einträge, Status und Zugänge verwalten, ohne dass Beiträge bei einem Neustart verloren gehen."
     },
     {
@@ -578,6 +578,25 @@
           "url": "https://docs.google.com/spreadsheets/d/1aNwzYXmHhpONZURtufkDg6qZHX1-ywOYgyRd_u_LHCY/edit"
         }
       ]
+    },
+    {
+      "id": "roadmap-accounts",
+      "title": "Persönliche Roadmap-Zugänge statt langer Codes",
+      "description": "Einmalige Einladungslinks und persönliche Konten mit Benutzername und Passwort.",
+      "category": "Plattform & Zugang",
+      "status": "test",
+      "priority": "high",
+      "milestone": "Roadmap-Zugänge · GitHub fertig, noch nicht online",
+      "nextStep": "Nach sicherem, persistentem Server-Speicher und Browserprüfung den überarbeiteten Roadmap-Anmeldedienst ausdrücklich freigeben und manuell veröffentlichen.",
+      "updatedAt": "2026-11-06T11:15:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Eingeladene Testpersonen sollen ohne lange Codes Ideen kommentieren können. Die Projektleitung sieht, wer Zugang hat, kann Rollen ändern und Benutzer direkt sperren.",
+      "scope": "• Persönlicher Benutzername und eigenes Passwort, passwortgeschützt gespeichert.\n• Einmaliger, sieben Tage gültiger Einladungslink statt Codeeingabe.\n• Anmeldung, Abmeldung und Passwortänderung im Profil.\n• Rollen Nur lesen / Ideen und Kommentare, von Projektleitung bearbeitbar.\n• Benutzer sperren; Widerruf wirkt auf bestehende Sitzungen.\n• Vorhandenen Admin-/Einladungscode einmalig auf ein Konto übertragen, Kommentare und Status behalten.\n• Bisheriger übergeordneter Testseiten-Passwortschutz bleibt bestehen.",
+      "currentState": "GitHub-Code und automatisierte PHP-/HTTP-Tests sind vorhanden; 261 von 261 Tests erfolgreich. Die neue Anmeldetechnik ist bewusst noch nicht auf dem Server veröffentlicht. Der automatische Roadmap-Workflow überträgt bei Inhaltsänderungen nur die Roadmap-Seed-Datei. Einen Link zum Kopieren erstellt die Projektleitung selbst; automatischer E-Mail-Versand ist nicht enthalten.",
+      "openPoints": "Vor externer Nutzung ist das aktuelle temporäre Roadmap-Datenverzeichnis durch dauerhaften, privaten Speicher zu ersetzen und zu sichern. Danach Tests im echten Browser mit zwei Benutzerprofilen, Einladungslink, Anmeldung, Rollenwechsel, Sperrung und Passwortänderung. Einladungslinks müssen privat geteilt werden. Separater App-Account und automatischer E-Mail-Versand sind noch nicht Teil dieses Moduls.",
+      "doneWhen": "Mitwirkende können ohne Codeverwaltung ihren persönlichen Account anlegen und wiederholt nutzen. Einladungen funktionieren genau einmal, abgelaufene oder widerrufene Links nicht; alte Zugänge werden ohne Datenverlust umgestellt und Unberechtigte können keine Kommentare oder Status ändern.",
+      "references": []
     }
   ]
 }
