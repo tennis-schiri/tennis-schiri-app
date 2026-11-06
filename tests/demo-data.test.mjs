@@ -62,3 +62,10 @@ test("Zufalls-Punktresultat erfüllt das Zwei-Punkte-Vorsprung-Prinzip",()=>{
   assert.deepEqual([Math.max(v.score1,v.score2),Math.min(v.score1,v.score2)],[100,98]);
   assert.equal(demoCountLimits(newTournament({type:"opc",opc:{fieldSize:2}})).defaultCount,2);
 });
+
+test("Unspielbare Demofelder werden schon bei der Teilnehmergenerierung abgewiesen",()=>{
+  const ribbon=newTournament({type:"ribbon",rounds:4,courts:[1]});
+  assert.throws(()=>makeDemoCopy(ribbon,500),/mehr als 20 Runden/);
+  const double=newTournament({type:"doubles",rounds:7,courts:[1,2]});
+  assert.throws(()=>makeDemoCopy(double,9),/ungerader Teamzahl/);
+});

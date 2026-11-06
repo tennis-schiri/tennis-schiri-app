@@ -3,9 +3,10 @@
 import {uid} from "./storage.js";
 import {scoringRules} from "./match-scoring.js";
 import {updateRibbonMatchResult} from "./results.js";
+import {analyzeRibbonDraw} from "./draw.js";
 import {updateRibbonFinalResult} from "./finals.js";
-import {updateDoublesResult,updateDoublesPlayoffResult} from "./doubles.js";
-import {setOnePointWinner} from "./one-point.js";
+import {updateDoublesResult,updateDoublesPlayoffResult,analyzeDoublesSetup} from "./doubles.js";
+import {setOnePointWinner,checkOnePointSetup} from "./one-point.js";
 
 const FIRST=["Alex","Robin","Kim","Toni","Mika","Luca","Jana","Sam","Chris","Nina","Pat","Max","Lea","Flo","Jules","Elli","Mara","Ben","Sascha","Noah","Lena","Milan","Tara","Nico","Pia","Finn","Mona","Jan","Kira","Tim","Lina","Jonas"];
 const LAST=["Bauer","Fischer","Hartmann","Berger","Vogel","Beck","Hoffmann","Keller","Sommer","Seidel","Winter","Schulz","König","Neumann","Meyer","Brandt","Wolf","Richter","Krause","Schwarz","Krüger","Walter","Schmitt","Roth","Busch","Lorenz"];
@@ -56,6 +57,17 @@ export function makeDemoCopy(source,requested,{random=Math.random,makeId=uid}={}
     copy.opc.players=players.map((name,i)=>({
       id:nextId(),name,present:true,feeTierId:tier(source,i),paidCents:0
     }));
+  }
+  // Auch die tatsächliche Auslosungsprüfung muss die Konfiguration erlauben.
+  // So erzeugt etwa ein 500er Feld auf nur einem Platz keine unspielbare Demo.
+  if(source.type==="ribbon")analyzeRibbonDraw(copy);
+  if(source.type==="doubles"){
+    const setup=analyzeDoublesSetup(copy);
+    if(!setup.ok)throw Error(setup.errors[0]);
+  }
+  if(source.type==="opc"){
+    const setup=checkOnePointSetup(copy);
+    if(!setup.ok)throw Error(setup.errors[0]);
   }
   return copy;
 }

@@ -607,13 +607,13 @@
       "priority": "high",
       "milestone": "v0.8.8 – im GitHub-Code, noch nicht auf der Testseite",
       "nextStep": "App-Upload manuell freigeben und Bedienabläufe im Browser für alle drei Turnierarten prüfen.",
-      "updatedAt": "2026-11-06T12:00:00+01:00",
+      "updatedAt": "2026-11-06T11:45:00+01:00",
       "origin": "official",
       "comments": [],
       "benefit": "Turniere schneller mit realistischen Teilnehmerlisten und Ergebnissen durchspielen, um Ranglisten, Aufsteiger, Endrunden und Anzeige zu prüfen.",
       "scope": "• Eigene Demo-Kopie mit allen aktuellen Turniereinstellungen.\n• Frei wählbare Anzahl mit Plausibilitätsprüfung: Stärkegruppen im Schleifchenturnier, feste Zweierteams im Doppel, Spieler und Freilose im One Point Cup.\n• Eigene Schaltfläche für Zufallsergebnisse nach der Auslosung.\n• Nur offene Partien ausfüllen, manuell erfasste Entscheidungen erhalten.\n• Zeit-/Punktewertung gemäß Turniervorgabe; auch bestehende Endrunden und Play-offs befüllen.\n• Keine fiktiven Barzahlungen; Originalsätze bleiben unverändert.",
-      "currentState": "Fachmodul, UI für alle drei Formate, lokales Demo-Kennzeichen und automatisierte Tests in GitHub implementiert. App-Veröffentlichung bewusst noch nicht durchgeführt.",
-      "openPoints": "Praxistests im Browser, Sonderfälle enger Zeitpläne und Umgang mit speziellen Auffüllrunden vor Freigabe prüfen. Endrunden/Play-offs werden von der Turnierleitung zunächst normal ausgelost und anschließend mit Zufallsergebnissen gefüllt.",
+      "currentState": "Fachmodul, UI für alle drei Turnierformate, persistentes Demo-Kennzeichen und automatisierte Tests in GitHub implementiert. Plausibilitätsprüfung nutzt die bestehenden Auslosungsmodelle. Der automatische Prüflauf für den bisherigen Stand ist erfolgreich. Die App ist nicht veröffentlicht; Upload erfordert ausdrückliche manuelle Freigabe.",
+      "openPoints": "Vor dem Release UI im echten Browser prüfen, insbesondere kleine/hohe Teilnehmerzahlen, ungerade Teamzahlen, die Auffüllrunde, enge Zeitpläne und vorhandene Play-offs. Endrunden und Play-offs werden zunächst normal ausgelost und danach befüllt.",
       "doneWhen": "In jedem Turnierformat kann eine sichere Demo-Kopie erzeugt und eine Auslosung anschließend mit gültigen zufälligen Ergebnissen bis zum Sieger durchgespielt werden.",
       "references": []
     }

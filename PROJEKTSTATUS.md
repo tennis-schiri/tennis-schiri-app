@@ -227,3 +227,6 @@ Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Version
 - Auf dem Demo-Turnier: Nach regulärer Auslosung „Offene Ergebnisse auswürfeln“ – nur noch offene Partien erhalten gültige Resultate aus der hinterlegten Zeit-/Punktwertung; bereits entschiedene Partien bleiben unverändert. Unterstützt Vorrunden, bereits angelegte Endrunden/Play-offs und One-Point-K.-o.-Fortschritt. Auslosungen selbst bleiben explizite Handlungen.
 - `site/assets/demo-data.js`, `tests/demo-data.test.mjs`, Bedienflächen, Cache-Versionen, Storage-Modell und FTPS-Whitelist ergänzt. CI und Browser-Praxistests prüfen; **kein App-Upload ohne Freigabe**.
 - Offizielle Roadmap-Karte `demo-testdaten` gleichzeitig gepflegt. Automatischer Roadmap-Inhaltssync enthält keine App-Codefreigabe.
+
+
+**Prüfung Demo v0.8.8:** Der erste vollständige CI-Lauf nach Integration der UI-Module und Korrektur des lokalen Demo-Speichers war mit 270/270 automatisierten Node-Tests erfolgreich (Prüflauf 42204790925). Zusätzlich ist nun eine direkte Machbarkeitsprüfung der generierten Gruppen/Teams/Felder eingebaut; der folgende Prüflauf enthält ergänzende UI- und Grenzfalltests. Die Seed-Datei löst ausschließlich den geschützten Roadmap-Datensync aus; dies ist kein App-Release.
