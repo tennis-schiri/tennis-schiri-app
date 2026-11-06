@@ -136,7 +136,7 @@ Die Unterseite `site/roadmap.html` zeigt ein **Kanban-Board mit fünf Entwicklun
 
 Der Code ist mit einem eigenständigen kleinen PHP-Dienst umgesetzt; das nicht veröffentlichte allgemeine TENNILO-Backend bleibt unberührt. **Achtung:** Der aktuelle Standard nutzt einen privaten Server-Temp-Speicher, dessen dauerhafte Verfügbarkeit nicht garantiert werden kann. Vor echten Einladungen einen dauerhaft privaten Speicherort in der Hosting-Konfiguration setzen. Weiteres Vorgehen siehe [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
 
-**Noch nicht online:** Die Erweiterung wartet auf den nächsten manuellen GitHub-Actions-Upload. Dann werden 34 statt 28 erlaubte App-Dateien übertragen; der bestehende Passwortschutz wird nicht überschrieben.
+**Tests:** GitHub-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) erfolgreich: **244/244 JavaScript-Tests** sowie PHP-Syntax, Modell- und HTTP-Integrationstest. **Noch nicht online:** Die Erweiterung wartet auf den nächsten manuellen GitHub-Actions-Upload. Dann werden 34 statt 28 erlaubte App-Dateien übertragen; der bestehende Passwortschutz wird nicht überschrieben.
 
 ## Turnierberater v0.8.3 – aktuell nur in GitHub
 
