@@ -307,7 +307,8 @@ function rm_storage_location(string $appDir, string $documentRoot,
         rm_error(503, 'Roadmap-Speicher muss außerhalb des öffentlich erreichbaren Webverzeichnisses liegen.');
     }
     clearstatcache(true, $real);
-    if ($automatic && ((@fileperms($real) & 0077) !== 0)) {
+    $permissions = @fileperms($real);
+    if ($automatic && (!is_int($permissions) || ($permissions & 0077) !== 0)) {
         rm_error(503, 'Privater Roadmap-Ordner benötigt Rechte 0700.');
     }
     $legacy = $automatic ?
