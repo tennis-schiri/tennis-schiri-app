@@ -1,23 +1,33 @@
 # TENNILO – Projektstatus
 
 **Stand:** 2026-11-06  
-**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderung:** v0.8.2 Zeitplanung mit optionaler Endzeit und Machbarkeitsprüfung. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
+**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderungen:** v0.8.2 Zeitplanung und v0.8.3 Turnierberater mit Formatvergleich. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.8.2 (optionale Endzeit + Zeitautomatik für drei Turnierarten, noch nicht veröffentlicht)**  
-**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanungsänderung v0.8.2 liegt ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
+**Version im GitHub-Code:** **0.8.3 (Turnierberater + Zeitplanung, noch nicht veröffentlicht)**  
+**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanungsänderungen v0.8.2 und der Formatfinder v0.8.3 liegen ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
 ## Produktidee
 
-Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanungsfunktionen werden als v0.8.2 lokal in GitHub weiterentwickelt, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
+Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanung v0.8.2 und Turnierberater v0.8.3 sind ausschließlich in GitHub, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
 
 **Claim:** „Weniger Orga. Mehr Tennis.“  
 **Aktuelle URL:** https://app.tennis-schiri.de/index.html  
 **Arbeitsname:** TENNILO; UI und Repository tragen derzeit noch überwiegend „Tennis-Schiri/Turniermanager“. Eine komplette Umbenennung wurde **nicht** beauftragt.
 
+
+## Turnierberater v0.8.3 (nur GitHub; 2026-11-06)
+
+- [x] Auf der TENNILO-Startseite neuer Einstieg **„Welches Turnier passt zu euch?“** mit Eingaben für 4–128 Personen, 1–24 Plätze, Datum, Start-/optionale Endzeit, Ziel und Partnerwunsch.
+- [x] Erweiterbares `FORMAT_ADVISORS`-Register (`site/assets/tournament-advisor.js`) mit echten anonymen Probeauslosungen für Schleifchen und Doppel sowie echter K.-o.-Block-/Freilosplanung für One Point Cup. Sortiert zuerst nach Machbarkeit, dann nach Ziel/Partnerwunsch; begründet Empfehlungen und Grenzen. Keine erfundenen Live-Daten.
+- [x] Für Vorschläge Begegnungsanzahl, Blöcke, ungefähres Ende, Spiele je Person/Team und Hinweise; nicht planbare Formate werden mit Gründen angezeigt. Die Matchplanung verwendet dieselben Regeln wie die eigentlichen Turniere.
+- [x] **„Diesen Vorschlag als Turnier anlegen“** speichert die empfohlenen Werte und öffnet die vorhandene Turnierverwaltung mit **leeren echten Teilnehmer-/Teamlisten**. Anonyme Modellteilnehmer bleiben nur für die Berechnung im Arbeitsspeicher.
+- [x] Responsive Oberfläche; `tests/tournament-advisor.test.mjs` / `tests/tournament-advisor-ui.test.mjs`. Mehrere Beispielszenarien und die geänderten Quellmodule isoliert in JavaScript geprüft. **Vollständiger GitHub-CI- und Browser-Praxistest offen.**
+- [ ] **Nicht online:** v0.8.3 benötigt neue Datei im manuellen FTPS-Allowlist (28 statt 27). Letzter bestätigter Upload ist v0.8.0; Passwortschutz/Backend bleiben unverändert.
+- [ ] Später: neue Turnierarten über eigenständige Adapter + unterstützte Neuanlage integrieren; Anmeldedaten und tatsächliche Spielstärken erst nach Anlegen auswerten. Details [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md).
 
 ## Endzeit- und Machbarkeitsplanung v0.8.2 (nur GitHub, 2026-11-06)
 
