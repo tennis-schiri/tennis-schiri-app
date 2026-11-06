@@ -1,4 +1,5 @@
 import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=082";
+import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=082";
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
@@ -238,7 +239,7 @@ function drawPage(t) {
     "Jedes anwesende Team erhält "+t.rounds+" Begegnungen ohne Wiederholung. Pro Zeitblock spielt ein Team höchstens einmal.",controls);
   if(!draw)return top+doublesOptions(t)+(setup.ok?'<div class="double-success">'+setup.teams+' anwesende Teams · '+setup.fixtures+' Begegnungen · '+t.courts.length+' Plätze. Auslosung bereit.</div>':
     '<div class="double-warning">'+esc(setup.errors.join(" · "))+'</div>')+
-    '<section class="double-panel"><h3>Spielmodus</h3><p>1 Satz · No-Ad · bei Game-Gleichstand Entscheidungspunkte. Rangliste: Siege, danach Game-Differenz, dann gewonnene Games.</p></section>';
+    '<section class="double-panel"><h3>Spielmodus</h3><p>'+ (scoringRules(t).mode==="points"?'Punktspiel bis '+scoringRules(t).target+' Punkte'+(scoringRules(t).winByTwo?', mit zwei Punkten Vorsprung':'')+'. Matchdauer und geplante Endzeit sind unverbindliche Schätzwerte.':'Auf Zeit · Games erfassen; bei Game-Gleichstand Entscheidungspunkte. Rangliste nach Siegen und Game-Differenz.')+'</p></section>';
   if(check&&!check.ok)return top+'<div class="double-warning">'+esc(check.errors.join(" · "))+'</div>';
   const index=Math.min(currentRound,draw.rounds.length-1),r=draw.rounds[index];
   const done=r.matches.filter(hasResult).length;
@@ -253,13 +254,13 @@ function drawPage(t) {
 }
 function tablePage(t) {
   const head=sectionHead("DOPPELTURNIER / RANGLISTE","Livetabelle",
-    "Wertung: Siege → Game-Differenz → Games + → Name.");
+    scoringRules(t).mode==="points"?"Wertung: Siege → Punktedifferenz → erzielte Punkte → Name.":"Wertung: Siege → Game-Differenz → Games + → Name.");
   if(!t.doubles.draw)return head+'<div class="double-warning">Bitte zuerst die Vorrunde auslosen.</div>';
   let info;
   try{info=doublesStandings(t);}catch(e){return head+'<div class="double-warning">'+esc(e.message)+'</div>';}
   return head+'<div class="double-success">'+info.complete+' von '+info.planned+' Begegnungen erfasst.</div>'+
     '<section class="double-panel"><div class="double-table-wrap"><table class="double-table"><thead><tr>'+
-    '<th>Rang</th><th>Doppelteam</th><th>Sp</th><th>S</th><th>N</th><th>Games +</th><th>Games −</th><th>Diff.</th></tr></thead><tbody>'+
+    '<th>Rang</th><th>Doppelteam</th><th>Sp</th><th>S</th><th>N</th><th>'+(scoringRules(t).mode==="points"?"Punkte +":"Games +")+'</th><th>'+(scoringRules(t).mode==="points"?"Punkte −":"Games −")+'</th><th>Diff.</th></tr></thead><tbody>'+
     info.ranking.map((x,i)=>'<tr><td><strong>'+(i+1)+'</strong></td><td><strong>'+esc(x.name)+'</strong></td>'+
       '<td>'+x.played+'</td><td>'+x.wins+'</td><td>'+x.losses+'</td><td>'+x.gamesFor+'</td>'+
       '<td>'+x.gamesAgainst+'</td><td>'+x.gameDiff+'</td></tr>').join("")+
@@ -337,6 +338,7 @@ function settingsFields(t=null,inline=false) {
     '<option value="fixed" '+(current.timeMode!=="fit"?"selected":"")+'>Feste Spielzeit und Pausen</option>'+
     '<option value="fit" '+(current.timeMode==="fit"?"selected":"")+'>Spielzeiten bis zur Endzeit anpassen</option></select>'+
     '<span class="field-hint">Berechnet die Dauer pro Zeitblock, ohne die Zahl der Matches zu ändern. Unter 10 Min. je Block nicht machbar.</span></label>'+
+    scoreModeFields(current,esc)+
     '<label class="field wide checkbox-field"><input type="checkbox" name="reservePlayoffs" '+(current.reservePlayoffs!==false?"checked":"")+'> Top-8-Play-offs im Endzeitplan berücksichtigen</label>'+
     '<label class="field">Spieldauer (Min.)<input name="duration" type="number" min="10" max="120" required value="'+(current.duration??20)+'"></label>'+
     '<label class="field">Wechselpause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="'+(current.breakMinutes??10)+'"></label>'+
@@ -412,14 +414,16 @@ function resultDialog(t,{round=null,stage=null,index}) {
     form:stage?"playoff-result":"round-result",submit:"Ergebnis speichern",
     body:'<input name="round" type="hidden" value="'+(round??"")+'"><input name="stage" type="hidden" value="'+esc(stage||"")+
       '"><input name="index" type="hidden" value="'+index+'">'+
-      '<div class="form-grid"><label class="field">Games Team 1<input name="score1" type="number" min="0" max="99" required value="'+(r?.score1??"")+'"></label>'+
-      '<label class="field">Games Team 2<input name="score2" type="number" min="0" max="99" required value="'+(r?.score2??"")+'"></label>'+
+      '<div class="form-grid"><label class="field">'+(scoringRules(t).mode==="points"?"Punkte":"Games")+' Team 1<input name="score1" type="number" min="0" max="'+(scoringRules(t).mode==="points"?999:99)+'" required value="'+(r?.score1??"")+'"></label>'+
+      '<label class="field">'+(scoringRules(t).mode==="points"?"Punkte":"Games")+' Team 2<input name="score2" type="number" min="0" max="'+(scoringRules(t).mode==="points"?999:99)+'" required value="'+(r?.score2??"")+'"></label>'+
+      (scoringRules(t).mode==="points"?
+      '<p class="muted">Erstes Team bis '+scoringRules(t).target+' Punkte'+(scoringRules(t).winByTwo?', mit 2 Punkten Vorsprung':'')+'. Sieger wird automatisch ermittelt; Uhrzeit nur geschätzt.</p>':
       '<label class="field">Entscheidungspunkte Team 1 (optional)<input name="points1" type="number" min="0" max="999" value="'+(r?.points1??"")+'"></label>'+
       '<label class="field">Entscheidungspunkte Team 2 (optional)<input name="points2" type="number" min="0" max="999" value="'+(r?.points2??"")+'"></label>'+
       '<label class="field wide">Siegerteam<select name="winner" required><option value="">Bitte wählen</option>'+
       '<option value="1" '+(r?.winner===1?"selected":"")+'>'+esc(label(t,match.team1))+'</option>'+
       '<option value="2" '+(r?.winner===2?"selected":"")+'>'+esc(label(t,match.team2))+'</option></select></label></div>'+
-      '<p class="muted">Bei gleichem Game-Stand sind Entscheidungspunkte für beide Teams erforderlich.</p>'+
+      '<p class="muted">Bei gleichem Game-Stand sind Entscheidungspunkte für beide Teams erforderlich.</p>')+
       (r?'<div class="double-actions" style="margin-top:12px"><button type="button" class="btn double-danger" data-act="reset-result" '+
         (stage?'data-stage="'+esc(stage)+'"':'data-round="'+round+'"')+' data-match="'+index+'">Ergebnis löschen</button></div>':'')});
 }
@@ -467,6 +471,7 @@ function saveSettings(t,form,isCreate) {
   if(!Number.isInteger(games)||games<1||games>8)throw Error("Bitte 1–8 Spiele je Team einstellen.");
   if(t?.doubles.draw&&(count!==t.courts.length||games!==t.rounds))
     throw Error("Bitte vor Änderungen an Platzanzahl oder Spielanzahl zuerst die Auslosung zurücknehmen.");
+  const scoring=readScoringFields(form);
   const standard=euroCents(d.get("standardFee")),reduced=euroCents(d.get("reducedFee"));
   const courts=t?.courts.length===count?t.courts:Array.from({length:count},(_,i)=>i+1);
   const cats=[
@@ -475,13 +480,14 @@ function saveSettings(t,form,isCreate) {
   ];
   const values={
     name,date:String(d.get("date")),startTime:String(d.get("startTime")),
-    endTime:String(d.get("endTime")||"")||null,timeMode:d.get("timeMode")==="fit"?"fit":"fixed",
+    endTime:String(d.get("endTime")||"")||null,timeMode:scoring.matchMode==="points"?"fixed":d.get("timeMode")==="fit"?"fit":"fixed",...scoring,
     reservePlayoffs:d.has("reservePlayoffs"),duration:Number(d.get("duration")),breakMinutes:Number(d.get("breakMinutes")),
     rounds:games,courts,entryFeeCents:standard,feeCategories:cats
   };
   const preview={...(t||{}),...values,type:"doubles"};
   timeWindow(preview);
   if(preview.timeMode==="fit"&&!preview.endTime)throw Error("Für die Zeitoptimierung bitte eine Endzeit einstellen.");
+  if(t)assertScoringChangeAllowed(t,preview);
   if(t?.doubles.draw)tournamentSchedule(preview);
   if(isCreate) {
     store.create({type:"doubles",...values});
@@ -523,12 +529,12 @@ function saveCash(t,form) {
 }
 function saveResult(t,form,playoff=false) {
   const d=new FormData(form),round=Number(d.get("round")),index=Number(d.get("index")),stage=String(d.get("stage")||"");
-  if(!d.get("winner"))throw Error("Bitte ein Siegerteam auswählen.");
+  if(scoringRules(t).mode!=="points"&&!d.get("winner"))throw Error("Bitte ein Siegerteam auswählen.");
   const value={
     score1:d.get("score1"),score2:d.get("score2"),points1:d.get("points1"),points2:d.get("points2"),
     winner:d.get("winner")
   };
-  normalizeDoublesResult(value);
+  normalizeDoublesResult(value,t);
   if(playoff)replaceDoubles(t,{playoffs:updateDoublesPlayoffResult(t,stage,index,value)});
   else replaceDoubles(t,{draw:updateDoublesResult(t,round,index,value)});
   closeDialog();
