@@ -1,7 +1,7 @@
 import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=080";
-import {euroCents,euroText,euroInput} from "./operations.js?v=061";
+import {euroCents,euroText,euroInput,timeWindow} from "./operations.js?v=082";
 import {
-  checkOnePointSetup,drawOnePointCup,checkOnePointDraw,
+  checkOnePointSetup,onePointTimePlan,drawOnePointCup,checkOnePointDraw,
   setOnePointWinner,onePointProgress,onePointRoundName
 } from "./one-point.js?v=080";
 
@@ -87,6 +87,18 @@ function stats(t) {
   ].map(([heading,value,sub])=>
     '<div class="double-stat"><small>'+heading+'</small><strong>'+value+'</strong><span class="muted">'+sub+'</span></div>').join("")+'</div>';
 }
+function opcTimeNote(t) {
+  if(!checkOnePointSetup(t).ok)return t.endTime?
+    '<div class="opc-import-warning">Wunsch-Endzeit: '+esc(t.endTime)+' Uhr. Bitte erst die Spieler und Feldgröße vollständig festlegen.</div>':"";
+  try{
+    const plan=onePointTimePlan(t);
+    return '<div class="'+(plan.overTarget?"opc-import-warning":"double-success")+'"><strong>Geplantes Cup-Ende: '+
+      esc(plan.end)+' Uhr</strong>'+(t.endTime?' · Wunsch-Endzeit: '+esc(t.endTime)+' Uhr':'')+
+      ' · '+plan.blocks+' Zeitblöcke auf '+plan.courts+' Platz/Plätzen · '+plan.matchMinutes+
+      ' Min. pro Block'+(plan.mode==="fit"?' · automatisch an Endzeit angepasst':'')+
+      (plan.overTarget?' · Ende wird überschritten!':'')+'</div>';
+  }catch(e){return '<div class="opc-import-warning">'+esc(e.message)+'</div>';}
+}
 function overview(t) {
   const valid=t.opc.draw?checkOnePointDraw(t):null;
   let state=null;
@@ -94,10 +106,10 @@ function overview(t) {
   return section("ONE POINT CUP / ÜBERSICHT","Cup-Übersicht",
     "Ein Ballwechsel pro Match · Verlierer scheidet aus · Sieger rückt direkt weiter.",
     '<button class="btn ghost" data-act="settings">Einstellungen</button>')+
-    stats(t)+(state?.finished?'<section class="opc-award"><span>TURNIERSIEGER</span><strong>'+esc(label(t,state.champion))+'</strong></section>':'')+
+    stats(t)+opcTimeNote(t)+(state?.finished?'<section class="opc-award"><span>TURNIERSIEGER</span><strong>'+esc(label(t,state.champion))+'</strong></section>':'')+
     '<div class="double-grid"><section class="double-panel"><h3>Organisation</h3>'+
     '<p><strong>Turnier:</strong> '+esc(t.name)+'<br><strong>Datum:</strong> '+dateLabel(t.date)+
-    '<br><strong>Feld:</strong> '+t.opc.fieldSize+' Plätze<br><strong>Start:</strong> '+esc(t.startTime)+' Uhr</p>'+
+    '<br><strong>Feld:</strong> '+t.opc.fieldSize+' Plätze<br><strong>Start:</strong> '+esc(t.startTime)+' Uhr<br><strong>Ende:</strong> '+(t.endTime?esc(t.endTime)+' Uhr':'offen')+'</p>'+
     '<div class="double-actions"><button class="btn primary" data-act="tab" data-tab="players">Spieler & Bar-Nenngeld</button>'+
     '<button class="btn ghost" data-act="tab" data-tab="bracket">Tableau öffnen</button></div></section>'+
     '<section class="double-panel"><h3>Turnierstatus</h3>'+
@@ -166,7 +178,7 @@ function bracket(t) {
       (playable&&done?'<button class="btn ghost small" data-act="winner-reset" data-stage="'+round+
         '" data-match="'+i+'">Entscheidung zurücknehmen</button>':"")+'</div></article>';
   }).join("");
-  return head+(progress.finished?'<section class="opc-award"><span>GEWINNER DES ONE POINT CUPS</span><strong>'+
+  return head+opcTimeNote(t)+(progress.finished?'<section class="opc-award"><span>GEWINNER DES ONE POINT CUPS</span><strong>'+
     esc(label(t,progress.champion))+'</strong></section>':"")+
     '<div class="opc-round-nav">'+stages+'</div>'+
     '<section class="double-panel"><h3>'+esc(selected.roundName)+'</h3><p class="opc-panel-note">'+
@@ -177,7 +189,7 @@ function bracket(t) {
 function settings(t) {
   return section("ONE POINT CUP / EINSTELLUNGEN","Cup konfigurieren",
     "Feldgröße und Nenngeld festlegen. Das Tableau schützt die Teilnehmerliste nach der Auslosung.")+
-    '<section class="double-panel"><form data-form="settings">'+settingsFields(t)+
+    '<section class="double-panel">'+opcTimeNote(t)+'<form data-form="settings">'+settingsFields(t)+
     '<div class="double-actions" style="margin-top:20px"><button class="btn primary" type="submit">Einstellungen speichern</button>'+
     '<button class="btn double-danger" type="button" data-act="delete">Cup löschen</button></div></form></section>';
 }
@@ -192,6 +204,13 @@ function settingsFields(t=null) {
     '<label class="field wide">Name des One Point Cups<input name="name" required minlength="2" maxlength="90" value="'+esc(t?.name||"")+'"></label>'+
     '<label class="field">Datum<input name="date" type="date" required value="'+esc(t?.date||todayLocal())+'"></label>'+
     '<label class="field">Startzeit<input name="startTime" type="time" required value="'+esc(t?.startTime||"10:00")+'"></label>'+
+    '<label class="field">Endzeit (optional)<input name="endTime" type="time" value="'+esc(t?.endTime||"")+'"></label>'+
+    '<label class="field wide">Zeitplanung<select name="timeMode">'+
+      '<option value="fixed" '+(t?.timeMode!=="fit"?"selected":"")+'>Feste Minuten je Ein-Punkt-Match</option>'+
+      '<option value="fit" '+(t?.timeMode==="fit"?"selected":"")+'>Zeitblöcke an die Endzeit anpassen</option>'+
+      '</select><span class="field-hint">Ein Punkt je Duell, nacheinander je Turnierrunde. Automatisch 1–15 Minuten pro Zeitblock; kürzere Zeitfenster werden abgelehnt.</span></label>'+
+    '<label class="field">Plätze gleichzeitig<input name="courtCount" type="number" min="1" max="64" required value="'+(t?.courts?.length||1)+'"></label>'+
+    '<label class="field">Minuten je Ballwechsel inkl. Wechsel<input name="opcMinutes" type="number" min="1" max="15" required value="'+(t?.opcMinutes??3)+'"></label>'+
     '<label class="field">Feldgröße<select name="fieldSize">'+
       [2,4,8,16,32,64].map(n=>'<option value="'+n+'" '+((t?.opc?.fieldSize??32)===n?"selected":"")+'>'+
         n+'er Feld</option>').join("")+'</select></label>'+
@@ -251,12 +270,22 @@ function saveSettings(t,form,isCreate=false) {
   if(name.length<2||name.length>90)throw Error("Bitte einen Turniernamen mit 2–90 Zeichen eingeben.");
   if(![2,4,8,16,32,64].includes(size))throw Error("Ungültige Feldgröße.");
   if(t?.opc.draw&&t.opc.fieldSize!==size)throw Error("Bitte die Auslosung vor einer Feldgrößenänderung zurücknehmen.");
+  const courtCount=Number(d.get("courtCount")),minutes=Number(d.get("opcMinutes"));
+  if(!Number.isInteger(courtCount)||courtCount<1||courtCount>64)throw Error("Bitte 1–64 Spielplätze wählen.");
+  if(!Number.isInteger(minutes)||minutes<1||minutes>15)throw Error("Bitte 1–15 Minuten je Ballwechsel eintragen.");
+  if(t?.opc.draw&&courtCount!==t.courts.length)throw Error("Bitte vor einer Änderung der Platzanzahl das Tableau zurücknehmen.");
   const standard=euroCents(d.get("feeStandard")),youth=euroCents(d.get("feeYouth"));
   const categories=[{id:"standard",name:"Standard",amountCents:standard},
     {id:"jugend",name:"Jugend",amountCents:youth}];
   const values={name,date:String(d.get("date")),startTime:String(d.get("startTime")),
+    endTime:String(d.get("endTime")||"")||null,timeMode:d.get("timeMode")==="fit"?"fit":"fixed",
+    opcMinutes:minutes,courts:t?.courts?.length===courtCount?t.courts:Array.from({length:courtCount},(_,i)=>i+1),
     entryFeeCents:standard,feeCategories:categories};
-  if(isCreate)store.create({...values,type:"opc",opc:{players:[],fieldSize:size,draw:null},courts:[1]});
+  const preview={...(t||{}),...values,type:"opc",opc:t?.opc||{fieldSize:size,players:[],draw:null}};
+  timeWindow(preview);
+  if(preview.timeMode==="fit"&&!preview.endTime)throw Error("Für die Zeitoptimierung bitte eine Endzeit eingeben.");
+  if(t?.opc.draw)onePointTimePlan({...preview,opc:{...t.opc,fieldSize:size}});
+  if(isCreate)store.create({...values,type:"opc",opc:{players:[],fieldSize:size,draw:null}});
   else store.editTournament(t.id,{...values,opc:{...t.opc,fieldSize:size}});
   closeDialog();view="overview";draw();flash("One Point Cup gespeichert.");
 }
@@ -352,6 +381,7 @@ document.addEventListener("click",event=>{
   });
   if(act==="draw-generate")return run(()=>{
     const drawData=drawOnePointCup(t,{seed:Math.floor(Math.random()*2147483647)});
+    onePointTimePlan({...t,opc:{...t.opc,draw:drawData}});
     store.editTournament(t.id,{opc:{...t.opc,draw:drawData}});
     selectedRound=0;view="bracket";draw();flash("One Point Cup ausgelost. Ein Punkt pro Begegnung.");
   });
