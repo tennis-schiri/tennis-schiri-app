@@ -315,3 +315,11 @@
 - **Umsetzung:** Neues erweiterbares `FORMAT_ADVISORS`-Register, responsive Startseiten-Navigation und Vergleich. Einen Vorschlag mit den empfohlenen Turnierparametern als echtes, **noch leeres** Turnier anlegen, ohne die anonymen Modellsimulatoren zu speichern.
 - **Grenzen:** Der Berater prüft derzeit 4–128 Personen und 1–24 Plätze; Schleifchen-Probeauslosung bis 80, One Point Cup bis 64. Neue Formate benötigen Adapter und vorhandene Fach-/Neuanlage-Unterstützung. Keine personenbezogenen Daten oder Echtgeldtransaktionen bei der Beratung.
 - **Freigabe:** Nur GitHub v0.8.3; bisherige Online-Version v0.8.0 unverändert. Manuelles FTPS nach bestätigter CI-/Browserprüfung, keine automatische Veröffentlichung.
+
+## E-035 · Gemeinsame private Roadmap und Ideen (2026-11-06)
+
+- **Entscheidung:** TENNILO erhält eine übersichtliche, eigene Unterseite zur Roadmap und Ideensammlung, nicht nur eine Textliste. Fünf klare Zustände (Idee, geplant, in Arbeit, Code fertig, auf Testseite), Prioritäten, Suche, Themen und Kommentarfunktionen.
+- **Berechtigungen:** Bereits existierender Testseiten-Passwortschutz gilt weiter für **alle Leser**. Einladungen mit 192-Bit-Code erlauben zusätzlich Kommentare/Ideen oder nur Lesezuordnung; Statusänderung, Moderatorfunktionen und Widerrufe bleiben der Projektleitung vorbehalten.
+- **Datenhaltung:** Vorerst separat vom noch unveröffentlichten TENNILO-Kontobackend; eigener datensparsamer PHP-Dienst mit privaten Serverdateien, Session, CSRF, Same-Origin und Eingabelimits. Kein Klartext-Code in GitHub oder lokalem Browser-Speicher. Einmaliges Admin-Bootstrap nur mit bestehender Apache-Basic-Authentifizierung, daher **vor Freigabe an Gäste selbst einrichten**.
+- **Wichtige Einschränkung:** Temporärer Serverordner taugt für erste Tests, nicht für langfristige Roadmap-Daten. Betreiber muss vor echten Mitwirkenden persistenten Pfad außerhalb aller öffentlichen Webverzeichnisse und Backups sicherstellen. Die Authentifizierung der gesamten Test-App wird durch Einladungscodes **nicht** umgangen.
+- **Stand:** v0.8.4 liegt nur in GitHub; PHP- und Node-Prüftests im GitHub-CI-Prüflauf 42187058485 erfolgreich (243 Node-Tests). Die Funktion ist nicht auf ALL-INKL getestet oder veröffentlicht. FTPS bleibt manuell, Backend/WordPress/.htaccess unverändert. Weitere Details in `ROADMAP_KONZEPT.md`.
