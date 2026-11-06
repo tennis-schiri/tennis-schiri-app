@@ -1,5 +1,6 @@
 // TENNILO Doppelturnier: feste Zweierteams, Vorrunde, Rangliste und Top-8-Play-offs.
 import {plannedRound,tournamentSchedule} from "./operations.js?v=082";
+import {normalizePointResult,scoringRules} from "./match-scoring.js";
 // Fachliche Vorlage: "Turniere Verein – Auslosung & Livetabelle", Doppel-Setup,
 // Doppel-Auslosung, Doppel-Livetabelle und Doppel-Play-Offs (03.10.2026).
 const key = (a,b) => a < b ? a + "|" + b : b + "|" + a;
@@ -21,7 +22,8 @@ export function doublesDrawSignature(t) {
   });
 }
 
-export function normalizeDoublesResult(input) {
+export function normalizeDoublesResult(input,t=null) {
+  if(t&&scoringRules(t).mode==="points")return normalizePointResult(input,t);
   if (input === null || input === undefined || input === "") return null;
   if (typeof input !== "object" || Array.isArray(input)) throw Error("Ungültiges Ergebnis.");
   if (input.winner == null || input.winner === "") return null;
@@ -153,7 +155,7 @@ export function updateDoublesResult(t,roundIndex,matchIndex,value) {
   const check=verifyDoublesDraw(t);
   if(!check.ok)throw Error(check.errors[0]);
   const rounds=t.doubles.draw.rounds.map((r,i)=>i===roundIndex?{...r,matches:r.matches.map((m,j)=>
-    j===matchIndex?{...m,result:normalizeDoublesResult(value)}:m)}:r);
+    j===matchIndex?{...m,result:normalizeDoublesResult(value,t)}:m)}:r);
   if(!validIndex(roundIndex,rounds.length)||!validIndex(matchIndex,rounds[roundIndex].matches.length))
     throw Error("Begegnung nicht gefunden.");
   return {...t.doubles.draw,rounds};
@@ -235,7 +237,7 @@ export function updateDoublesPlayoffResult(t,stage,index,result) {
   const fresh=copy(rebuildDoublesPlayoffs(t,p));
   const matches=stage==="final"||stage==="thirdPlace"?[fresh[stage]]:fresh[stage];
   if(!matches[index]?.team1||!matches[index]?.team2)throw Error("Diese Begegnung ist noch nicht vollständig besetzt.");
-  matches[index].result=normalizeDoublesResult(result);
+  matches[index].result=normalizeDoublesResult(result,t);
   if(stage==="final"||stage==="thirdPlace")fresh[stage]=matches[0];
   return rebuildDoublesPlayoffs(t,fresh);
 }
