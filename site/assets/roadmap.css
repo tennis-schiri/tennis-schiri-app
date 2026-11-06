@@ -168,3 +168,17 @@
 .rm-detail-sources p{font-size:12px;color:#607a72;line-height:1.6;margin:0 0 12px}
 .rm-detail-source-links{display:grid;gap:8px}
 .rm-detail-source-links a{font-size:12px;font-weight:750;color:#1a685e;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+
+
+/* Persönliche Roadmap-Konten */
+.rm-account-form{display:grid;gap:13px;margin:16px 0}
+.rm-account-form .btn{justify-self:start}
+.rm-legacy{margin-top:23px;padding-top:16px;border-top:1px solid #e0eae0}
+.rm-legacy summary{cursor:pointer;color:#547269;font-size:12px;font-weight:750}
+.rm-legacy p{font-size:12px;line-height:1.6;color:#718880}
+.rm-legacy form{display:grid;gap:12px;margin-top:14px}
+.rm-member-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.rm-member-actions .btn{white-space:normal}
+.rm-member small{display:block;line-height:1.65}
+#rm-invite-url{font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:620px){.rm-member{flex-direction:column;align-items:flex-start}.rm-member-actions{justify-content:flex-start}}
