@@ -67,7 +67,7 @@ function run(fn) {
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
     '<a class="doubles-logo" href="./index.html">TENN<span>I</span>LO <small style="font-size:.48em;letter-spacing:.02em;color:#c9dcda"> / DOPPELTURNIER</small></a>'+
-    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.7.0</span></div></header>';
+    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.2</span></div></header>';
 }
 function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
@@ -362,7 +362,7 @@ function render() {
   root.innerHTML=header()+'<main class="double-shell"><div class="double-hero"><div class="eyebrow">FESTE DOPPELPARTNER · TURNIERLEITUNG</div>'+
     '<h1>'+esc(t.name)+'</h1><p>'+dateText(t.date)+' · '+t.courts.length+' Plätze · '+t.rounds+' Spiele pro Team</p></div>'+
     '<div class="double-content">'+nav(t)+'<section class="double-main">'+(tabs[view]||overview)(t)+'</section></div>'+
-    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.7.0 · Geschützte Testversion · Daten nur lokal</footer></main>';
+    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.8.2 · Geschützte Testversion · Daten nur lokal</footer></main>';
 }
 function showDialog({eyebrow,title,form,body,submit="Speichern"}) {
   dialogRoot.innerHTML='<dialog class="app-dialog" aria-labelledby="double-dialog-title">'+
