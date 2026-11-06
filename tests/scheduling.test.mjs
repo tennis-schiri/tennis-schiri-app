@@ -110,6 +110,18 @@ test("Schleifchen richtet Runden inklusive optional reservierter Endrunde aus",(
   assert.equal(tournamentSchedule(t).blocks,5);
   assert.equal(tournamentSchedule(t).end,"11:10");
 });
+test("Schleifchen-Auffüllrunde wird schon vor ihrer Auslosung zeitlich reserviert",()=>{
+  const t=newTournament({name:"Auffüllung",startTime:"10:00",endTime:"11:35",
+    timeMode:"fit",duration:20,breakMinutes:5});
+  t.draw={signature:"test",rounds:[{matches:[]},{matches:[]},{matches:[]}],
+    special:{matches:1,regularStrong:[],regularWeak:[]}};
+  assert.equal(tournamentSchedule(t).blocks,4);
+  const original=plannedRound(t,0).duration;
+  t.draw.specialRound={matches:[]};
+  assert.equal(tournamentSchedule(t).blocks,4);
+  assert.equal(plannedRound(t,0).duration,original);
+});
+
 test("Die Rundenuhr eines Schleifchenturniers übernimmt die automatisch verteilten Minuten",()=>{
   const t=newTournament({name:"Schleifchen",startTime:"10:00",endTime:"11:10",
     timeMode:"fit",duration:20,breakMinutes:5,courts:[1,2,3,4]});
