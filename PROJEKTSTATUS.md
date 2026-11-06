@@ -1,25 +1,25 @@
 # TENNILO – Projektstatus
 
 **Stand:** 2026-11-06  
-**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderungen:** v0.8.2 Zeitplanung, v0.8.3 Turnierberater und v0.8.4 gemeinsame Roadmap/Ideensammlung. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
+**Live bestätigt:** TENNILO **v0.8.4** am **2026-11-06** auf die passwortgeschützte Testseite übertragen: Roadmap/Ideensammlung, Turnierberater, Start-/Endzeit-Automatik und bestehende Turnierarten. Backend B0.2 und Konto-/Vereinsoberfläche bleiben unveröffentlicht.  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.8.4 (Roadmap/Ideensammlung + Turnierberater + Zeitplanung, noch nicht veröffentlicht)**  
-**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanung v0.8.2, der Formatfinder v0.8.3 und die gemeinsame Roadmap v0.8.4 liegen ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
+**Version im GitHub-Code:** **v0.8.4 (auf Testseite veröffentlicht; Browser-Praxistest noch offen)**  
+**FTPS-Upload zuletzt bestätigt:** **v0.8.4** – [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) vom **2026-11-06** erfolgreich (**244/244 Node-Tests**, PHP-Syntax und HTTP-Simulation, **34/34 Dateien übertragen**). Passwortschutz und WordPress unangetastet, manuelle Workflow-Sicherung nach einem einmalig freigegebenen Upload wiederhergestellt. **Offen:** Admin-Ersteinrichtung, dauerhafter privater Roadmap-Speicher, echter ALL-INKL-/Zweitgeräte- und Browsertest. Keine Backend-Konto-API veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
 ## Produktidee
 
-Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanung v0.8.2, Turnierberater v0.8.3 und Roadmap v0.8.4 sind ausschließlich in GitHub, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
+Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanung v0.8.2, Turnierberater v0.8.3 und Roadmap v0.8.4 sind seit dem bestätigten Upload v0.8.4 auf dem geschützten Testserver; praktische Browser-Prüfung offen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
 
 **Claim:** „Weniger Orga. Mehr Tennis.“  
 **Aktuelle URL:** https://app.tennis-schiri.de/index.html  
 **Arbeitsname:** TENNILO; UI und Repository tragen derzeit noch überwiegend „Tennis-Schiri/Turniermanager“. Eine komplette Umbenennung wurde **nicht** beauftragt.
 
 
-## Roadmap & Ideensammlung v0.8.4 (nur GitHub, 2026-11-06)
+## Roadmap & Ideensammlung v0.8.4 (auf Testseite seit 2026-11-06)
 
 - [x] Eigene `site/roadmap.html`-Unterseite, in TENNILO auf der Startseite verlinkt. Fünf Status-Spalten: **Ideensammlung, Geplant, In Arbeit, Code fertig, Auf Testseite**. Karten mit Priorität, Kommentarzahl, Kategorie, Meilenstein und nächstem Schritt; Suche, Status- und Bereichsfilter, Listenansicht. Responsive gestaltet.
 - [x] **18 echte Start-Einträge** aus Projektstatus und Ideen, mit klarer Abgrenzung zwischen bereits auf Testseite hochgeladen (v0.8.0) und nur im GitHub-Code fertig (v0.8.2/v0.8.3).
@@ -28,19 +28,20 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei T
 - [x] `tests/roadmap-ui.test.mjs` und `tests/roadmap.php` in CI und manuellen FTPS-Workflow eingebaut. GitHub-CI-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) hat **244/244 Node-Tests**, PHP-Syntax, Roadmap-PHP-Modell und vollständige lokale HTTP-Integration mit Admin-Bootstrap, Einladungen, Kommentaren, Status und Widerruf erfolgreich geprüft.
 - [ ] **Haltbarkeit vor Einladung:** Standard-Speicher derzeit im privaten Server-Temp-Verzeichnis, kann vom Hosting gelöscht werden. Dauerhaften `TENNILO_ROADMAP_STORAGE_DIR` außerhalb aller Webroots serverseitig konfigurieren und Backup-Prozess festlegen; UI weist auf das Problem hin.
 - [ ] **Ersteinrichtung vor Einladungen:** Erste Person mit dem Testseiten-Passwort kann den Admin-Code einmalig erzeugen. Besitzer muss deshalb unmittelbar nach Upload zuerst selbst starten und Code sicher aufbewahren. Freigabe eines Schreibcodes allein erlaubt keinen Zugang an der bestehenden Testseiten-HTTP-Auth vorbei.
-- [ ] Noch nicht veröffentlicht; bestehende manuelle FTPS-Allowlist auf **34 Dateien** erweitert. Ein kompletter ALL-INKL-Test mit echten Nutzer-Sitzungen, zwei Geräten und langzeitstabiler Speicherung steht aus. Details [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
+- [x] **Veröffentlichung bestätigt:** [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) mit **244/244 Node-Tests**, PHP-Prüfungen, **34/34 Dateien**. Originaler manueller Workflow nach einmaligem Release wiederhergestellt.
+- [ ] **Noch offen:** Echte ALL-INKL-Sitzungen, zwei Geräte und langzeitstabile Roadmap-Speicherung. Die Seed-Karte „Gemeinsame Roadmap und Ideensammlung“ muss nach Admin-Ersteinrichtung manuell auf „Auf Testseite“ gestellt werden. Details [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
 
-## Turnierberater v0.8.3 (nur GitHub; 2026-11-06)
+## Turnierberater v0.8.3 (in v0.8.4 auf Testseite seit 2026-11-06)
 
 - [x] Auf der TENNILO-Startseite neuer Einstieg **„Welches Turnier passt zu euch?“** mit Eingaben für 4–128 Personen, 1–24 Plätze, Datum, Start-/optionale Endzeit, Ziel und Partnerwunsch.
 - [x] Erweiterbares `FORMAT_ADVISORS`-Register (`site/assets/tournament-advisor.js`) mit echten anonymen Probeauslosungen für Schleifchen und Doppel sowie echter K.-o.-Block-/Freilosplanung für One Point Cup. Sortiert zuerst nach Machbarkeit, dann nach Ziel/Partnerwunsch; begründet Empfehlungen und Grenzen. Keine erfundenen Live-Daten.
 - [x] Für Vorschläge Begegnungsanzahl, Blöcke, ungefähres Ende, Spiele je Person/Team und Hinweise; nicht planbare Formate werden mit Gründen angezeigt. Die Matchplanung verwendet dieselben Regeln wie die eigentlichen Turniere.
 - [x] **„Diesen Vorschlag als Turnier anlegen“** speichert die empfohlenen Werte und öffnet die vorhandene Turnierverwaltung mit **leeren echten Teilnehmer-/Teamlisten**. Anonyme Modellteilnehmer bleiben nur für die Berechnung im Arbeitsspeicher.
 - [x] Responsive Oberfläche; `tests/tournament-advisor.test.mjs` / `tests/tournament-advisor-ui.test.mjs`. Mehrere Beispielszenarien und die geänderten Quellmodule isoliert in JavaScript geprüft. **Vollständiger GitHub-CI- und Browser-Praxistest offen.**
-- [ ] **Nicht online:** v0.8.3 benötigt neue Datei im manuellen FTPS-Allowlist (28 statt 27). Letzter bestätigter Upload ist v0.8.0; Passwortschutz/Backend bleiben unverändert.
+- [x] **Auf Testseite:** v0.8.3-Beratungsmodul ist Bestandteil des erfolgreichen v0.8.4-Uploads (34 Dateien); echter Browser-Praxistest offen.
 - [ ] Später: neue Turnierarten über eigenständige Adapter + unterstützte Neuanlage integrieren; Anmeldedaten und tatsächliche Spielstärken erst nach Anlegen auswerten. Details [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md).
 
-## Endzeit- und Machbarkeitsplanung v0.8.2 (nur GitHub, 2026-11-06)
+## Endzeit- und Machbarkeitsplanung v0.8.2 (in v0.8.4 auf Testseite seit 2026-11-06)
 
 - [x] Gemeinsames Datenmodell für alle drei Turnierarten: verpflichtende Startzeit, **optionale Endzeit**, manuelle `fixed`-Zeiten oder bewusst wählbares `fit`-Verfahren. Bestehende Turniere und JSON-Sicherungen bleiben Schema-Version 1 und erhalten standardmäßig `endTime: null, timeMode: fixed`.
 - [x] `site/assets/operations.js`: deterministische Minutenverteilung zwischen Start und Endzeit über tatsächliche Spielblöcke plus Wechselpausen, maximal 120 Min. und minimal 10 Min. pro Doppel-/Schleifchenblock; zu knappe Zielzeiten führen zu Fehler statt verlorenen Spielen. Fixer Modus zeigt Überschreitungen als Warnung, ohne Spielzeit zu verändern. Übernacht-Endzeiten (+1 Tag) möglich. Schon gestartete Rundenuhren behalten ihre bei Start festgehaltene Dauer.
@@ -48,7 +49,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei T
 - [x] Schleifchen: nach Auslosung Zeitblöcke automatisch bis zur Endzeit anpassen; mögliche K.-o.-Endrunde kann ausdrücklich im Zeitbudget reserviert werden.
 - [x] One Point Cup: konfigurierbare Tennisplätze und Zeitbedarf 1–15 Minuten pro Ein-Punkt-Begegnungsblock; nach K.-o.-Runde seriell und innerhalb einer Runde parallel geplante Courts; Endzeitmodus rechnet die gesamte Zahl tatsächlich ausgetragener Duelle einschließlich Freilos-Vermeidung.
 - [x] Neues `tests/scheduling.test.mjs` mit 15 isoliert in JavaScript erfolgreich ausgeführten Fällen und `tests/scheduling-ui.test.mjs` als Formular-/Verlinkungsprüfung ergänzt. Syntax der sieben veränderten Kernmodule geprüft. **Vollständiger GitHub-CI-/Browser-Test für v0.8.2 noch nicht bestätigt.**
-- [ ] **Noch nicht veröffentlicht**: Der letzte bestätigte manuelle Upload ist v0.8.0 mit 200 erfolgreichen Tests und 27 Dateien im Run 42085118679. Die vorhandenen 27 Datei-Allowlist bleibt unverändert. Backend bleibt ausgeschlossen.
+- [x] **Auf Testseite:** Zeitplanung in v0.8.4 mit 244 erfolgreich geprüften Node-Tests und 34 hochgeladenen Dateien enthalten; das private Backend bleibt ausgeschlossen.
 
 ## Bereits implementiert (GitHub `main`)
 
@@ -64,7 +65,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei T
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; bei v0.6.1 19 Dateien, für die aktuelle v0.8.2 weiterhin 27 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; bei v0.6.1 19 Dateien, für die aktuelle v0.8.4 insgesamt 34 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
@@ -145,7 +146,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei T
 | Frontend | HTML, CSS, JavaScript-Module; derzeit kein React-Build und kein Node-Server |
 | Speicherung | Im jeweiligen Browser mit `localStorage`, Schema-Version 1 |
 | Deployment | `.github/workflows/deploy.yml` – manuell `workflow_dispatch` starten |
-| Live v0.8.0, nächste v0.8.2-Upload-Allowlist | 27 ausdrücklich freigegebene Dateien (alte 19 plus vier Doppel-Dateien und vier One-Point-Dateien: `site/opc.html`, `one-point.css`, `one-point-ui.js`, `one-point.js`; mit v0.8.0 hochgeladen; v0.8.2 noch nicht hochgeladen). Frühere Liste: `site/index.html`, `site/live.html`, `site/live-feed.php`, `site/favicon.png` sowie `site/assets/styles.css`, `storage.js`, `draw.js`, `results.js`, `special.js`, `finals.js`, `finals-ui.js`, `operations.js`, `operations-ui.js`, `app.js`, `live.css`, `live-model.js`, `live-ui.js`, `live.js`, `remote-live.js` |
+| Live v0.8.4; aktuelle manuelle FTPS-Allowlist | 34 ausdrücklich freigegebene Dateien (alte 19 plus vier Doppel-Dateien und vier One-Point-Dateien: `site/opc.html`, `one-point.css`, `one-point-ui.js`, `one-point.js`; mit v0.8.0 hochgeladen; v0.8.2 noch nicht hochgeladen). Frühere Liste: `site/index.html`, `site/live.html`, `site/live-feed.php`, `site/favicon.png` sowie `site/assets/styles.css`, `storage.js`, `draw.js`, `results.js`, `special.js`, `finals.js`, `finals-ui.js`, `operations.js`, `operations-ui.js`, `app.js`, `live.css`, `live-model.js`, `live-ui.js`, `live.js`, `remote-live.js` |
 | Zugangsdaten | Nur als GitHub-Actions-Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`; **keine Werte dokumentieren** |
 
 **Workflow-Wartung 2026-11-05:** `actions/checkout@v7`, `actions/setup-node@v7`, `ubuntu-24.04` (statt `ubuntu-latest`) und Checkout ohne persistierte Git-Zugangsdaten. Diese Änderung ist im GitHub-Code gespeichert; der Nutzer hat anschließend berichtet, dass keine Warnungen mehr angezeigt werden; ein Workflow-Log dieser Meldung wurde hier nicht erneut gesichtet. Der Upload bleibt manuell.
@@ -172,7 +173,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei T
 
 ## Nächster sinnvoller Entwicklungsschritt
 
-**Priorität 2026-11-06:** Neue Endzeitplanung und Doppel-Match-Machbarkeit v0.8.2 automatisiert in GitHub CI und anschließend im Browser mit 4/5 Matches/Team und verschiedenen Platzanzahlen prüfen. Der letzte erfolgreiche Upload war v0.8.0; v0.8.2 bleibt unveröffentlicht, bis die Tests und ausdrückliche Freigabe vorliegen. Danach die One Point Cup-Fernanzeige weiterentwickeln; Backend-Staging weiterhin zurückgestellt.
+**Priorität nach Veröffentlichung v0.8.4:** Roadmap-Admin zuerst selbst einrichten, Code sichern und vor Mitwirkenden einen persistenten privaten Server-Speicher konfigurieren. Roadmap-Sitzungen, Kommentare, Rollen und Zugänge auf ALL-INKL prüfen. Danach die neuen Zeitpläne (4/5 Doppelmatches/Team), den Turnierberater und die One-Point-Cup-Fernanzeige im Browser weiter prüfen; Backend-Staging zurückgestellt.
 
 ### Aufgeschobene Backend-/Staging-Aufgaben
 
