@@ -1,10 +1,10 @@
 // TENNILO v0.6.1 – datensparendes Live-Modell für lokale und entfernte Monitore.
 // Das Modell kann nach ausdrücklicher Freigabe auch als gefilterter\n// Snapshot an den PHP-Server übertragen werden.
 import {verifyRibbonDraw} from "./draw.js?v=061";
-import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=061";
-import {verifyRibbonFinals} from "./finals.js?v=061";
+import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=086";
+import {verifyRibbonFinals} from "./finals.js?v=086";
 import {plannedRound,clockFor} from "./operations.js?v=082";
-import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=082";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=086";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
