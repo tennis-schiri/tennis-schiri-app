@@ -5,7 +5,7 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
-## [0.8.4] – Gemeinsame Roadmap und Ideensammlung (nur GitHub; kein Upload)
+## [0.8.4 – Veröffentlichung bestätigt] – Gemeinsame Roadmap, Berater und Zeitplanung (2026-11-06)
 
 **2026-11-06:** Neue private Unterseite für den Projektfortschritt mit Kanban-Board, fünf klar definierten Status, Prioritäten, Kommentaren, Ideenannahme und Rollen für ausgewählte Mitwirkende. Themen und Entwicklungsstatus sind filter- und durchsuchbar; mobile Listen- und Boardansicht verfügbar. Der Einstieg ist von der TENNILO-Startseite erreichbar.
 
@@ -13,18 +13,19 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - **Rollen:** Bestehender Testseiten-Passwortschutz für alle Leser, persönlicher zusätzlicher Code für Ideen/Kommentare, separater Projektleitungs-Code für Statusänderungen und Einladungen. Codes werden nie im Klartext persistiert. CSRF, Session, HTTPS, Same-Origin, Eingabelimits, atomisches Schreiben.
 - **Hosting-Grenze:** Standardmäßig privater Server-Temp-Speicher, der vom Hosting gelöscht werden kann; dauerhafte, private Ablage muss vor regelmäßiger Nutzung eingerichtet werden. Erste Besucher mit Testseiten-Passwort können die Administration übernehmen, solange der Code noch nicht eingerichtet wurde – daher vor weiteren Einladungen zuerst selbst einrichten.
 - **Tests:** PHP-Lint, `tests/roadmap.php`, `tests/roadmap-ui.test.mjs`, 244/244 Node-Tests plus PHP-Lint und PHP-Modelldatentest in GitHub-Prüflauf 42188294342 erfolgreich. Zusätzlich ein HTTP-Integrationstest (simulierte Apache-HTTPS-Umgebung) für Bootstrap, Einladungen, Kommentare, Status und Widerruf. Echter Browser-/ALL-INKL-/Zweitgeräte-Test noch offen.
-- **Deployment:** Sechs neue Dateien für den bisherigen ausschließlich manuellen FTPS-Upload freigegeben (34 statt 28 Dateien); kein Upload automatisch ausgelöst. Online bleibt v0.8.0.
+- **Deployment:** Auf ausdrückliche Nutzerfreigabe wurde einmalig ein strikt auf den Release-Commit begrenzter GitHub-Actions-Upload ausgelöst. [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) hat **244/244 Node-Tests, PHP-Prüfungen und 34/34 erfolgreich übertragene App-Dateien** bestätigt. Die temporäre Auslösekonfiguration wurde danach entfernt; der normale Workflow ist wieder ausschließlich manuell. `.htaccess`, WordPress und das private Kontobackend wurden nicht übertragen.
+- **Noch offen:** Echter ALL-INKL-/Browser- und Zweitgerätetest, erste Projektleitungs-Aktivierung, persistent privater Roadmap-Speicher. Bis dahin sind Kommentare und Einladungscodes nicht dauerhaft garantiert.
 
-## [0.8.3] – Turnierberater mit Formatvergleich und direkter Neuanlage (nur GitHub; kein Upload)
+## [0.8.3] – Turnierberater (Bestandteil der veröffentlichten v0.8.4)
 
 **2026-11-06:** Neuer Startseiten-Einstieg **„Welches Turnier passt zu euch?“**. Eckdaten erfassen (Teilnehmende, Plätze, Datum, Start-/Endzeit, Wunsch für Partner und Turnierziel), drei Turnierformate auf Basis anonym simulierter echter Auslosungen und Zeitpläne vergleichen, ungeeignete Varianten begründen und einen Vorschlag direkt als neues Turnier mit vorausgefüllten Einstellungen übernehmen. Keine Modellspieler werden gespeichert.
 
 - **Architektur:** `site/assets/tournament-advisor.js` mit erweiterbarem `FORMAT_ADVISORS`-Register, realer Doppel-Matchanzahlprüfung (1–8), Schleifchen-Probeauslosung und One-Point-K.-o.-Zeitplanung inklusive Freilosen.
 - **Oberfläche:** Formatfinder auf der Startseite, responsive Formular- und Ergebniskarten, Begründung des Rankings, sichere Übernahme in das bestehende Browser-Datenmodell ohne Backend.
 - **Tests:** Neue Dateien `tests/tournament-advisor.test.mjs` und `tests/tournament-advisor-ui.test.mjs`; Fachmodelle für 4–66 Personen, knappe Zeitfenster, ungerade Doppelanzahl und Freilose isoliert ausgeführt. GitHub-CI und Browser-Praxistest dieser Version noch ausstehend.
-- **Release:** FTPS-Allowlist manuell von 27 auf 28 Dateien erweitert, kein Upload ausgelöst. Live bleibt v0.8.0.
+- **Release:** Seit dem erfolgreichen v0.8.4-Upload (42189703936) auf der geschützten Testseite; Praxistest noch offen.
 
-## [0.8.2] – Optionale Endzeit und Spielzeit-Automatik (nur GitHub; kein neuer Upload)
+## [0.8.2] – Optionale Endzeit und Spielzeit-Automatik (Bestandteil der veröffentlichten v0.8.4)
 
 **2026-11-06:** In allen drei bestehenden Turnierarten neue Eingaben für Startzeit und eine optionale Endzeit sowie zwei wählbare Planungsmodi: feste Spielzeiten oder **an Endzeit anpassen**. Die Automatik verteilt die verfügbare Dauer auf die tatsächlich ausgelosten Zeitblöcke mit Pausen, schlägt keine Matchanzahl stillschweigend herunter und meldet unmachbare Zeitfenster explizit. Frühere Turniere ohne Endzeit bleiben unverändert. Laufende Uhren behalten ihre beim Start festgelegte Dauer.
 
@@ -33,7 +34,7 @@ In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-R
 - **One Point Cup:** Einstellbare gleichzeitige Plätze und Zeitbedarf je Ein-Punkt-Match (1–15 Minuten), seriell geplante K.-o.-Stufen und mögliche Endzeit-Automatik.
 - **Kompatibilität:** `endTime`, `timeMode`, `reserveFinals`, `reservePlayoffs`, `opcMinutes` werden im bestehenden lokalen/JSON-Datenmodell gespeichert; alte Daten behalten feste Zeiten, JSON-Schema-Version 1.
 - **Tests:** Neues `tests/scheduling.test.mjs` mit 15 isoliert bestandenen Fachfällen sowie `tests/scheduling-ui.test.mjs` mit Formular-/Kompatibilitätsprüfungen. Vollständige GitHub-CI/Browser-Tests für diese Version noch offen.
-- **Release:** Die letzte bestätigte FTPS-Veröffentlichung bleibt **v0.8.0** vom 05.11.2026, nicht diese Änderung. Kein automatischer Upload.
+- **Release:** Seit v0.8.4 (2026-11-06) auf der geschützten Testseite; keine vollständige reale Browser-Prüfung.
 
 ## [0.8.0 – Veröffentlichung bestätigt] – Alle drei Turnierarten (2026-11-05)
 
