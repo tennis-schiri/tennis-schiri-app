@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "updated": "2026-11-06",
-  "source": "TENNILO-Projektstatus und Entwicklungskonzepte; Details erklären bestätigten Stand, Annahmen und offene Schritte.",
+  "source": "TENNILO Projektstatus und konkrete Google-Drive-Regelvorlagen. Technischer Stand und vorgeschlagene Formate sind getrennt.",
   "items": [
     {
       "id": "schleifchen",
@@ -162,8 +162,22 @@
       "benefit": "Viele Vereine kennen Teilnehmerzahl, Plätze und Zeitbudget, aber nicht das geeignete Turnierformat. Der Berater hilft beim Einstieg, ohne Fachwissen zur Auslosung vorauszusetzen.",
       "scope": "• Personen, Plätze, Datum, Zeitfenster und Turnierziel eingeben.\n• Wunsch nach festen, wechselnden oder keinen Doppelpartnern berücksichtigen.\n• Schleifchen, Doppel und One Point Cup nach Machbarkeit vergleichen.\n• Ergebnis mit Spielen, Blöcken, Endzeit und Begründung anzeigen.\n• Vorschlag mit passenden Einstellungen direkt anlegen.",
       "currentState": "Der Turnierberater wurde als v0.8.3 umgesetzt und in v0.8.4 hochgeladen. Es werden anonyme Modellteilnehmer verwendet; neu angelegte Turniere bleiben ohne echte Teilnehmer.",
-      "openPoints": "Einzelne Aussagen beruhen auf Modellannahmen, etwa ausgeglichenen Spielstärkengruppen. Der Berater muss mit realistischen Vereinsfällen getestet werden. Neue Turnierarten benötigen jeweils einen zusätzlichen Formatadapter.",
-      "doneWhen": "Die Empfehlungen sind transparent, schließen unmachbare Varianten aus und übernehmen nur passende Einstellungen – ohne Musterteilnehmer oder fiktive Zahlungen anzulegen."
+      "openPoints": "Einzelne Aussagen beruhen auf Modellannahmen, etwa ausgeglichenen Spielstärkengruppen. Der Berater muss mit realistischen Vereinsfällen getestet werden. Neue Turnierarten benötigen jeweils einen zusätzlichen Formatadapter. Neue Turnierarten aus Drive werden erst nach geprüften Fachregeln als Empfehlungen aufgenommen.",
+      "doneWhen": "Die Empfehlungen sind transparent, schließen unmachbare Varianten aus und übernehmen nur passende Einstellungen – ohne Musterteilnehmer oder fiktive Zahlungen anzulegen.",
+      "references": [
+        {
+          "title": "Rotationsformate – Rauf und Runter, Stopp, Doppel-Tausch",
+          "url": "https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view"
+        },
+        {
+          "title": "Jeder gegen jeden – Gruppen und Wertung",
+          "url": "https://drive.google.com/file/d/1XmxC21CPF7UBANC4laGFXjtlMDZE2eIA/view"
+        },
+        {
+          "title": "Teamwettbewerbe – u. a. 8 gegen 8 Doppel",
+          "url": "https://drive.google.com/file/d/1-VWCPpZ4xS5LyKBYXQrReqj9G_IIdtBE/view"
+        }
+      ]
     },
     {
       "id": "accounts",
@@ -250,7 +264,7 @@
       "origin": "official",
       "comments": [],
       "benefit": "Projektleitung und ausgewählte Testpersonen sollen transparent sehen, welche Funktionen vorhanden sind, was geplant ist und wo Rückmeldungen besonders hilfreich sind.",
-      "scope": "• Roadmap-Board mit Status, Priorität und Bereichen.\n• Such- und Filterfunktion sowie Detailkarten.\n• Gemeinsame Ideen und Kommentare.\n• Persönliche Einladungscodes für Mitwirkende und Projektleitung.\n• Ausführliche Ziele, Umfang, Entwicklungsstand und offene Punkte.",
+      "scope": "• Roadmap-Board mit Status, Priorität und Bereichen.\n• Such- und Filterfunktion sowie Detailkarten.\n• Gemeinsame Ideen und Kommentare.\n• Persönliche Einladungscodes für Mitwirkende und Projektleitung.\n• Ausführliche Ziele, Umfang, Entwicklungsstand und offene Punkte.\n• Offizielle Projektänderungen aus GitHub automatisch ins Board übernehmen, ohne manuelle Änderungen zu überschreiben.",
       "currentState": "Die Roadmap mit Kommentardienst wurde in v0.8.4 auf die passwortgeschützte Testseite hochgeladen. Automatisierte PHP- und JavaScript-Tests waren erfolgreich. Ein realer Browser-/ALL-INKL-Funktionstest ist noch offen.",
       "openPoints": "Der Admin-Zugang muss zuerst von der Projektleitung eingerichtet werden. Der derzeitige private temporäre Server-Speicher ist nicht dauerhaft garantiert; vor externen Einladungen ist eine persistente private Ablage nötig.",
       "doneWhen": "Eingeladene Personen können aktuelle Stände zuverlässig lesen und kommentieren; die Projektleitung kann Einträge, Status und Zugänge verwalten, ohne dass Beiträge bei einem Neustart verloren gehen."
@@ -289,7 +303,13 @@
       "scope": "• Spieler rotieren durch verschiedene Partner und Gegner.\n• Punkte werden pro Person statt nur pro Team gesammelt.\n• Runden, Plätze und Ergebniswertung transparent planen.\n• Passende Variante später im Turnierberater anbieten.",
       "currentState": "Noch eine Idee; für TENNILO wurde weder eine verbindliche Americano-Regelvariante ausgewählt noch eine entsprechende Auslosung programmiert.",
       "openPoints": "Zu klären sind Punkteformat, Spielerzahl, Pausenregel, Paarungsrotation, faire Wertung und Verhalten bei ungeraden Teilnehmerzahlen. Unterschiedliche Americano-Varianten dürfen nicht vermischt werden.",
-      "doneWhen": "Ein dokumentierter Regelsatz kann mit automatisierten Tests konfliktfrei ausgelost werden und liefert eine verständliche Einzelrangliste."
+      "doneWhen": "Ein dokumentierter Regelsatz kann mit automatisierten Tests konfliktfrei ausgelost werden und liefert eine verständliche Einzelrangliste.",
+      "references": [
+        {
+          "title": "Rotationsformate – Rauf und Runter, Stopp, Doppel-Tausch",
+          "url": "https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view"
+        }
+      ]
     },
     {
       "id": "mixed",
@@ -307,7 +327,13 @@
       "scope": "• Mixed mit festen oder wechselnden Doppelpaaren untersuchen.\n• Gruppenphasen mit anschließenden Platzierungs- oder K.-o.-Spielen.\n• Einfache Eingabe von Teams, Gruppen und Ergebnisregeln.\n• Spätere Einbindung in die Formatberatung.",
       "currentState": "Als Ideensammlung vorgemerkt. Die einzelnen Varianten und ihre genauen Regeln wurden noch nicht spezifiziert oder umgesetzt.",
       "openPoints": "Zu entscheiden sind zulässige Paarungen, Gruppengrößen, Setzregeln, Punktegleichheit, Qualifikationswege und benötigte Zeitreserven. Inklusive Anforderungen sollten explizit geklärt werden.",
-      "doneWhen": "Die gewählte Formatvariante ist eindeutig beschrieben, auslosbar und kann alle Gruppen- und Endrundenergebnisse fehlerfrei auswerten."
+      "doneWhen": "Die gewählte Formatvariante ist eindeutig beschrieben, auslosbar und kann alle Gruppen- und Endrundenergebnisse fehlerfrei auswerten.",
+      "references": [
+        {
+          "title": "Teamwettbewerbe – u. a. 8 gegen 8 Doppel",
+          "url": "https://drive.google.com/file/d/1-VWCPpZ4xS5LyKBYXQrReqj9G_IIdtBE/view"
+        }
+      ]
     },
     {
       "id": "series",
@@ -325,7 +351,201 @@
       "scope": "• Einzelne Veranstaltungen zu einer Serie zusammenfassen.\n• Einheitliche und nachvollziehbare Punktevergabe definieren.\n• Vereins-/Saisonrangliste mit Korrekturen.\n• Optional Gesamtwertung nach Kategorien oder Altersgruppen.",
       "currentState": "Bisher eine Idee. Derzeit verwaltet TENNILO einzelne Turniere; eine zentrale, dauerhafte Serienwertung wurde noch nicht erstellt.",
       "openPoints": "Zuerst werden stabile zentrale Turnierdaten und Identitäten benötigt. Danach sind Wertungsregeln, Gleichstände, Streichresultate, Abmeldungen und Datenschutz zu klären.",
-      "doneWhen": "Ergebnisse aus mehreren Turnieren fließen korrekt in eine nachvollziehbare Jahreswertung, auch wenn einzelne Turnierergebnisse nachträglich korrigiert werden."
+      "doneWhen": "Ergebnisse aus mehreren Turnieren fließen korrekt in eine nachvollziehbare Jahreswertung, auch wenn einzelne Turnierergebnisse nachträglich korrigiert werden.",
+      "references": [
+        {
+          "title": "Alle Turnierformate im Drive",
+          "url": "https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs"
+        }
+      ]
+    },
+    {
+      "id": "rr",
+      "title": "Jeder gegen jeden",
+      "description": "Alle Spieler einer Gruppe treten gegeneinander an.",
+      "category": "Turnierformate",
+      "benefit": "Gruppen mit garantierter Matchzahl und nachvollziehbarer Wertung.",
+      "scope": "Gruppen zu 3–6 Personen oder Teams; jeder gegen jeden; Tabelle und Tiebreaker; Zeit- und Punktspiele sowie spätere kurze Sätze.",
+      "currentState": "Eine PDF-Regelbeschreibung und Excel-Beispiele liegen in Drive; noch keine eigene TENNILO-Auslosung.",
+      "openPoints": "Gruppengröße, Platzbelegung und Gleichstandregeln aus Vorlagen präzisieren.",
+      "doneWhen": "Alle Gruppenspiele und Ranglisten werden korrekt erstellt, auch bei Gleichstand.",
+      "references": [
+        {
+          "title": "Jeder gegen jeden – Gruppen und Wertung",
+          "url": "https://drive.google.com/file/d/1XmxC21CPF7UBANC4laGFXjtlMDZE2eIA/view"
+        },
+        {
+          "title": "Anleitung zur Ergebniserfassung und Zählweisen",
+          "url": "https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "ko-consolation",
+      "title": "K.-o.-Turnier mit Trostrunde",
+      "description": "Ausscheidungssystem mit weiteren Spielen für früh ausgeschiedene Teilnehmer.",
+      "category": "Turnierformate",
+      "benefit": "Auch Verlierer der ersten Runde können zusätzliche Matches bestreiten.",
+      "scope": "Hauptfeld und Trostrunde auslosen; Freilose und Setzung prüfen; Ergebnisse und Folgepaarungen verfolgen.",
+      "currentState": "Im Drive liegt eine Vorlage K.-o.-System mit Trostrunde, aber diese ist noch nicht als TENNILO-Modus umgesetzt.",
+      "openPoints": "Einstieg in die Trostrunde, Zeitbedarf und Sonderfälle festlegen.",
+      "doneWhen": "Haupt- und Trosttableau bleiben auch nach Ergebnisänderungen konsistent.",
+      "references": [
+        {
+          "title": "Alle Turnierformate im Drive",
+          "url": "https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs"
+        },
+        {
+          "title": "Anleitung zur Ergebniserfassung und Zählweisen",
+          "url": "https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "updown",
+      "title": "Rauf und Runter",
+      "description": "Sieger steigen auf einen höheren Platz, Verlierer ab.",
+      "category": "Turnierformate",
+      "benefit": "Gesellige kurze Spiele mit häufig wechselnden Gegnern.",
+      "scope": "Startverteilung auf Plätze; nach Matchgewinn auf-/absteigen; Warteschlange und Platzbelegung; Punkt- oder Zeitspiel.",
+      "currentState": "In der Drive-Rotationsvorlage mit Tiebreak bis 7 oder 10 Punkten beschrieben; bisher nicht programmiert.",
+      "openPoints": "Regeln für Platz 1, letzten Platz, Wartende und ungerade Teamzahl klären.",
+      "doneWhen": "Jede Runde erzeugt nachvollziehbare, konfliktfreie Paarungen.",
+      "references": [
+        {
+          "title": "Rotationsformate – Rauf und Runter, Stopp, Doppel-Tausch",
+          "url": "https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "stop",
+      "title": "STOPP-Punkte-Challenge",
+      "description": "Alle Partien enden, sobald die erste das vorgegebene Punktziel erreicht.",
+      "category": "Turnierformate",
+      "benefit": "Dynamisches Eventformat mit einem gemeinsamen Stoppsignal.",
+      "scope": "Alle Partien synchron beginnen; erstes Match erreicht z. B. 5 Punkte; übrige Ergebnisse einfrieren; Gleichstände entscheiden.",
+      "currentState": "Als eigenes Rotations-/Mannschaftsformat im Drive beschrieben, nicht in TENNILO implementiert.",
+      "openPoints": "Synchronisation über mehrere Plätze und Gleichstand nach Stoppsignal klären.",
+      "doneWhen": "Alle Ergebnisse beziehen sich nachweislich auf denselben Stoppzeitpunkt.",
+      "references": [
+        {
+          "title": "Rotationsformate – Rauf und Runter, Stopp, Doppel-Tausch",
+          "url": "https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "eight-v-eight",
+      "title": "8 gegen 8 Mannschaftsturnier",
+      "description": "Zwei Mannschaften spielen rotierende Doppel gegeneinander.",
+      "category": "Turnierformate",
+      "benefit": "Gemeinsame Teamwertung für Vereinsfeste und Breitensport.",
+      "scope": "Zwei Teams bilden, feste Doppelpaare anlegen, nach Runden rotieren, Mannschaftspunkte erfassen.",
+      "currentState": "Die Drive-Vorlage nutzt Matches bis 5 Punkte plus eine besondere Wertung nach Gegnernummern; noch nicht programmiert.",
+      "openPoints": "Spezielle Wertung darf nicht mit normalen erzielten Punkten verwechselt werden; Ersatzspieler klären.",
+      "doneWhen": "Paarungen, Rotation und Teamwertung stimmen mit dem ausgewählten Regelsatz überein.",
+      "references": [
+        {
+          "title": "Teamwettbewerbe – u. a. 8 gegen 8 Doppel",
+          "url": "https://drive.google.com/file/d/1-VWCPpZ4xS5LyKBYXQrReqj9G_IIdtBE/view"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "ladder",
+      "title": "Ranglisten-/Leitertennis",
+      "description": "Laufende Rangliste mit freien Herausforderungen und Platzwechseln.",
+      "category": "Turnierformate",
+      "benefit": "Regelmäßiges Vereinsspiel unabhängig von einem einzigen Turniertag.",
+      "scope": "Herausforderungsregeln, Rangstufen, Termine und Ergebnisbuchung definieren.",
+      "currentState": "Leiter-/Herausforderungsformate sind in Drive vorhanden; noch nicht für TENNILO spezifiziert.",
+      "openPoints": "Verfall, parallele Herausforderungen, Konflikte und Reihung definieren.",
+      "doneWhen": "Änderungen der Rangliste sind transparent und können korrekt rückgängig gemacht werden.",
+      "references": [
+        {
+          "title": "Herausforderungsformate – Leitersysteme",
+          "url": "https://drive.google.com/file/d/1Lz6KQfyALjRKbHPPokYypoOqHkaFxdOB/view"
+        },
+        {
+          "title": "Alle Turnierformate im Drive",
+          "url": "https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs"
+        }
+      ],
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Drive-Vorlage / Idee",
+      "nextStep": "Vorlage prüfen, Regelsatz festlegen und Testfälle definieren.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": []
+    },
+    {
+      "id": "score-modes",
+      "title": "Matches auf Zeit oder auf Punkte",
+      "description": "Einstellbare Matchdauer oder Punktziel, optional mit zwei Punkten Vorsprung.",
+      "category": "Turnierbetrieb",
+      "status": "test",
+      "priority": "high",
+      "milestone": "v0.8.6 · GitHub",
+      "nextStep": "CI und Praxisprüfung der beiden Ergebnisarten; erst danach App-Upload.",
+      "updatedAt": "2026-11-06T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Vereine können dasselbe Turnierformat passend zur Altersgruppe und zum Zeitbudget austragen.",
+      "scope": "• Zeitspiel mit fester Spieldauer und anschließend erfasstem Sieger.\n• Punktspiel bis zu einem Zielwert von 1–99 Punkten, auf Wunsch zwei Punkte Vorsprung.\n• Sieger automatisch anhand des Punktstands.\n• Für Schleifchen und feste Doppel inklusive Endrunden; One Point Cup bleibt ein Punkt.\n• Turnierberater übernimmt die gewählte Zählweise.",
+      "currentState": "Punktspiel-Logik und Eingaben liegen in der GitHub-Entwicklung vor, noch nicht auf dem Testserver. Die bestehenden Zeit-/Game-Ergebnisse bleiben kompatibel.",
+      "openPoints": "Browser-Tests, klare Hinweise auf nur geschätzte Matchdauer bei Punktspielen und später weitere Satz-/Tiebreakvarianten.",
+      "doneWhen": "Beide Matcharten sind mit korrekter Siegerberechnung benutzbar, ohne bestehende Ergebnisdaten zu verändern.",
+      "references": [
+        {
+          "title": "Rotationsformate – Rauf und Runter, Stopp, Doppel-Tausch",
+          "url": "https://drive.google.com/file/d/1ZkN6bCLMCNusMbUNwpbUxVy_OPtfgJ5e/view"
+        },
+        {
+          "title": "Teamwettbewerbe – u. a. 8 gegen 8 Doppel",
+          "url": "https://drive.google.com/file/d/1-VWCPpZ4xS5LyKBYXQrReqj9G_IIdtBE/view"
+        },
+        {
+          "title": "Anleitung zur Ergebniserfassung und Zählweisen",
+          "url": "https://drive.google.com/file/d/1u4mYHajdIpSyrITw9YDW-kwsWJrTwq0w/view"
+        }
+      ]
     }
   ]
 }
