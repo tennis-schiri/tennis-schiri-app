@@ -1,22 +1,33 @@
 # TENNILO – Projektstatus
 
-**Stand:** 2026-11-05  
-**Neue unveröffentlichte Bausteine:** Doppelturnier v0.7.0 unter `site/doppel.html`, One Point Cup v0.8.0 unter `site/opc.html` und die private B0.2 Konto-/Vereinsoberfläche unter `backend/staging-ui/`. Keine Veröffentlichung der neuen Version und keine LIVE-Konten.  
+**Stand:** 2026-11-06  
+**Live bestätigt:** TENNILO v0.8.0 mit Schleifchen, Doppel und One Point Cup wurde am **2026-11-05** erfolgreich hochgeladen. **Neue, noch nicht veröffentlichte Änderung:** v0.8.2 Zeitplanung mit optionaler Endzeit und Machbarkeitsprüfung. Die private B0.2-Konto-/Vereinsoberfläche unter `backend/staging-ui/` bleibt unveröffentlicht.  
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **0.8.0 (dritte Turnierart One Point Cup ergänzt, noch nicht veröffentlicht)**  
-**FTPS-Upload zuletzt bestätigt:** **v0.6.1** – [GitHub Actions Run 42044203175](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42044203175) vom **2026-11-05** erfolgreich; alle App- und Live-Dateien im manuellen FTPS-Job hochgeladen. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
+**Version im GitHub-Code:** **0.8.2 (optionale Endzeit + Zeitautomatik für drei Turnierarten, noch nicht veröffentlicht)**  
+**FTPS-Upload zuletzt bestätigt:** **v0.8.0** – [GitHub Actions Run 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679) vom **2026-11-05** erfolgreich; **200/200 Tests**, PHP-Syntax, 27 App-Dateien hochgeladen. Die Zeitplanungsänderung v0.8.2 liegt ausschließlich in GitHub. **Ein unabhängiger Smart-TV-/Zweitgeräte-Funktionstest auf ALL-INKL ist noch nicht bestätigt.** Das neue Backend B0.1/B0.2 wird **nicht** über FTPS veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
 
 ## Produktidee
 
-Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Schleifchenturnier v0.6.1 ist veröffentlicht; Doppelturnier v0.7.0 und One Point Cup v0.8.0 liegen als unveröffentlichte Testversionen im GitHub-Code. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
+Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Alle drei Turnierarten – Schleifchen, feste Doppel und One Point Cup – sind in v0.8.0 auf dem passwortgeschützten Webspace. Neue Zeitplanungsfunktionen werden als v0.8.2 lokal in GitHub weiterentwickelt, noch nicht hochgeladen. Ziel: Turnier anlegen, Teilnehmer erfassen, Auslosung erstellen, Ergebnisse eingeben und Tabellen live darstellen. Die App soll auf Smartphone, Tablet und Computer nutzbar sein.
 
 **Claim:** „Weniger Orga. Mehr Tennis.“  
 **Aktuelle URL:** https://app.tennis-schiri.de/index.html  
 **Arbeitsname:** TENNILO; UI und Repository tragen derzeit noch überwiegend „Tennis-Schiri/Turniermanager“. Eine komplette Umbenennung wurde **nicht** beauftragt.
+
+
+## Endzeit- und Machbarkeitsplanung v0.8.2 (nur GitHub, 2026-11-06)
+
+- [x] Gemeinsames Datenmodell für alle drei Turnierarten: verpflichtende Startzeit, **optionale Endzeit**, manuelle `fixed`-Zeiten oder bewusst wählbares `fit`-Verfahren. Bestehende Turniere und JSON-Sicherungen bleiben Schema-Version 1 und erhalten standardmäßig `endTime: null, timeMode: fixed`.
+- [x] `site/assets/operations.js`: deterministische Minutenverteilung zwischen Start und Endzeit über tatsächliche Spielblöcke plus Wechselpausen, maximal 120 Min. und minimal 10 Min. pro Doppel-/Schleifchenblock; zu knappe Zielzeiten führen zu Fehler statt verlorenen Spielen. Fixer Modus zeigt Überschreitungen als Warnung, ohne Spielzeit zu verändern. Übernacht-Endzeiten (+1 Tag) möglich. Schon gestartete Rundenuhren behalten ihre bei Start festgehaltene Dauer.
+- [x] Doppel: **Machbarkeitsliste 1–8 Matches/Team** mit echter Probeauslosung und tatsächlicher Platz-/Zeitblockanzahl; ungerade Teamzahl erlaubt nur gerade Matchzahlen. Falls aktiviert, werden Viertelfinale/Halbfinale/Finale und Platz 3 für die Top 8 als zusätzliche Zeitblöcke mit eingeplant. Testfälle 8 Teams/4 oder 5 Begegnungen sowie 7 Teams/5 Begegnungen geprüft.
+- [x] Schleifchen: nach Auslosung Zeitblöcke automatisch bis zur Endzeit anpassen; mögliche K.-o.-Endrunde kann ausdrücklich im Zeitbudget reserviert werden.
+- [x] One Point Cup: konfigurierbare Tennisplätze und Zeitbedarf 1–15 Minuten pro Ein-Punkt-Begegnungsblock; nach K.-o.-Runde seriell und innerhalb einer Runde parallel geplante Courts; Endzeitmodus rechnet die gesamte Zahl tatsächlich ausgetragener Duelle einschließlich Freilos-Vermeidung.
+- [x] Neues `tests/scheduling.test.mjs` mit 15 isoliert in JavaScript erfolgreich ausgeführten Fällen und `tests/scheduling-ui.test.mjs` als Formular-/Verlinkungsprüfung ergänzt. Syntax der sieben veränderten Kernmodule geprüft. **Vollständiger GitHub-CI-/Browser-Test für v0.8.2 noch nicht bestätigt.**
+- [ ] **Noch nicht veröffentlicht**: Der letzte bestätigte manuelle Upload ist v0.8.0 mit 200 erfolgreichen Tests und 27 Dateien im Run 42085118679. Die vorhandenen 27 Datei-Allowlist bleibt unverändert. Backend bleibt ausgeschlossen.
 
 ## Bereits implementiert (GitHub `main`)
 
@@ -32,7 +43,7 @@ Browserbasierter Turniermanager für Tennisvereine und Veranstalter. Schleifchen
 - [x] Dashboard mit Teilnehmerzahlen, Platzanzahl und vorbereitenden Hinweisen
 - [x] JSON-Sicherung herunterladen und wieder einlesen
 - [x] Lokale Browser-Speicherung (`localStorage`) als vorläufige Datenhaltung
-- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; bei v0.6.1 19 Dateien, für die unveröffentlichte v0.8.0 nun 27 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
+- [x] Manuell auslösbarer FTPS-Deploy-Workflow in GitHub Actions; bei v0.6.1 19 Dateien, für die aktuelle v0.8.2 weiterhin 27 freigegebene Dateien inklusive PHP-Live-Endpunkt. PHP-Syntax und alle Tests vor Upload; zusätzlich separater automatischer CI-Prüfworkflow **ohne Upload**
 - [x] Auslosungsbereich mit normalen Vorrunden (3 oder 4 Wertungsspiele je Spieler)
 - [x] Doppelteam immer 1 Stark + 1 Schwächer; Platz-/Rundenprüfung und Spielplan-Speicherung
 - [x] Nötige Auffüllrunde erkennen und erst nach vollständigen regulären Ergebnissen mit 0-/1-Schleifchen-Kandidaten auslosen
