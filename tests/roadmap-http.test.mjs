@@ -89,12 +89,21 @@ test("Roadmap HTTP: nur eingeladene Personen dürfen schreiben, Admin verwaltet 
     assert.equal(comment.status,200);
 
     await pause(2100); // Two writes from the same admin session are rate-limited.
-    const updated=await request("update",{itemId,priority:"high",status:"test"},
+    const updated=await request("update",{itemId,priority:"high",status:"test",
+      benefit:"Hilft Vereinen bei der Durchführung",
+      scope:"• Teilnehmer erfassen\\n• Paarungen auslosen",
+      currentState:"Im Probebetrieb",
+      openPoints:"Browser-Tests notwendig",
+      doneWhen:"Praxischeck mit zwei Geräten erfolgreich"},
       admin.cookie,admin.data.session.csrf);
     assert.equal(updated.status,200);
     const check=await get(admin.cookie);
     const item=check.data.items.find(x=>x.id===itemId);
     assert.equal(item.status,"test");
+    assert.equal(item.benefit,"Hilft Vereinen bei der Durchführung");
+    assert.equal(item.openPoints,"Browser-Tests notwendig");
+    assert.ok(item.scope.includes("Paarungen auslosen"));
+    assert.ok(first.data.items.find(x=>x.id===itemId).doneWhen?.length>20,"Seed-Details auch vor Update für Gäste vorhanden");
     assert.equal(item.comments.length,1);
     assert.equal(item.comments[0].author,"Person A");
     assert.equal(check.data.members.length,1);
@@ -111,6 +120,7 @@ test("Roadmap HTTP: nur eingeladene Personen dürfen schreiben, Admin verwaltet 
 
     const stored=JSON.parse(await readFile(join(dir,"state.json"),"utf8"));
     assert.equal(stored.items.find(x=>x.id===itemId).comments.length,1);
+    assert.equal(stored.items.find(x=>x.id===itemId).benefit,"Hilft Vereinen bei der Durchführung");
     assert.equal(JSON.stringify(stored).includes(setup.data.ownerCode),false);
     assert.equal(JSON.stringify(stored).includes(invite.data.inviteCode),false);
   }finally{
