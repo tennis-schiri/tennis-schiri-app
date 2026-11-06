@@ -5,6 +5,12 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.8.5] – Ausführliche Roadmap-Details (nur GitHub)
+
+**Roadmap-Detailausbau v0.8.5 (noch nicht veröffentlicht):** In GitHub wurden alle 18 bestehenden Einträge um Ziel und Nutzen, Funktionsumfang, Umsetzungsstand, offene Punkte und klare Fertig-Kriterien ergänzt. Die Übersicht bleibt kurz; die Details sind nur im geöffneten Eintrag sichtbar und von der Projektleitung bearbeitbar. Altbestand wird ohne Überschreiben von Kommentaren, Rollen oder redaktionellen Statusänderungen ergänzt. [CI 42192449800](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42192449800): **245/245 Node-Tests** plus PHP- und MariaDB-Prüfungen erfolgreich. Die letzte Testseiten-Veröffentlichung bleibt **v0.8.4**. Der neue Detailausbau wurde noch nicht hochgeladen.
+
+In fünf neuen, getrennt editierbaren Feldern sind alle 18 Roadmap-Punkte fachlich ausführlich beschrieben. Neue Ideen bleiben zunächst mit optional leeren Detailfeldern bestehen. Ausschließlich die Projektleitung ändert Details; serverseitige Validierung und HTML-Maskierung verhindern unkontrollierte Inhalte. Die seed-basierte Ergänzung betrifft ausschließlich noch fehlende Felder und erhält bestehende Änderungen, Status, Kommentare und Rollen. Die neue Ansicht nutzt ausschließlich vorhandene PHP- und JS-Dateien aus der FTPS-Allowlist. Kein Upload ausgelöst.
+
 ## [0.8.4 – Veröffentlichung bestätigt] – Gemeinsame Roadmap, Berater und Zeitplanung (2026-11-06)
 
 **2026-11-06:** Neue private Unterseite für den Projektfortschritt mit Kanban-Board, fünf klar definierten Status, Prioritäten, Kommentaren, Ideenannahme und Rollen für ausgewählte Mitwirkende. Themen und Entwicklungsstatus sind filter- und durchsuchbar; mobile Listen- und Boardansicht verfügbar. Der Einstieg ist von der TENNILO-Startseite erreichbar.
