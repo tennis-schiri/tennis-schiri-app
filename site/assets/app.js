@@ -1,4 +1,5 @@
 import { BrowserTournamentStore, todayLocal } from "./storage.js?v=082";
+import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {normalizeAdvisorInput,recommendTournamentFormats,advisorTournamentValues} from "./tournament-advisor.js?v=083";
 import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=061";
 import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=061";
@@ -454,7 +455,7 @@ function drawPreview(t) {
       ${renderClockToolbar(t,index,{icon})}
       <div class="live-round-choice"><button type="button" class="btn ${t.liveDisplay?.mode==="round"&&t.liveDisplay.index===index?"primary":"subtle"} small" data-action="live-round" data-round="${index}">${icon("monitor")} ${t.liveDisplay?.mode==="round"&&t.liveDisplay.index===index?"Auf Live-Monitor ausgewählt":"Diese Runde live zeigen"}</button></div>
       <div class="draw-match-list">${round.matches.map((m,matchIndex)=>{
-        const result=normalizeRibbonResult(m.result);
+        const result=normalizeRibbonResult(m.result,t);
         const finished=result.winner!==null;
         const editing=finished && editingResult?.tournamentId===t.id &&
           editingResult.round===index && editingResult.match===matchIndex;
@@ -466,7 +467,7 @@ function drawPreview(t) {
             <strong>${displaySlot(m,0)} <em>+</em> ${displaySlot(m,1)}</strong>
           </div>
           <div class="draw-versus ${finished?"draw-versus-final":""}" ${finished?`aria-label="Ergebnis: ${resultLabel}, Sieger Team ${result.winner}"`:""}>
-            ${finished ? result.score1!==null ? `<strong>${result.score1}<span>:</span>${result.score2}</strong><small>GAMES</small>`
+            ${finished ? result.score1!==null ? `<strong>${result.score1}<span>:</span>${result.score2}</strong><small>${scoringRules(t).mode==="points"?"PUNKTE":"GAMES"}</small>`
              : `<strong class="draw-no-score">${icon("check")}</strong><small>SIEG</small>` : "VS"}
           </div>
           <div class="draw-team ${finished?(result.winner===2?"is-winner":"is-loser"):""}${m.fillerMask?.some(Boolean)?" has-filler":""}">
@@ -477,15 +478,15 @@ function drawPreview(t) {
             <button type="button" class="draw-edit-btn" data-action="draw-edit-result" data-round="${index}" data-match="${matchIndex}" ${saved.finals || saved.specialRound && index<saved.rounds.length ? 'disabled title="Bitte zuerst die Auffüllrunde zurücknehmen."' : ""} aria-label="Ergebnis in Runde ${index+1} auf ${escapeHtml(courtName(t,m.court))} ändern">${icon("edit")} Ergebnis ändern</button>
           </div>` : ""}
           ${!finished || editing ? `<form class="draw-result-form" data-form="draw-result" data-round="${index}" data-match="${matchIndex}">
-            <label class="draw-score-label">Games Team 1<input name="score1" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score1??""}"></label>
-            <label class="draw-score-label">Games Team 2<input name="score2" type="number" min="0" max="99" step="1" inputmode="numeric" placeholder="–" value="${result.score2??""}"></label>
-            <label class="draw-winner-label">Siegerteam
+            <label class="draw-score-label">${scoringRules(t).mode==="points"?"Punkte":"Games"} Team 1<input name="score1" type="number" min="0" max="${scoringRules(t).mode==="points"?999:99}" step="1" inputmode="numeric" ${scoringRules(t).mode==="points"?"required":""} placeholder="–" value="${result.score1??""}"></label>
+            <label class="draw-score-label">${scoringRules(t).mode==="points"?"Punkte":"Games"} Team 2<input name="score2" type="number" min="0" max="${scoringRules(t).mode==="points"?999:99}" step="1" inputmode="numeric" ${scoringRules(t).mode==="points"?"required":""} placeholder="–" value="${result.score2??""}"></label>
+            ${scoringRules(t).mode==="points"?`<p class="field-hint">Erster bis ${scoringRules(t).target} Punkte${scoringRules(t).winByTwo?", mit 2 Punkten Vorsprung":""}. Sieger wird automatisch ermittelt.</p>`:`<label class="draw-winner-label">Siegerteam
               <select name="winner" aria-label="Siegerteam, Runde ${index+1}, Platz ${escapeHtml(courtName(t,m.court))}">
                 <option value="" ${result.winner===null?"selected":""}>Noch offen</option>
                 <option value="1" ${result.winner===1?"selected":""}>Team 1</option>
                 <option value="2" ${result.winner===2?"selected":""}>Team 2</option>
               </select>
-            </label>
+            </label>`}
             <div class="draw-result-actions">
               <button type="submit" class="btn subtle small">Ergebnis speichern</button>
               ${editing ? `<button type="button" class="btn ghost small" data-action="draw-cancel-edit">Abbrechen</button>` : ""}
@@ -556,6 +557,7 @@ function settingsFields(t = {}) {
       <option value="fixed" ${t.timeMode!=="fit"?"selected":""}>Feste Spielzeit und Pausen beibehalten</option>
       <option value="fit" ${t.timeMode==="fit"?"selected":""}>Spielzeit an die Endzeit anpassen</option>
     </select><span class="field-hint">Nach der Auslosung werden die möglichen Spielminuten pro Runde errechnet. Unter 10 Minuten je Spielblock wird die Planung abgelehnt.</span></label>
+    ${scoreModeFields(t,escapeHtml)}
     <label class="field wide checkbox-field"><input type="checkbox" name="reserveFinals" ${t.reserveFinals?"checked":""}> Zeitblöcke für eine mögliche K.-o.-Endrunde mitplanen</label>
     <label class="field">Spieldauer<input name="duration" type="number" min="10" max="120" required value="${t.duration ?? 20}"></label>
     <label class="field">Wechsel / Pause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="${t.breakMinutes ?? 10}"></label>
@@ -646,10 +648,12 @@ function readSettings(form) {
   const existing = form.dataset.form === "settings" ? store.active()?.courts : null;
   const courts = existing?.length === courtCount
     ? [...existing] : Array.from({length: courtCount}, (_, i) => i + 1);
+  const score=readScoringFields(form);
   return {
+    ...score,
     name: String(data.get("name") ?? "").trim(), date: String(data.get("date") ?? ""),
     startTime: String(data.get("startTime") ?? ""),endTime:String(data.get("endTime")||"")||null,
-    timeMode:data.get("timeMode")==="fit"?"fit":"fixed",reserveFinals:data.has("reserveFinals"),duration: Number(data.get("duration")),
+    timeMode:score.matchMode==="points"?"fixed":data.get("timeMode")==="fit"?"fit":"fixed",reserveFinals:data.has("reserveFinals"),duration: Number(data.get("duration")),
     breakMinutes: Number(data.get("breakMinutes")), rounds: Number(data.get("rounds")), entryFeeCents:euroCents(data.get("entryFee")), courts
   };
 }
@@ -1001,7 +1005,7 @@ document.addEventListener("submit", event => {
     });
     store.editTournament(t.id,{draw});
     editingFinal=null;view="finals";render();
-    flash(data.get("winner")?"Endrunden-Ergebnis gespeichert.":"Endrunden-Ergebnis zurückgesetzt.");
+    flash(data.get("winner")||String(data.get("score1")||"").trim()?"Endrunden-Ergebnis gespeichert.":"Endrunden-Ergebnis zurückgesetzt.");
   });
   if(kind === "draw-result") return run(() => {
     const t=store.active();
@@ -1015,7 +1019,7 @@ document.addEventListener("submit", event => {
     drawOpenRound=roundIndex;
     editingResult=null;
     render();
-    flash(data.get("winner") ? "Ergebnis und Schleifen gespeichert." : "Ergebnis zurückgesetzt.");
+    flash(data.get("winner")||String(data.get("score1")||"").trim() ? "Ergebnis und Schleifen gespeichert." : "Ergebnis zurückgesetzt.");
   });
   run(() => {
     if (kind === "create" || kind === "settings") {
@@ -1024,6 +1028,7 @@ document.addEventListener("submit", event => {
       const preview={...(kind==="create"?{}:store.active()),...values};
       timeWindow(preview);
       if(preview.timeMode==="fit"&&!preview.endTime)throw Error("Für die automatische Zeitplanung bitte eine Endzeit eintragen.");
+      if(kind==="settings")assertScoringChangeAllowed(store.active(),preview);
       if(kind==="settings"&&store.active()?.draw)tournamentSchedule(preview);
       if (kind === "create") store.create(values);
       else store.editTournament(store.active().id, values);
