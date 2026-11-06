@@ -323,3 +323,16 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .remote-live-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .remote-live-actions .btn{text-decoration:none}
 @media(max-width:750px){.remote-live-panel{padding:13px;gap:12px}.remote-live-actions{width:100%}.remote-live-actions .btn{flex:1;white-space:normal;font-size:11px;text-align:center}}
+
+
+/* Endzeitplanung – alle drei Turnierarten, nur in der privaten nächsten Version. */
+.schedule-note{display:block;padding:13px 15px;margin:12px 0 18px;border-radius:10px;border:1px solid #c9e0ca;background:#edf8e9;color:#275a4a;font-size:13px;line-height:1.65}
+.schedule-note strong{font-weight:900}
+.schedule-note.schedule-warning{background:#fff5e8;color:#815328;border-color:#eccb9f}
+.schedule-option-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:9px;margin:14px 0}
+.schedule-option{display:flex;flex-direction:column;gap:5px;border:1px solid #dae1d8;border-radius:10px;padding:11px 12px;font-size:12px;line-height:1.5}
+.schedule-option strong{font-size:13px}
+.schedule-option span{color:#506e66}
+.schedule-option-ok{background:#eff8ec;border-color:#bbdcc0;color:#215e43}
+.schedule-option-no{background:#fcf3ed;border-color:#e9d6c7;color:#7b3f2c}
+@media(max-width:620px){.schedule-option-list{grid-template-columns:1fr}}
