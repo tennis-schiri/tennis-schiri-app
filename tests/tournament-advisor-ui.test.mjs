@@ -35,7 +35,8 @@ test("Berater wird responsiv gestaltet und erst nach manueller Freigabe hochgela
   assert.match(css,/@media\(max-width:700px\).*\.advisor-fields/s);
   assert.match(html,/app\.js\?v=084/);
   assert.match(html,/styles\.css\?v=083/);
-  assert.equal((deploy.match(/site\/assets\/tournament-advisor\.js/g)||[]).length,2);
+  const manualDeploy=deploy.split("\n  deploy:\n")[1]?.split("\n  deploy_once:\n")[0]||"";
+  assert.equal((manualDeploy.match(/site\/assets\/tournament-advisor\.js/g)||[]).length,2);
   assert.match(deploy,/if: github\.event_name == 'workflow_dispatch'/);
   assert.doesNotMatch(deploy,/backend\/public\/index\.php|backend\/src\//);
 });
