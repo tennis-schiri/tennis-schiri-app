@@ -1,4 +1,5 @@
 import { BrowserTournamentStore, todayLocal } from "./storage.js?v=082";
+import {normalizeAdvisorInput,recommendTournamentFormats,advisorTournamentValues} from "./tournament-advisor.js?v=083";
 import { normalizeRibbonResult, updateRibbonMatchResult, ribbonStandings } from "./results.js?v=061";
 import { generateRibbonSpecialRound, resetRibbonSpecialRound } from "./special.js?v=061";
 import { analyzeRibbonDraw, drawSignature, generateRibbonDraw, verifyRibbonDraw } from "./draw.js?v=061";
@@ -28,6 +29,8 @@ const dialogRoot = document.getElementById("dialog-root");
 const noticeRoot = document.getElementById("toast-region");
 let view = "home";
 let search = "";
+let advisorState={participants:24,courtCount:4,date:todayLocal(),startTime:"10:00",endTime:"14:00",goal:"many",teamStyle:"any"};
+let advisorResults=null;
 let drawOpenRound = 0;
 let editingResult = null; // Nur die aktuell geöffnete Bearbeitung, nicht als Turnierdaten speichern.
 let editingFinal = null; // Korrekturformular einer Endrunden-Begegnung.
@@ -125,6 +128,7 @@ function intro() {
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
       <button class="btn ghost" data-action="demo-filler">Auffüllrunde testen</button>
     </div>
+    <section class="advisor-invite" aria-label="Turnierberater"><div><div class="eyebrow">DER TENNILO TURNIERBERATER</div><h2>Welches Turnier passt zu euch?</h2><p>Personen, Plätze, Zeitfenster und Ziel eingeben. Machbarkeit und Formate vergleichen.</p></div><button type="button" class="btn primary" data-action="advisor-open">Turnierberater starten ${icon("arrow")}</button></section>
     ${savedTournaments}
     <div class="format-grid">
       <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.8.2</span></article>
@@ -133,6 +137,61 @@ function intro() {
     </div>
     ${browserNotice()}
   </main>`;
+}
+
+
+function advisorPage() {
+  const a=advisorState;
+  const selected=advisorResults?.find(item=>item.feasible);
+  const cards=advisorResults?advisorResults.map(item=>{
+    const e=item.estimate;
+    return '<article class="advisor-result'+(item.id===selected?.id?' recommended':'')+'">'+
+      '<div class="advisor-result-top"><span class="eyebrow">'+escapeHtml(item.title)+'</span>'+
+      (item.id===selected?.id?'<span class="advisor-best">Beste Übereinstimmung</span>':
+        item.feasible?'<span class="advisor-status">Weitere Option</span>':
+          '<span class="advisor-status not-feasible">Hier nicht machbar</span>')+'</div>'+
+      '<h3>'+escapeHtml(item.title)+'</h3><p class="advisor-description">'+escapeHtml(item.description)+'</p>'+
+      (item.feasible?
+        '<div class="advisor-numbers"><div><small>Begegnungen</small><strong>'+e.matches+'</strong></div>'+
+        '<div><small>Spielblöcke</small><strong>'+e.blocks+'</strong></div>'+
+        '<div><small>Geplantes Ende</small><strong>'+escapeHtml(e.plannedEnd)+' Uhr</strong></div></div>'+
+        '<p class="advisor-matches">'+escapeHtml(e.perPerson)+'</p>'+
+        '<p class="advisor-detail">'+escapeHtml(e.detail)+'</p>'+
+        '<p class="advisor-note">'+escapeHtml(e.note)+'</p>'+
+        '<button class="btn primary" type="button" data-action="advisor-create" data-format="'+escapeHtml(item.id)+'">Diesen Vorschlag als Turnier anlegen '+icon("arrow")+'</button>':
+        '<p class="advisor-unavailable">'+escapeHtml(item.reason)+'</p>')+
+      '</article>';
+  }).join(""):'';
+  const valid=advisorResults?.filter(item=>item.feasible).length||0;
+  return '<main class="advisor-shell"><div class="advisor-heading"><div>'+
+    '<div class="eyebrow">TENNILO / PLANUNGSASSISTENT</div>'+
+    '<h1>Das passende Turnier. <em>Für euren Tag.</em></h1>'+
+    '<p>Wir vergleichen die vorhandenen Turnierarten anhand von Teilnehmerzahl, Platzkapazität, Zeit und eurem Ziel. Die Berechnung erfolgt mit den echten Auslosungs- und Zeitmodellen.</p></div>'+
+    '<button type="button" class="btn ghost" data-action="home">Zur Startseite</button></div>'+
+    '<section class="advisor-form-panel"><div class="advisor-panel-heading"><h2>Eckdaten eingeben</h2><span>Schritt 1 / 2</span></div>'+
+    '<form data-form="advisor"><div class="advisor-fields">'+
+    '<label class="field">Teilnehmende insgesamt<input type="number" name="participants" min="4" max="128" step="1" required value="'+a.participants+'"></label>'+
+    '<label class="field">Verfügbare Tennisplätze<input type="number" name="courtCount" min="1" max="24" step="1" required value="'+a.courtCount+'"></label>'+
+    '<label class="field">Turnierdatum<input type="date" name="date" required value="'+escapeHtml(a.date)+'"></label>'+
+    '<label class="field">Startzeit<input type="time" name="startTime" required value="'+escapeHtml(a.startTime)+'"></label>'+
+    '<label class="field">Endzeit (optional)<input type="time" name="endTime" value="'+escapeHtml(a.endTime||"")+'"><small>Mit Endzeit werden die Spielblöcke zeitlich angepasst.</small></label>'+
+    '<label class="field">Was ist besonders wichtig?<select name="goal">'+
+      [['many','Möglichst viele Spiele für alle'],['social','Abwechslung und Spaß'],['competitive','Sportlicher Wettbewerb'],['quick','Ein möglichst kurzes Turnier']].map(item=>
+        '<option value="'+item[0]+'"'+(a.goal===item[0]?' selected':'')+'>'+item[1]+'</option>').join("")+
+    '</select></label>'+
+    '<label class="field advisor-wide">Wunsch für die Spielpartner<select name="teamStyle">'+
+      [['any','Offen – bitte geeignete Formate vergleichen'],['rotating','Wechselnde Doppelpartner'],['fixed','Feste Doppel-Teams'],['singles','Jeder spielt für sich']].map(item=>
+        '<option value="'+item[0]+'"'+(a.teamStyle===item[0]?' selected':'')+'>'+item[1]+'</option>').join("")+
+    '</select></label></div>'+
+    '<div class="advisor-form-actions"><button class="btn primary" type="submit">Geeignete Turniere berechnen '+icon("arrow")+'</button>'+
+    '<p>Keine Anmeldung nötig. Es werden keine Personen erfasst oder Turniere angelegt, bevor du einen Vorschlag auswählst.</p></div>'+
+    '</form></section>'+
+    (advisorResults?
+      '<section id="advisor-results" class="advisor-results" aria-live="polite">'+
+      '<div class="advisor-panel-heading"><div><div class="eyebrow">DEINE AUSWERTUNG</div><h2>'+valid+' von '+advisorResults.length+' Turnierarten planbar</h2></div><span>Schritt 2 / 2</span></div>'+
+      '<p class="advisor-disclaimer">Vorplanung mit anonymen Modellteilnehmern. Die tatsächliche Machbarkeit wird nach Check-in, Teambildung und Auslosung neu geprüft. Spielzeiten sind Prognosen, keine Garantie.</p>'+
+      '<div class="advisor-result-grid">'+cards+'</div></section>':'')+
+    '</main>';
 }
 
 function browserNotice() {
@@ -476,9 +535,9 @@ function drawPreview(t) {
 }
 function render() {
   const t = store.active();
-  if(t?.type==="doubles"&&view!=="home") {window.location.assign("./doppel.html");return;}
-  if(t?.type==="opc"&&view!=="home") {window.location.assign("./opc.html");return;}
-  root.innerHTML = header() + (!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
+  if(t?.type==="doubles"&&view!=="home"&&view!=="advisor") {window.location.assign("./doppel.html");return;}
+  if(t?.type==="opc"&&view!=="home"&&view!=="advisor") {window.location.assign("./opc.html");return;}
+  root.innerHTML = header() + (view==="advisor"?advisorPage():!t || view === "home" ? intro() : `<div class="app-layout">${sidebar(t)}
     <main class="main-area">${appTop(t)}${view === "participants"||view === "fees" ? participants(t) : view === "settings" ? settings(t) : view === "draw" ? drawPreview(t) : view === "finals" ? renderRibbonFinals(t,{icon,escapeHtml,courtName,groupLabel,editingFinal}) : overview(t)}
       ${browserNotice()}<footer>© Tennis-Schiri · Version 0.8.2 · Private Testversion</footer>
     </main></div>`);
@@ -675,6 +734,16 @@ document.addEventListener("click", event => {
     if(!confirm(message))return;
     store.editTournament(t.id,{draw:resetRibbonFinals(t)});
     editingFinal=null;render();flash("Endrunde zurückgenommen. Vorrunden-Ergebnisse bleiben erhalten.");
+  });
+  if (action === "advisor-open") {view="advisor";advisorResults=null;render();window.scrollTo?.(0,0);return;}
+  if (action === "advisor-create") return run(() => {
+    const choice=advisorResults?.find(item=>item.id===trigger.dataset.format);
+    if(!choice?.feasible)throw Error("Bitte zuerst einen machbaren Vorschlag berechnen.");
+    const t=store.create(advisorTournamentValues(advisorState,choice));
+    advisorResults=null;
+    if(t.type==="doubles"){window.location.assign("./doppel.html");return;}
+    if(t.type==="opc"){window.location.assign("./opc.html");return;}
+    view="overview";render();flash("Schleifchenturnier mit den empfohlenen Einstellungen angelegt. Bitte jetzt die Teilnehmer erfassen.");
   });
   if (action === "close-dialog") return closeDialog();
   if (action === "home") { view = "home"; search = ""; editingResult=null; editingFinal=null; render(); window.scrollTo?.(0, 0); return; }
@@ -877,6 +946,9 @@ document.addEventListener("change", event => {
 });
 
 document.addEventListener("input", event => {
+  if(event.target.closest("form[data-form=advisor]")&&advisorResults){
+    advisorResults=null;document.getElementById("advisor-results")?.remove();
+  }
   if (event.target.id === "player-search") {
     search = event.target.value;
     const el = document.getElementById("participant-results"), t = store.active();
@@ -889,6 +961,14 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   const kind = form.dataset.form;
+  if(kind==="advisor") return run(() => {
+    const d=new FormData(form);
+    advisorState=normalizeAdvisorInput({participants:d.get("participants"),courtCount:d.get("courtCount"),
+      date:d.get("date"),startTime:d.get("startTime"),endTime:d.get("endTime"),goal:d.get("goal"),teamStyle:d.get("teamStyle")});
+    advisorResults=recommendTournamentFormats(advisorState);
+    view="advisor";render();
+    document.getElementById("advisor-results")?.scrollIntoView?.({behavior:"smooth",block:"start"});
+  });
   if(kind === "fee-category") return run(() => {
     const t=store.active();
     if(!t)throw Error("Turnier nicht gefunden.");
