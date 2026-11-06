@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.8.3, noch nicht veröffentlicht** (Turnierberater mit Formatvergleich und direkter Neuanlage sowie v0.8.2-Zeitplanung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller GitHub-Code:** **v0.8.4, noch nicht veröffentlicht** (gemeinsame Roadmap/Ideensammlung samt Rollen und Kommentaren, außerdem v0.8.3-Turnierberater und v0.8.2-Zeitplanung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
 
 ## Einstieg und Projektdokumentation
 
@@ -130,6 +130,14 @@ Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Ve
 
 Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals ihre Werte, private Kennwörter oder echte Spielerdaten in GitHub-Dokumentationen oder Commits speichern.** Die vorhandene `.htaccess` und der Passwortschutz dürfen beim Deployment nicht überschrieben werden.
 
+## Roadmap und Ideen v0.8.4 (nur GitHub)
+
+Die Unterseite `site/roadmap.html` zeigt ein **Kanban-Board mit fünf Entwicklungsstatus**, Prioritäten, Meilensteinen, Suche und Filter sowie einer alternativen Listenansicht. Für jedes Thema sind Details und Kommentare sichtbar. Eingeladene Personen erhalten einen persönlichen Code für Kommentare und neue Ideen; die Projektleitung kann Status, Prioritäten und Zugänge verwalten. Die bestehenden Testseiten-Zugangsdaten bleiben für **alle** Besucher der Roadmap nötig; persönliche Codes ersetzen diesen Passwortschutz nicht.
+
+Der Code ist mit einem eigenständigen kleinen PHP-Dienst umgesetzt; das nicht veröffentlichte allgemeine TENNILO-Backend bleibt unberührt. **Achtung:** Der aktuelle Standard nutzt einen privaten Server-Temp-Speicher, dessen dauerhafte Verfügbarkeit nicht garantiert werden kann. Vor echten Einladungen einen dauerhaft privaten Speicherort in der Hosting-Konfiguration setzen. Weiteres Vorgehen siehe [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
+
+**Noch nicht online:** Die Erweiterung wartet auf den nächsten manuellen GitHub-Actions-Upload. Dann werden 34 statt 28 erlaubte App-Dateien übertragen; der bestehende Passwortschutz wird nicht überschrieben.
+
 ## Turnierberater v0.8.3 – aktuell nur in GitHub
 
 Auf der Startseite können Nutzer **„Welches Turnier passt zu euch?“** wählen: Teilnehmerzahl, Plätze, Datum, Startzeit/optionale Endzeit, Ziel und Partnerwunsch eingeben, dann Schleifchen, Doppel und One Point Cup vergleichen. Die Vorauswahl nutzt die bestehenden echten Auslosungs-/Zeitmodelle, zeigt Spiel- und Zeitbedarf sowie Ausschlussgründe und ermöglicht **Turnier mit übernommenen Einstellungen anlegen**. Es werden keine anonymen Modellspieler dauerhaft gespeichert. Der Berater ist über die Adapterliste `FORMAT_ADVISORS` für neue Turnierarten erweiterbar. Einzelheiten: [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md).
@@ -142,6 +150,6 @@ Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren M
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan **und den Turnierberater aus v0.8.3** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan, den Turnierberater und die Roadmap **v0.8.4** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
