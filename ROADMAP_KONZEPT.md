@@ -1,6 +1,6 @@
 # TENNILO – gemeinsame Roadmap und Ideensammlung
 
-**Stand:** 2026-11-06 · **GitHub-Version:** v0.8.4, noch nicht veröffentlicht · **Live bestätigt:** v0.8.0.
+**Stand:** 2026-11-06 · **GitHub und Testseite:** v0.8.4, 34 Dateien erfolgreich übertragen · **Browser- und Zwei-Geräte-Praxistest:** offen.
 
 ## Ziel und Oberfläche
 
@@ -48,7 +48,9 @@ Die Datei `site/roadmap-api.php` speichert eine JSON-Datenbank außerhalb des ö
 - PHP-Syntax und Modelldatentests sind in Prüf- und **manuellen** Veröffentlichungsworkflow eingebunden.
 - FTPS-Whitelist: **34 statt 28 Dateien**. Bestehender Passwortschutz, WordPress, `.htaccess`, Backend-Konto-API und Turnierdaten bleiben unangetastet.
 - **CI bestätigt:** GitHub-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) vom 2026-11-06: **244/244 Node-Tests**, PHP-Syntax, Roadmap-Fachtests und simulierte PHP-HTTP-Integration bestanden. Die tatsächliche ALL-INKL-/Browser-/Zweitgeräte-Prüfung steht weiter aus.
-- **Kein Upload durch GitHub-Commits**. Nur `workflow_dispatch` startet die bestehende FTPS-Veröffentlichung.
+- **Veröffentlichung:** [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) erfolgreich (244/244 Node-Tests, PHP-Prüfung, 34/34 Dateien). Der für die ausdrückliche Freigabe temporär ergänzte, einmalige Release-Auslöser ist wieder entfernt. Die bestehende FTPS-Veröffentlichung arbeitet danach wieder ausschließlich per `workflow_dispatch`.
+
+**Nächste Schritte nach dem Upload:** Projektleitungs-Code als erster Testseitenbenutzer erstellen und externen Personen bis dahin keinen Testseitenzugang geben; für dauerhaft verlässliche Daten ein persistentes privates Verzeichnis außerhalb der Webroots konfigurieren; alle Benutzerrollen, Kommentarfunktionen, widerrufenen Einladungen und Reloads praktisch prüfen. Die vorab angelegte Karte der Roadmap selbst hat noch den Seed-Status „In Arbeit“ und soll bei der ersten Moderation auf „Auf Testseite“ geändert werden.
 
 ## Mögliche Erweiterungen
 
