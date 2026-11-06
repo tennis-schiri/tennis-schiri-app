@@ -7,6 +7,8 @@ const ribbon=read("site/assets/app.js");
 const doubles=read("site/assets/doppel-ui.js");
 const opc=read("site/assets/one-point-ui.js");
 const operations=read("site/assets/operations.js");
+const finals=read("site/assets/finals-ui.js");
+const liveModel=read("site/assets/live-model.js");
 const storage=read("site/assets/storage.js");
 
 test("Alle drei Turnierformulare enthalten Startzeit, optionale Endzeit und anpassbare Zeitplanung",()=>{
@@ -33,7 +35,14 @@ test("One Point Cup nutzt die Anzahl von Ein-Punkt-Blöcken und tatsächlich ver
   assert.match(opc,/onePointTimePlan\(/);
   assert.match(opc,/Zeitblöcke an die Endzeit anpassen/);
   assert.match(opc,/onePointTimePlan\(\{\.\.\.t,opc:\{\.\.\.t\.opc,draw:drawData\}\}\)/);
+  assert.match(opc,/phasePlan\.start/);
+  assert.match(opc,/phasePlan\.end/);
 });
+test("Reservierte Schleifchen-Endrundenzeiten sind in Turnierleitung und Monitor sichtbar",()=>{
+  assert.match(finals,/finalTime\(stageIndex\)/);
+  assert.match(liveModel,/plannedStart:stagePlan\?\.start/);
+});
+
 test("Zeitplanung wird dauerhaft gespeichert, ohne alte Turnier-Backups umzuschreiben",()=>{
   assert.match(storage,/endTime:/);
   assert.match(storage,/timeMode:/);
