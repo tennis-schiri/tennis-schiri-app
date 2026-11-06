@@ -156,6 +156,7 @@ function advisorPage() {
         '<div><small>Spielblöcke</small><strong>'+e.blocks+'</strong></div>'+
         '<div><small>Geplantes Ende</small><strong>'+escapeHtml(e.plannedEnd)+' Uhr</strong></div></div>'+
         '<p class="advisor-matches">'+escapeHtml(e.perPerson)+'</p>'+
+        '<p class="advisor-why">'+escapeHtml(item.why)+'</p>'+
         '<p class="advisor-detail">'+escapeHtml(e.detail)+'</p>'+
         '<p class="advisor-note">'+escapeHtml(e.note)+'</p>'+
         '<button class="btn primary" type="button" data-action="advisor-create" data-format="'+escapeHtml(item.id)+'">Diesen Vorschlag als Turnier anlegen '+icon("arrow")+'</button>':
