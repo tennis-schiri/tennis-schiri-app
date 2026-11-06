@@ -5,6 +5,16 @@
 
 In diesem Dokument bedeutet **„implementiert“**: Änderung liegt im GitHub-Repository vor. Das ist **kein** Nachweis, dass sie bereits auf `app.tennis-schiri.de` veröffentlicht oder auf allen Geräten getestet wurde. Veröffentlichung und Tests gesondert im [Projektstatus](PROJEKTSTATUS.md) vermerken.
 
+## [0.8.4] – Gemeinsame Roadmap und Ideensammlung (nur GitHub; kein Upload)
+
+**2026-11-06:** Neue private Unterseite für den Projektfortschritt mit Kanban-Board, fünf klar definierten Status, Prioritäten, Kommentaren, Ideenannahme und Rollen für ausgewählte Mitwirkende. Themen und Entwicklungsstatus sind filter- und durchsuchbar; mobile Listen- und Boardansicht verfügbar. Der Einstieg ist von der TENNILO-Startseite erreichbar.
+
+- **Echte gemeinsame Beiträge:** 18 seed-basierte Roadmap-Themen plus PHP-API mit serverseitiger JSON-Speicherung, kommentierbaren Einzelkarten und neuen Vorschlägen.
+- **Rollen:** Bestehender Testseiten-Passwortschutz für alle Leser, persönlicher zusätzlicher Code für Ideen/Kommentare, separater Projektleitungs-Code für Statusänderungen und Einladungen. Codes werden nie im Klartext persistiert. CSRF, Session, HTTPS, Same-Origin, Eingabelimits, atomisches Schreiben.
+- **Hosting-Grenze:** Standardmäßig privater Server-Temp-Speicher, der vom Hosting gelöscht werden kann; dauerhafte, private Ablage muss vor regelmäßiger Nutzung eingerichtet werden. Erste Besucher mit Testseiten-Passwort können die Administration übernehmen, solange der Code noch nicht eingerichtet wurde – daher vor weiteren Einladungen zuerst selbst einrichten.
+- **Tests:** PHP-Lint, `tests/roadmap.php`, `tests/roadmap-ui.test.mjs`, bisher 243/243 Node-Tests in GitHub-Prüflauf 42187058485; echter Browser-/ALL-INKL-/Zweitgeräte-Test noch offen.
+- **Deployment:** Sechs neue Dateien für den bisherigen ausschließlich manuellen FTPS-Upload freigegeben (34 statt 28 Dateien); kein Upload automatisch ausgelöst. Online bleibt v0.8.0.
+
 ## [0.8.3] – Turnierberater mit Formatvergleich und direkter Neuanlage (nur GitHub; kein Upload)
 
 **2026-11-06:** Neuer Startseiten-Einstieg **„Welches Turnier passt zu euch?“**. Eckdaten erfassen (Teilnehmende, Plätze, Datum, Start-/Endzeit, Wunsch für Partner und Turnierziel), drei Turnierformate auf Basis anonym simulierter echter Auslosungen und Zeitpläne vergleichen, ungeeignete Varianten begründen und einen Vorschlag direkt als neues Turnier mit vorausgefüllten Einstellungen übernehmen. Keine Modellspieler werden gespeichert.
