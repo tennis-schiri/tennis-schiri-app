@@ -390,7 +390,25 @@ document.addEventListener("submit",event=>{
   const form=event.target.closest("form[data-form]");if(!form)return;
   event.preventDefault();
   const kind=form.dataset.form,d=new FormData(form);
-  if(kind==="login")return run("login",{code:String(d.get("code")||"")},()=>{closeModal();toast("Zugang freigeschaltet.");});
+  if(["login-account","bootstrap-account","register-invite","upgrade-account","change-password"].includes(kind)){
+    const data={username:d.get("username"),password:d.get("password"),
+      oldPassword:d.get("oldPassword"),newPassword:d.get("newPassword")};
+    if(kind!=="login-account"){
+      const pw=kind==="change-password"?data.newPassword:data.password;
+      if(pw!==d.get("passwordAgain"))return toast("Passwörter stimmen nicht überein.",true);
+    }
+    if(kind==="register-invite"){
+      if(!pendingInviteToken)return toast("Einladungslink erneut öffnen.",true);
+      data.token=pendingInviteToken;
+    }
+    return run(kind,data,()=>{
+      if(kind==="register-invite")pendingInviteToken=null;
+      closeModal();toast(kind==="login-account"?"Angemeldet.":"Konto aktualisiert.");
+    });
+  }
+  if(kind==="login")return run("login",{code:String(d.get("code")||"")},()=>{
+    closeModal();upgradeAccountModal();toast("Alten Code bitte in Benutzerkonto umwandeln.");
+  });
   if(kind==="idea")return run("idea",{title:d.get("title"),description:d.get("description"),category:d.get("category")},
     result=>{closeModal();filterStatus="all";query="";render();detail(result.itemId);toast("Idee eingereicht.");});
   if(kind==="comment"){
