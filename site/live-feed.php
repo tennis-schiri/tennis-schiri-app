@@ -84,6 +84,7 @@ function public_live_payload($input): array {
         'mode' => $mode,
         'format' => ($input['format'] ?? '') === 'doubles' ? 'doubles' : 'ribbon',
         'name' => live_str($input['name'] ?? '', 90),
+        'scoreUnit' => ($input['scoreUnit'] ?? '') === 'points' ? 'points' : 'games',
         'date' => live_str($input['date'] ?? '', 12),
         'startTime' => live_str($input['startTime'] ?? '', 8),
         'message' => live_str($input['message'] ?? '', 240)
