@@ -47,7 +47,7 @@ function summary(){
     '<div class="rm-overview-stat"><span>Auf Testseite</span><strong>'+done+'</strong><small>Bereits verfügbar</small></div>'+
     '<div class="rm-overview-stat"><span>In Arbeit / Prüfung</span><strong>'+(counts.progress+counts.test)+'</strong><small>In der aktiven Entwicklung</small></div>'+
     '<div class="rm-overview-stat"><span>Geplant / Ideen</span><strong>'+(counts.planned+counts.idea)+'</strong><small>Für später vorgemerkt</small></div></div>'+
-    '<div class="rm-progress" aria-label="'+done+' von '+total+' Themen auf der Testseite"><span style="width:'+Math.round(total?done*100/total:0)+'%"></span></div>';
+    '<div class="rm-progress" aria-label="'+done+' von '+total+' Themen auf der Testseite"><span></span></div>';
 }
 function controls(){
   return '<div class="rm-controls"><div class="rm-control-title"><div><h2>Entwicklungsübersicht</h2><p>Klicke einen Punkt an, um Details, Kommentare und nächste Schritte zu sehen.</p></div>'+
@@ -129,6 +129,8 @@ function render(){
     '<p>Der Entwicklungsstatus wird redaktionell gepflegt. Ideen und Kommentare sind Beiträge der eingeladenen Testgruppe, keine verbindlichen Funktionszusagen.</p></div>'+
     '</main>';
   renderResults();
+  const progress=document.querySelector('.rm-progress span');
+  if(progress)progress.style.width=Math.round(state.items.length?state.items.filter(x=>x.status==='online').length*100/state.items.length:0)+'%';
 }
 function showModal(title,body,{wide=false}={}){
   modalRoot.innerHTML='<dialog class="rm-dialog'+(wide?' wide':'')+'" aria-label="'+esc(title)+'">'+
