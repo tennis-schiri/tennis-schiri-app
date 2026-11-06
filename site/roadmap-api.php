@@ -5,8 +5,8 @@ require_once __DIR__ . '/roadmap-lib.php';
 
 /**
  * TENNILO Roadmap API. The surrounding test-site HTTP Basic Auth protects
- * reading. A separate cryptographic invite code is required for commenting;
- * only a private owner code can change statuses and issue/revoke invitations.
+ * reading. Personal roadmap accounts use password_hash/password_verify and
+ * one-time registration links. Existing code-based users can migrate safely.
  * This is NOT the unpublished TENNILO account/licensing backend.
  */
 const RM_MAX_REQUEST = 12000;
@@ -85,26 +85,62 @@ function rm_write_state(string $dir, array $state): void {
 }
 
 function rm_identity(array $state): array {
+    $account = $_SESSION['roadmapAccount'] ?? null;
+    $proof = $_SESSION['roadmapCredentialProof'] ?? null;
+    if (is_string($account) && is_string($proof)) {
+        $entry = $account === 'owner' ? ($state['ownerAccount'] ?? null) : null;
+        if ($account !== 'owner') foreach ($state['invites'] as $member) {
+            if (($member['id'] ?? null) === $account) { $entry = $member; break; }
+        }
+        if (is_array($entry) && is_string($entry['passwordHash'] ?? null) &&
+            hash_equals(hash('sha256',$entry['passwordHash']), $proof)) {
+            return ['role'=>$account==='owner'?'admin':
+                (($entry['role'] ?? '')==='viewer'?'viewer':'commenter'),
+                'label'=>$account==='owner'?'Projektleitung':$entry['label'],
+                'account'=>true,'username'=>$entry['username']];
+        }
+        unset($_SESSION['roadmapAccount'], $_SESSION['roadmapCredentialProof']);
+    }
     $hash = $_SESSION['roadmapHash'] ?? null;
-    if (!is_string($hash)) return ['role'=>'guest', 'label'=>'Gast'];
+    if (!is_string($hash)) return ['role'=>'guest', 'label'=>'Gast','account'=>false];
     if (is_string($state['adminHash']) && hash_equals($state['adminHash'], $hash))
-        return ['role'=>'admin','label'=>'Projektleitung'];
+        return ['role'=>'admin','label'=>'Projektleitung','account'=>false];
     foreach ($state['invites'] as $member) {
         if (is_array($member) && is_string($member['hash'] ?? null) &&
             hash_equals($member['hash'], $hash)) {
             return ['role' => $member['role'] === 'viewer' ? 'viewer' : 'commenter',
-                'label'=>$member['label']];
+                'label'=>$member['label'],'account'=>false];
         }
     }
     unset($_SESSION['roadmapHash']);
-    return ['role'=>'guest','label'=>'Gast'];
+    return ['role'=>'guest','label'=>'Gast','account'=>false];
+}
+function rm_account_session(string $id, string $passwordHash): void {
+    session_regenerate_id(true);
+    unset($_SESSION['roadmapHash']);
+    $_SESSION['roadmapAccount'] = $id;
+    $_SESSION['roadmapCredentialProof'] = hash('sha256', $passwordHash);
+}
+function rm_login_rate(bool $failed): void {
+    $until = (int)($_SESSION['roadmapLoginWindow'] ?? 0);
+    if ($until < time()) {
+        $_SESSION['roadmapLoginWindow'] = time() + 900;
+        $_SESSION['roadmapLoginFailures'] = 0;
+    }
+    if ((int)($_SESSION['roadmapLoginFailures'] ?? 0) >= 5)
+        rm_error(429, 'Zu viele Anmeldeversuche. Bitte später erneut versuchen.');
+    if ($failed) $_SESSION['roadmapLoginFailures']++;
+    else $_SESSION['roadmapLoginFailures'] = 0;
 }
 
 function rm_members(array $state): array {
     $list = [];
     foreach ($state['invites'] as $member) {
         $list[] = ['id'=>$member['id'], 'label'=>$member['label'],
-            'role'=>$member['role'], 'createdAt'=>$member['createdAt']];
+            'role'=>$member['role'], 'createdAt'=>$member['createdAt'],
+            'username'=>$member['username'] ?? null,
+            'status'=>isset($member['passwordHash'])?'active':
+                (isset($member['inviteHash'])?'invited':'legacy')];
     }
     return $list;
 }
@@ -139,8 +175,10 @@ try {
         rm_reply([
             'ok'=>true,'items'=>array_map('rm_public_item', $state['items']),
             'session'=>['role'=>$identity['role'],'label'=>$identity['label'],
-                'csrf'=>$_SESSION['roadmapCsrf']],
-            'bootstrapAvailable'=>$state['adminHash']===null && rm_basic_user()!==null,
+                'csrf'=>$_SESSION['roadmapCsrf'],'account'=>$identity['account']??false,
+                'username'=>$identity['username']??null],
+            'bootstrapAvailable'=>$state['adminHash']===null &&
+                $state['ownerAccount']===null && rm_basic_user()!==null,
             'storagePersistent'=>$persistent,
             'members'=>$identity['role']==='admin'?rm_members($state):[]
         ]);
@@ -169,7 +207,106 @@ try {
     $response = ['ok'=>true];
 
     // Login and bootstrap use the same CSRF and HTTPS checks as all writes.
-    if ($action === 'login') {
+    if ($action === 'login-account') {
+        rm_login_rate(false); // Checks the existing failure window before verifying credentials.
+        $username = rm_username($data['username'] ?? null);
+        $password = is_string($data['password'] ?? null) ? $data['password'] : '';
+        $id = rm_authenticate($state, $username, $password);
+        if ($id === null) {
+            rm_login_rate(true);
+            rm_error(403, 'Benutzername oder Passwort nicht korrekt.');
+        }
+        $entry = $id === 'owner' ? $state['ownerAccount'] :
+            current(array_filter($state['invites'], fn($m)=>($m['id']??null)===$id));
+        rm_account_session($id, $entry['passwordHash']);
+        rm_login_rate(false);
+    } elseif ($action === 'bootstrap-account') {
+        if ($state['adminHash'] !== null || $state['ownerAccount'] !== null)
+            rm_error(403, 'Die erstmalige Einrichtung ist nicht verfügbar.');
+        $username = rm_username($data['username'] ?? null);
+        $password = rm_password($data['password'] ?? null);
+        $state['ownerAccount'] = ['username'=>$username,
+            'passwordHash'=>password_hash($password, PASSWORD_DEFAULT),
+            'createdAt'=>$now];
+        rm_account_session('owner', $state['ownerAccount']['passwordHash']);
+        rm_write_state($dir, $state);
+    } elseif ($action === 'register-invite') {
+        $token = $data['token'] ?? null;
+        if (!rm_valid_code($token)) rm_error(403, 'Einladungslink ungültig oder abgelaufen.');
+        $hash = hash('sha256', $token);
+        $index = null;
+        foreach ($state['invites'] as $i=>$member) {
+            if (is_string($member['inviteHash'] ?? null) &&
+                hash_equals($member['inviteHash'], $hash) &&
+                strtotime($member['expiresAt'] ?? '') >= time()) {
+                $index = $i; break;
+            }
+        }
+        if ($index === null) rm_error(403, 'Einladungslink ungültig oder abgelaufen.');
+        $username = rm_username($data['username'] ?? null);
+        if (rm_user_exists($state, $username)) rm_error(409, 'Dieser Benutzername ist bereits vergeben.');
+        $password = rm_password($data['password'] ?? null);
+        $state['invites'][$index]['username'] = $username;
+        $state['invites'][$index]['passwordHash'] = password_hash($password, PASSWORD_DEFAULT);
+        $state['invites'][$index]['claimedAt'] = $now;
+        unset($state['invites'][$index]['inviteHash'],$state['invites'][$index]['expiresAt']);
+        rm_account_session($state['invites'][$index]['id'], $state['invites'][$index]['passwordHash']);
+        rm_write_state($dir, $state);
+    } elseif ($action === 'upgrade-account') {
+        if (($identity['role'] ?? 'guest') === 'guest' || ($identity['account'] ?? false))
+            rm_error(403, 'Zuerst mit dem bisherigen Zugang anmelden.');
+        $username = rm_username($data['username'] ?? null);
+        if (rm_user_exists($state, $username)) rm_error(409, 'Dieser Benutzername ist bereits vergeben.');
+        $password = rm_password($data['password'] ?? null);
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        if ($identity['role']==='admin') {
+            $state['ownerAccount'] = ['username'=>$username,
+                'passwordHash'=>$passwordHash,'createdAt'=>$now];
+            $state['adminHash'] = null; // The old owner code is now invalid.
+            rm_account_session('owner', $passwordHash);
+        } else {
+            $hash = $_SESSION['roadmapHash'] ?? '';
+            $found = false;
+            foreach ($state['invites'] as &$member) {
+                if (is_string($member['hash'] ?? null) && hash_equals($member['hash'],$hash)) {
+                    $member['username']=$username;
+                    $member['passwordHash']=$passwordHash;
+                    $member['claimedAt']=$now;
+                    unset($member['hash']);
+                    $id=$member['id'];
+                    $found = true; break;
+                }
+            }
+            unset($member);
+            if (!$found) rm_error(403, 'Bisheriger Zugang nicht gefunden.');
+            rm_account_session($id,$passwordHash);
+        }
+        rm_write_state($dir, $state);
+    } elseif ($action === 'change-password') {
+        if (!($identity['account']??false)) rm_error(403, 'Bitte zuerst ein Benutzerkonto einrichten.');
+        $old = is_string($data['oldPassword'] ?? null) ? $data['oldPassword'] : '';
+        $next = rm_password($data['newPassword'] ?? null);
+        $id = $_SESSION['roadmapAccount'] ?? null;
+        if ($id === 'owner') {
+            if (!password_verify($old, $state['ownerAccount']['passwordHash']))
+                rm_error(403, 'Das bisherige Passwort ist nicht korrekt.');
+            $state['ownerAccount']['passwordHash']=password_hash($next,PASSWORD_DEFAULT);
+            rm_account_session('owner',$state['ownerAccount']['passwordHash']);
+        } else {
+            $found=false;
+            foreach ($state['invites'] as &$member) {
+                if (($member['id']??null)!==$id)continue;
+                if (!password_verify($old,$member['passwordHash']))
+                    rm_error(403, 'Das bisherige Passwort ist nicht korrekt.');
+                $member['passwordHash']=password_hash($next,PASSWORD_DEFAULT);
+                $hash=$member['passwordHash'];$found=true;break;
+            }
+            unset($member);
+            if (!$found)rm_error(403,'Benutzerkonto nicht gefunden.');
+            rm_account_session($id,$hash);
+        }
+        rm_write_state($dir,$state);
+    } elseif ($action === 'login') {
         $code = $data['code'] ?? null;
         if (!rm_valid_code($code)) rm_error(403, 'Zugangscode ungültig.');
         $hash = hash('sha256', $code);
@@ -180,10 +317,10 @@ try {
         session_regenerate_id(true);
         $_SESSION['roadmapHash'] = $hash;
     } elseif ($action === 'logout') {
-        unset($_SESSION['roadmapHash']);
+        unset($_SESSION['roadmapHash'],$_SESSION['roadmapAccount'],$_SESSION['roadmapCredentialProof']);
         session_regenerate_id(true);
     } elseif ($action === 'bootstrap') {
-        if ($state['adminHash'] !== null || rm_basic_user() === null)
+        if ($state['adminHash'] !== null || $state['ownerAccount']!==null || rm_basic_user() === null)
             rm_error(403, 'Die erstmalige Einrichtung ist nicht verfügbar.');
         $ownerCode = rm_secret();
         $state['adminHash'] = hash('sha256', $ownerCode);
@@ -215,6 +352,7 @@ try {
                 rm_delete_comment($state, rm_text($data['itemId'] ?? null, 80, 'Eintrag'),
                     rm_text($data['commentId'] ?? null, 80, 'Kommentar'), $now);
             } elseif ($action === 'rotate-owner') {
+                if ($state['ownerAccount']!==null)rm_error(403,'Bitte dein Benutzerkonto verwalten.');
                 $ownerCode = rm_secret();
                 $state['adminHash'] = hash('sha256', $ownerCode);
                 $_SESSION['roadmapHash'] = $state['adminHash'];
@@ -230,6 +368,28 @@ try {
                     'createdAt'=>$now
                 ];
                 $response['inviteCode'] = $code; // Shown once.
+            } elseif ($action === 'invite-link') {
+                if (count($state['invites']) >= 40) rm_error(422,'Maximal 40 Zugänge.');
+                $label=rm_text($data['label']??null,70,'Name');
+                $role=rm_enum($data['role']??null,['viewer','commenter'],'Rolle');
+                $token=rm_secret();
+                $state['invites'][]=[
+                    'id'=>'u-'.bin2hex(random_bytes(8)),
+                    'label'=>$label,'role'=>$role,
+                    'inviteHash'=>hash('sha256',$token),
+                    'expiresAt'=>gmdate('c',time()+7*86400),'createdAt'=>$now
+                ];
+                $response['inviteToken']=$token;
+            } elseif ($action === 'set-role') {
+                $id=rm_text($data['inviteId']??null,80,'Zugang');
+                $role=rm_enum($data['role']??null,['viewer','commenter'],'Rolle');
+                $found=false;
+                foreach($state['invites'] as &$member){
+                    if(($member['id']??'')!==$id)continue;
+                    $member['role']=$role;$found=true;break;
+                }
+                unset($member);
+                if(!$found)rm_error(404,'Zugang nicht gefunden.');
             } elseif ($action === 'revoke') {
                 $id = rm_text($data['inviteId'] ?? null, 80, 'Zugang');
                 $before = count($state['invites']);
