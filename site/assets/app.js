@@ -30,7 +30,7 @@ const dialogRoot = document.getElementById("dialog-root");
 const noticeRoot = document.getElementById("toast-region");
 let view = "home";
 let search = "";
-let advisorState={participants:24,courtCount:4,date:todayLocal(),startTime:"10:00",endTime:"14:00",goal:"many",teamStyle:"any"};
+let advisorState={participants:24,courtCount:4,date:todayLocal(),startTime:"10:00",endTime:"14:00",goal:"many",teamStyle:"any",matchMode:"time",pointTarget:7,pointWinByTwo:false};
 let advisorResults=null;
 let drawOpenRound = 0;
 let editingResult = null; // Nur die aktuell geöffnete Bearbeitung, nicht als Turnierdaten speichern.
@@ -160,7 +160,7 @@ function advisorPage() {
         '<p class="advisor-matches">'+escapeHtml(e.perPerson)+'</p>'+
         '<p class="advisor-why">'+escapeHtml(item.why)+'</p>'+
         '<p class="advisor-detail">'+escapeHtml(e.detail)+'</p>'+
-        '<p class="advisor-note">'+escapeHtml(e.note)+'</p>'+
+        '<p class="advisor-note">'+escapeHtml(e.note)+(a.matchMode==="points"?' Punktspiele: Zeitangaben sind Schätzwerte; das Punktziel hat Vorrang.':'')+'</p>'+
         '<button class="btn primary" type="button" data-action="advisor-create" data-format="'+escapeHtml(item.id)+'">Diesen Vorschlag als Turnier anlegen '+icon("arrow")+'</button>':
         '<p class="advisor-unavailable">'+escapeHtml(item.reason)+'</p>')+
       '</article>';
@@ -182,6 +182,12 @@ function advisorPage() {
       [['many','Möglichst viele Spiele für alle'],['social','Abwechslung und Spaß'],['competitive','Sportlicher Wettbewerb'],['quick','Ein möglichst kurzes Turnier']].map(item=>
         '<option value="'+item[0]+'"'+(a.goal===item[0]?' selected':'')+'>'+item[1]+'</option>').join("")+
     '</select></label>'+
+    '<label class="field advisor-wide">Match-Zählweise<select name="matchMode">'+
+      '<option value="time"'+(a.matchMode!=="points"?' selected':'')+'>Auf Zeit – feste Matchdauer</option>'+
+      '<option value="points"'+(a.matchMode==="points"?' selected':'')+'>Auf Punkte – bis zum Zielwert</option>'+
+    '</select><small>Bei Punktmatches ist die Spieldauer eine Schätzung. Der One Point Cup wird immer auf einen Punkt gespielt.</small></label>'+
+    '<label class="field">Punktziel<input name="pointTarget" type="number" min="1" max="99" required value="'+a.pointTarget+'"></label>'+
+    '<label class="field checkbox-field"><input name="pointWinByTwo" type="checkbox"'+(a.pointWinByTwo?' checked':'')+'> Zwei Punkte Vorsprung</label>'+
     '<label class="field advisor-wide">Wunsch für die Spielpartner<select name="teamStyle">'+
       [['any','Offen – bitte geeignete Formate vergleichen'],['rotating','Wechselnde Doppelpartner'],['fixed','Feste Doppel-Teams'],['singles','Jeder spielt für sich']].map(item=>
         '<option value="'+item[0]+'"'+(a.teamStyle===item[0]?' selected':'')+'>'+item[1]+'</option>').join("")+
@@ -970,7 +976,8 @@ document.addEventListener("submit", event => {
   if(kind==="advisor") return run(() => {
     const d=new FormData(form);
     advisorState=normalizeAdvisorInput({participants:d.get("participants"),courtCount:d.get("courtCount"),
-      date:d.get("date"),startTime:d.get("startTime"),endTime:d.get("endTime"),goal:d.get("goal"),teamStyle:d.get("teamStyle")});
+      date:d.get("date"),startTime:d.get("startTime"),endTime:d.get("endTime"),goal:d.get("goal"),teamStyle:d.get("teamStyle"),
+      matchMode:d.get("matchMode"),pointTarget:d.get("pointTarget"),pointWinByTwo:d.has("pointWinByTwo")});
     advisorResults=recommendTournamentFormats(advisorState);
     view="advisor";render();
     document.getElementById("advisor-results")?.scrollIntoView?.({behavior:"smooth",block:"start"});
