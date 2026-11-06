@@ -5,10 +5,12 @@
 **Produktname:** TENNILO (Arbeitstitel; Marke/Domain nicht abschließend geprüft)  
 **Dachmarke:** Tennis-Schiri / Insta Tennis-Schiri  
 **Repository:** `tennis-schiri/tennis-schiri-app` (privat, Branch `main`)  
-**Version im GitHub-Code:** **v0.8.4 (auf Testseite veröffentlicht; Browser-Praxistest noch offen)**  
+**Version im GitHub-Code:** **v0.8.5 (Roadmap-Detailansicht, noch nicht veröffentlicht; letzte Testseite v0.8.4)**  
 **FTPS-Upload zuletzt bestätigt:** **v0.8.4** – [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) vom **2026-11-06** erfolgreich (**244/244 Node-Tests**, PHP-Syntax und HTTP-Simulation, **34/34 Dateien übertragen**). Passwortschutz und WordPress unangetastet, manuelle Workflow-Sicherung nach einem einmalig freigegebenen Upload wiederhergestellt. **Offen:** Admin-Ersteinrichtung, dauerhafter privater Roadmap-Speicher, echter ALL-INKL-/Zweitgeräte- und Browsertest. Keine Backend-Konto-API veröffentlicht.
 
 > **Wichtig beim Wiedereinstieg:** Erst diesen Status und `ENTSCHEIDUNGEN.md` lesen, dann den tatsächlichen GitHub-Code prüfen. „In GitHub umgesetzt“ ist nicht gleich „online veröffentlicht“ oder „im echten Browser vollständig getestet“.
+
+**Roadmap-Detailausbau v0.8.5 (noch nicht veröffentlicht):** In GitHub wurden alle 18 bestehenden Einträge um Ziel und Nutzen, Funktionsumfang, Umsetzungsstand, offene Punkte und klare Fertig-Kriterien ergänzt. Die Übersicht bleibt kurz; die Details sind nur im geöffneten Eintrag sichtbar und von der Projektleitung bearbeitbar. Altbestand wird ohne Überschreiben von Kommentaren, Rollen oder redaktionellen Statusänderungen ergänzt. [CI 42192449800](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42192449800): **245/245 Node-Tests** plus PHP- und MariaDB-Prüfungen erfolgreich. Die letzte Testseiten-Veröffentlichung bleibt **v0.8.4**. Der neue Detailausbau wurde noch nicht hochgeladen.
 
 ## Produktidee
 
