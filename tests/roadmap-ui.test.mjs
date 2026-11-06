@@ -50,7 +50,7 @@ test("Ausführliche Inhalte stehen ausschließlich in der Detailansicht und blei
   assert.match(ui,/Object\.fromEntries\(DETAIL_SECTIONS\.map/);
   assert.match(ui,/data-action="edit"/);
   assert.match(lib,/RM_DETAIL_FIELDS/);
-  assert.match(lib,/array_key_exists\(\$field, \$existing\)/);
+  assert.match(lib,/array_key_exists\(\$field, \$item\)/);
   assert.match(css,/\.rm-details-grid/);
   assert.match(css,/\.rm-detail-section/);
   const overview=ui.split("function card(x)")[1].split("function renderResults()")[0];
