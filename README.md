@@ -2,7 +2,7 @@
 
 **TENNILO ist der aktuelle Arbeitstitel** für die browserbasierte Turnier-App von **Tennis-Schiri**. Die endgültige Marken-/Domainentscheidung steht noch aus. Die Benutzeroberfläche verwendet vorläufig weiterhin den Namen Tennis-Schiri Turniermanager.
 
-**Aktueller GitHub-Code:** **v0.8.4, noch nicht veröffentlicht** (gemeinsame Roadmap/Ideensammlung samt Rollen und Kommentaren, außerdem v0.8.3-Turnierberater und v0.8.2-Zeitplanung). **Zuletzt erfolgreich auf den passwortgeschützten Webspace geladen:** **v0.8.0** am 2026-11-05 ([GitHub-Lauf 42085118679](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42085118679)), **200/200 Tests, 27/27 Dateien**. Alle drei Turnierarten: Schleifchen, feste Doppel und One Point Cup. Der reale Zweitgeräte-/Browser-Praxistest ist weiterhin offen. **Zusätzlich privat entwickelt:** Backend B0.1/B0.2 mit Kontodatenbank, Registrierung, E-Mail-Bestätigung, Login/Sessions, Vereinsanlage, Rollen und Einladungen. Gegen temporäre MariaDB geprüft. **Die Konto-API ist standardmäßig deaktiviert; es gibt weder eine öffentliche Registrierungsseite noch eine Produktivdatenbank.**
+**Aktueller GitHub- und Testseitenstand:** **v0.8.4**. Die gemeinsame Roadmap mit Kommentaren/Rollen, der Turnierberater und die automatische Zeitplanung wurden am **2026-11-06** mit [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) auf die bestehende passwortgeschützte Testseite übertragen (**244/244 Node-Tests, PHP-Prüfungen, 34/34 Dateien**). **Der echte Browser-/ALL-INKL-Zweitgeräte- und Roadmap-Sitzungstest ist noch offen.** Die Roadmap nutzt zunächst einen privaten **temporären** Server-Speicher; vor externen Einladungen einen persistenten privaten Pfad einrichten. **Unveröffentlicht bleibt:** Backend B0.1/B0.2 mit Konto-/Vereins-/Registrierungsfunktionen, deaktivierter Konto-API, unveröffentlichtem Staging-UI sowie noch fehlender Produktivdatenbank/Mail-/Zahlungsfunktion.
 
 ## Einstieg und Projektdokumentation
 
@@ -130,26 +130,26 @@ Die Subdomain `app.tennis-schiri.de` ist in einem separaten ALL-INKL-Webspace-Ve
 
 Die GitHub-Secrets heißen `FTP_HOST`, `FTP_USER` und `FTP_PASSWORD`. **Niemals ihre Werte, private Kennwörter oder echte Spielerdaten in GitHub-Dokumentationen oder Commits speichern.** Die vorhandene `.htaccess` und der Passwortschutz dürfen beim Deployment nicht überschrieben werden.
 
-## Roadmap und Ideen v0.8.4 (nur GitHub)
+## Roadmap und Ideen v0.8.4 (geschützte Testseite)
 
 Die Unterseite `site/roadmap.html` zeigt ein **Kanban-Board mit fünf Entwicklungsstatus**, Prioritäten, Meilensteinen, Suche und Filter sowie einer alternativen Listenansicht. Für jedes Thema sind Details und Kommentare sichtbar. Eingeladene Personen erhalten einen persönlichen Code für Kommentare und neue Ideen; die Projektleitung kann Status, Prioritäten und Zugänge verwalten. Die bestehenden Testseiten-Zugangsdaten bleiben für **alle** Besucher der Roadmap nötig; persönliche Codes ersetzen diesen Passwortschutz nicht.
 
 Der Code ist mit einem eigenständigen kleinen PHP-Dienst umgesetzt; das nicht veröffentlichte allgemeine TENNILO-Backend bleibt unberührt. **Achtung:** Der aktuelle Standard nutzt einen privaten Server-Temp-Speicher, dessen dauerhafte Verfügbarkeit nicht garantiert werden kann. Vor echten Einladungen einen dauerhaft privaten Speicherort in der Hosting-Konfiguration setzen. Weiteres Vorgehen siehe [ROADMAP_KONZEPT.md](ROADMAP_KONZEPT.md).
 
-**Tests:** GitHub-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) erfolgreich: **244/244 JavaScript-Tests** sowie PHP-Syntax, Modell- und HTTP-Integrationstest. **Noch nicht online:** Die Erweiterung wartet auf den nächsten manuellen GitHub-Actions-Upload. Dann werden 34 statt 28 erlaubte App-Dateien übertragen; der bestehende Passwortschutz wird nicht überschrieben.
+**Tests:** GitHub-Prüflauf [42188294342](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42188294342) erfolgreich: **244/244 JavaScript-Tests** sowie PHP-Syntax, Modell- und HTTP-Integrationstest. **Veröffentlichung:** [GitHub-Actions-Lauf 42189703936](https://github.com/tennis-schiri/tennis-schiri-app/actions/runs/42189703936) hat **244/244 Tests** und den Upload aller **34 Dateien** bestätigt. Der einmalig freigegebene Auslöser wurde anschließend entfernt; zukünftige Veröffentlichungen bleiben manuell. Browser-/ALL-INKL-Praxistests und dauerhafte Roadmap-Speicherung sind noch offen.
 
-## Turnierberater v0.8.3 – aktuell nur in GitHub
+## Turnierberater v0.8.3 – in v0.8.4 auf Testseite
 
 Auf der Startseite können Nutzer **„Welches Turnier passt zu euch?“** wählen: Teilnehmerzahl, Plätze, Datum, Startzeit/optionale Endzeit, Ziel und Partnerwunsch eingeben, dann Schleifchen, Doppel und One Point Cup vergleichen. Die Vorauswahl nutzt die bestehenden echten Auslosungs-/Zeitmodelle, zeigt Spiel- und Zeitbedarf sowie Ausschlussgründe und ermöglicht **Turnier mit übernommenen Einstellungen anlegen**. Es werden keine anonymen Modellspieler dauerhaft gespeichert. Der Berater ist über die Adapterliste `FORMAT_ADVISORS` für neue Turnierarten erweiterbar. Einzelheiten: [TURNIERBERATER_KONZEPT.md](TURNIERBERATER_KONZEPT.md).
 
-## Zeitplanung v0.8.2 – aktuell nur im privaten GitHub-Code
+## Zeitplanung v0.8.2 – in v0.8.4 auf Testseite
 
 Alle drei Formate bieten eine **optionale Endzeit** und den bewusst wählbaren Modus **„Spielzeiten bis zur Endzeit anpassen“**. Im festen Modus bleiben die gewählten Spielminuten erhalten und eine mögliche Zeitüberschreitung wird angezeigt. Der automatische Modus teilt die Zeit zwischen Start und Ende auf reale Spielblöcke und Pausen auf; zu enge Zeitfenster werden abgelehnt. Beim Doppelturnier erscheint eine Übersicht für 1–8 Spiele pro Team auf Basis echter Probeauslosungen, Platzanzahl und Endzeit, auf Wunsch mit Top-8-Play-off-Reserve. One Point Cup unterstützt planbare Minuten je Ballwechsel und parallele Plätze. Bestandsdaten bleiben kompatibel. Details: [Projektstatus](PROJEKTSTATUS.md), [Entscheidungen E-033](ENTSCHEIDUNGEN.md).
 
-**Diese neuen Änderungen sind noch nicht online.** Die letzte bestätigte produktive Testversion ist v0.8.0. CI/Praxistests v0.8.2 und eine ausdrückliche Freigabe sind vor dem nächsten manuellen FTPS-Upload nötig.
+**In v0.8.4 hochgeladen:** Zeitplanung, Berater und Roadmap. Die Veröffentlichung bestätigt die Übertragung, nicht einen vollständigen Test der Funktionen im echten Browser.
 
 ## Nächster Entwicklungsschritt
 
-Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Den neuen Endzeitplan, den Turnierberater und die Roadmap **v0.8.4** vollständig über GitHub CI und im Browser testen und erst nach ausdrücklicher Freigabe manuell über GitHub Actions veröffentlichen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
+Siehe [PROJEKTSTATUS.md](PROJEKTSTATUS.md): Zuerst die Roadmap als Projektleitung aktivieren, den generierten Admin-Code sicher aufbewahren und vor externen Einladungen einen persistenten privaten Roadmap-Speicherort einrichten. Danach Zeitplanung, Formatberater und Roadmap im echten Browser testen. Auf dem Rechner der Turnierleitung **Fernanzeige aktivieren**, Live-Link kopieren, auf einem **separaten Laptop/Tablet/Smart-TV** öffnen und dort den Webspace-Passwortschutz bestätigen. Runde starten, Ergebnisse erfassen, Nachführung und Widerruf prüfen. Ein echtes Backend für gemeinsames Bearbeiten kommt erst in einer späteren Entwicklungsphase.
 
 **Nach größeren Änderungen:** Projektstatus, Entscheidungen (falls relevant) und Changelog im selben Arbeitsschritt aktualisieren. Unterschied zwischen implementiert, getestet und live veröffentlicht konsequent dokumentieren.
