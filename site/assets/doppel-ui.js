@@ -623,8 +623,8 @@ document.addEventListener("click",event=>{
     // end-time plan is found; seed 37 mirrors the feasibility preview.
     for(let attempt=0;attempt<8;attempt++){
       const seed=attempt===7?37:Math.floor(Math.random()*2147483647);
-      const candidate=generateDoublesDraw(t,{seed});
       try{
+        const candidate=generateDoublesDraw(t,{seed});
         const plan=tournamentSchedule({...t,doubles:{...t.doubles,draw:candidate}});
         if(plan.overTarget&&t.timeMode==="fit")throw Error("Endzeit ist zu knapp.");
         draw=candidate;
