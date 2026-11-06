@@ -155,7 +155,7 @@ function detailsHtml(item){
     '<p>Dieser Vorschlag wurde eingereicht. Die Projektleitung kann Ziel, Umfang und konkrete Prüfpunkte noch ausarbeiten.</p></div>';
   const sourceLinks=(Array.isArray(item.references)?item.references:[])
     .filter(ref=>ref&&typeof ref.title==="string"&&typeof ref.url==="string"&&
-      /^https:\/\/(?:drive\\.google\\.com|docs\\.google\\.com)\//.test(ref.url))
+      /^https:\/\/(?:drive\.google\.com|docs\.google\.com)\//.test(ref.url))
     .slice(0,5);
   const sources=sourceLinks.length?
     '<section class="rm-detail-sources"><h3>Fachquellen aus Google Drive</h3><p>Grundlagen und mögliche Varianten – nicht automatisch verbindliche TENNILO-Regeln.</p>'+
