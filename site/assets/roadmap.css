@@ -137,3 +137,28 @@
 @media(max-width:1250px){.rm-board{grid-template-columns:repeat(5,250px)}}
 @media(max-width:900px){.rm-hero-decoration{display:none}.rm-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.rm-filter-bar{grid-template-columns:repeat(2,minmax(0,1fr))}.rm-list-row{grid-template-columns:115px 1fr auto}.rm-list-priority{display:none}}
 @media(max-width:620px){.rm-container{padding:19px 15px 60px}.rm-top{align-items:start}.rm-access{width:100%;justify-content:flex-start}.rm-hero{min-height:unset;padding:32px 23px}.rm-hero h1{font-size:2.35rem}.rm-hero-actions .btn{width:100%}.rm-summary{gap:8px}.rm-overview-stat{padding:15px}.rm-overview-stat small{font-size:10px}.rm-filter-bar{grid-template-columns:1fr}.rm-filter-bar label{width:100%}.rm-board{grid-template-columns:1fr;overflow:visible;gap:13px}.rm-column{min-height:0}.rm-list-row{grid-template-columns:1fr auto;gap:10px}.rm-list-row .rm-status-chip{grid-column:1/-1}.rm-detail-facts{grid-template-columns:1fr}.rm-form-grid{grid-template-columns:1fr}.rm-dialog-head{padding:21px 20px}.rm-dialog-body{padding:20px}.rm-setup{flex-direction:column;align-items:start}}
+
+
+/* Strukturierte Fachdetails – ausschließlich im Eintrag, nicht auf den Board-Karten */
+.rm-detail-intro{padding:17px 20px 14px;background:#f3f7f3;border-radius:11px;border-left:3px solid #d8e985}
+.rm-detail-eyebrow{display:block;color:#638075;font-size:10px;letter-spacing:.12em;font-weight:900;margin-bottom:7px}
+.rm-detail-intro .rm-detail-description{margin:0;font-size:13px;line-height:1.7}
+.rm-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 24px}
+.rm-detail-section{background:#fff;border:1px solid #dfe9e2;border-radius:11px;padding:18px 19px;min-width:0}
+.rm-detail-section.detail-benefit,.rm-detail-section.detail-scope,.rm-detail-section.detail-doneWhen{grid-column:1/-1}
+.rm-detail-section.detail-doneWhen{border-color:#c5dac9}
+.rm-detail-section-title{display:flex;align-items:flex-start;gap:10px}
+.rm-detail-section-marker{display:block;width:6px;height:18px;border-radius:4px;background:#ef7146;flex-shrink:0;margin-top:2px}
+.rm-detail-section.detail-currentState .rm-detail-section-marker{background:#258268}
+.rm-detail-section.detail-openPoints .rm-detail-section-marker{background:#d6a44e}
+.rm-detail-section.detail-doneWhen .rm-detail-section-marker{background:#659875}
+.rm-detail-section h3{margin:0!important;font-size:14px;letter-spacing:-.018em;color:#113b41}
+.rm-detail-section small{font-size:11px;display:block;color:#789087;font-weight:500;line-height:1.5;margin-top:3px}
+.rm-detail-section p{margin:12px 0 0;font-size:12.5px;line-height:1.75;color:#47645e;white-space:pre-line;overflow-wrap:anywhere}
+.rm-detail-awaiting{padding:20px;border:1px dashed #cbded0;border-radius:11px;color:#56776a;margin:12px 0 25px}
+.rm-detail-awaiting strong{font-size:13px}.rm-detail-awaiting p{margin:7px 0 0;font-size:12px;line-height:1.7}
+.rm-edit-details-head{margin-top:12px;border-top:1px solid #dfe8df;padding-top:23px}
+.rm-edit-details-head h3{margin:0 0 5px!important;font-size:18px;letter-spacing:-.04em}
+.rm-edit-details-head p{font-size:12px;line-height:1.6;color:#6c877d;margin:0}
+.rm-field>small{font-size:11px;line-height:1.5;font-weight:500;color:#6e8b7d}
+@media(max-width:620px){.rm-details-grid{grid-template-columns:1fr}.rm-detail-section{grid-column:1/-1}.rm-detail-intro{padding:15px}.rm-detail-section p{font-size:12px}}
