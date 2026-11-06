@@ -1,9 +1,9 @@
-import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=080";
+import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=082";
 import {euroCents,euroText,euroInput,timeWindow} from "./operations.js?v=082";
 import {
   checkOnePointSetup,onePointTimePlan,drawOnePointCup,checkOnePointDraw,
   setOnePointWinner,onePointProgress,onePointRoundName
-} from "./one-point.js?v=080";
+} from "./one-point.js?v=082";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
