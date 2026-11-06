@@ -1,0 +1,69 @@
+name: TENNILO – Roadmap-Inhalte automatisch aktualisieren
+
+# Nur die bereits geschützte Roadmap (keine Turnier-App, kein Kontobackend).
+# Entwicklungsstände müssen weiterhin explizit im offiziellen Seed gepflegt werden.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/roadmap-seed.json'
+      - 'site/roadmap.html'
+      - 'site/roadmap-lib.php'
+      - 'site/roadmap-api.php'
+      - 'site/assets/roadmap.js'
+      - 'site/assets/roadmap.css'
+      - '.github/workflows/roadmap-sync.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennilo-roadmap-only-sync
+  cancel-in-progress: false
+
+jobs:
+  roadmap:
+    name: Geschützte Roadmap prüfen und separat übertragen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Nur Quellcode auschecken
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Node.js 22 vorbereiten
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: PHP-Syntax und Roadmap-Regeln testen
+        run: |
+          php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2 erforderlich.\n"); exit(1); }'
+          php -l site/roadmap-lib.php
+          php -l site/roadmap-api.php
+          php tests/roadmap.php
+      - name: Alle App- und Roadmap-Tests vor automatischem Inhaltssync prüfen
+        run: node --test tests/*.test.mjs
+      - name: Ausschließlich sechs Roadmap-Dateien per FTPS hochladen
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${FTP_HOST:?FTP_HOST fehlt}"
+          : "${FTP_USER:?FTP_USER fehlt}"
+          : "${FTP_PASSWORD:?FTP_PASSWORD fehlt}"
+          # Kein App-JavaScript, keine Benutzerkonten, keine Konfiguration,
+          # keine .htaccess, keine Löschbefehle oder privaten Serverdaten.
+          for file in site/roadmap-lib.php site/roadmap-api.php site/roadmap-seed.json site/assets/roadmap.css site/assets/roadmap.js site/roadmap.html; do
+            test -f "$file"
+            remote="${file#site/}"
+            echo "Roadmap aktualisieren: $remote"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --user "${FTP_USER}:${FTP_PASSWORD}" \
+              --upload-file "$file" \
+              "ftp://${FTP_HOST}:21/$remote"
+          done
+          echo "Sechs geschützte Roadmap-Dateien erfolgreich aktualisiert."
