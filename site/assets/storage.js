@@ -100,9 +100,12 @@ const doublesOf=(value,categories)=>{
     raw.draw.signature.length<30000&&Array.isArray(raw.draw.rounds)&&raw.draw.rounds.length<=500&&
     raw.draw.rounds.every(r=>Array.isArray(r.matches)&&r.matches.length<=100)?raw.draw:null;
   const p=raw.playoffs;
-  const playoffs=p&&typeof p==="object"&&Array.isArray(p.seeds)&&p.seeds.length===8&&
-    Array.isArray(p.quarterfinals)&&p.quarterfinals.length===4&&
-    Array.isArray(p.semifinals)&&p.semifinals.length===2&&p.final&&p.thirdPlace?p:null;
+  const size=Array.isArray(p?.seeds)?p.seeds.length:0;
+  const playoffs=[2,4,8,16].includes(size)&&
+    (size<16||(Array.isArray(p.roundOf16)&&p.roundOf16.length===8))&&
+    (size<8||(Array.isArray(p.quarterfinals)&&p.quarterfinals.length===4))&&
+    (size<4||(Array.isArray(p.semifinals)&&p.semifinals.length===2))&&
+    p.final&&(size<4||p.thirdPlace)?p:null;
   return {teams,draw,playoffs,playoffOptOut:Array.isArray(raw.playoffOptOut)?
     [...new Set(raw.playoffOptOut.map(id=>text(id,80)).filter(Boolean))].slice(0,100):[]};
 };
@@ -145,6 +148,7 @@ export function normalizeTournament(v) {
     pointWinByTwo:v.type!=="opc"&&v.matchMode==="points"&&v.pointWinByTwo===true,
     reserveFinals:v.reserveFinals===true,
     reservePlayoffs:v.reservePlayoffs!==false,
+    playoffSize:[2,4,8,16].includes(Number(v.playoffSize))?Number(v.playoffSize):8,
     opcMinutes:integer(v.opcMinutes,1,15,3),
     duration: integer(v.duration, 10, 120, 20),
     breakMinutes: integer(v.breakMinutes, 0, 60, 10),
@@ -184,7 +188,7 @@ export function normalizeTournament(v) {
 export function newTournament(values = {}) {
   return normalizeTournament({
     id: uid(), type:values.type, demoMode:values.demoMode===true, doubles:values.doubles, opc:values.opc, name: values.name, date: values.date, startTime: values.startTime,
-    endTime:values.endTime,timeMode:values.timeMode,matchMode:values.matchMode,pointTarget:values.pointTarget,pointWinByTwo:values.pointWinByTwo,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,opcMinutes:values.opcMinutes,
+    endTime:values.endTime,timeMode:values.timeMode,matchMode:values.matchMode,pointTarget:values.pointTarget,pointWinByTwo:values.pointWinByTwo,reserveFinals:values.reserveFinals,reservePlayoffs:values.reservePlayoffs,playoffSize:values.playoffSize,opcMinutes:values.opcMinutes,
     duration: values.duration, breakMinutes: values.breakMinutes,
     rounds: values.rounds, courts: values.courts, courtLabels: values.courtLabels,
     finalSize: values.finalSize ?? 8, finalOptOut: [], entryFeeCents: values.entryFeeCents ?? 0,

@@ -58,8 +58,12 @@ export function scheduleBlockCount(t) {
     if(!preliminary)return null;
     const present=(t.doubles.teams||[]).filter(x=>x.present).length;
     const courts=Math.max(1,t.courts?.length||1);
-    const playoffs=t.reservePlayoffs!==false&&present>=8?
-      Math.ceil(4/courts)+Math.ceil(2/courts)+Math.ceil(2/courts):0;
+    const size=[2,4,8,16].includes(Number(t.playoffSize))?Number(t.playoffSize):8;
+    const stages=[];
+    for(let matches=size/2;matches>=2;matches/=2)stages.push(matches);
+    stages.push(size>=4?2:1); // Finale plus Spiel um Platz 3, except a two-team final.
+    const playoffs=t.reservePlayoffs!==false&&present>=size?
+      stages.reduce((blocks,matches)=>blocks+Math.ceil(matches/courts),0):0;
     return preliminary+playoffs;
   }
   if(t?.type==="opc")return null; // One-point matches use their own time slots.

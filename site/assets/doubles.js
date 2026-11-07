@@ -1,4 +1,4 @@
-// TENNILO Doppelturnier: feste Zweierteams, Vorrunde, Rangliste und Top-8-Play-offs.
+// TENNILO Doppelturnier: feste Zweierteams, Vorrunde, Rangliste und wählbare Play-offs.
 import {plannedRound,tournamentSchedule} from "./operations.js?v=082";
 import {normalizePointResult,scoringRules} from "./match-scoring.js";
 // Fachliche Vorlage: "Turniere Verein – Auslosung & Livetabelle", Doppel-Setup,
@@ -12,6 +12,29 @@ const hashSeed = seed => {let x=(Number(seed)||1)>>>0;return ()=>{x^=x<<13;x^=x>
 const shuffle = (items,rng) => {const result=[...items];for(let i=result.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[result[i],result[j]]=[result[j],result[i]];}return result;};
 const presentTeams = t => (t?.doubles?.teams||[]).filter(team=>team.present).map(team=>team.id);
 const teamLabel = team => [team.player1,team.player2].filter(Boolean).join(" / ");
+
+export const DOUBLES_PLAYOFF_SIZES = [2,4,8,16];
+export function doublesPlayoffSize(t) {
+  return DOUBLES_PLAYOFF_SIZES.includes(Number(t?.playoffSize)) ? Number(t.playoffSize) : 8;
+}
+export function doublesPlayoffStages(t) {
+  const size=doublesPlayoffSize(t);
+  return [
+    ...(size===16?[{id:"roundOf16",title:"Achtelfinale",count:8}]:[]),
+    ...(size>=8?[{id:"quarterfinals",title:"Viertelfinale",count:4}]:[]),
+    ...(size>=4?[{id:"semifinals",title:"Halbfinale",count:2}]:[]),
+    {id:"final",title:"Finale",count:1},
+    ...(size>=4?[{id:"thirdPlace",title:"Spiel um Platz 3",count:1}]:[])
+  ];
+}
+// Highest seed faces lowest, the two halves meet only in the final.
+// Creates standard 1–16, 8–9 etc. seed pairing for any supported field size.
+function seededPositions(size) {
+  let positions=[1,2];
+  for(let n=4;n<=size;n*=2)positions=positions.flatMap(x=>[x,n+1-x]);
+  return positions.map(x=>x-1);
+}
+
 
 export function doublesDrawSignature(t) {
   return JSON.stringify({
@@ -189,11 +212,12 @@ export function doublesStandings(t) {
 
 export function doublesPlayoffPreview(t) {
   const info=doublesStandings(t);
+  const size=doublesPlayoffSize(t);
   const excluded=new Set(t.doubles.playoffOptOut||[]);
   const eligible=info.ranking.filter(x=>!excluded.has(x.id));
-  return {...info,eligible,ready:info.finished && eligible.length>=8,
+  return {...info,eligible,size,ready:info.finished && eligible.length>=size,
     reason:!info.finished?"Zuerst alle Vorrundenergebnisse eintragen.":
-      eligible.length<8?"Mindestens acht Teams müssen für die Play-offs zugelassen sein.":null};
+      eligible.length<size?"Mindestens "+size+" Teams müssen für die Play-offs zugelassen sein.":null};
 }
 
 const newMatch=(team1=null,team2=null,court=null)=>({team1,team2,court,result:null});
@@ -203,40 +227,49 @@ const preserve=(old,a,b,court)=>({
   team1:a,team2:b,court,
   result:old && old.team1===a && old.team2===b ? old.result : null
 });
+const matchRows=(matches,teams,courts)=>Array.from({length:teams.length/2},(_,i)=>
+  preserve(matches?.[i],teams[i*2],teams[i*2+1],courts[i%courts.length]));
 
 export function rebuildDoublesPlayoffs(t,playoffs) {
-  const courts=t.courts;
-  const qf=playoffs.quarterfinals.map((m,i)=>({...m,court:courts[i%courts.length]}));
-  const sf=Array.from({length:2},(_,i)=>preserve(playoffs.semifinals[i],
-    winner(qf[i*2]),winner(qf[i*2+1]),courts[i%courts.length]));
-  const final=preserve(playoffs.final,winner(sf[0]),winner(sf[1]),courts[0]);
-  const third=preserve(playoffs.thirdPlace,loser(sf[0]),loser(sf[1]),courts[Math.min(1,courts.length-1)]);
-  return {...playoffs,quarterfinals:qf,semifinals:sf,final,thirdPlace:third};
+  const size=playoffs.seeds.length,courts=t.courts;
+  const seedOrder=seededPositions(size).map(i=>playoffs.seeds[i]);
+  const base=matchRows(
+    size===16?playoffs.roundOf16:size===8?playoffs.quarterfinals:
+      size===4?playoffs.semifinals:[playoffs.final],
+    seedOrder,courts);
+  const r16=size===16?base:[];
+  const qf=size===16?matchRows(playoffs.quarterfinals,r16.map(winner),courts):
+    size===8?base:[];
+  const sf=size===16||size===8?matchRows(playoffs.semifinals,qf.map(winner),courts):
+    size===4?base:[];
+  const finals=size>=4?sf.map(winner):[];
+  const final=size===2?base[0]:preserve(playoffs.final,finals[0],finals[1],courts[0]);
+  const third=size===2?null:preserve(playoffs.thirdPlace,loser(sf[0]),loser(sf[1]),
+    courts[Math.min(1,courts.length-1)]);
+  return {...playoffs,roundOf16:r16,quarterfinals:qf,semifinals:sf,final,thirdPlace:third};
 }
 
 export function createDoublesPlayoffs(t) {
   const check=doublesPlayoffPreview(t);
   if(!check.ready)throw Error(check.reason);
-  const seeds=check.eligible.slice(0,8).map(x=>x.id);
-  const pairings=[[0,7],[3,4],[1,6],[2,5]];
-  const playoffs={
+  const seeds=check.eligible.slice(0,check.size).map(x=>x.id);
+  return rebuildDoublesPlayoffs(t,{
     sourceSignature:t.doubles.draw.signature,
     seeds,
-    quarterfinals:pairings.map(([a,b],i)=>newMatch(seeds[a],seeds[b],t.courts[i%t.courts.length])),
-    semifinals:[newMatch(),newMatch()],
-    final:newMatch(),thirdPlace:newMatch()
-  };
-  return rebuildDoublesPlayoffs(t,playoffs);
+    roundOf16:[],quarterfinals:[],semifinals:[],final:newMatch(),thirdPlace:null
+  });
 }
 
 export function updateDoublesPlayoffResult(t,stage,index,result) {
   const p=t?.doubles?.playoffs;
   if(!p)throw Error("Play-offs noch nicht ausgelost.");
-  const allowed={quarterfinals:4,semifinals:2,final:1,thirdPlace:1};
-  if(!(stage in allowed)||!validIndex(index,allowed[stage]))throw Error("Ungültige Play-off-Begegnung.");
+  const stageInfo=doublesPlayoffStages({playoffSize:p.seeds.length}).find(s=>s.id===stage);
+  if(!stageInfo || !validIndex(index,stageInfo.count))
+    throw Error("Ungültige Play-off-Begegnung.");
   const fresh=copy(rebuildDoublesPlayoffs(t,p));
   const matches=stage==="final"||stage==="thirdPlace"?[fresh[stage]]:fresh[stage];
-  if(!matches[index]?.team1||!matches[index]?.team2)throw Error("Diese Begegnung ist noch nicht vollständig besetzt.");
+  if(!matches[index]?.team1||!matches[index]?.team2)
+    throw Error("Diese Begegnung ist noch nicht vollständig besetzt.");
   matches[index].result=normalizeDoublesResult(result,t);
   if(stage==="final"||stage==="thirdPlace")fresh[stage]=matches[0];
   return rebuildDoublesPlayoffs(t,fresh);
@@ -246,10 +279,14 @@ export function doublesPlayoffStatus(t) {
   const p=t?.doubles?.playoffs;
   if(!p)return {ready:false};
   const check=verifyDoublesDraw(t);
-  if(!check.ok || p.sourceSignature!==t.doubles.draw.signature) return {ready:false,error:"Ungültige Play-off-Grundlage."};
+  if(!check.ok || p.sourceSignature!==t.doubles.draw.signature ||
+    !DOUBLES_PLAYOFF_SIZES.includes(p.seeds?.length) || p.seeds.length!==doublesPlayoffSize(t)) {
+    return {ready:false,error:"Ungültige Play-off-Grundlage."};
+  }
   const refreshed=rebuildDoublesPlayoffs(t,p);
-  const champion=winner(refreshed.final),third=winner(refreshed.thirdPlace);
-  return {ready:true,playoffs:refreshed,champion,third,done:!!(champion&&third)};
+  const champion=winner(refreshed.final),third=refreshed.thirdPlace?winner(refreshed.thirdPlace):null;
+  return {ready:true,playoffs:refreshed,champion,third,
+    done:!!(champion&&(p.seeds.length===2||third))};
 }
 
 export function doublesPlanRound(t,index) {
