@@ -1,4 +1,4 @@
-import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=093";
+import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=095";
 import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=093";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=091";
@@ -6,11 +6,11 @@ import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
   doublesPlayoffStatus,updateDoublesPlayoffCourt,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,decideDoublesTie,drawDoublesTieOrder,changeDoublesClock,normalizeDoublesResult
-} from "./doubles.js?v=093";
+} from "./doubles.js?v=095";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
   clearLiveSecrets,publishLive,remoteLiveUrl
-} from "./remote-live.js?v=093";
+} from "./remote-live.js?v=095";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
@@ -84,7 +84,7 @@ function dIcon(kind) {
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
     '<a class="brand brand-link" href="./index.html">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></a>'+
-    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.3</span></div></header>';
+    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.5</span></div></header>';
 }
 function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
@@ -536,7 +536,7 @@ function render() {
       t.courts.length+' Plätze · '+t.rounds+' Spiele je Team · Top '+doublesPlayoffSize(t)+' Play-offs</p></div>'+
     '<div class="hero-orbit" aria-hidden="true"><div class="tennis-ball"></div></div></div>'+
     '<section class="screen double-main">'+demoPanel(t)+(tabs[view]||overview)(t)+'</section>'+
-    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.9.3 · Geschützte Testversion · Daten nur lokal</footer>'+
+    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.9.5 · Geschützte Testversion · Daten nur lokal</footer>'+
     '<input type="file" id="doubles-import" accept=".json,application/json" hidden></main></div>';
 }
 

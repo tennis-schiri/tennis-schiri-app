@@ -1,4 +1,4 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=093";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=095";
 import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {normalizeAdvisorInput,recommendTournamentFormats,advisorTournamentValues} from "./tournament-advisor.js?v=086";
@@ -9,7 +9,7 @@ import { createRibbonFinals, updateRibbonFinalResult, verifyRibbonFinals, resetR
 import { renderRibbonFinals } from "./finals-ui.js?v=086";
 import { euroCents,euroText,euroInput,entryDue,feesOverview,plannedRound,clockFor,changeRoundClock,timeWindow,tournamentSchedule } from "./operations.js?v=082";
 import { renderFees,cashPaymentBody,renderClockToolbar,refreshClockDisplays } from "./operations-ui.js?v=082";
-import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=086";
+import {publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,clearLiveSecrets,publishLive,remoteLiveUrl} from "./remote-live.js?v=095";
 
 const store = new BrowserTournamentStore();
 let remoteRequest=null;

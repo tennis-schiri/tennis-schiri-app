@@ -12,8 +12,8 @@ const main=text("site/assets/app.js");
 const workflow=text(".github/workflows/deploy.yml");
 
 test("Doppelturnier hat eigene, responsiv gestylte Startseite mit Noindex",()=>{
-  assert.match(html,/doppel-ui\.js\?v=093/);
-  assert.match(html,/doppel\.css\?v=093/);
+  assert.match(html,/doppel-ui\.js\?v=095/);
+  assert.match(html,/doppel\.css\?v=095/);
   assert.match(html,/noindex,nofollow/);
   assert.match(text("site/assets/doppel.css"),/@media\(max-width:730px\)/);
 });
