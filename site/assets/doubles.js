@@ -35,6 +35,32 @@ function seededPositions(size) {
   return positions.map(x=>x-1);
 }
 
+// Play-off pairings are deterministic: seeds 1 vs N, 2 vs N-1, etc.
+// Match indexes stay in bracket order (1/8 vs 4/5), while the visual
+// numbering follows standings order: 1/8, 2/7, 3/6, 4/5.
+export function doublesPlayoffSeeding(t,ranking) {
+  const size=doublesPlayoffSize(t);
+  const excluded=new Set(t?.doubles?.playoffOptOut||[]);
+  const available=(Array.isArray(ranking)?ranking:[]).filter(x=>!excluded.has(x.id));
+  const seeds=t?.doubles?.playoffs?.seeds||available.slice(0,size).map(x=>x.id);
+  const bracket=seededPositions(size);
+  const firstRoundId=doublesPlayoffStages(t)[0].id;
+  const abbrev=({roundOf16:"AF",quarterfinals:"VF",semifinals:"HF",final:"F"})[firstRoundId];
+  const pairs=Array.from({length:size/2},(_,matchIndex)=>{
+    const seed1=bracket[matchIndex*2]+1,seed2=bracket[matchIndex*2+1]+1;
+    return {matchIndex,seed1,seed2,team1:seeds[seed1-1]||null,
+      team2:seeds[seed2-1]||null};
+  }).sort((a,b)=>a.seed1-b.seed1).map((pair,i)=>({
+    ...pair,number:i+1,label:abbrev+" "+(i+1),
+    seedLabel:pair.seed1+"–"+pair.seed2
+  }));
+  const byTeam=new Map();
+  for(const pair of pairs)for(const id of [pair.team1,pair.team2])
+    if(id)byTeam.set(id,pair);
+  return {size,seeds,pairs,byTeam};
+}
+
+
 
 export function doublesDrawSignature(t) {
   return JSON.stringify({
