@@ -53,7 +53,7 @@ export function renderLiveScreen(data) {
   const standings=data.ranking.length?`<aside class="live-rankings" aria-label="${doubles?"Doppel-Livetabelle":"Schleifchen-Zwischenstand"}">
       <h3>${doubles?"Doppel-Livetabelle":"Schleifchen-Stand"}</h3><p>${doubles?(data.scoreUnit==="points"?"Siege · Punktedifferenz":"Siege · Game-Differenz")+" · Top "+(data.playoffSize||8)+" Play-offs":"Vorrunde · Top "+data.ranking.length}</p>
       ${data.ranking.map(p=>`<div class="live-standing-line ${doubles&&p.qualified?"playoff-qualified":""} ${doubles&&Number.isInteger(p.pairNumber)&&p.pairNumber>=1&&p.pairNumber<=8?"po-pair-"+p.pairNumber:""}"><span class="live-standing-rank">${p.place}.</span>
-        <span class="live-standing-name">${escapeLiveText(p.name)}${doubles&&p.qualified?'<small class="live-standing-playoff-label">${escapeLiveText(p.pairLabel||"PO")}</small>':""}</span>
+        <span class="live-standing-name">${escapeLiveText(p.name)}${doubles&&p.qualified?`<small class="live-standing-playoff-label">${escapeLiveText(p.pairLabel||"PO")}</small>`:""}</span>
         <span class="live-standing-ribbons">${doubles?`${escapeLiveText(p.wins)} S · ${escapeLiveText(p.gameDiff)} Diff`:`${p.ribbons} ◉`}</span>
       </div>`).join("")}
     </aside>`:"";

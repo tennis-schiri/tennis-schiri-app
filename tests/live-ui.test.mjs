@@ -83,3 +83,30 @@ test("Die Ergebnisanzeige unterscheidet erledigte und offene Partien",()=>{
   assert.match(html,/ERGEBNIS/);
   assert.match(html,/Spiel offen/);
 });
+
+test("Doppel-Live-Monitor rendert Play-off-Paarungslabel als echten Text, nicht als JavaScript-Ausdruck",()=>{
+  const x=sample();
+  x.format="doubles";
+  x.playoffSize=8;
+  x.ranking=[
+    {place:1,name:"Team 1",wins:4,gameDiff:9,played:4,qualified:true,pairNumber:1,pairLabel:"VF 1 · 1–8"},
+    {place:8,name:"Team 8",wins:2,gameDiff:1,played:4,qualified:true,pairNumber:1,pairLabel:"VF 1 · 1–8"},
+    {place:9,name:"Team 9",wins:1,gameDiff:-3,played:4,qualified:false,pairNumber:0,pairLabel:""}
+  ];
+  const html=renderLiveScreen(x);
+  assert.equal((html.match(/VF 1 · 1–8/g)||[]).length,2);
+  assert.equal((html.match(/class="live-standing-playoff-label"/g)||[]).length,2);
+  assert.equal((html.match(/po-pair-1/g)||[]).length,2);
+  assert.doesNotMatch(html,/\$\{escapeLiveText/);
+  assert.doesNotMatch(html,/Team 9<small class="live-standing-playoff-label"/);
+});
+test("Doppel-Paarungsbeschriftung wird HTML-sicher dargestellt",()=>{
+  const x=sample();
+  x.format="doubles";
+  x.ranking=[{place:1,name:"Team <A>",wins:2,gameDiff:3,
+    qualified:true,pairNumber:2,pairLabel:'<img src=x onerror="oops">'}];
+  const html=renderLiveScreen(x);
+  assert.match(html,/&lt;img src=x onerror=&quot;oops&quot;&gt;/);
+  assert.doesNotMatch(html,/<img/);
+  assert.doesNotMatch(html,/\$\{escapeLiveText/);
+});

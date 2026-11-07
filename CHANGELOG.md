@@ -424,3 +424,10 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Eindeutige Auswahl und Zeitpunkt dokumentiert, im Browser gespeichert und exportierbar; bei geänderten Ergebnissen werden veraltete Entscheidungen nicht still übernommen.
 - Neue **Gleichstände klären**-Sektion vor der Endrunde und auf der Livetabellen-Seite; ungeklärte relevante Gleichstände verhindern die verbindlichen Play-off-Paarungen.
 - Cache-Revision 093 für die gemeinsame Turnierablage und Doppel-/Live-Oberfläche; manuelle FTPS-Veröffentlichung erforderlich.
+
+
+### v0.9.4 – Doppel-Live-Monitor: Paarungslabel korrekt rendern (07.11.2026)
+
+- Anzeige eines versehentlich wörtlich gerenderten JavaScript-Template-Ausdrucks im PO-Farblabel korrigiert. Die Kurzkennung (z. B. „VF 1 · 1–8“) wird nun als dynamischer, HTML-sicher maskierter Text angezeigt.
+- Regressionstests für zwei gleich eingefärbte Gegner, nicht qualifizierte Teams und HTML-Escaping ergänzt.
+- Neues Live-JavaScript mit Cache-Version 094 eingebunden, damit Browser nach dem manuellen FTPS-Upload die korrigierte Anzeige laden.
