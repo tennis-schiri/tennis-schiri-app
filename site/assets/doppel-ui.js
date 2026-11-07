@@ -5,7 +5,7 @@ import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} fro
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
-  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,decideDoublesTie,drawDoublesTieOrder,changeDoublesClock,normalizeDoublesResult
+  doublesPlayoffStatus,updateDoublesPlayoffCourt,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,decideDoublesTie,drawDoublesTieOrder,changeDoublesClock,normalizeDoublesResult
 } from "./doubles.js?v=093";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
@@ -245,6 +245,12 @@ function matchMarkup(t,m,index,{playoff=null,stage="",round=0,pair=null}={}) {
     '<div class="double-teams"><div class="double-side '+(has&&result.winner===1?"win":"")+'"><strong>'+esc(a)+'</strong></div>'+
     '<span class="double-versus">'+(has?'<span class="double-score">'+result.score1+':'+result.score2+'</span>':"gegen")+'</span>'+
     '<div class="double-side '+(has&&result.winner===2?"win":"")+'"><strong>'+esc(b)+'</strong></div></div>'+
+    (playoff?'<label class="double-po-court-control"><span>'+dIcon("court")+' Spielplatz</span>'+
+      '<select data-act="playoff-court" data-stage="'+esc(stage)+'" data-match="'+index+'" '+
+      'aria-label="Platz für '+esc((doublesPlayoffStages(t).find(x=>x.id===stage)?.title||"Endrunde")+
+        ' Begegnung '+(index+1))+'">'+
+      t.courts.map(court=>'<option value="'+court+'" '+(court===m.court?"selected":"")+'>'+
+        esc(courtName(t,court))+'</option>').join("")+'</select></label>':'')+
     (has&&result.points1!==null?'<p class="muted" style="margin:6px 0">Entscheidungspunkte: '+result.points1+':'+result.points2+'</p>':'')+
     (planned?'<div class="double-actions" style="margin-top:12px"><button class="btn ghost small" data-act="result" '+
       (playoff? 'data-stage="'+esc(stage)+'" data-match="'+index+'"':
@@ -372,7 +378,13 @@ function playoffStage(t,title,id,matches,seedPairs=[]) {
   const pairAtIndex=new Map(seedPairs.map(x=>[x.matchIndex,x]));
   const entries=matches.map((match,index)=>({match,index,pair:pairAtIndex.get(index)||null}));
   if(seedPairs.length)entries.sort((a,b)=>(a.pair?.seed1||999)-(b.pair?.seed1||999));
-  return '<section class="double-panel"><h3>'+title+'</h3>'+
+  const currentlyShown=t.liveDisplay?.mode==="finals"&&t.liveDisplay.stage===id;
+  return '<section class="double-panel double-po-stage" id="stage-'+esc(id)+'">'+
+    '<div class="double-po-stage-head"><h3>'+esc(title)+'</h3>'+
+    '<button class="btn '+(currentlyShown?"primary":"subtle")+' small" data-act="live-stage" '+
+    'data-stage="'+esc(id)+'" aria-pressed="'+(currentlyShown?"true":"false")+'">'+
+    dIcon("monitor")+' '+(currentlyShown?"Auf Live-Monitor ausgewählt":"Auf Live-Monitor anzeigen")+
+    '</button></div>'+
     entries.map(({match,index,pair})=>matchMarkup(t,match,index,{playoff:true,stage:id,pair})).join("")+'</section>';
 }
 
@@ -740,9 +752,18 @@ document.addEventListener("click",event=>{
   });
   if(act==="live-playoffs")return run(()=>{
     if(!t.doubles.playoffs||!doublesPlayoffStatus(t).ready)
-      throw Error("Bitte zuerst gültige Play-offs auslosen.");
+      throw Error("Bitte zuerst gültige Play-offs festlegen.");
     mutate(t,{liveDisplay:{mode:"finals"}});
-    flash("Die Play-offs werden auf dem Live-Monitor gezeigt.");
+    flash("Der Live-Monitor zeigt automatisch die aktuelle Endrunde an.");
+  });
+  if(act==="live-stage")return run(()=>{
+    if(!t.doubles.playoffs||!doublesPlayoffStatus(t).ready)
+      throw Error("Bitte zuerst die Play-off-Paarungen festlegen.");
+    const stage=trigger.dataset.stage;
+    const info=doublesPlayoffStages(t).find(s=>s.id===stage);
+    if(!info)throw Error("Unbekannte Endrunde.");
+    mutate(t,{liveDisplay:{mode:"finals",stage}});
+    flash(info.title+" wird auf dem Live-Monitor angezeigt.");
   });
   if(act==="live-auto")return run(()=>{
     mutate(t,{liveDisplay:null});
@@ -890,6 +911,12 @@ document.addEventListener("change",event=>{
   if(el.dataset.act==="presence")return run(()=>{
     if(t.doubles.draw)throw Error("Anwesenheit ist nach der Auslosung gesperrt.");
     replaceDoubles(t,{teams:t.doubles.teams.map(x=>x.id===el.dataset.id?{...x,present:el.checked}:x)});
+  });
+  if(el.dataset.act==="playoff-court")return run(()=>{
+    if(!t.doubles.playoffs)throw Error("Bitte zuerst die Endrunde festlegen.");
+    const stage=el.dataset.stage,index=Number(el.dataset.match),court=Number(el.value);
+    replaceDoubles(t,{playoffs:updateDoublesPlayoffCourt(t,stage,index,court)});
+    flash("Platzzuordnung gespeichert: "+courtName(t,court));
   });
   if(el.dataset.act==="playoff-eligible")return run(()=>{
     if(t.doubles.playoffs)throw Error("Bitte zuerst die Play-offs zurücknehmen.");
