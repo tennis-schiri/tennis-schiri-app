@@ -71,3 +71,23 @@ test("Doppel-JavaScript und veränderte Einstiegsmodule sind syntaktisch valide"
     execFileSync(process.execPath,["--check",new URL("../"+path,import.meta.url).pathname]);
   }
 });
+
+test("Doppel benutzt gemeinsame Turniermanager-Navigation, PO-Rangfarben und wählbare Endrunde",()=>{
+  const style=text("site/assets/doppel.css");
+  const live=text("site/assets/live-ui.js");
+  assert.match(ui,/class="app-layout double-app-layout"/);
+  assert.match(ui,/class="sidebar double-sidebar"/);
+  assert.match(ui,/class="nav-tabs"/);
+  assert.match(ui,/class="hero"/);
+  assert.match(ui,/class="toolbar"/);
+  assert.match(ui,/id="doubles-tournament-select"/);
+  assert.match(ui,/name="playoffSize"/);
+  assert.match(ui,/\[2,4,8,16\]/);
+  assert.match(ui,/double-playoff-row/);
+  assert.match(ui,/double-playoff-legend/);
+  assert.match(style,/\.double-ranking-table tr\.double-playoff-row/);
+  assert.match(style,/\.double-playoff-label/);
+  assert.match(live,/playoff-qualified/);
+  assert.match(model,/export function doublesPlayoffStages/);
+  assert.match(store,/playoffSize:/);
+});

@@ -77,10 +77,11 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
   response=await post(wrong);
   assert.equal(response.status,403);
   const doubles={
-    ...query,format:"doubles",name:"Doppelturnier",index:26,
+    ...query,format:"doubles",name:"Doppelturnier",index:26,playoffSize:16,
     paid1:2300,present:true,
-    ranking:[{place:1,name:"Alex / Kim",wins:3,gameDiff:-5,gamesFor:17,played:4,
-      paid1:123456,ribbons:9999}]
+    ranking:Array.from({length:16},(_,i)=>({place:i+1,name:"Doppelteam "+(i+1),
+      wins:3,gameDiff:-5,gamesFor:17,played:4,qualified:i<16,
+      paid1:123456,ribbons:9999}))
   };
   response=await post(writer,"publish",doubles);
   assert.equal(response.status,200,await response.text());
@@ -94,6 +95,9 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
   assert.equal(dblBody.display.ranking[0].wins,3);
   assert.equal(dblBody.display.ranking[0].gameDiff,-5);
   assert.equal(dblBody.display.ranking[0].gamesFor,17);
+  assert.equal(dblBody.display.playoffSize,16);
+  assert.equal(dblBody.display.ranking.length,16);
+  assert.equal(dblBody.display.ranking[15].qualified,true);
   assert.ok(!("ribbons" in dblBody.display.ranking[0]));
   for(const secret of ["paid1","present","123456","2300"])
     assert.ok(!JSON.stringify(dblBody.display).includes(secret));

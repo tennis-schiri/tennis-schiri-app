@@ -93,7 +93,7 @@ function icon(name) {
 function header() {
   return `<header class="shell-header"><div class="header-inner">
     <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
-    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.8</span>
+    <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.1</span>
   </div></header>`;
 }
 
