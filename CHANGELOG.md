@@ -405,3 +405,13 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Endrundenfeld mit 2, 4, 8 oder 16 Teams wählbar und im Turnier/JSON gespeichert (Altdaten bleiben bei acht).
 - K.-o.-Auslosung von direktem Finale bis 16er-Achtelfinale samt Ergebnisfortschreibung, Nachrücken, Zeitplanung und Demo-Befüllung.
 - Testabdeckung für alle Feldgrößen; manueller App-Upload erst nach Freigabe.
+
+
+### v0.9.2 – Feste Doppel-Play-off-Paarungen, Farbe und Nachrücker (07.11.2026, GitHub)
+
+- Feste Paarungen nach Setzliste, Darstellung in Rangfolge 1–8, 2–7, 3–6, 4–5 (4/16er-Felder entsprechend); keine zufällige Endrundenauslosung.
+- „Top N auslosen“ durch „Play-off-Paarungen festlegen“ ersetzt.
+- Acht aufeinander abgestimmte Paarungsfarben samt VF/HF/AF/F-Labels in Admin-Rangliste und Live-Monitor; beide Gegner im selben Farbcode.
+- Nur Qualifizierte angehakt; bei Absage rückt der nächste Tabellenrang automatisch nach, bei weiteren Absagen entsprechend weiter. Wiederzulassung möglich.
+- Absturzsichere Ablauflogik für ältere Doppelturniere und alle vier Play-off-Größen; veränderte UI-Module und CSS mit eigener Cache-Version 092.
+- Vor Veröffentlichung erneut Tests und manuellen FTPS-Upload prüfen.
