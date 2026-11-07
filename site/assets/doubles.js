@@ -338,8 +338,9 @@ export function doublesPlayoffPreview(t) {
     ready:info.finished && eligible.length>=size && unresolvedTies.length===0,
     reason:!info.finished?"Zuerst alle Vorrundenergebnisse eintragen.":
       eligible.length<size?"Mindestens "+size+" Teams müssen für die Play-offs zugelassen sein.":
-      unresolvedTies.length?"Zuerst "+unresolvedTies.length+" relevanten Gleichstand "+
-        (unresolvedTies.length===1?"klären.":"klären.") :null};
+      unresolvedTies.length?(unresolvedTies.length===1?
+        "Zuerst den relevanten Gleichstand klären.":
+        "Zuerst "+unresolvedTies.length+" relevante Gleichstände klären."):null};
 }
 
 const newMatch=(team1=null,team2=null,court=null)=>({team1,team2,court,result:null});

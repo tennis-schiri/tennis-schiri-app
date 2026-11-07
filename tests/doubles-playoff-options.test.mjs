@@ -4,7 +4,7 @@ import {newTournament,normalizeTournament} from "../site/assets/storage.js";
 import {
   generateDoublesDraw,updateDoublesResult,doublesStandings,doublesPlayoffPreview,
   createDoublesPlayoffs,updateDoublesPlayoffResult,doublesPlayoffStatus,
-  doublesPlayoffStages,doublesPlayoffSize
+  doublesPlayoffStages,doublesPlayoffSize,decideDoublesTie
 } from "../site/assets/doubles.js";
 import {tournamentSchedule} from "../site/assets/operations.js";
 import {buildLiveDisplay} from "../site/assets/live-model.js";
@@ -28,6 +28,12 @@ function finishPrelim(t) {
     for(let mi=0;mi<t.doubles.draw.rounds[ri].matches.length;mi++)
       t.doubles.draw=updateDoublesResult(t,ri,mi,{score1:6,score2:3,winner:1});
 }
+function settleOpenTies(t) {
+  // Der Test prüft Endrunden. Bei künstlich gleichen Vorrundenergebnissen
+  // muss die Turnierleitung vor dem endgültigen Setzen bewusst entscheiden.
+  for(const group of doublesStandings(t).tieGroups.filter(x=>!x.resolved))
+    t.doubles.tieBreaks=decideDoublesTie(t,group.ids,group.order,"manual");
+}
 function matchRows(p,stage) {
   return stage==="final"||stage==="thirdPlace"?[p[stage]]:p[stage];
 }
@@ -38,6 +44,7 @@ for(const size of [2,4,8,16]){
     assert.equal(doublesPlayoffPreview(t).ready,false);
     finishPrelim(t);
     assert.equal(doublesStandings(t).finished,true);
+    settleOpenTies(t);
     const preview=doublesPlayoffPreview(t);
     assert.equal(preview.ready,true);
     assert.equal(preview.size,size);
@@ -83,6 +90,7 @@ for(const size of [2,4,8,16]){
 test("Doppel: Auswahl und Freigaben beeinflussen markierte Play-off-Ränge",()=>{
   const t=fixture(12,4);
   finishPrelim(t);
+  settleOpenTies(t);
   const ranking=doublesStandings(t).ranking;
   t.doubles.playoffOptOut=[ranking[0].id];
   const preview=doublesPlayoffPreview(t);
@@ -116,6 +124,7 @@ test("Doppel: 16er-Demo simuliert Achtelfinale bis Sieger samt Fernanzeige",()=>
   t.doubles.draw=generateDoublesDraw(t,{seed:5});
   t.doubles={...t.doubles,...fillDemoResults(t,()=>0.42).patch.doubles};
   assert.equal(doublesStandings(t).finished,true);
+  settleOpenTies(t);
   t.doubles.playoffs=createDoublesPlayoffs(t);
   const result=fillDemoResults(t,()=>0.42);
   assert.equal(result.filled,16);
