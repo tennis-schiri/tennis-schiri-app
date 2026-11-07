@@ -5,7 +5,7 @@ import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} fro
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
-  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,changeDoublesClock,normalizeDoublesResult
+  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,changeDoublesClock,normalizeDoublesResult
 } from "./doubles.js?v=091";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
@@ -234,10 +234,12 @@ function teams(t) {
     '<tbody>'+ (rows||'<tr><td colspan="6">Noch keine Teams angelegt. Bitte zwei Namen pro Team erfassen.</td></tr>')+'</tbody></table></div></section>'+
     '<p class="muted">Die Barzahlungen bleiben beim Verein; sie gehören nicht zur späteren TENNILO-Softwarelizenz.</p>';
 }
-function matchMarkup(t,m,index,{playoff=null,stage="",round=0}={}) {
+function matchMarkup(t,m,index,{playoff=null,stage="",round=0,pair=null}={}) {
   const a=label(t,m.team1),b=label(t,m.team2),ready=!!(m.team1&&m.team2),result=m.result,has=hasResult(m);
   const planned=ready;
-  return '<article class="double-match"><div class="double-match-head"><span>'+(!playoff?'Spiel '+(index+1)+' · '+esc(courtName(t,m.court)):
+  return '<article class="double-match'+(pair?' po-pair-'+pair.number+' double-po-match':'')+'"><div class="double-match-head"><span>'+
+    (pair?'<span class="double-po-pair-chip po-pair-'+pair.number+'">'+esc(pair.label)+' · '+esc(pair.seedLabel)+'</span> · ':'')+
+    (!playoff?'Spiel '+(index+1)+' · '+esc(courtName(t,m.court)):
       esc(courtName(t,m.court||t.courts[0])))+'</span>'+
     '<span class="double-tag '+(has?"winner":"pending")+'">'+(has?"Ergebnis gespeichert":"Offen")+'</span></div>'+
     '<div class="double-teams"><div class="double-side '+(has&&result.winner===1?"win":"")+'"><strong>'+esc(a)+'</strong></div>'+
@@ -289,27 +291,40 @@ function tablePage(t) {
   if(!t.doubles.draw)return head+'<div class="double-warning">Bitte zuerst die Vorrunde auslosen.</div>';
   let info;
   try{info=doublesStandings(t);}catch(e){return head+'<div class="double-warning">'+esc(e.message)+'</div>';}
-  const excluded=new Set(t.doubles.playoffOptOut||[]);
-  const places=new Set(t.doubles.playoffs?.seeds||
-    info.ranking.filter(x=>!excluded.has(x.id)).slice(0,size).map(x=>x.id));
+  const seeding=doublesPlayoffSeeding(t,info.ranking);
+  const frozen=!!t.doubles.playoffs;
   return head+'<div class="double-success">'+info.complete+' von '+info.planned+' Begegnungen erfasst.</div>'+
     '<div class="double-playoff-legend"><span class="double-playoff-swatch" aria-hidden="true"></span>'+
-    '<strong>Grün = '+size+' Play-off-Plätze</strong> · '+(t.doubles.playoffs?"Endrunde bereits ausgelost":
-      "Aktueller Zwischenstand – bis zum Ende der Vorrunde vorläufig")+
-    ' <button class="btn ghost small" data-act="tab" data-tab="playoffs">Endrunde verwalten</button></div>'+
+    '<strong>Top '+size+' · Play-off-Plätze</strong> · '+(frozen?"Paarungen festgelegt":
+      "Vorläufig: Platzierung und Paarungen ändern sich mit den Vorrundenergebnissen")+
+    ' <button class="btn ghost small" data-act="tab" data-tab="playoffs">Play-offs verwalten</button></div>'+
+    '<div class="double-po-pairs" aria-label="Play-off-Paarungen nach Setzliste">'+
+    seeding.pairs.map(pair=>'<span class="double-po-pair-chip po-pair-'+pair.number+'">'+
+      esc(pair.label)+': '+esc(pair.seedLabel)+'</span>').join("")+'</div>'+
     '<section class="double-panel"><div class="double-table-wrap"><table class="double-table double-ranking-table"><thead><tr>'+
-    '<th>Rang</th><th>Doppelteam</th><th>Sp</th><th>S</th><th>N</th><th>'+(scoringRules(t).mode==="points"?"Punkte +":"Games +")+'</th><th>'+(scoringRules(t).mode==="points"?"Punkte −":"Games −")+'</th><th>Diff.</th></tr></thead><tbody>'+
-    info.ranking.map((x,i)=>'<tr class="'+(places.has(x.id)?"double-playoff-row":"")+'"><td><strong>'+(i+1)+'</strong></td><td><strong>'+esc(x.name)+'</strong>'+
-      (places.has(x.id)?'<span class="double-playoff-label">PO</span>':"")+'</td>'+
-      '<td>'+x.played+'</td><td>'+x.wins+'</td><td>'+x.losses+'</td><td>'+x.gamesFor+'</td>'+
-      '<td>'+x.gamesAgainst+'</td><td>'+x.gameDiff+'</td></tr>').join("")+
-    '</tbody></table></div></section><p class="muted">Bei vollständigem Gleichstand entscheidet vorläufig die alphabetische Reihenfolge. Nicht teilnehmende Teams können in der Endrunde abgewählt werden; das nächste zugelassene Team rückt nach.</p>';
+    '<th>Rang</th><th>Doppelteam</th><th>Play-off-Paarung</th><th>Sp</th><th>S</th><th>N</th><th>'+
+    (scoringRules(t).mode==="points"?"Punkte +":"Games +")+'</th><th>'+
+    (scoringRules(t).mode==="points"?"Punkte −":"Games −")+'</th><th>Diff.</th></tr></thead><tbody>'+
+    info.ranking.map((x,i)=>{
+      const pair=seeding.byTeam.get(x.id);
+      return '<tr class="'+(pair?'double-playoff-row po-pair-'+pair.number:'')+'"><td><strong>'+(i+1)+'</strong></td>'+
+        '<td><strong>'+esc(x.name)+'</strong>'+(pair?'<span class="double-playoff-label">PO</span>':"")+'</td>'+
+        '<td>'+(pair?'<span class="double-po-pair-chip po-pair-'+pair.number+'">'+esc(pair.label)+' · '+esc(pair.seedLabel)+'</span>':
+          '<span class="double-po-waiting">–</span>')+'</td>'+
+        '<td>'+x.played+'</td><td>'+x.wins+'</td><td>'+x.losses+'</td><td>'+x.gamesFor+'</td>'+
+        '<td>'+x.gamesAgainst+'</td><td>'+x.gameDiff+'</td></tr>';
+    }).join("")+
+    '</tbody></table></div></section><p class="muted">Teams derselben Play-off-Partie sind identisch eingefärbt und über die Paarungsnummer verbunden. Nach Absagen erhält der nächste verfügbare Nachrücker automatisch den freien Platz. Die Setzliste wird erst bei „Paarungen festlegen“ verbindlich.</p>';
 }
 
-function playoffStage(t,title,id,matches) {
+function playoffStage(t,title,id,matches,seedPairs=[]) {
+  const pairAtIndex=new Map(seedPairs.map(x=>[x.matchIndex,x]));
+  const entries=matches.map((match,index)=>({match,index,pair:pairAtIndex.get(index)||null}));
+  if(seedPairs.length)entries.sort((a,b)=>(a.pair?.seed1||999)-(b.pair?.seed1||999));
   return '<section class="double-panel"><h3>'+title+'</h3>'+
-    matches.map((m,i)=>matchMarkup(t,m,i,{playoff:true,stage:id})).join("")+'</section>';
+    entries.map(({match,index,pair})=>matchMarkup(t,match,index,{playoff:true,stage:id,pair})).join("")+'</section>';
 }
+
 function playoffTimeNote(t) {
   if(!t.doubles.draw)return "";
   if(t.reservePlayoffs===false)return '<p class="muted">Play-off-Zeiten sind nicht in der Wunsch-Endzeit enthalten. Bei Bedarf unter Einstellungen aktivieren.</p>';
@@ -333,7 +348,7 @@ function playoffTimeNote(t) {
 function playoffsPage(t) {
   const size=doublesPlayoffSize(t);
   const head=sectionHead("DOPPELTURNIER / ENDRUNDE","Top-"+size+"-Play-offs",
-    "Gesetzt nach der Livetabelle, abwählbare Teams und automatische Nachrücker.");
+    "Feste Paarungen nach Tabellenrang – keine Zufallsauslosung. Absagen führen zu automatischem Nachrücken.");
   if(!t.doubles.draw)return head+'<div class="double-warning">Zuerst die Vorrunde auslosen.</div>';
   let preview;
   try{preview=doublesPlayoffPreview(t);}catch(e){return head+'<div class="double-warning">'+esc(e.message)+'</div>';}
@@ -341,9 +356,12 @@ function playoffsPage(t) {
   if(t.doubles.playoffs) {
     if(!stage.ready)return head+'<div class="double-warning">'+esc(stage.error||"Play-offs nicht verfügbar.")+'</div>';
     const p=stage.playoffs;
+    const seeding=doublesPlayoffSeeding(t,preview.ranking);
+    const firstStage=doublesPlayoffStages(t)[0].id;
     const sections=doublesPlayoffStages(t).map(info=>
       playoffStage(t,info.title,info.id,
-        info.id==="final"||info.id==="thirdPlace"?[p[info.id]]:p[info.id])).join("");
+        info.id==="final"||info.id==="thirdPlace"?[p[info.id]]:p[info.id],
+        info.id===firstStage?seeding.pairs:[])).join("");
     return head+livePanel(t)+playoffTimeNote(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
       '<button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
       (stage.champion?'<div class="double-success"><strong>Turniersieger: '+esc(label(t,stage.champion))+'</strong>'+
@@ -352,14 +370,31 @@ function playoffsPage(t) {
       '<p class="muted">Bei Änderung einer früheren Partie werden abhängige Ergebnisse zurückgesetzt, sobald sich eine Paarung ändert.</p>';
   }
   const excluded=new Set(t.doubles.playoffOptOut||[]);
-  const selection=preview.ranking.map((x,i)=>'<label class="double-checkbox">'+
-    '<input type="checkbox" data-act="playoff-eligible" data-id="'+esc(x.id)+'" '+(!excluded.has(x.id)?"checked":"")+'>'+
-    '<span>Rang '+(i+1)+' · '+esc(x.name)+'</span></label>').join("");
+  const seeding=doublesPlayoffSeeding(t,preview.ranking);
+  const selected=new Set(seeding.seeds);
+  const selection=preview.ranking.map((x,i)=>{
+    const chosen=selected.has(x.id),canceled=excluded.has(x.id);
+    const pair=seeding.byTeam.get(x.id);
+    return '<label class="double-checkbox double-po-choice '+(chosen?'chosen po-pair-'+pair.number:canceled?'canceled':'reserve')+'">'+
+      '<input type="checkbox" data-act="playoff-eligible" data-id="'+esc(x.id)+'" '+
+        (chosen?'checked ':'')+(!chosen&&!canceled?'disabled ':'')+
+        'aria-label="Endrundenteilnahme '+esc(x.name)+'">'+
+      '<span class="double-po-choice-body"><strong>Rang '+(i+1)+' · '+esc(x.name)+'</strong>'+
+        '<small>'+(chosen?'<span class="double-po-pair-chip po-pair-'+pair.number+'">'+esc(pair.label)+
+          ' · '+esc(pair.seedLabel)+'</span> · Qualifiziert':
+          canceled?'Abgesagt · Haken setzen, um Team wieder zuzulassen':
+          'Nachrückliste · automatisch, sobald ein Platz frei wird')+'</small></span></label>';
+  }).join("");
   return head+playoffTimeNote(t)+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
-    (preview.ready?"Play-offs sind bereit. "+size+" Teams werden nach Rangliste gesetzt.":esc(preview.reason))+'</div>'+
-    '<section class="double-panel"><h3>Teilnahme an der Endrunde</h3><p>Häkchen entfernen, falls ein Team nicht teilnehmen kann. Das nächste zugelassene Team rückt nach.</p>'+
-    '<p class="muted">Aktuelle Qualifikationszahl: <strong>'+size+' Teams</strong>. Änderung unter Einstellungen möglich, bevor die Endrunde ausgelost wurde.</p>'+
-    selection+'<div class="double-actions" style="margin-top:17px"><button class="btn primary" data-act="playoffs-generate" '+(preview.ready?"":"disabled")+'>Top '+size+' auslosen</button></div></section>';
+    (preview.ready?"Play-offs bereit: "+size+" Teams sind qualifiziert. Die Paarungen ergeben sich fest aus der Setzliste.":esc(preview.reason))+'</div>'+
+    '<section class="double-panel"><h3>Teilnahme an der Endrunde</h3>'+
+    '<p>Nur die '+size+' aktuell qualifizierten Teams sind angehakt. Nimm den Haken bei einer Absage weg: Das nächstplatzierte verfügbare Team bekommt ihn automatisch. Kann auch dieses Team nicht, entferne seinen Haken ebenfalls.</p>'+
+    '<p class="muted">Abgesagte Teams kannst du wieder zulassen, indem du ihren Haken erneut setzt. Die Paarungen bleiben bis zur Festlegung vorläufig.</p>'+
+    '<div class="double-po-pairs">'+seeding.pairs.map(pair=>
+      '<span class="double-po-pair-chip po-pair-'+pair.number+'">'+esc(pair.label)+': '+esc(pair.seedLabel)+'</span>').join("")+'</div>'+
+    '<div class="double-po-choices">'+selection+'</div>'+
+    '<div class="double-actions" style="margin-top:17px"><button class="btn primary" data-act="playoffs-generate" '+
+      (preview.ready?"":"disabled")+'>Play-off-Paarungen festlegen</button></div></section>';
 }
 
 function settingsPage(t) {
@@ -747,9 +782,9 @@ document.addEventListener("click",event=>{
     closeDialog();flash("Ergebnis zurückgesetzt.");
   });
   if(act==="playoffs-generate")return run(()=>{
-    if(!confirm("Die besten "+doublesPlayoffSize(t)+" zugelassenen Teams nach Rangliste für die Play-offs setzen?"))return;
+    if(!confirm("Die "+doublesPlayoffSize(t)+" qualifizierten Teams nach den festen Tabellenpaarungen (1 gegen "+doublesPlayoffSize(t)+", 2 gegen "+(doublesPlayoffSize(t)-1)+" usw.) in die Endrunde übernehmen?"))return;
     replaceDoubles(t,{playoffs:createDoublesPlayoffs(t)});
-    flash("Play-offs ausgelost.");
+    flash("Play-off-Paarungen gemäß Setzliste festgelegt.");
   });
   if(act==="playoffs-reset")return run(()=>{
     if(!confirm("Play-offs und sämtliche Play-off-Ergebnisse zurücknehmen? Die Vorrunde bleibt erhalten."))return;
@@ -795,8 +830,20 @@ document.addEventListener("change",event=>{
   if(el.dataset.act==="playoff-eligible")return run(()=>{
     if(t.doubles.playoffs)throw Error("Bitte zuerst die Play-offs zurücknehmen.");
     const excluded=new Set(t.doubles.playoffOptOut||[]);
-    if(el.checked)excluded.delete(el.dataset.id);else excluded.add(el.dataset.id);
+    const standing=doublesStandings(t);
+    const before=doublesPlayoffSeeding(t,standing.ranking);
+    if(el.checked) {
+      if(!excluded.has(el.dataset.id))throw Error("Nur abgesagte Teams können auf diesem Weg wieder zugelassen werden.");
+      excluded.delete(el.dataset.id);
+    }else {
+      if(!before.seeds.includes(el.dataset.id))throw Error("Nur aktuell qualifizierte Teams können absagen.");
+      excluded.add(el.dataset.id);
+    }
     replaceDoubles(t,{playoffOptOut:[...excluded]});
+    const next=doublesPlayoffSeeding({...t,doubles:{...t.doubles,playoffOptOut:[...excluded]}},standing.ranking);
+    const newcomer=next.seeds.find(id=>!before.seeds.includes(id));
+    if(newcomer)flash("Nachrücker automatisch qualifiziert: "+label(t,newcomer));
+    else flash(el.checked?"Team wieder zugelassen. Setzliste aktualisiert.":"Absage vermerkt. Setzliste aktualisiert.");
   });
 });
 document.addEventListener("submit",event=>{
