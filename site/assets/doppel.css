@@ -35,3 +35,35 @@
  .double-main .double-bracket{grid-template-columns:1fr}
  .double-playoff-legend .btn{margin-left:0}
 }
+
+/* v0.9.2 – feste Setzlisten-Paarungen: gleiche Tönung für beide Gegner */
+.po-pair-1{--po-accent:#629337;--po-bg:#e6f5d1;--po-ink:#29551d}
+.po-pair-2{--po-accent:#337cba;--po-bg:#e2f1ff;--po-ink:#164b72}
+.po-pair-3{--po-accent:#d57c31;--po-bg:#fff0d9;--po-ink:#76420e}
+.po-pair-4{--po-accent:#8762bb;--po-bg:#eee8fc;--po-ink:#4c3273}
+.po-pair-5{--po-accent:#c45586;--po-bg:#fce7ee;--po-ink:#7b2a4b}
+.po-pair-6{--po-accent:#278e88;--po-bg:#def5f1;--po-ink:#17635d}
+.po-pair-7{--po-accent:#ad8230;--po-bg:#faf1d0;--po-ink:#695016}
+.po-pair-8{--po-accent:#62778d;--po-bg:#e7edf4;--po-ink:#354a60}
+.double-ranking-table tr.double-playoff-row{background:var(--po-bg,#f0f9db)}
+.double-ranking-table tr.double-playoff-row td:first-child{box-shadow:inset 5px 0 var(--po-accent,var(--lime))}
+.double-ranking-table tr.double-playoff-row td:first-child strong{color:var(--po-ink,#24523d)}
+.double-ranking-table .double-playoff-label{background:var(--po-accent,#5a8c3a);color:#fff}
+.double-ranking-table{min-width:880px}
+.double-po-pairs{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 17px}
+.double-po-pair-chip{display:inline-flex;align-items:center;justify-content:center;gap:4px;background:var(--po-bg,#e6f5d1);color:var(--po-ink,#24523d);border:1px solid var(--po-accent,#679b42);border-left-width:5px;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:900;letter-spacing:.015em;white-space:nowrap}
+.double-po-waiting{color:var(--muted)}
+.double-po-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:9px;margin-top:14px}
+.double-main .double-po-choice{display:flex;min-width:0;align-items:center;margin:0;padding:13px 14px;border:1px solid var(--line);border-left:5px solid #d4ded4;background:#f8faf6;border-radius:10px;cursor:default}
+.double-main .double-po-choice.chosen{border-left-color:var(--po-accent);background:var(--po-bg)}
+.double-main .double-po-choice.canceled{border-style:dashed;border-left-color:var(--danger);background:#fff4f1}
+.double-main .double-po-choice.reserve{opacity:.73}
+.double-po-choice input{flex-shrink:0}
+.double-po-choice input:not(:disabled){cursor:pointer}
+.double-po-choice-body{display:flex;flex-direction:column;gap:7px;min-width:0;line-height:1.3}
+.double-po-choice-body strong{font-size:12px;overflow-wrap:anywhere}
+.double-po-choice-body small{font-size:11px;line-height:1.4;color:#5e746b}
+.double-po-choice-body .double-po-pair-chip{font-size:10px;padding:3px 7px}
+.double-po-match{border-left:5px solid var(--po-accent)!important;background:var(--po-bg)!important}
+.double-po-match .double-po-pair-chip{font-size:10px;padding:3px 6px}
+.double-main .double-playoff-legend{background:#f3f6ee}
