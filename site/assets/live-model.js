@@ -4,7 +4,7 @@ import {verifyRibbonDraw} from "./draw.js?v=061";
 import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=086";
 import {verifyRibbonFinals} from "./finals.js?v=086";
 import {plannedRound,clockFor} from "./operations.js?v=091";
-import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages} from "./doubles.js?v=091";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding} from "./doubles.js?v=091";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
@@ -96,13 +96,13 @@ const doublesVisibleMatch=(t,m,i)=>({
 });
 const doublesRanking=(t,info)=>{
   const size=doublesPlayoffSize(t);
-  const excluded=new Set(t.doubles.playoffOptOut||[]);
-  const selected=new Set(t.doubles.playoffs?.seeds||
-    info.ranking.filter(x=>!excluded.has(x.id)).slice(0,size).map(x=>x.id));
-  return info.ranking.slice(0,Math.max(10,size)).map((row,i)=>({
-    place:i+1,name:row.name,wins:row.wins,gameDiff:row.gameDiff,
-    gamesFor:row.gamesFor,played:row.played,qualified:selected.has(row.id)
-  }));
+  const seeding=doublesPlayoffSeeding(t,info.ranking);
+  return info.ranking.slice(0,Math.max(10,size)).map((row,i)=>{
+    const pair=seeding.byTeam.get(row.id);
+    return {place:i+1,name:row.name,wins:row.wins,gameDiff:row.gameDiff,
+      gamesFor:row.gamesFor,played:row.played,qualified:!!pair,
+      pairNumber:pair?.number||0,pairLabel:pair?pair.label+" · "+pair.seedLabel:""};
+  });
 };
 function selectedDoublesRound(t) {
   const rounds=t.doubles.draw.rounds,explicit=t.liveDisplay;

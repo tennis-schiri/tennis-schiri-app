@@ -132,6 +132,8 @@ function public_live_payload($input): array {
             $row['gameDiff'] = is_int($diff) && $diff >= -1000 && $diff <= 1000 ? $diff : 0;
             $row['gamesFor'] = live_number($p['gamesFor'] ?? null, 0, 1000);
             $row['qualified'] = live_bool($p['qualified'] ?? false);
+            $row['pairNumber'] = live_number($p['pairNumber'] ?? null, 1, 8);
+            $row['pairLabel'] = live_str($p['pairLabel'] ?? '', 32);
         } else {
             $row['ribbons'] = live_number($p['ribbons'] ?? null, 0, 1000);
         }
