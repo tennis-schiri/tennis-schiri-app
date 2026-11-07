@@ -431,3 +431,12 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Anzeige eines versehentlich wörtlich gerenderten JavaScript-Template-Ausdrucks im PO-Farblabel korrigiert. Die Kurzkennung (z. B. „VF 1 · 1–8“) wird nun als dynamischer, HTML-sicher maskierter Text angezeigt.
 - Regressionstests für zwei gleich eingefärbte Gegner, nicht qualifizierte Teams und HTML-Escaping ergänzt.
 - Neues Live-JavaScript mit Cache-Version 094 eingebunden, damit Browser nach dem manuellen FTPS-Upload die korrigierte Anzeige laden.
+
+
+### v0.9.5 – Endrunden-Plätze wählen & Runden im Livebild anzeigen (07.11.2026, GitHub)
+
+- Pro Doppel-Endrundenbegegnung eigene, direkt bedienbare Platzwahl aus den verfügbaren Plätzen einschließlich frei benannter Courts.
+- Platzwahl bleibt beim Eintragen und Korrigieren von Ergebnissen und auch nach dem Nachrücken der Sieger in spätere Runden bestehen. Play-off-Resultate werden dadurch nicht überschrieben.
+- Viertelfinale, Halbfinale, Finale und Spiel um Platz 3 lassen sich in der Turnierleitung gezielt auf den Live-Monitor schalten; bei 16er-Feld ebenso das Achtelfinale. Automatikmodus bleibt erhalten.
+- Live-Monitor hebt die aktuelle Endrunde mit großem Runden-Badge statt generischem »ENDRUNDE« hervor; separate Fernanzeige übernimmt die Rundenüberschrift und Platznamen.
+- Neue Tests für Setzliste, Court-Zuordnung, Live-Rundenwahl, Speicher-/Backup-Stabilität; 304/304 Node-Tests im letzten abgeschlossenen CI-Lauf erfolgreich. Veröffentlichung nur über manuellen FTPS-Workflow.

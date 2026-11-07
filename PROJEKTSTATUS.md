@@ -268,3 +268,12 @@ Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Version
 - Zwei oder mehr punktgleiche Teams können manuell in vollständige Reihenfolge gebracht werden; bei mehreren Teams ohne vollständigen eindeutigen Vergleich entscheidet die Turnierleitung. Für zwei Teams hat ein vorhandener direkter Vergleich Vorrang vor einer manuellen Wahl.
 - Cache-Revisionen `093` in Doppel-/Live-Einstiegspunkten und in allen gemeinsamen Turnierformaten angepasst, damit das geänderte gemeinsame Speicherungsschema verwendet wird. Bisherige JSON-Dateien bleiben kompatibel.
 - Fachtests für direkte Vergleiche, mehrere unentschiedene Teams, manuelle/physische/digitale Entscheide, Schutz vor ungültigen Paarungen und Standsignatur ergänzt. **Kein automatischer App-Upload**.
+
+
+## v0.9.5 – Manuelle Court-Zuordnung und eindeutig bezeichnete Live-Endrunden (07.11.2026, GitHub)
+
+- Für jede Doppel-Play-off-Partie (Achtel-, Viertel-, Halbfinale, Finale, Spiel um Platz 3) steht ein eigener Platz-Dropdown zur Verfügung. Er enthält ausschließlich die im Turnier eingerichteten Plätze und berücksichtigt eigene Platznamen.
+- `updateDoublesPlayoffCourt` aktualisiert eine einzelne Partie. Die Bracket-Neuberechnung bewahrt den eingetragenen Platz, selbst wenn die vorherige Begegnung den Gewinner und damit die Paarung ändert; ein Platzwechsel löscht kein Ergebnis. Spätere Runden können bereits vor Bekanntwerden der Gegner geplant werden. Turnier- und JSON-Sicherung behalten die Auswahl.
+- Je Endrundenabschnitt kann die Turnierleitung `Auf Live-Monitor anzeigen` wählen. `liveDisplay:{mode:'finals',stage}` wird in der Speicherung beibehalten; die automatische Auswahl bleibt über den vorhandenen Live-Automatik-Button erreichbar. Ungültige Stages aus fehlerhaften Backups werden ignoriert.
+- Local/Remote-Live zeigt die große Phasenplakette mit dem Namen (»VIERTELFINALE«, »HALBFINALE«, »FINALE«, »SPIEL UM PLATZ 3«) anstelle nur des generischen »ENDRUNDE«. Erhalten bleibt die klare Rundenüberschrift und die echte Platzzuordnung in jeder Spielkarte.
+- Neue `tests/doubles-playoff-courts.test.mjs` prüft alle vier Endrundengrößen, court-Änderungen vor und nach Ergebnissen, K.-o.-Fortschritt, ungültige Platznummern, JSON-Reload, Fernanzeige, explizite Phasen und bisherigen Schleifchen-Modus. Letzter grüner Lauf: 304/304 Node-Tests, PHP- und MariaDB-Checks. **Manueller FTPS-Upload noch nicht erfolgt.**
