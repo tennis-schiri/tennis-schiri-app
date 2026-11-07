@@ -81,6 +81,7 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
     paid1:2300,present:true,
     ranking:Array.from({length:16},(_,i)=>({place:i+1,name:"Doppelteam "+(i+1),
       wins:3,gameDiff:-5,gamesFor:17,played:4,qualified:i<16,
+      pairNumber:Math.floor(i/2)+1,pairLabel:"AF "+(Math.floor(i/2)+1)+" · "+(i+1)+"–"+(16-i),
       paid1:123456,ribbons:9999}))
   };
   response=await post(writer,"publish",doubles);
@@ -98,6 +99,9 @@ test("PHP-Live-Dienst: Tokens, Trennung privater Felder, Veröffentlichung, Wide
   assert.equal(dblBody.display.playoffSize,16);
   assert.equal(dblBody.display.ranking.length,16);
   assert.equal(dblBody.display.ranking[15].qualified,true);
+  assert.equal(dblBody.display.ranking[0].pairNumber,1);
+  assert.match(dblBody.display.ranking[0].pairLabel,/AF 1/);
+  assert.equal(dblBody.display.ranking[15].pairNumber,8);
   assert.ok(!("ribbons" in dblBody.display.ranking[0]));
   for(const secret of ["paid1","present","123456","2300"])
     assert.ok(!JSON.stringify(dblBody.display).includes(secret));
