@@ -3,8 +3,8 @@
 import {verifyRibbonDraw} from "./draw.js?v=061";
 import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=086";
 import {verifyRibbonFinals} from "./finals.js?v=086";
-import {plannedRound,clockFor} from "./operations.js?v=082";
-import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound} from "./doubles.js?v=086";
+import {plannedRound,clockFor} from "./operations.js?v=091";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages} from "./doubles.js?v=091";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
@@ -94,10 +94,16 @@ const doublesVisibleMatch=(t,m,i)=>({
   score1:m.result?.score1??null,score2:m.result?.score2??null,
   finished:validResult(m.result)
 });
-const doublesRanking=info=>info.ranking.slice(0,10).map((row,i)=>({
-  place:i+1,name:row.name,wins:row.wins,gameDiff:row.gameDiff,
-  gamesFor:row.gamesFor,played:row.played
-}));
+const doublesRanking=(t,info)=>{
+  const size=doublesPlayoffSize(t);
+  const excluded=new Set(t.doubles.playoffOptOut||[]);
+  const selected=new Set(t.doubles.playoffs?.seeds||
+    info.ranking.filter(x=>!excluded.has(x.id)).slice(0,size).map(x=>x.id));
+  return info.ranking.slice(0,Math.max(10,size)).map((row,i)=>({
+    place:i+1,name:row.name,wins:row.wins,gameDiff:row.gameDiff,
+    gamesFor:row.gamesFor,played:row.played,qualified:selected.has(row.id)
+  }));
+};
 function selectedDoublesRound(t) {
   const rounds=t.doubles.draw.rounds,explicit=t.liveDisplay;
   if(explicit?.mode==="round"&&Number.isInteger(explicit.index)&&
@@ -114,7 +120,7 @@ function selectedDoublesRound(t) {
   return open>=0?open:rounds.length-1;
 }
 function doublesLiveDisplay(t,now) {
-  const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now,format:"doubles",scoreUnit:t.matchMode==="points"?"points":"games"};
+  const base={id:t.id,name:t.name,date:t.date,startTime:t.startTime,now,format:"doubles",scoreUnit:t.matchMode==="points"?"points":"games",playoffSize:doublesPlayoffSize(t)};
   if(!t.doubles?.draw)return {...base,mode:"waiting",message:"Das Doppelturnier ist noch nicht ausgelost."};
   const verification=verifyDoublesDraw(t);
   if(!verification.ok)return {...base,mode:"invalid",message:verification.errors[0]};
@@ -122,24 +128,23 @@ function doublesLiveDisplay(t,now) {
   try{standing=doublesStandings(t);}catch(error){
     return {...base,mode:"invalid",message:error.message};
   }
-  const ranking=doublesRanking(standing);
+  const ranking=doublesRanking(t,standing);
   if(t.doubles.playoffs&&t.liveDisplay?.mode!=="round"){
     const status=doublesPlayoffStatus(t);
     if(!status.ready)return {...base,mode:"invalid",message:status.error||"Die Play-offs sind ungültig."};
-    const stages=[
-      {title:"Viertelfinale",matches:status.playoffs.quarterfinals},
-      {title:"Halbfinale",matches:status.playoffs.semifinals},
-      {title:"Finale",matches:[status.playoffs.final]},
-      {title:"Spiel um Platz 3",matches:[status.playoffs.thirdPlace]}
-    ];
+    const stages=doublesPlayoffStages(t).map(({id,title})=>({
+      title,
+      matches:id==="final"||id==="thirdPlace"?[status.playoffs[id]]:status.playoffs[id]
+    }));
+
     let stage=stages.find(s=>s.matches.some(m=>!validResult(m.result)));
-    if(!stage)stage=stages[2];
+    if(!stage)stage=stages.find(x=>x.title==="Finale")||stages.at(-1);
     const champion=status.champion?doublesTeamNames(t,status.champion):null;
     const next=stages[stages.indexOf(stage)+1];
     const nextRound=next?.matches?.length&&next.matches.every(m=>m.team1&&m.team2)?
       previewRound(next.title,next.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),null):null;
     return {...base,mode:"finals",title:stage.title,nextRound,
-      subtitle:"Doppelturnier · feste Teams · Top-8-Play-offs",
+      subtitle:"Doppelturnier · feste Teams · Top-"+doublesPlayoffSize(t)+"-Play-offs",
       progress:stage.matches.filter(m=>validResult(m.result)).length,
       total:stage.matches.length,
       matches:stage.matches.map((m,i)=>doublesVisibleMatch(t,m,i)),

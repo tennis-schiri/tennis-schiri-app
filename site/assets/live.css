@@ -92,3 +92,8 @@ button{font:inherit;cursor:pointer}
 @media(min-width:1750px){.live-match{min-height:0}.live-match-top{margin-bottom:8px}.live-standing-line{padding:9px 0}}
 @media(max-width:1000px){.live-rankings{position:static}.live-next-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.live-matches-dense,.live-next-grid{grid-template-columns:1fr}.live-next-match{grid-template-columns:80px minmax(0,1fr)}}
+
+/* v0.9.1: provisional or fixed play-off qualification on the TV monitor */
+.live-standing-line.playoff-qualified{background:rgba(231,255,106,.12);border-left:4px solid var(--lime);border-radius:8px;padding:10px 8px 10px 10px;margin-left:-10px}
+.live-standing-line.playoff-qualified .live-standing-rank{color:var(--lime)}
+.live-standing-playoff-label{display:inline-block;margin-left:7px;padding:2px 5px;border-radius:4px;background:var(--lime);color:var(--navy);font-size:10px;font-weight:950;vertical-align:middle;letter-spacing:.035em}
