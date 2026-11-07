@@ -106,21 +106,24 @@ function livePanel(t) {
 }
 function home() {
   const all=doublesList();
-  return '<main class="double-shell double-intro"><div class="eyebrow">TENNILO / TURNIERART 02</div>'+
+  return '<main class="wrap welcome double-intro"><div class="eyebrow">Tennis-Schiri / Digitale Turnierorganisation · Doppelturnier</div>'+
     '<h1>Feste Teams.<br><em>Gemeinsame Siege.</em></h1>'+
     '<p class="lead">Doppelturniere mit festen Paarungen, Vorrunde, Livetabelle und frei wählbarer Endrunde organisieren.</p>'+
-    '<div class="welcome-actions"><button class="btn primary" data-act="new">Doppelturnier anlegen</button>'+
+    '<div class="welcome-actions"><button class="btn primary" data-act="new">'+dIcon("plus")+' Doppelturnier anlegen</button>'+
     '<button class="btn ghost" data-act="demo">Demoturnier laden</button>'+
     '<a class="btn ghost" href="./index.html">Zur Hauptstartseite</a>'+
     '<button class="btn ghost" data-act="import">Sicherung laden</button>'+
     '<input type="file" id="doubles-import" accept=".json,application/json" hidden></div>'+
-    (all.length?'<h2>Deine Doppelturniere ('+all.length+')</h2><div class="double-list">'+all.map(t=>
-    '<article class="double-saved"><span class="eyebrow">DOPPELTURNIER</span>'+
-    '<h3>'+esc(t.name)+'</h3><p>'+dateText(t.date)+' · '+t.doubles.teams.length+' Teams · '+t.courts.length+' Plätze</p>'+
-    '<button class="btn primary small" data-act="open" data-id="'+esc(t.id)+'">Turnier öffnen</button></article>').join("")+
-    '</div>':'<div class="double-panel"><h3>Noch kein Doppelturnier angelegt</h3><p>Lege ein Turnier an oder lade ein Beispiel mit acht festen Doppelteams.</p></div>')+
+    (all.length?'<section class="saved-tournaments"><div class="saved-tournaments-heading"><div><div class="eyebrow">HIER GEHT’S WEITER</div>'+
+      '<h2>Deine Doppelturniere <span>('+all.length+')</span></h2></div></div><div class="saved-tournaments-grid">'+all.map(t=>
+      '<article class="saved-tournament"><div class="saved-tournament-top"><span class="eyebrow">DOPPELTURNIER</span>'+
+      '<span class="mini-tag">'+t.doubles.teams.length+' Teams</span></div>'+
+      '<h3>'+esc(t.name)+'</h3><p>'+dateText(t.date)+' · '+t.courts.length+' Plätze · Top '+doublesPlayoffSize(t)+'</p>'+
+      '<button class="btn primary" data-act="open" data-id="'+esc(t.id)+'">Turnier öffnen</button></article>').join("")+
+      '</div></section>':'<div class="double-panel"><h3>Noch kein Doppelturnier angelegt</h3><p>Lege ein Turnier an oder lade ein Beispiel mit acht festen Doppelteams.</p></div>')+
     note()+'</main>';
 }
+
 function nav(t) {
   const tabs=[
     ["overview","Übersicht","trophy"],

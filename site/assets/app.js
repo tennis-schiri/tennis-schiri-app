@@ -134,9 +134,9 @@ function intro() {
     <section class="advisor-invite" aria-label="Turnierberater"><div><div class="eyebrow">DER TENNILO TURNIERBERATER</div><h2>Welches Turnier passt zu euch?</h2><p>Personen, Plätze, Zeitfenster und Ziel eingeben. Machbarkeit und Formate vergleichen.</p></div><button type="button" class="btn primary" data-action="advisor-open">Turnierberater starten ${icon("arrow")}</button></section>
     ${savedTournaments}
     <div class="format-grid">
-      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.8.4</span></article>
-      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und Top-8-Play-offs.</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.8.4</span></article>
-      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.8.4</span></article>
+      <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.9.1</span></article>
+      <article class="format-card current"><div class="eyebrow">02 / TESTVERSION</div><h2>Doppelturnier</h2><p>Feste Teams, Spielpläne, Livetabelle und wählbare Play-offs (2, 4, 8 oder 16 Teams).</p><button class="btn primary small" data-action="doppel-new">Doppelturnier starten</button><span>VERSION 0.9.1</span></article>
+      <article class="format-card current"><div class="eyebrow">03 / TESTVERSION</div><h2>One Point Cup</h2><p>Ein Punkt pro Match. K.-o.-System, Freilose und Bar-Nenngeld.</p><button class="btn primary small" data-action="opc-new">One Point Cup starten</button><span>VERSION 0.9.1</span></article>
     </div>
     ${browserNotice()}
   </main>`;
