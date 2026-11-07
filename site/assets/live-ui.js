@@ -50,6 +50,9 @@ export function renderLiveScreen(data) {
     </section>`;
   }
   const doubles=data.format==="doubles";
+  const phaseLabel=data.mode==="finals"&&doubles?
+    String(data.title||"Endrunde").toLocaleUpperCase("de-DE"):
+    data.mode==="finals"?"ENDRUNDE":"VORRUNDE";
   const standings=data.ranking.length?`<aside class="live-rankings" aria-label="${doubles?"Doppel-Livetabelle":"Schleifchen-Zwischenstand"}">
       <h3>${doubles?"Doppel-Livetabelle":"Schleifchen-Stand"}</h3><p>${doubles?(data.scoreUnit==="points"?"Siege · Punktedifferenz":"Siege · Game-Differenz")+" · Top "+(data.playoffSize||8)+" Play-offs":"Vorrunde · Top "+data.ranking.length}</p>
       ${data.ranking.map(p=>`<div class="live-standing-line ${doubles&&p.qualified?"playoff-qualified":""} ${doubles&&Number.isInteger(p.pairNumber)&&p.pairNumber>=1&&p.pairNumber<=8?"po-pair-"+p.pairNumber:""}"><span class="live-standing-rank">${p.place}.</span>
@@ -69,7 +72,7 @@ export function renderLiveScreen(data) {
     <div class="live-title-row"><div><div class="live-kicker">TENNILO · LIVE</div>
       <h1 class="live-event-name">${escapeLiveText(data.name)}</h1>
       <div class="live-event-date">${escapeLiveText(dateLabel(data.date))} · Beginn ${escapeLiveText(data.startTime)} Uhr</div></div>
-      <div class="live-phase">${data.mode==="finals"?"ENDRUNDE":"VORRUNDE"}</div></div>
+      <div class="live-phase ${data.mode==="finals"&&doubles?"live-playoff-phase":""}" aria-label="Aktuelle Turnierphase">${escapeLiveText(phaseLabel)}</div></div>
     <div class="live-stage-head"><div><h2>${escapeLiveText(data.title)}</h2>
       <p>${escapeLiveText(data.subtitle)}${data.plannedStart&&data.plannedEnd?` · Geplant ${escapeLiveText(data.plannedStart)}–${escapeLiveText(data.plannedEnd)} Uhr`:""}</p>
       <div class="live-progress">${data.progress} von ${data.total} Begegnungen entschieden</div>

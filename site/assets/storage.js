@@ -169,7 +169,10 @@ export function normalizeTournament(v) {
     feeCategories:categories,
     roundClocks: normalizeClocks(v.roundClocks),
     // Auswahl für ein zweites Fenster desselben Browsers – nicht übertragene Daten.
-    liveDisplay:v.liveDisplay?.mode==="finals"?{mode:"finals"}:
+    liveDisplay:v.liveDisplay?.mode==="finals"?
+      {mode:"finals",...(v.type==="doubles"&&
+        ["roundOf16","quarterfinals","semifinals","final","thirdPlace"].includes(v.liveDisplay.stage)?
+        {stage:v.liveDisplay.stage}:{})}:
       v.liveDisplay?.mode==="round"&&Number.isInteger(v.liveDisplay.index)&&
       v.liveDisplay.index>=0&&v.liveDisplay.index<(v.type==="doubles"?500:21)?
       {mode:"round",index:v.liveDisplay.index}:null,

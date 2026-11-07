@@ -133,12 +133,14 @@ function doublesLiveDisplay(t,now) {
     const status=doublesPlayoffStatus(t);
     if(!status.ready)return {...base,mode:"invalid",message:status.error||"Die Play-offs sind ungültig."};
     const stages=doublesPlayoffStages(t).map(({id,title})=>({
-      title,
+      id,title,
       matches:id==="final"||id==="thirdPlace"?[status.playoffs[id]]:status.playoffs[id]
     }));
 
-    let stage=stages.find(s=>s.matches.some(m=>!validResult(m.result)));
-    if(!stage)stage=stages.find(x=>x.title==="Finale")||stages.at(-1);
+    const requested=t.liveDisplay?.mode==="finals"?t.liveDisplay.stage:null;
+    let stage=stages.find(s=>s.id===requested);
+    if(!stage)stage=stages.find(s=>s.matches.some(m=>!validResult(m.result)));
+    if(!stage)stage=stages.find(x=>x.id==="final")||stages.at(-1);
     const champion=status.champion?doublesTeamNames(t,status.champion):null;
     const next=stages[stages.indexOf(stage)+1];
     const nextRound=next?.matches?.length&&next.matches.every(m=>m.team1&&m.team2)?

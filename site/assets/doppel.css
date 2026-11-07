@@ -83,3 +83,14 @@
 .double-tie-item.pending .double-tie-position{border-style:dashed;border-color:#e6d4a7}
 .double-tie-item .double-actions{margin-top:12px;flex-wrap:wrap}
 .double-tie-item .double-actions button{white-space:normal}
+
+/* v0.9.5 – Court assignment and per-stage live controls */
+.double-po-stage-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.double-po-stage-head h3{margin:0;font-size:clamp(17px,1.7vw,23px);color:var(--navy)}
+.double-po-stage-head .btn{display:inline-flex;align-items:center;gap:6px}
+.double-po-court-control{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 0 4px;padding:10px 12px;border-radius:9px;background:#f0f5f0;border:1px solid #d4e2d6}
+.double-po-match .double-po-court-control{background:rgba(255,255,255,.64);border-color:var(--po-accent,#d4e2d6)}
+.double-po-court-control>span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:850;color:#2b534b;white-space:nowrap}
+.double-po-court-control .icon{width:18px;height:18px}
+.double-po-court-control select{font:inherit;min-height:38px;min-width:125px;max-width:65%;border:1px solid #bdcfbe;border-radius:7px;padding:6px 9px;background:#fff;color:var(--navy);font-weight:800;cursor:pointer}
+@media(max-width:600px){.double-po-court-control{flex-wrap:wrap}.double-po-court-control select{min-width:100%;max-width:100%}}
