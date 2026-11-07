@@ -396,3 +396,12 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Kein SSH nötig: privater Schwesterordner der App wird anhand des tatsächlichen Serverpfads aufgelöst und auf .htaccess, Ordnerrechte, Webroot und Symlinks geprüft.
 - Automatische verlustarme Kopie eines vorhandenen alten Temp-`state.json` vor der ersten Nutzung des neuen Speichers, mit Sperren, Validierung und unverändertem Altbestand.
 - PHP-Integrationstests in Prüf- und Veröffentlichungsworkflow; neue Zugänge weiterhin nur bei manuellem Upload.
+
+
+### v0.9.1 – Einheitliches Doppelturnier & wählbare Play-offs (07.11.2026, in GitHub)
+
+- Doppelturnier-Seitenstruktur und Navigation an den Schleifchen-Turniermanager angeglichen.
+- Im Ranking und auf Monitoren Play-off-Qualifikation farbig mit PO markiert.
+- Endrundenfeld mit 2, 4, 8 oder 16 Teams wählbar und im Turnier/JSON gespeichert (Altdaten bleiben bei acht).
+- K.-o.-Auslosung von direktem Finale bis 16er-Achtelfinale samt Ergebnisfortschreibung, Nachrücken, Zeitplanung und Demo-Befüllung.
+- Testabdeckung für alle Feldgrößen; manueller App-Upload erst nach Freigabe.

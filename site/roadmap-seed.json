@@ -693,6 +693,25 @@
       "currentState": "Stand 07.11.2026: Der Betreiber bestätigt, dass die zuvor blockierte Funktion „E-Mail-Themen verwalten“ nach dem korrigierten Origin-Check jetzt funktioniert. Der Einstellungslink kann wieder angefordert werden. Weitere End-to-End-Tests einzelner Themenänderungen und des ausschließlich newsletterbezogenen Abmeldelinks sollten separat bestätigt werden. Allgemeiner Newsletter mit news@tennilo.de, eigener Anmeldung, Double-Opt-in, geteilter privater Kontaktverwaltung mit separaten Einwilligungen und Admin-Mailing ist in GitHub umgesetzt; keine regulären Rundmails als versendet bestätigt.",
       "openPoints": "• Tatsächliche Bereitstellung und Erreichbarkeit von news@tennilo.de als Postfach/Alias prüfen; PHP mail() benötigt korrekte Hostingkonfiguration, auch wenn keine SMTP-Zugangsdaten im Skript hinterlegt sind.\n• PHP-Syntaxprüfung über GitHub-Workflow, Live-Doppel-Opt-in, bestehende-Founders-Opt-in-Nachrüstung und Verwaltung nach Deployment testen.\n• Newsletter-Testmail, HTML/Klartext, persönliche nur themenbezogene Abmeldung, administrative Zählung und Schutz vor ungewolltem Founders-Massenversand prüfen.\n• Backup/Wiederherstellung, Bounce-Verarbeitung, Zustellung, Sperren und rechtliche Prüfung vor allgemeiner Werbung und größeren Rundmails.",
       "doneWhen": "Eigene neue Newsletter-Anmeldung bestätigt sich per E-Mail, bestehende Founders-Kontakte können den allgemeinen Newsletter gesondert freischalten, die Verwaltung speichert Themenänderungen und löscht auf Wunsch, Testmails nutzen news@tennilo.de und eine einzelne echte Mail meldet nur das Newsletter-Thema ab; Nutzer hat diese Abläufe auf echtem ALL-INKL-Hosting geprüft."
+    },
+    {
+      "id": "doppel-playoff-flex",
+      "title": "Doppelturnier: einheitliches Design und variable Play-offs",
+      "description": "Doppelturnier im gleichen Turniermanager-Layout wie Schleifchen, farblich sichtbare Qualifikationsplätze in der Live-Tabelle und auswählbare Endrunde mit 2, 4, 8 oder 16 Teams.",
+      "category": "Turnierbetrieb",
+      "status": "test",
+      "priority": "high",
+      "milestone": "v0.9.1 – Code fertig, noch nicht auf der Testseite",
+      "nextStep": "Manuellen App-Upload freigeben und alle Endrundengrößen sowie Livetabelle, Zweitmonitor und bestehende Doppelturniere im Browser testen.",
+      "updatedAt": "2026-11-07T13:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Turnierleitung muss zwischen Schleifchen und Doppel nicht umdenken; die voraussichtlichen Endrundenteilnehmer sind sofort erkennbar; kleine und große Starterfelder bekommen eine passende Endrunde.",
+      "scope": "• Gleiche Kopfzeile, Seitenleiste, Turnierauswahl, Turnierkopf und Navigation wie beim Schleifchenturnier.\n• Hellgrüne PO-Zeilen mit klarer Legende in der Doppel-Livetabelle; im Live-Monitor ebenso markiert.\n• Auswahl 2/4/8/16 qualifizierte Teams in den Einstellungen; bisherige Turniere bleiben bei 8 Teams.\n• Gesetze K.-o.-Paarungen, Achtel-, Viertel-, Halbfinale, Finale und gegebenenfalls Platz 3.\n• Spielzeitreserve, Korrekturen/abhängige Spiele, manuell abgewählte Teams und Demo-Zufallsergebnisse berücksichtigen die Feldgröße.\n• Remote-Monitor überträgt nur sichtbare Ranglisten-/Qualifikationsdaten, keine Kasseninformationen.",
+      "currentState": "In GitHub implementiert. 281 von 281 automatisierten Node-Tests bestanden, ebenso PHP-Syntax und MariaDB-Test. Noch keine manuelle FTPS-Veröffentlichung und keine Browser-Praxistests auf ALL-INKL.",
+      "openPoints": "Bei der Freigabe 2/4/8/16 mit realer Browserbedienung und alten JSON-Sicherungen testen. Besonders PO-Zonen während laufender Vorrunde, nicht teilnehmende Spitzenteams, 16er-Achtelfinale, kleinere Endrunden, Anzeige auf zweitem Gerät und Smartphones. Keine Änderung des bestehenden Passwortschutzes.",
+      "doneWhen": "Bei jedem Feldgrößenwert lassen sich reguläre Play-offs bis zum Champion durchspielen, die Zeitplanung reserviert passende Blöcke, die Livetabelle zeigt die echten Qualifikationsplätze und die Doppel-Oberfläche ist mit dem Schleifchen-Look konsistent.",
+      "references": []
     }
   ]
 }

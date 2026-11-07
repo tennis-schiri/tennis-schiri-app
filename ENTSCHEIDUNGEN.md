@@ -347,3 +347,6 @@
 
 
 **E-039 – Roadmap-Daten dauerhaft im privaten Geschwisterordner (06.11.2026):** Bei ALL-INKL ohne SSH wird das via WebFTP angelegte Verzeichnis `tennilo-roadmap-private` relativ zum echten App-Verzeichnis gefunden. Die Anwendung verweigert Betrieb bei fehlendem wirksamen Dateischutz/Rechten anstatt in ein unzuverlässiges `/tmp` zurückzufallen. Ein bestehender Temp-Datenbestand wird automatisch unter Dateisperren kopiert und als Rückfallsicherung nicht entfernt. Die neue Roadmap-Authentifizierung bleibt bis zum manuell freigegebenen Roadmap-Release in GitHub; allgemeine TENNILO-Benutzerregistrierung und Zahlungsabwicklung werden nicht aktiviert.
+
+
+**E-040 – Konsistente Doppel-Bedienung und variable Endrunden (07.11.2026):** Eine Turnierart darf keine vollständig andere Bedienwelt eröffnen. Doppel nutzt deshalb die gemeinsamen Layout-Bausteine von Schleifchen, behält aber die fachlich nötigen Team-/Kassenfelder. Qualifizierte Teams werden im aktuellen Zwischenstand ausdrücklich als **vorläufig** und nach Play-off-Auslosung als gesetzt hervorgehoben – einschließlich Fernanzeige. Der Veranstalter wählt 2, 4, 8 oder 16 Play-off-Teams; Bestandsdaten bleiben bei der alten Standardgröße 8. Spiel um Platz 3 erst ab vier Teams. Die Einstellung kann nach Play-off-Auslosung erst nach Rücknahme des Tableaus geändert werden.

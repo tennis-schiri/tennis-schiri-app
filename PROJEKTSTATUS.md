@@ -238,3 +238,12 @@ Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Version
 - Neue PHP-Speicherauflösung nutzt automatisch das Geschwisterverzeichnis anhand des PHP-Skriptpfades. Kein SSH oder Server-Umgebungswert nötig. Verweigert fehlende `.htaccess`, unsichere Berechtigungen, Webroot-Ziel und Symlinks.
 - Beim ersten API-Aufruf wird eine existierende alte `state.json` unter zwei Sperren als Ganzes in den persistenten Ordner kopiert. Weder vorhandene neue Daten noch ursprüngliche Temp-Daten werden überschrieben bzw. gelöscht; korrupte Altdateien stoppen den Vorgang.
 - Neue reine PHP-Fachtests: `tests/roadmap-storage.php` durch beide Deployment-Prüfpfade integriert. **Noch keine neue App- oder Roadmap-Authentifizierungs-Veröffentlichung.** Vor externen Testern beide Veröffentlichungs-Workflows manuell anstoßen und per Browser Speichersignal, bestehende Admin-Daten und Einladungen prüfen.
+
+
+## v0.9.1 – Doppelturnier-Design, PO-Zonen und flexible Endrunde (07.11.2026, GitHub, nicht live)
+
+- Doppelturnier nutzt dieselben `app-layout`, `sidebar`, `main-area`, `toolbar`, `hero` und `screen`-Grundelemente wie der Schleifchen-Turniermanager. Die Doppel-spezifischen Bereiche Teams, Check-in/Kasse, Auslosung, Livetabelle, Endrunde und Einstellungen bleiben erhalten.
+- Livetabelle hebt Play-off-Qualifizierte hellgrün mit PO-Marker hervor. Vor der Auslosung vorläufig anhand der Rangliste und möglicher Opt-outs, danach anhand der tatsächlich gesetzten Teams. Lokaler Live-Monitor und freigegebener Remote-Monitor zeigen dieselben Qualifikationshinweise.
+- Neue Einstellung `playoffSize`: 2, 4, 8 oder 16 Teams, Standard 8 für alte Doppelturniere. Zwei = direktes Finale; vier = Halbfinale, Finale, Platz 3; acht = bewährter Ablauf; sechzehn = zusätzlich Achtelfinale. Nachrücker, abhängige Ergebnisse, JSON/Browser-Speicher und Demo-Zufallsergebnisse entsprechend erweitert.
+- Die Endzeitreserve berücksichtigt die für die gewählte Endrunde nötigen Zeitblöcke, ohne Spiele oder Dauer stillschweigend zu verändern. Für aktive Play-offs ist eine Änderung der Qualifikationszahl gesperrt.
+- Code wird ausschließlich über manuellen App-FTPS-Workflow hochgeladen, bestehende `.htaccess`, Passwortschutz und aktuelle Daten werden nicht überschrieben. **Kein Upload beim Push.** Vollständige Browser- und Zweitgerätetests offen. Neues Roadmap-Thema `doppel-playoff-flex` angelegt.
