@@ -346,12 +346,14 @@ export function doublesPlayoffPreview(t) {
 const newMatch=(team1=null,team2=null,court=null)=>({team1,team2,court,result:null});
 const winner=m=>isWinner(m?.result)?m.result.winner===1?m.team1:m.team2:null;
 const loser=m=>isWinner(m?.result)?m.result.winner===1?m.team2:m.team1:null;
-const preserve=(old,a,b,court)=>({
-  team1:a,team2:b,court,
+// A manual court stays attached to its bracket match, even when a preceding
+// result changes the opponents or the match is not yet fully assigned.
+const preserve=(old,a,b,court,courts)=>({
+  team1:a,team2:b,court:courts.includes(old?.court)?old.court:court,
   result:old && old.team1===a && old.team2===b ? old.result : null
 });
 const matchRows=(matches,teams,courts)=>Array.from({length:teams.length/2},(_,i)=>
-  preserve(matches?.[i],teams[i*2],teams[i*2+1],courts[i%courts.length]));
+  preserve(matches?.[i],teams[i*2],teams[i*2+1],courts[i%courts.length],courts));
 
 export function rebuildDoublesPlayoffs(t,playoffs) {
   const size=playoffs.seeds.length,courts=t.courts;
@@ -366,9 +368,9 @@ export function rebuildDoublesPlayoffs(t,playoffs) {
   const sf=size===16||size===8?matchRows(playoffs.semifinals,qf.map(winner),courts):
     size===4?base:[];
   const finals=size>=4?sf.map(winner):[];
-  const final=size===2?base[0]:preserve(playoffs.final,finals[0],finals[1],courts[0]);
+  const final=size===2?base[0]:preserve(playoffs.final,finals[0],finals[1],courts[0],courts);
   const third=size===2?null:preserve(playoffs.thirdPlace,loser(sf[0]),loser(sf[1]),
-    courts[Math.min(1,courts.length-1)]);
+    courts[Math.min(1,courts.length-1)],courts);
   return {...playoffs,roundOf16:r16,quarterfinals:qf,semifinals:sf,final,thirdPlace:third};
 }
 
@@ -395,6 +397,24 @@ export function updateDoublesPlayoffResult(t,stage,index,result) {
     throw Error("Diese Begegnung ist noch nicht vollständig besetzt.");
   matches[index].result=normalizeDoublesResult(result,t);
   if(stage==="final"||stage==="thirdPlace")fresh[stage]=matches[0];
+  return rebuildDoublesPlayoffs(t,fresh);
+}
+
+// Courts can be assigned manually for every elimination match, including
+// later rounds whose participants are still unknown. A court change never
+// resets an already entered result.
+export function updateDoublesPlayoffCourt(t,stage,index,court) {
+  const status=doublesPlayoffStatus(t);
+  if(!status.ready)throw Error(status.error||"Bitte zuerst die Play-off-Paarungen festlegen.");
+  const info=doublesPlayoffStages(t).find(s=>s.id===stage);
+  if(!info || !validIndex(index,info.count))
+    throw Error("Ungültige Play-off-Begegnung.");
+  const chosen=Number(court);
+  if(!Number.isSafeInteger(chosen)||!t.courts.includes(chosen))
+    throw Error("Bitte einen vorhandenen Tennisplatz auswählen.");
+  const fresh=copy(status.playoffs);
+  if(stage==="final"||stage==="thirdPlace")fresh[stage].court=chosen;
+  else fresh[stage][index].court=chosen;
   return rebuildDoublesPlayoffs(t,fresh);
 }
 
