@@ -51,7 +51,7 @@ for(const size of [2,4,8,16]){
     assert.throws(()=>updateDoublesPlayoffCourt(t,first,20,1),/Ungültige/);
     assert.throws(()=>updateDoublesPlayoffCourt(t,first,0,999),/vorhandenen/);
     const saved=normalizeTournament(JSON.parse(JSON.stringify(t)));
-    assert.equal(stageMatches(saved,first)[0].court,7);
+    assert.equal(stageMatches(saved,first)[0].court,size===2?8:7);
     assert.equal(saved.doubles.playoffs.final.court,8);
     t=saved;
     for(const stage of stages){
