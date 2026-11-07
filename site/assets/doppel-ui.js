@@ -5,7 +5,7 @@ import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} fro
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
-  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,changeDoublesClock,normalizeDoublesResult
+  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding,decideDoublesTie,drawDoublesTieOrder,changeDoublesClock,normalizeDoublesResult
 } from "./doubles.js?v=092";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
@@ -284,6 +284,56 @@ function drawPage(t) {
     '<div class="double-actions"><button class="btn ghost small" data-act="live-round" data-round="'+index+'">Diese Runde auf Monitor zeigen</button></div>'+
     roundTimer(t,index)+r.matches.map((m,i)=>matchMarkup(t,m,i,{round:index})).join("")+'</section>';
 }
+function tieBreakPanel(t,info) {
+  if(!info.tieGroups?.length)return "";
+  const locked=!!t.doubles.playoffs,finished=info.finished;
+  const methodLabel={direct:"Direkter Vergleich",manual:"Manuell festgelegt",
+    onsite:"Los vor Ort",random:"Durch TENNILO ausgelost",pending:"Entscheidung offen"};
+  const byId=new Map(info.ranking.map(x=>[x.id,x.name]));
+  return '<section class="double-panel double-tie-panel" aria-label="Gleichstände klären">'+
+    '<h3>Gleichstände klären</h3>'+
+    '<p class="muted">Bei exakt gleicher Anzahl Siege, gleicher Differenz und gleich vielen erzielten '+
+    (scoringRules(t).mode==="points"?"Punkten":"Games")+
+    ' entscheidet zunächst der direkte Vergleich. Ohne entscheidenden direkten Vergleich kann vor Ort gelost, in TENNILO gelost oder die Reihenfolge festgelegt werden.</p>'+
+    info.tieGroups.map((group,i)=>{
+      const canChange=finished&&!locked&&group.method!=="direct";
+      const rows=group.order.map((id,j)=>'<span class="double-tie-position">'+(group.firstPlace+j)+'. '+esc(byId.get(id)||id)+'</span>').join("");
+      return '<article class="double-tie-item '+(!group.resolved?"pending":"resolved")+'">'+
+        '<div class="double-tie-row"><div><strong>Rang '+group.firstPlace+(group.lastPlace!==group.firstPlace?"–"+group.lastPlace:"")+
+        '</strong><p>'+group.rows.map(x=>esc(x.name)).join(' · ')+'</p></div>'+
+        '<span class="double-tie-status '+(group.resolved?"resolved":"pending")+'">'+methodLabel[group.method]+'</span></div>'+
+        '<div class="double-tie-positions">'+rows+'</div>'+
+        (canChange?'<div class="double-actions">'+
+          '<button class="btn subtle small" data-act="tie-onsite" data-tie="'+i+'">Los vor Ort</button>'+
+          '<button class="btn subtle small" data-act="tie-random" data-tie="'+i+'">TENNILO losen</button>'+
+          '<button class="btn subtle small" data-act="tie-manual" data-tie="'+i+'">Reihenfolge festlegen</button></div>':
+          !group.resolved?'<p class="muted">Entscheidung nach vollständiger Vorrunde möglich.</p>':
+          '<p class="muted">'+(group.method==="direct"?"Der Sieger des direkten Vergleichs steht oben.":
+            "Diese Reihenfolge ist gespeichert.")+'</p>')+
+      '</article>';
+    }).join("")+'</section>';
+}
+function tieDecisionDialog(t,index,method) {
+  const info=doublesStandings(t);
+  const group=info.tieGroups[index];
+  if(!group||!info.finished||t.doubles.playoffs||group.method==="direct")
+    throw Error("Dieser Gleichstand ist nicht mehr offen oder die Play-offs sind bereits festgelegt.");
+  const labelText=method==="onsite"?"Los vor Ort dokumentieren":"Reihenfolge festlegen";
+  const teams=group.rows;
+  const options='<option value="">Bitte Team wählen</option>'+
+    teams.map(row=>'<option value="'+esc(row.id)+'">'+esc(row.name)+'</option>').join("");
+  showDialog({eyebrow:"DOPPELTURNIER / GLEICHSTAND",title:labelText,form:"tie-decision",submit:"Reihenfolge speichern",
+    body:'<p>'+(method==="onsite"?"Losentscheid vor Ort durchführen und das Ergebnis hier eintragen.":
+      "Die Turnierleitung legt die Reihenfolge verbindlich fest.")+'</p>'+
+    '<input type="hidden" name="tieIds" value="'+esc(JSON.stringify(group.ids))+'">'+
+    '<input type="hidden" name="tieSignature" value="'+esc(group.signature)+'">'+
+    '<input type="hidden" name="tieMethod" value="'+esc(method)+'">'+
+    '<div class="form-grid">'+teams.map((_,i)=>
+      '<label class="field">Rang '+(group.firstPlace+i)+
+      '<select name="tieRank'+i+'" required>'+options+'</select></label>').join("")+'</div>'+
+    '<p class="muted">Jedes Team darf genau einmal gewählt werden. Die Entscheidung wird mit Verfahren und Zeitpunkt gespeichert.</p>'});
+}
+
 function tablePage(t) {
   const size=doublesPlayoffSize(t);
   const head=sectionHead("DOPPELTURNIER / RANGLISTE","Livetabelle",
@@ -294,6 +344,7 @@ function tablePage(t) {
   const seeding=doublesPlayoffSeeding(t,info.ranking);
   const frozen=!!t.doubles.playoffs;
   return head+'<div class="double-success">'+info.complete+' von '+info.planned+' Begegnungen erfasst.</div>'+
+    tieBreakPanel(t,info)+
     '<div class="double-playoff-legend"><span class="double-playoff-swatch" aria-hidden="true"></span>'+
     '<strong>Top '+size+' · Play-off-Plätze</strong> · '+(frozen?"Paarungen festgelegt":
       "Vorläufig: Platzierung und Paarungen ändern sich mit den Vorrundenergebnissen")+
@@ -362,7 +413,7 @@ function playoffsPage(t) {
       playoffStage(t,info.title,info.id,
         info.id==="final"||info.id==="thirdPlace"?[p[info.id]]:p[info.id],
         info.id===firstStage?seeding.pairs:[])).join("");
-    return head+livePanel(t)+playoffTimeNote(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
+    return head+tieBreakPanel(t,preview)+livePanel(t)+playoffTimeNote(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
       '<button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
       (stage.champion?'<div class="double-success"><strong>Turniersieger: '+esc(label(t,stage.champion))+'</strong>'+
         (stage.third?'<br>Platz 3: '+esc(label(t,stage.third)):'')+'</div>':'')+
@@ -385,7 +436,7 @@ function playoffsPage(t) {
           canceled?'Abgesagt · Haken setzen, um Team wieder zuzulassen':
           'Nachrückliste · automatisch, sobald ein Platz frei wird')+'</small></span></label>';
   }).join("");
-  return head+playoffTimeNote(t)+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
+  return head+tieBreakPanel(t,preview)+playoffTimeNote(t)+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
     (preview.ready?"Play-offs bereit: "+size+" Teams sind qualifiziert. Die Paarungen ergeben sich fest aus der Setzliste.":esc(preview.reason))+'</div>'+
     '<section class="double-panel"><h3>Teilnahme an der Endrunde</h3>'+
     '<p>Nur die '+size+' aktuell qualifizierten Teams sind angehakt. Nimm den Haken bei einer Absage weg: Das nächstplatzierte verfügbare Team bekommt ihn automatisch. Kann auch dieses Team nicht, entferne seinen Haken ebenfalls.</p>'+
@@ -758,12 +809,12 @@ document.addEventListener("click",event=>{
       }catch(e){reason=e;}
     }
     if(!draw)throw reason||Error("Für dieses Zeitfenster ist keine passende Auslosung möglich.");
-    store.editTournament(t.id,{doubles:{...t.doubles,draw,playoffs:null},roundClocks:{}});
+    store.editTournament(t.id,{doubles:{...t.doubles,draw,playoffs:null,tieBreaks:[]},roundClocks:{}});
     currentRound=0;view="draw";render();flash("Vorrunde ausgelost. Alle Begegnungen sind ohne Wiederholung.");
   });
   if(act==="draw-reset")return run(()=>{
     if(!confirm("Vorrunde inklusive Ergebnissen und Play-offs wirklich zurücknehmen? Barzahlungen bleiben erhalten."))return;
-    store.editTournament(t.id,{doubles:{...t.doubles,draw:null,playoffs:null},roundClocks:{}});
+    store.editTournament(t.id,{doubles:{...t.doubles,draw:null,playoffs:null,tieBreaks:[]},roundClocks:{}});
     currentRound=0;render();flash("Auslosung zurückgenommen.");
   });
   if(act==="round"){currentRound=Number(trigger.dataset.round);render();return;}
@@ -780,6 +831,19 @@ document.addEventListener("click",event=>{
       replaceDoubles(t,{draw:updateDoublesResult(t,Number(trigger.dataset.round),i,{winner:""})});
     }
     closeDialog();flash("Ergebnis zurückgesetzt.");
+  });
+  if(["tie-onsite","tie-manual","tie-random"].includes(act))return run(()=>{
+    const index=Number(trigger.dataset.tie);
+    if(!Number.isInteger(index)||index<0)throw Error("Gleichstandsgruppe nicht gefunden.");
+    if(act==="tie-onsite"||act==="tie-manual")
+      return tieDecisionDialog(t,index,act==="tie-onsite"?"onsite":"manual");
+    const info=doublesStandings(t),group=info.tieGroups[index];
+    if(!group||!info.finished||t.doubles.playoffs||group.method==="direct")
+      throw Error("Gleichstandsentscheidung derzeit nicht möglich.");
+    if(!confirm("Die Reihenfolge dieser "+group.ids.length+" Teams jetzt per Zufall festlegen und speichern?"))return;
+    const order=drawDoublesTieOrder(group.ids,window.crypto);
+    replaceDoubles(t,{tieBreaks:decideDoublesTie(t,group.ids,order,"random")});
+    flash("Losentscheid gespeichert: "+order.map(id=>label(t,id)).join(" · "));
   });
   if(act==="playoffs-generate")return run(()=>{
     if(!confirm("Die "+doublesPlayoffSize(t)+" qualifizierten Teams nach den festen Tabellenpaarungen (1 gegen "+doublesPlayoffSize(t)+", 2 gegen "+(doublesPlayoffSize(t)-1)+" usw.) in die Endrunde übernehmen?"))return;
@@ -864,6 +928,21 @@ document.addEventListener("submit",event=>{
     if(kind==="cash")return saveCash(t,form);
     if(kind==="round-result")return saveResult(t,form);
     if(kind==="playoff-result")return saveResult(t,form,true);
+    if(kind==="tie-decision"){
+      const d=new FormData(form);
+      let ids;
+      try{ids=JSON.parse(String(d.get("tieIds")||""));}catch{throw Error("Ungültige Gleichstandsgruppe.");}
+      const info=doublesStandings(t);
+      const group=info.tieGroups.find(x=>Array.isArray(ids)&&x.ids.length===ids.length&&
+        x.ids.every((id,i)=>id===ids[i]));
+      if(!group||group.signature!==String(d.get("tieSignature")||""))
+        throw Error("Die Ergebnisse haben sich geändert. Bitte den Gleichstand neu öffnen.");
+      const order=group.ids.map((_,i)=>String(d.get("tieRank"+i)||""));
+      const method=String(d.get("tieMethod")||"");
+      replaceDoubles(t,{tieBreaks:decideDoublesTie(t,ids,order,method)});
+      closeDialog();flash(method==="onsite"?"Losentscheid vor Ort gespeichert.":"Rangfolge gespeichert.");
+      return;
+    }
     if(kind==="courts"){
       const d=new FormData(form),labels={},names=new Set();
       for(const court of t.courts){
