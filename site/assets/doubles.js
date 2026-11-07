@@ -1,5 +1,5 @@
 // TENNILO Doppelturnier: feste Zweierteams, Vorrunde, Rangliste und wählbare Play-offs.
-import {plannedRound,tournamentSchedule} from "./operations.js?v=082";
+import {plannedRound,tournamentSchedule} from "./operations.js?v=091";
 import {normalizePointResult,scoringRules} from "./match-scoring.js";
 // Fachliche Vorlage: "Turniere Verein – Auslosung & Livetabelle", Doppel-Setup,
 // Doppel-Auslosung, Doppel-Livetabelle und Doppel-Play-Offs (03.10.2026).

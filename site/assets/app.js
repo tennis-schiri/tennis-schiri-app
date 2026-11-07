@@ -1,4 +1,4 @@
-import { BrowserTournamentStore, todayLocal } from "./storage.js?v=088";
+import { BrowserTournamentStore, todayLocal } from "./storage.js?v=091";
 import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
 import {normalizeAdvisorInput,recommendTournamentFormats,advisorTournamentValues} from "./tournament-advisor.js?v=086";
