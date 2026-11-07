@@ -107,8 +107,9 @@ export function fillDemoResults(t,random=Math.random){
   if(t.type==="doubles"){
     if(!t.doubles.draw)throw Error("Bitte zuerst die Vorrunde auslosen.");
     if(t.doubles.playoffs){
-      for(const stage of ["quarterfinals","semifinals","final","thirdPlace"]){
+      for(const stage of ["roundOf16","quarterfinals","semifinals","final","thirdPlace"]){
         const list=stage==="final"||stage==="thirdPlace"?[working.doubles.playoffs[stage]]:working.doubles.playoffs[stage];
+        if(!Array.isArray(list))continue;
         for(let i=0;i<list.length;i++){
           const m=stage==="final"||stage==="thirdPlace"?working.doubles.playoffs[stage]:working.doubles.playoffs[stage][i];
           if(!m?.team1||!m?.team2||m.result?.winner)continue;

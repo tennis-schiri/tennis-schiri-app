@@ -85,6 +85,7 @@ function public_live_payload($input): array {
         'format' => ($input['format'] ?? '') === 'doubles' ? 'doubles' : 'ribbon',
         'name' => live_str($input['name'] ?? '', 90),
         'scoreUnit' => ($input['scoreUnit'] ?? '') === 'points' ? 'points' : 'games',
+        'playoffSize' => in_array($input['playoffSize'] ?? null, [2,4,8,16], true) ? $input['playoffSize'] : 8,
         'date' => live_str($input['date'] ?? '', 12),
         'startTime' => live_str($input['startTime'] ?? '', 8),
         'message' => live_str($input['message'] ?? '', 240)
@@ -113,7 +114,8 @@ function public_live_payload($input): array {
         ];
     }
     $ranking = $input['ranking'] ?? [];
-    if (!is_array($ranking) || !array_is_list($ranking) || count($ranking) > 10) {
+    if (!is_array($ranking) || !array_is_list($ranking) ||
+        count($ranking) > ($out['format'] === 'doubles' ? 16 : 10)) {
         fail_live(422, 'Ungültige Rangliste.');
     }
     $out['ranking'] = [];
@@ -129,6 +131,7 @@ function public_live_payload($input): array {
             $row['wins'] = live_number($p['wins'] ?? null, 0, 1000);
             $row['gameDiff'] = is_int($diff) && $diff >= -1000 && $diff <= 1000 ? $diff : 0;
             $row['gamesFor'] = live_number($p['gamesFor'] ?? null, 0, 1000);
+            $row['qualified'] = live_bool($p['qualified'] ?? false);
         } else {
             $row['ribbons'] = live_number($p['ribbons'] ?? null, 0, 1000);
         }

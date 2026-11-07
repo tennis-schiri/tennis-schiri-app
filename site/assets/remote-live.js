@@ -1,6 +1,6 @@
 // TENNILO v0.6.1 – explizit aktivierte Live-Übertragung zwischen Geräten.
 // Zugangsschlüssel separat vom Turnier/JSON-Backup im Browser speichern.
-import {buildLiveDisplay} from "./live-model.js?v=086";
+import {buildLiveDisplay} from "./live-model.js?v=091";
 
 const SHARE_PREFIX="tennilo-live-share-v1:";
 const CHANNEL=/^[a-f0-9]{48}$/;
@@ -42,7 +42,7 @@ export function publicLiveSnapshot(t,now=Date.now()){
   const view=buildLiveDisplay(t,now);
   const allow=["format","mode","name","date","startTime","message","title","subtitle",
     "progress","total","index","plannedStart","plannedEnd","matches",
-    "ranking","champion","timer","nextRound","scoreUnit"];
+    "ranking","champion","timer","nextRound","scoreUnit","playoffSize"];
   return Object.fromEntries(allow.filter(key=>view[key]!==undefined)
     .map(key=>[key,view[key]]));
 }
