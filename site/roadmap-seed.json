@@ -648,15 +648,33 @@
       "status": "online",
       "priority": "medium",
       "milestone": "November 2026 – Founders-Beta",
-      "nextStep": "Nach erfolgreich bestätigten Praxistests den normalen Betrieb beobachten, Backup/Wiederherstellung und Zugriffsschutz prüfen und vor der ersten Rundmail einen rechtskonformen Versand mit individuellem Abmeldelink implementieren.",
-      "updatedAt": "2026-11-07T10:15:00+01:00",
+      "nextStep": "Website-Workflow für aktualisierte Benachrichtigung und Mail-Verwaltung ausführen; eine neue echte Double-Opt-in-Testanmeldung verwenden und prüfen, ob Betreiberbenachrichtigung an founders@tennilo.de ankommt. Sicherheits- und Backup-Prüfung weiter offen.",
+      "updatedAt": "2026-11-07T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "benefit": "Frühes Interesse von Vereinen, Turnierorganisatoren, Trainern und Spielern messen; Betatester und spätere Unterstützer gewinnen, ohne schon Preise oder einen Startnext-Termin zu versprechen.",
       "scope": "• Eigenes Website-Formular mit E-Mail, Rolle, Interessen und Einwilligung.\n• Double-Opt-in-Bestätigung per E-Mail und automatische Bereinigung unbestätigter Einträge.\n• Serverbasierter SQLite-Speicher im privaten ALL-INKL-Verzeichnis.\n• Admin-Passwort und geschützte Statistik-/Exportansicht.\n• E-Mail-verifizierte Selbstabmeldung und Löschung.\n• Später: E-Mail-Aussendungen nach ausgewähltem Interesse, mit individuellen Abmeldelinks, Versandprotokoll und Schutz vor Doppelversand.",
-      "currentState": "Am 07.11.2026 hat der Nutzer auf tennilo.de den gesamten Ablauf erfolgreich getestet: Formularanmeldung, E-Mail-Bestätigung, Darstellung im Admin-Bereich sowie Abmelde-E-Mail und Löschung. Die ALL-INKL-Grundlagen (PHP, SQLite, Mailfunktion, privater Speicher) wurden zuvor positiv geprüft. Die Einrichtungsfunktion wurde abgeschlossen. Der Website-Workflow veröffentlicht die Founders-PHP-Dateien. Eine unabhängige Sicherheitsprüfung, echtes Backup-/Restore-Testing und Newsletter-Versand sind noch offen.",
+      "currentState": "Seit 07.11.2026 laut Nutzer produktiv getestet: Anmeldung, Double-Opt-in, Adminübersicht, Abmeldung/Löschung. Im Website-Repository seit 07.11.2026 zusätzlich interne Benachrichtigung an founders@tennilo.de nach bestätigter Anmeldung sowie Verlinkung der geschützten Mail-Verwaltung programmiert; diese Änderungen sind noch NICHT über einen bestätigten Upload und Praxistest freigegeben.",
       "openPoints": "• Backup- und Restore-Konzept sowie Zugriffs-/Rate-Limit-Sicherheitsprüfung des öffentlichen Formulars und Adminbereichs.\n• Individuelle Abmeldelinks und Nachweis/Protokollierung für spätere Rundmails sicher gestalten; bislang kein Newsletter-System.\n• Versandzustellbarkeit und Fehler-/Bounce-Behandlung bei wachsenden Listen prüfen.\n• DSGVO-Informationen, Speicherfristen und Einwilligungsnachweise anhand tatsächlicher Verarbeitung prüfen.\n• Den nicht mehr benötigten Diagnostik- und Einrichtungsendpunkt nach stabiler Inbetriebnahme aus dem öffentlichen Webroot entfernen bzw. sperren.\n• Vor bezahlten Vorbestellungen gesonderten Lizenz-/Checkout-Prozess und rechtliche Dokumentation vorbereiten.",
       "doneWhen": "Die Warteliste ist auf der öffentlichen Website erreichbar; Testanmeldung und bestätigte Aufnahme, Admin-Übersicht, Abmeldelink und Löschung funktionieren nachgewiesen. Diese Funktionsabnahme erfolgte laut Nutzer am 07.11.2026. Für dauerhaft sichere öffentliche Nutzung bleiben Sicherheits- und Betriebskontrollen als Folgeaufgaben dokumentiert."
+    },
+    {
+      "id": "founders-mail-management",
+      "title": "TENNILO Founders – Benachrichtigungen und Rundmail-Verwaltung",
+      "description": "Automatische Info nach bestätigter Anmeldung, Admin-Editor für E-Mails, Einwilligungsfilter und manuelle kleine Versandchargen.",
+      "category": "Plattform & Zugang",
+      "status": "test",
+      "priority": "medium",
+      "milestone": "Founders-Betrieb / November 2026",
+      "nextStep": "Per https://github.com/tennis-schiri/tennilo-website/actions/workflows/deploy.yml auf tennilo.de veröffentlichen. Betreiberbenachrichtigung nach einer neuen Double-Opt-in-Anmeldung prüfen. Admin-Mailbereich öffnen, Entwurf und Testmail an founders@tennilo.de prüfen. Vor erster echten Rundmail nur Testkontakte auswählen und Zustellung, Einwilligung, persönliche Abmeldung und Protokollierung überprüfen.",
+      "updatedAt": "2026-11-07T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Turnierleiter bzw. Projektbetreiber wird nach jeder bestätigten Founders-Anmeldung informiert und kann Betatests, Gründerpakete oder Startnext-Informationen an passende bestätigte Interessenten versenden, ohne jedes Mal CSV-Dateien zu bearbeiten.",
+      "scope": "• System-E-Mail an founders@tennilo.de nach abgeschlossener Double-Opt-in-Anmeldung (nicht beim unbestätigten Formulareintrag).\n• Adminbereich für Entwürfe mit Betreff, reiner Textnachricht und Auswahl von Beta-/Founders-/Crowdfunding-Interesse.\n• Testmail ausschließlich an founders@tennilo.de.\n• Freigabe des konkreten Empfängerkreises durch bewusste Bestätigung, anschließend Versand in manuellen Chargen von maximal fünf Nachrichten.\n• Versand ausschließlich an bestätigte Interessenten mit Zustimmung zum ausgewählten Thema; aktuelle Anmeldung vor jeder Sendung nochmals prüfen.\n• Persönlicher HMAC-signierter Abmeldelink je Empfänger mit Bestätigungsseite und Löschung.\n• Statistiken pro Kampagne: ausstehend, serverseitig angenommen, fehlgeschlagen, übersprungen oder unklar in Bearbeitung.",
+      "currentState": "Implementiert in tennis-schiri/tennilo-website (07.11.2026): public/founders-mail.php, Anpassungen an founders.php, founders-admin.php, Datenschutztext und Deployment-Whitelist. Der Code ist in GitHub gespeichert, aber noch nicht als live oder produktiv getestet bestätigt. Der Versand verwendet vorerst den PHP mail()-Transport; SMTP, Bounce-Analyse und automatisierte Versandwiederholung sind nicht vorhanden.",
+      "openPoints": "• GitHub-Actions-PHP-Syntaxprüfung und tatsächlichen ALL-INKL-Upload bestätigen; danach Betriebs- und Berechtigungstests.\n• Verantwortungsvolle Anfangstests ausschließlich mit kontrollierten Testadressen; keine ungeprüfte Aussendung an reale Interessenten.\n• Zustellbarkeit, Bounce-Behandlung, einheitliche Textvorlagen sowie Versandlimits für höhere Listenvolumina verbessern.\n• Sicherheitsprüfung Admin-Authentifizierung, CSRF, Datenschutz und Datenbank-Backup/Wiederherstellung.\n• SMTP/Transaktions-Mailing erst später entscheiden; Postfachpasswort wird für PHP mail() nicht benötigt.",
+      "doneWhen": "Eine neue bestätigte Anmeldung löst genau eine Betreiberbenachrichtigung aus. Der Admin kann einen Entwurf erstellen und Testmail empfangen, Empfängerkreis ausdrücklich freigeben und nur bestätigte Interessenten nach Themen versenden. Individuelle Abmeldelinks funktionieren, abgemeldete Kontakte werden vor Sendung ausgeschlossen und jeder Versandversuch erscheint im Adminstatus. Bestätigter Praxistest und organisatorische Datenschutzprüfung liegen vor."
     }
   ]
 }
