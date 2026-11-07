@@ -415,3 +415,12 @@ Die Einträge bis 0.2.3 wurden am 2026-11-05 aus Code und bisherigem Entwicklung
 - Nur Qualifizierte angehakt; bei Absage rückt der nächste Tabellenrang automatisch nach, bei weiteren Absagen entsprechend weiter. Wiederzulassung möglich.
 - Absturzsichere Ablauflogik für ältere Doppelturniere und alle vier Play-off-Größen; veränderte UI-Module und CSS mit eigener Cache-Version 092.
 - Vor Veröffentlichung erneut Tests und manuellen FTPS-Upload prüfen.
+
+
+### v0.9.3 – Gleichstand: direkter Vergleich und drei faire Entscheidungswege (07.11.2026, GitHub)
+
+- Bei exakt gleicher Sieg-, Differenz- und Games/Punkte-Wertung entscheidet ein vorhandener direkter Vergleich zweier Teams.
+- Ohne entscheidenden direkten Vergleich: Losentscheid vor Ort mit Ergebniseingabe, TENNILO-Zufallsauslosung via Web-Crypto oder freie Reihenfolge der Turnierleitung.
+- Eindeutige Auswahl und Zeitpunkt dokumentiert, im Browser gespeichert und exportierbar; bei geänderten Ergebnissen werden veraltete Entscheidungen nicht still übernommen.
+- Neue **Gleichstände klären**-Sektion vor der Endrunde und auf der Livetabellen-Seite; ungeklärte relevante Gleichstände verhindern die verbindlichen Play-off-Paarungen.
+- Cache-Revision 093 für die gemeinsame Turnierablage und Doppel-/Live-Oberfläche; manuelle FTPS-Veröffentlichung erforderlich.

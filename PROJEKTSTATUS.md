@@ -258,3 +258,13 @@ Nach jedem größeren Entwicklungsschritt **diese Datei** aktualisieren: Version
 - PHP-Whitelist und Remote-Monitor übertragen nur öffentliche Paarungsnummern/-labels, keine personenbezogenen Admin-Felder, Zahlungen oder unveröffentlichte Daten.
 - Neues Fachtestmodul `tests/doubles-seeded-pairings.test.mjs`, erweiterte PHP-Live-Integrationstests. Cache-Versionen für Doppel- und Live-HTML/Module/CSS auf `v=092` angehoben.
 - Manuelle Browser-/Remote-Prüfung und manuelles Deployment offen; das App-Deployment startet nicht bei GitHub-Push.
+
+
+## v0.9.3 – Gleichstände fair klären (07.11.2026, GitHub, noch nicht online)
+
+- Doppel-Rangfolge bleibt zunächst Siege → Game-/Punktedifferenz → erzielte Games/Punkte. Bei exakt gleicher Wertung zweier Teams wird ihr direkter Vergleich **automatisch vor jeder sonstigen Entscheidung** angewendet.
+- Falls kein entscheidender direkter Vergleich vorliegt: eigener Bereich **Gleichstände klären** in Admin-Livetabelle und Play-offs. Mögliche Verfahren: vor Ort gezogene Entscheidung eingeben, per Kryptografie-Zufall in TENNILO losen, oder Rangfolge manuell bestimmen. Verfahren, Reihenfolge, Zeitpunkt und Wertungs-Signatur werden mit dem Turnier und JSON-Backup gespeichert.
+- Bei fehlender Entscheidung bleibt die Darstellung vorläufig; relevante offene Gleichstände (Qualifikationsgrenze oder Setzplatz) **blockieren** das verbindliche Setzen der Play-off-Paarungen. Nachträgliche Vorrundenänderungen lassen eine veraltete Entscheidung nicht automatisch weitergelten. Bereits festgelegte Play-offs schützen gegen spätere Ranglistenänderungen wie bisher.
+- Zwei oder mehr punktgleiche Teams können manuell in vollständige Reihenfolge gebracht werden; bei mehreren Teams ohne vollständigen eindeutigen Vergleich entscheidet die Turnierleitung. Für zwei Teams hat ein vorhandener direkter Vergleich Vorrang vor einer manuellen Wahl.
+- Cache-Revisionen `093` in Doppel-/Live-Einstiegspunkten und in allen gemeinsamen Turnierformaten angepasst, damit das geänderte gemeinsame Speicherungsschema verwendet wird. Bisherige JSON-Dateien bleiben kompatibel.
+- Fachtests für direkte Vergleiche, mehrere unentschiedene Teams, manuelle/physische/digitale Entscheide, Schutz vor ungültigen Paarungen und Standsignatur ergänzt. **Kein automatischer App-Upload**.
