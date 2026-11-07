@@ -10,7 +10,7 @@ const page=file("site/opc.html"),ui=file("site/assets/one-point-ui.js"),
   workflow=file(".github/workflows/deploy.yml");
 
 test("One Point Cup hat eine separate responsive TENNILO-Oberfläche",()=>{
-  assert.match(page,/one-point-ui\.js\?v=091/);
+  assert.match(page,/one-point-ui\.js\?v=093/);
   assert.match(page,/one-point\.css\?v=080/);
   assert.match(page,/noindex,nofollow/);
   assert.match(file("site/assets/one-point.css"),/@media\(max-width:480px\)/);

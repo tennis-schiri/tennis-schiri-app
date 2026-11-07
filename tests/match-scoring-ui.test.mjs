@@ -35,8 +35,8 @@ test("Turnierberater übernimmt die Zählweise und der One Point Cup bleibt fest
   assert.match(advisor,/recommendation\.id==="opc"\?1:input\.pointTarget/);
 });
 test("Neue Scoring-Datei wird nur bei manuellem App-Upload ausgeliefert",()=>{
-  assert.match(entry,/app\.js\?v=091/);
-  assert.match(doppelEntry,/doppel-ui\.js\?v=092/);
+  assert.match(entry,/app\.js\?v=093/);
+  assert.match(doppelEntry,/doppel-ui\.js\?v=093/);
   assert.equal((deploy.match(/site\/assets\/match-scoring\.js/g)||[]).length,2);
   assert.match(deploy,/if: github\.event_name == 'workflow_dispatch'/);
   assert.doesNotMatch(sync,/site\/assets\/app\.js|site\/assets\/doppel-ui\.js|site\/assets\/match-scoring\.js/);

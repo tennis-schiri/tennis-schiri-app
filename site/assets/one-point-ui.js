@@ -1,4 +1,4 @@
-import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=091";
+import {BrowserTournamentStore,uid,todayLocal} from "./storage.js?v=093";
 import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {euroCents,euroText,euroInput,timeWindow} from "./operations.js?v=082";
 import {
