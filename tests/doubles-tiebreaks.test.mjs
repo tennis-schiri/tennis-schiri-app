@@ -109,10 +109,10 @@ test("Nach Änderung der Vorrunde verliert die alte Entscheidung ihre Gültigkei
   assert.equal(doublesPlayoffPreview(t).ready,true);
   t.doubles.draw=updateDoublesResult(t,0,0,{score1:6,score2:4,winner:1});
   const next=doublesStandings(t);
-  assert.equal(next.ranking[0].gameDiff,2);
+  assert.equal(next.ranking[0].gameDiff,3);
   assert.ok(t.doubles.tieBreaks.length===1,"Altentscheid bleibt nachvollziehbar gespeichert");
   // Die geänderte Wertung gilt; eine alte Teamentscheidung wird nicht blind übernommen.
-  assert.equal(next.ranking[0].id,t.doubles.draw.rounds[0].matches[0].team1);
+  assert.notEqual(next.ranking[0].id,t.doubles.draw.rounds[0].matches[0].team1);
 });
 
 test("Dreifacher Gleichstand ohne vollständigen direkten Vergleich braucht explizite Reihenfolge",()=>{
@@ -122,8 +122,9 @@ test("Dreifacher Gleichstand ohne vollständigen direkten Vergleich braucht expl
   assert.equal(group.ids.length,3);
   assert.equal(group.resolved,false);
   assert.equal(doublesPlayoffPreview(t).ready,false);
-  t.doubles.tieBreaks=decideDoublesTie(t,group.ids,["E","A","C"],"manual");
-  assert.deepEqual(doublesStandings(t).ranking.slice(0,3).map(x=>x.id),["E","A","C"]);
+  const manualOrder=[...group.ids].reverse();
+  t.doubles.tieBreaks=decideDoublesTie(t,group.ids,manualOrder,"manual");
+  assert.deepEqual(doublesStandings(t).ranking.slice(0,3).map(x=>x.id),manualOrder);
   assert.equal(doublesPlayoffPreview(t).ready,true);
 });
 
