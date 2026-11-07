@@ -210,6 +210,46 @@ export function updateDoublesResult(t,roundIndex,matchIndex,value) {
   return {...t.doubles.draw,rounds};
 }
 
+// A tie is measured only after the normal, published tournament criteria.
+// Alphabetical order is used solely for a provisional display, never silently
+// to decide PO qualification or seeding. Exactly two tied teams use their
+// mutual result first; larger tie groups require an explicit organizer decision.
+const primaryCompare=(a,b)=>b.wins-a.wins||b.gameDiff-a.gameDiff||b.gamesFor-a.gamesFor;
+const provisionalCompare=(a,b)=>a.name.localeCompare(b.name,"de")||a.id.localeCompare(b.id);
+const groupIds=group=>group.map(row=>row.id).sort();
+const sameIds=(a,b)=>a.length===b.length&&a.every((id,i)=>id===b[i]);
+const allDoublesMatches=t=>(t?.doubles?.draw?.rounds||[]).flatMap(r=>r.matches);
+function tiedGroupInfo(t,group,matches) {
+  const ids=groupIds(group),set=new Set(ids);
+  const h2h=matches.filter(m=>set.has(m.team1)&&set.has(m.team2)).map(m=>({
+    team1:m.team1,team2:m.team2,
+    result:isWinner(m.result)?[m.result.score1,m.result.score2,m.result.winner]:null
+  }));
+  const signature=JSON.stringify({
+    ids,stats:group.slice().sort((a,b)=>a.id.localeCompare(b.id)).map(r=>
+      [r.id,r.wins,r.gameDiff,r.gamesFor]),
+    headToHead:h2h
+  });
+  let order=null,method="pending";
+  if(group.length===2) {
+    const match=h2h.find(m=>m.result&&
+      ((m.team1===ids[0]&&m.team2===ids[1])||(m.team1===ids[1]&&m.team2===ids[0])));
+    if(match) {
+      const won=match.result[2]===1?match.team1:match.team2;
+      order=[won,ids.find(id=>id!==won)];
+      method="direct";
+    }
+  }
+  if(!order) {
+    const stored=(t.doubles?.tieBreaks||[]).find(decision=>
+      sameIds(decision.ids,ids)&&decision.signature===signature&&
+      sameIds([...decision.order].sort(),ids)&&
+      ["onsite","random","manual"].includes(decision.method));
+    if(stored){order=stored.order;method=stored.method;}
+  }
+  return {ids,signature,method,resolved:!!order,
+    order:order||group.slice().sort(provisionalCompare).map(row=>row.id)};
+}
 export function doublesStandings(t) {
   const valid=verifyDoublesDraw(t);
   if(!valid.ok)throw Error(valid.errors[0]);
@@ -217,23 +257,72 @@ export function doublesStandings(t) {
     id:team.id,name:teamLabel(team),played:0,wins:0,losses:0,gamesFor:0,gamesAgainst:0,gameDiff:0
   }]));
   let complete=0;
-  for(const round of t.doubles.draw.rounds){
-    for(const match of round.matches){
-      const r=match.result;
-      if(!isWinner(r))continue;
-      const a=rows.get(match.team1),b=rows.get(match.team2);
-      if(!a||!b)throw Error("Unbekannte Teams im Spielplan.");
-      for(const [row,forGames,againstGames,win] of [[a,r.score1,r.score2,r.winner===1],
-        [b,r.score2,r.score1,r.winner===2]]){
-        row.played++;row.wins+=Number(win);row.losses+=Number(!win);
-        row.gamesFor+=forGames;row.gamesAgainst+=againstGames;row.gameDiff=row.gamesFor-row.gamesAgainst;
-      }
-      complete++;
+  const matches=allDoublesMatches(t);
+  for(const match of matches){
+    const r=match.result;
+    if(!isWinner(r))continue;
+    const a=rows.get(match.team1),b=rows.get(match.team2);
+    if(!a||!b)throw Error("Unbekannte Teams im Spielplan.");
+    for(const [row,forGames,againstGames,win] of [[a,r.score1,r.score2,r.winner===1],
+      [b,r.score2,r.score1,r.winner===2]]){
+      row.played++;row.wins+=Number(win);row.losses+=Number(!win);
+      row.gamesFor+=forGames;row.gamesAgainst+=againstGames;row.gameDiff=row.gamesFor-row.gamesAgainst;
     }
+    complete++;
   }
-  const ranking=[...rows.values()].sort((a,b)=>b.wins-a.wins || b.gameDiff-a.gameDiff ||
-    b.gamesFor-a.gamesFor || a.name.localeCompare(b.name,"de"));
-  return {ranking,complete,planned:valid.fixtures,finished:complete===valid.fixtures};
+  const preliminary=[...rows.values()].sort((a,b)=>primaryCompare(a,b)||provisionalCompare(a,b));
+  const ranking=[],tieGroups=[];
+  for(let i=0;i<preliminary.length;){
+    let end=i+1;
+    while(end<preliminary.length && primaryCompare(preliminary[i],preliminary[end])===0)end++;
+    const group=preliminary.slice(i,end);
+    if(group.length>1){
+      const decision=tiedGroupInfo(t,group,matches);
+      const rankMap=new Map(decision.order.map((id,index)=>[id,index]));
+      ranking.push(...group.sort((a,b)=>rankMap.get(a.id)-rankMap.get(b.id)));
+      tieGroups.push({...decision,firstPlace:i+1,lastPlace:end,
+        rows:group.map(row=>({id:row.id,name:row.name}))});
+    } else ranking.push(group[0]);
+    i=end;
+  }
+  return {ranking,tieGroups,complete,planned:valid.fixtures,finished:complete===valid.fixtures};
+}
+
+// Decisions are restricted to an *exact* currently open tie and a permutation
+// of its member IDs, so no arbitrary third team can be inserted into the table.
+export function decideDoublesTie(t,ids,order,method,decidedAt=new Date().toISOString()) {
+  if(t?.doubles?.playoffs)throw Error("Bitte zuerst die Play-offs zurücknehmen.");
+  const info=doublesStandings(t);
+  if(!info.finished)throw Error("Bitte zuerst die Vorrunde vollständig abschließen.");
+  if(!["onsite","random","manual"].includes(method))
+    throw Error("Ungültiges Verfahren zur Gleichstandsentscheidung.");
+  if(!Array.isArray(ids)||!Array.isArray(order))throw Error("Ungültige Teamreihenfolge.");
+  const sorted=[...ids].sort();
+  const group=info.tieGroups.find(x=>sameIds(x.ids,sorted));
+  if(!group || group.method==="direct")
+    throw Error("Dieser Gleichstand ist bereits durch den direkten Vergleich entschieden oder nicht mehr aktuell.");
+  if(!sameIds([...order].sort(),group.ids))
+    throw Error("Bitte jedes betroffene Team genau einmal auswählen.");
+  const existing=(t.doubles.tieBreaks||[]).filter(x=>!sameIds(x.ids,group.ids));
+  return [...existing,{ids:group.ids,order:[...order],signature:group.signature,
+    method,decidedAt}].slice(-100);
+}
+
+// Cryptographically fair, rejection-sampled Fisher–Yates draw (HTTPS browser).
+export function drawDoublesTieOrder(ids,cryptoSource=globalThis.crypto) {
+  if(!Array.isArray(ids)||ids.length<2||ids.length>100||new Set(ids).size!==ids.length)
+    throw Error("Ungültige Gleichstandsgruppe.");
+  if(typeof cryptoSource?.getRandomValues!=="function")
+    throw Error("Zufallsauslosung nicht verfügbar. Bitte vor Ort losen oder manuell festlegen.");
+  const result=[...ids];
+  for(let i=result.length-1;i>0;i--){
+    const n=i+1,limit=Math.floor(4294967296/n)*n,bytes=new Uint32Array(1);
+    let value;
+    do{cryptoSource.getRandomValues(bytes);value=bytes[0];}while(value>=limit);
+    const j=value%n;
+    [result[i],result[j]]=[result[j],result[i]];
+  }
+  return result;
 }
 
 export function doublesPlayoffPreview(t) {
@@ -241,9 +330,16 @@ export function doublesPlayoffPreview(t) {
   const size=doublesPlayoffSize(t);
   const excluded=new Set(t.doubles.playoffOptOut||[]);
   const eligible=info.ranking.filter(x=>!excluded.has(x.id));
-  return {...info,eligible,size,ready:info.finished && eligible.length>=size,
+  const selected=new Set(eligible.slice(0,size).map(row=>row.id));
+  const unresolvedTies=info.tieGroups.filter(group=>
+    !group.resolved && group.ids.filter(id=>!excluded.has(id)).length>=2 &&
+    group.ids.some(id=>selected.has(id)));
+  return {...info,eligible,size,unresolvedTies,
+    ready:info.finished && eligible.length>=size && unresolvedTies.length===0,
     reason:!info.finished?"Zuerst alle Vorrundenergebnisse eintragen.":
-      eligible.length<size?"Mindestens "+size+" Teams müssen für die Play-offs zugelassen sein.":null};
+      eligible.length<size?"Mindestens "+size+" Teams müssen für die Play-offs zugelassen sein.":
+      unresolvedTies.length?"Zuerst "+unresolvedTies.length+" relevanten Gleichstand "+
+        (unresolvedTies.length===1?"klären.":"klären.") :null};
 }
 
 const newMatch=(team1=null,team2=null,court=null)=>({team1,team2,court,result:null});

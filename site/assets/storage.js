@@ -106,7 +106,19 @@ const doublesOf=(value,categories)=>{
     (size<8||(Array.isArray(p.quarterfinals)&&p.quarterfinals.length===4))&&
     (size<4||(Array.isArray(p.semifinals)&&p.semifinals.length===2))&&
     p.final&&(size<4||p.thirdPlace)?p:null;
-  return {teams,draw,playoffs,playoffOptOut:Array.isArray(raw.playoffOptOut)?
+  const tieBreaks=(Array.isArray(raw.tieBreaks)?raw.tieBreaks:[]).slice(-100).map(x=>{
+    const ids=Array.isArray(x?.ids)?x.ids.map(id=>text(id,80)):[];
+    const order=Array.isArray(x?.order)?x.order.map(id=>text(id,80)):[];
+    const signature=typeof x?.signature==="string"?x.signature:"";
+    const method=x?.method;
+    if(ids.length<2||ids.length>100||new Set(ids).size!==ids.length||
+      ids.some(id=>!id)||order.length!==ids.length||new Set(order).size!==ids.length||
+      !order.every(id=>ids.includes(id))||signature.length>20000||
+      !["onsite","random","manual"].includes(method))return null;
+    return {ids,order,signature,method,
+      decidedAt:text(x?.decidedAt,40)};
+  }).filter(Boolean);
+  return {teams,draw,playoffs,tieBreaks,playoffOptOut:Array.isArray(raw.playoffOptOut)?
     [...new Set(raw.playoffOptOut.map(id=>text(id,80)).filter(Boolean))].slice(0,100):[]};
 };
 

@@ -42,7 +42,7 @@ export function makeDemoCopy(source,requested,{random=Math.random,makeId=uid}={}
   const players=Array.from({length:source.type==="doubles"?count*2:count},(_,i)=>randomName(random,i));
   const copy={...source,name:("Demo – "+source.name.replace(/^Demo\s*[–-]\s*/i,"")).slice(0,90),
     demoMode:true,draw:null,participants:[],roundClocks:{},liveDisplay:null,
-    finalOptOut:[],doubles:{teams:[],draw:null,playoffs:null,playoffOptOut:[]},
+    finalOptOut:[],doubles:{teams:[],draw:null,playoffs:null,tieBreaks:[],playoffOptOut:[]},
     opc:{players:[],fieldSize:source.opc.fieldSize,draw:null}};
   if(source.type==="ribbon"){
     copy.participants=players.map((name,i)=>({id:nextId(),name,
