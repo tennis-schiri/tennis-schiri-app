@@ -1,16 +1,16 @@
-import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=088";
-import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
+import {BrowserTournamentStore,todayLocal,uid} from "./storage.js?v=091";
+import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=091";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
-import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=082";
+import {euroCents,euroText,euroInput,clockFor,timeWindow,tournamentSchedule} from "./operations.js?v=091";
 import {
   analyzeDoublesSetup,doublesMatchOptions,generateDoublesDraw,verifyDoublesDraw,updateDoublesResult,
   doublesStandings,doublesPlayoffPreview,createDoublesPlayoffs,updateDoublesPlayoffResult,
-  doublesPlayoffStatus,doublesPlanRound,changeDoublesClock,normalizeDoublesResult
-} from "./doubles.js?v=086";
+  doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,changeDoublesClock,normalizeDoublesResult
+} from "./doubles.js?v=091";
 import {
   publicLiveSnapshot,createLiveSecrets,readLiveSecrets,saveLiveSecrets,
   clearLiveSecrets,publishLive,remoteLiveUrl
-} from "./remote-live.js?v=086";
+} from "./remote-live.js?v=091";
 
 const store=new BrowserTournamentStore();
 const root=document.getElementById("app");
@@ -66,10 +66,25 @@ function run(fn) {
   try{return fn();}
   catch(error){flash(error?.message||"Aktion fehlgeschlagen.",true);return null;}
 }
+function dIcon(kind) {
+  const icons={
+    home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
+    trophy:'<path d="M8 21h8M12 17v4M7 4h10v7a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v3a4 4 0 0 0 4 4M17 6h3v3a4 4 0 0 1-4-4"/>',
+    users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+    court:'<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M3 12h18M7 5v14M17 5v14"/>',
+    table:'<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M9 10v10M15 10v10"/>',
+    settings:'<path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="2"/><circle cx="16" cy="17" r="2"/>',
+    plus:'<path d="M12 5v14M5 12h14"/>',
+    download:'<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>',
+    upload:'<path d="M12 16V4m-4 4 4-4 4 4M4 18v3h16v-3"/>',
+    monitor:'<rect x="2.5" y="3.5" width="19" height="13.5" rx="2"/><path d="M8 21h8M12 17v4"/>'
+  };
+  return '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(icons[kind]||icons.court)+'</svg>';
+}
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
-    '<a class="doubles-logo" href="./index.html">TENN<span>I</span>LO <small style="font-size:.48em;letter-spacing:.02em;color:#c9dcda"> / DOPPELTURNIER</small></a>'+
-    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.8.8</span></div></header>';
+    '<a class="brand brand-link" href="./index.html">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></a>'+
+    '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.1</span></div></header>';
 }
 function note() {
   return '<div class="browser-notice"><div><strong>Lokale Testversion</strong>'+
@@ -93,7 +108,7 @@ function home() {
   const all=doublesList();
   return '<main class="double-shell double-intro"><div class="eyebrow">TENNILO / TURNIERART 02</div>'+
     '<h1>Feste Teams.<br><em>Gemeinsame Siege.</em></h1>'+
-    '<p class="lead">Doppelturniere mit festen Paarungen, Vorrunde, Livetabelle und Top-8-Play-offs organisieren.</p>'+
+    '<p class="lead">Doppelturniere mit festen Paarungen, Vorrunde, Livetabelle und frei wählbarer Endrunde organisieren.</p>'+
     '<div class="welcome-actions"><button class="btn primary" data-act="new">Doppelturnier anlegen</button>'+
     '<button class="btn ghost" data-act="demo">Demoturnier laden</button>'+
     '<a class="btn ghost" href="./index.html">Zur Hauptstartseite</a>'+
@@ -107,16 +122,27 @@ function home() {
     note()+'</main>';
 }
 function nav(t) {
-  const tabs=[["overview","Übersicht"],["teams","Teams & Kasse"],["draw","Spielplan"],["table","Livetabelle"],["playoffs","Play-offs"],["settings","Einstellungen"]];
-  return '<nav class="double-nav" aria-label="Doppelturnier Bereiche">'+
-    '<a href="./index.html">← TENNILO Start</a>'+
-    '<button type="button" data-act="home">Alle Doppelturniere</button>'+
-    tabs.map(([id,title])=>'<button type="button" data-act="tab" data-tab="'+id+'" class="'+(view===id?"active":"")+'">'+title+'</button>').join("")+
-    '<hr style="border:0;border-top:1px solid #d6e0d8;width:100%">'+
-    '<button data-act="new">+ Neues Doppelturnier</button><button data-act="backup">Daten sichern (JSON)</button>'+
-    '<button data-act="import">Sicherung laden (JSON)</button>'+
-    '<input type="file" id="doubles-import" accept=".json,application/json" hidden></nav>';
+  const tabs=[
+    ["overview","Übersicht","trophy"],
+    ["teams","Check-in & Nenngeld","users"],
+    ["draw","Auslosung","court"],
+    ["table","Livetabelle","table"],
+    ["playoffs","Endrunde","trophy"],
+    ["settings","Einstellungen","settings"]
+  ];
+  return '<aside class="sidebar double-sidebar"><div class="nav-label">DEIN TURNIER</div>'+
+    '<div class="tournament-picker"><label class="sr-only" for="doubles-tournament-select">Doppelturnier wählen</label>'+
+    '<select id="doubles-tournament-select">'+doublesList().map(x=>
+      '<option value="'+esc(x.id)+'" '+(x.id===t.id?"selected":"")+'>'+esc(x.name)+'</option>').join("")+'</select></div>'+
+    '<nav class="nav-tabs" aria-label="Turnierbereich">'+
+    '<button type="button" data-act="home">'+dIcon("home")+' Startseite</button>'+
+    tabs.map(([id,title,icon])=>'<button type="button" data-act="tab" data-tab="'+id+'" class="'+(view===id?"selected":"")+'">'+dIcon(icon)+' '+title+'</button>').join("")+
+    '</nav><button type="button" class="btn side-new" data-act="new">'+dIcon("plus")+' Neues Turnier</button>'+
+    '<div class="double-sidebar-links"><button class="btn ghost small" data-act="backup">'+dIcon("download")+' Daten sichern</button>'+
+    '<button class="btn ghost small" data-act="import">'+dIcon("upload")+' Daten laden</button></div>'+
+    '<div class="sidebar-foot">TENNILO · TENNIS-SCHIRI<br><span>TESTBUILD · 2026</span></div></aside>';
 }
+
 function sectionHead(labelText,title,description,actions="") {
   return '<div class="section-header"><div><div class="eyebrow">'+labelText+'</div><h2>'+title+'</h2>'+
     '<p class="section-sub">'+description+'</p></div><div class="double-actions">'+actions+'</div></div>';
@@ -137,8 +163,8 @@ function doublesTimeNote(t){
     return '<div class="'+(plan.overTarget?"double-warning":"double-success")+'"><strong>Geplantes Turnierende: '+
       esc(plan.end)+' Uhr</strong>'+(t.endTime?' · Ziel: '+esc(t.endTime)+' Uhr':'')+
       (plan.mode==="fit"?' · angepasste Spielzeiten':' · feste Spielzeiten')+
-      (t.reservePlayoffs!==false&&t.doubles.teams.filter(x=>x.present).length>=8?
-       ' · Top-8-Play-offs eingeplant':'')+
+      (t.reservePlayoffs!==false&&t.doubles.teams.filter(x=>x.present).length>=doublesPlayoffSize(t)?
+       ' · Top-'+doublesPlayoffSize(t)+'-Play-offs eingeplant':'')+
       (plan.overTarget?' · Zielzeit wird überschritten!':'')+'</div>';
   }catch(e){return '<div class="double-warning">'+esc(e.message)+'</div>';}
 }
@@ -146,7 +172,7 @@ function doublesOptions(t){
   if(t.doubles.teams.filter(x=>x.present).length<2)return "";
   const options=doublesMatchOptions(t);
   return '<section class="double-panel"><h3>Wie viele Matches pro Team sind machbar?</h3>'+
-    '<p class="muted">Geprüft anhand der anwesenden Teams, verfügbaren Plätze, echten Probeauslosungen und – falls gesetzt – der Endzeit. Bei 8+ Teams ist die Top-8-Endrunde standardmäßig mit eingeplant.</p>'+
+    '<p class="muted">Geprüft anhand der anwesenden Teams, verfügbaren Plätze, echten Probeauslosungen und – falls gesetzt – der Endzeit. Bei mindestens '+doublesPlayoffSize(t)+' Teams ist die Top-'+doublesPlayoffSize(t)+'-Endrunde standardmäßig mit eingeplant.</p>'+
     '<div class="schedule-option-list">'+options.map(o=>
       '<div class="schedule-option '+(o.possible?"schedule-option-ok":"schedule-option-no")+'">'+
       '<strong>'+o.games+' Match'+(o.games===1?"":"es")+' / Team'+(o.games===t.rounds?' · gewählt':'')+'</strong>'+
@@ -159,7 +185,7 @@ function overview(t) {
   try{if(valid?.ok)progress=doublesStandings(t);}catch{}
   const stage=t.doubles.playoffs?doublesPlayoffStatus(t):null;
   return sectionHead("DOPPELTURNIER / ZENTRALE","Turnierübersicht",
-    "Feste Teams, Vorrunde und die besten acht Teams in den Play-offs.",
+    "Feste Teams, Vorrunde und die besten "+doublesPlayoffSize(t)+" Teams in den Play-offs.",
     '<button class="btn subtle" data-act="settings">Turniereinstellungen</button>')+
     stats(t)+doublesTimeNote(t)+livePanel(t)+
     '<div class="double-grid"><section class="double-panel"><h3>Turnierstatus</h3>'+
@@ -254,19 +280,29 @@ function drawPage(t) {
     roundTimer(t,index)+r.matches.map((m,i)=>matchMarkup(t,m,i,{round:index})).join("")+'</section>';
 }
 function tablePage(t) {
+  const size=doublesPlayoffSize(t);
   const head=sectionHead("DOPPELTURNIER / RANGLISTE","Livetabelle",
     scoringRules(t).mode==="points"?"Wertung: Siege → Punktedifferenz → erzielte Punkte → Name.":"Wertung: Siege → Game-Differenz → Games + → Name.");
   if(!t.doubles.draw)return head+'<div class="double-warning">Bitte zuerst die Vorrunde auslosen.</div>';
   let info;
   try{info=doublesStandings(t);}catch(e){return head+'<div class="double-warning">'+esc(e.message)+'</div>';}
+  const excluded=new Set(t.doubles.playoffOptOut||[]);
+  const places=new Set(t.doubles.playoffs?.seeds||
+    info.ranking.filter(x=>!excluded.has(x.id)).slice(0,size).map(x=>x.id));
   return head+'<div class="double-success">'+info.complete+' von '+info.planned+' Begegnungen erfasst.</div>'+
-    '<section class="double-panel"><div class="double-table-wrap"><table class="double-table"><thead><tr>'+
+    '<div class="double-playoff-legend"><span class="double-playoff-swatch" aria-hidden="true"></span>'+
+    '<strong>Grün = '+size+' Play-off-Plätze</strong> · '+(t.doubles.playoffs?"Endrunde bereits ausgelost":
+      "Aktueller Zwischenstand – bis zum Ende der Vorrunde vorläufig")+
+    ' <button class="btn ghost small" data-act="tab" data-tab="playoffs">Endrunde verwalten</button></div>'+
+    '<section class="double-panel"><div class="double-table-wrap"><table class="double-table double-ranking-table"><thead><tr>'+
     '<th>Rang</th><th>Doppelteam</th><th>Sp</th><th>S</th><th>N</th><th>'+(scoringRules(t).mode==="points"?"Punkte +":"Games +")+'</th><th>'+(scoringRules(t).mode==="points"?"Punkte −":"Games −")+'</th><th>Diff.</th></tr></thead><tbody>'+
-    info.ranking.map((x,i)=>'<tr><td><strong>'+(i+1)+'</strong></td><td><strong>'+esc(x.name)+'</strong></td>'+
+    info.ranking.map((x,i)=>'<tr class="'+(places.has(x.id)?"double-playoff-row":"")+'"><td><strong>'+(i+1)+'</strong></td><td><strong>'+esc(x.name)+'</strong>'+
+      (places.has(x.id)?'<span class="double-playoff-label">PO</span>':"")+'</td>'+
       '<td>'+x.played+'</td><td>'+x.wins+'</td><td>'+x.losses+'</td><td>'+x.gamesFor+'</td>'+
       '<td>'+x.gamesAgainst+'</td><td>'+x.gameDiff+'</td></tr>').join("")+
-    '</tbody></table></div></section><p class="muted">Bei vollständigem Gleichstand entscheidet vorläufig die alphabetische Reihenfolge. Play-off-Teilnahme kann vor dem Auslosen manuell abgewählt werden.</p>';
+    '</tbody></table></div></section><p class="muted">Bei vollständigem Gleichstand entscheidet vorläufig die alphabetische Reihenfolge. Nicht teilnehmende Teams können in der Endrunde abgewählt werden; das nächste zugelassene Team rückt nach.</p>';
 }
+
 function playoffStage(t,title,id,matches) {
   return '<section class="double-panel"><h3>'+title+'</h3>'+
     matches.map((m,i)=>matchMarkup(t,m,i,{playoff:true,stage:id})).join("")+'</section>';
@@ -274,21 +310,26 @@ function playoffStage(t,title,id,matches) {
 function playoffTimeNote(t) {
   if(!t.doubles.draw)return "";
   if(t.reservePlayoffs===false)return '<p class="muted">Play-off-Zeiten sind nicht in der Wunsch-Endzeit enthalten. Bei Bedarf unter Einstellungen aktivieren.</p>';
-  if(t.doubles.teams.filter(x=>x.present).length<8)return "";
+  const size=doublesPlayoffSize(t);
+  if(t.doubles.teams.filter(x=>x.present).length<size)return "";
   try{
     const plan=tournamentSchedule(t),courtCount=t.courts.length;
     let cursor=t.doubles.draw.rounds.length;
+    const stageRows=doublesPlayoffStages(t).filter(x=>x.id!=="thirdPlace");
     return '<section class="double-panel"><h3>Reservierte Zeitfenster der Endrunde</h3>'+
-      [['Viertelfinale',Math.ceil(4/courtCount)],['Halbfinale',Math.ceil(2/courtCount)],
-       ['Finale und Platz 3',Math.ceil(2/courtCount)]].map(([title,blocks])=>{
-         const first=plan.rounds[cursor],last=plan.rounds[cursor+blocks-1];
-         cursor+=blocks;
-         return '<p><strong>'+title+':</strong> '+esc(first.start)+'–'+esc(last.end)+' Uhr ('+blocks+' Zeitblock'+(blocks===1?'':'e')+')</p>';
-       }).join("")+'</section>';
+      stageRows.map(({id,title,count})=>{
+        const matches=id==="final"&&size>=4?2:count;
+        const blocks=Math.ceil(matches/courtCount);
+        const first=plan.rounds[cursor],last=plan.rounds[cursor+blocks-1];
+        cursor+=blocks;
+        return '<p><strong>'+(id==="final"&&size>=4?"Finale und Platz 3":title)+
+          ':</strong> '+esc(first.start)+'–'+esc(last.end)+' Uhr ('+blocks+' Zeitblock'+(blocks===1?'':'e')+')</p>';
+      }).join("")+'</section>';
   }catch(e){return '<div class="double-warning">'+esc(e.message)+'</div>';}
 }
 function playoffsPage(t) {
-  const head=sectionHead("DOPPELTURNIER / ENDRUNDE","Top-8-Play-offs",
+  const size=doublesPlayoffSize(t);
+  const head=sectionHead("DOPPELTURNIER / ENDRUNDE","Top-"+size+"-Play-offs",
     "Gesetzt nach der Livetabelle, abwählbare Teams und automatische Nachrücker.");
   if(!t.doubles.draw)return head+'<div class="double-warning">Zuerst die Vorrunde auslosen.</div>';
   let preview;
@@ -297,13 +338,14 @@ function playoffsPage(t) {
   if(t.doubles.playoffs) {
     if(!stage.ready)return head+'<div class="double-warning">'+esc(stage.error||"Play-offs nicht verfügbar.")+'</div>';
     const p=stage.playoffs;
+    const sections=doublesPlayoffStages(t).map(info=>
+      playoffStage(t,info.title,info.id,
+        info.id==="final"||info.id==="thirdPlace"?[p[info.id]]:p[info.id])).join("");
     return head+livePanel(t)+playoffTimeNote(t)+'<div class="double-actions"><button class="btn ghost" data-act="live-playoffs">Play-offs auf Monitor zeigen</button>'+
       '<button class="btn double-danger" data-act="playoffs-reset">Play-offs zurücknehmen</button></div>'+
       (stage.champion?'<div class="double-success"><strong>Turniersieger: '+esc(label(t,stage.champion))+'</strong>'+
         (stage.third?'<br>Platz 3: '+esc(label(t,stage.third)):'')+'</div>':'')+
-      '<div class="double-bracket"><div>'+playoffStage(t,"Viertelfinale","quarterfinals",p.quarterfinals)+
-      playoffStage(t,"Halbfinale","semifinals",p.semifinals)+'</div><div>'+
-      playoffStage(t,"Finale","final",[p.final])+playoffStage(t,"Spiel um Platz 3","thirdPlace",[p.thirdPlace])+'</div></div>'+
+      '<div class="double-bracket">'+sections+'</div>'+
       '<p class="muted">Bei Änderung einer früheren Partie werden abhängige Ergebnisse zurückgesetzt, sobald sich eine Paarung ändert.</p>';
   }
   const excluded=new Set(t.doubles.playoffOptOut||[]);
@@ -311,10 +353,12 @@ function playoffsPage(t) {
     '<input type="checkbox" data-act="playoff-eligible" data-id="'+esc(x.id)+'" '+(!excluded.has(x.id)?"checked":"")+'>'+
     '<span>Rang '+(i+1)+' · '+esc(x.name)+'</span></label>').join("");
   return head+playoffTimeNote(t)+'<div class="'+(preview.ready?"double-success":"double-warning")+'">'+
-    (preview.ready?"Play-offs sind bereit. Acht Teams werden nach Rangliste gesetzt.":esc(preview.reason))+'</div>'+
+    (preview.ready?"Play-offs sind bereit. "+size+" Teams werden nach Rangliste gesetzt.":esc(preview.reason))+'</div>'+
     '<section class="double-panel"><h3>Teilnahme an der Endrunde</h3><p>Häkchen entfernen, falls ein Team nicht teilnehmen kann. Das nächste zugelassene Team rückt nach.</p>'+
-    selection+'<div class="double-actions" style="margin-top:17px"><button class="btn primary" data-act="playoffs-generate" '+(preview.ready?"":"disabled")+'>Top 8 auslosen</button></div></section>';
+    '<p class="muted">Aktuelle Qualifikationszahl: <strong>'+size+' Teams</strong>. Änderung unter Einstellungen möglich, bevor die Endrunde ausgelost wurde.</p>'+
+    selection+'<div class="double-actions" style="margin-top:17px"><button class="btn primary" data-act="playoffs-generate" '+(preview.ready?"":"disabled")+'>Top '+size+' auslosen</button></div></section>';
 }
+
 function settingsPage(t) {
   return sectionHead("DOPPELTURNIER / EINSTELLUNGEN","Turnier konfigurieren",
     "Start- und Endzeit, Platzanzahl und Spielzeit anpassen. Die Paarungen bleiben nach der Auslosung geschützt.")+
@@ -340,7 +384,10 @@ function settingsFields(t=null,inline=false) {
     '<option value="fit" '+(current.timeMode==="fit"?"selected":"")+'>Spielzeiten bis zur Endzeit anpassen</option></select>'+
     '<span class="field-hint">Berechnet die Dauer pro Zeitblock, ohne die Zahl der Matches zu ändern. Unter 10 Min. je Block nicht machbar.</span></label>'+
     scoreModeFields(current,esc)+
-    '<label class="field wide checkbox-field"><input type="checkbox" name="reservePlayoffs" '+(current.reservePlayoffs!==false?"checked":"")+'> Top-8-Play-offs im Endzeitplan berücksichtigen</label>'+
+    '<label class="field">Teams in der Endrunde<select name="playoffSize">'+
+      [2,4,8,16].map(size=>'<option value="'+size+'" '+(doublesPlayoffSize(current)===size?"selected":"")+'>'+size+' Teams'+(size===2?' · direktes Finale':'')+'</option>').join("")+
+    '</select><span class="field-hint">Die besten Teams der Vorrunde qualifizieren sich. Bei 4 oder mehr Teams mit Spiel um Platz 3.</span></label>'+
+    '<label class="field wide checkbox-field"><input type="checkbox" name="reservePlayoffs" '+(current.reservePlayoffs!==false?"checked":"")+'> Play-offs im Endzeitplan berücksichtigen</label>'+
     '<label class="field">Spieldauer (Min.)<input name="duration" type="number" min="10" max="120" required value="'+(current.duration??20)+'"></label>'+
     '<label class="field">Wechselpause (Min.)<input name="breakMinutes" type="number" min="0" max="60" required value="'+(current.breakMinutes??10)+'"></label>'+
     '<label class="field">Spiele pro Team<select name="rounds">'+
@@ -375,11 +422,23 @@ function render() {
     return;
   }
   const tabs={overview,teams,draw:drawPage,table:tablePage,playoffs:playoffsPage,settings:settingsPage};
-  root.innerHTML=header()+'<main class="double-shell"><div class="double-hero"><div class="eyebrow">FESTE DOPPELPARTNER · TURNIERLEITUNG</div>'+
-    '<h1>'+esc(t.name)+'</h1><p>'+dateText(t.date)+' · '+t.courts.length+' Plätze · '+t.rounds+' Spiele pro Team</p></div>'+
-    '<div class="double-content">'+nav(t)+'<section class="double-main">'+demoPanel(t)+(tabs[view]||overview)(t)+'</section></div>'+
-    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.8.8 · Geschützte Testversion · Daten nur lokal</footer></main>';
+  root.innerHTML=header()+'<div class="app-layout double-app-layout">'+nav(t)+
+    '<main class="main-area double-main-area">'+
+    '<div class="toolbar"><div class="breadcrumb">TURNIERMANAGER <span>/</span> DOPPELTURNIER</div>'+
+    '<div class="toolbar-actions">'+
+    '<button class="btn live-open-link small" data-act="live-local">'+dIcon("monitor")+' Live-Monitor öffnen</button>'+
+    '<button class="btn subtle small" data-act="backup">'+dIcon("download")+' Daten sichern</button>'+
+    '<button class="btn subtle small" data-act="import">'+dIcon("upload")+' Daten laden</button>'+
+    '</div></div>'+
+    '<div class="hero"><div class="hero-body"><span class="hero-mark">02 / DOPPELTURNIER</span>'+
+    '<h1>'+esc(t.name)+'</h1><p>'+dateText(t.date)+' · '+esc(t.startTime)+' Uhr · '+
+      t.courts.length+' Plätze · '+t.rounds+' Spiele je Team · Top '+doublesPlayoffSize(t)+' Play-offs</p></div>'+
+    '<div class="hero-orbit" aria-hidden="true"><div class="tennis-ball"></div></div></div>'+
+    '<section class="screen double-main">'+demoPanel(t)+(tabs[view]||overview)(t)+'</section>'+
+    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.9.1 · Geschützte Testversion · Daten nur lokal</footer>'+
+    '<input type="file" id="doubles-import" accept=".json,application/json" hidden></main></div>';
 }
+
 function showDialog({eyebrow,title,form,body,submit="Speichern"}) {
   dialogRoot.innerHTML='<dialog class="app-dialog" aria-labelledby="double-dialog-title">'+
     '<div class="dialog-top"><div><span class="eyebrow">'+esc(eyebrow)+'</span><h2 id="double-dialog-title">'+esc(title)+'</h2></div>'+
@@ -480,9 +539,12 @@ function replaceDoubles(t,patch) {
 function saveSettings(t,form,isCreate) {
   const d=new FormData(form),name=String(d.get("name")||"").trim();
   if(name.length<2||name.length>90)throw Error("Bitte einen Turniernamen mit 2–90 Zeichen eingeben.");
-  const count=Number(d.get("courtCount")),games=Number(d.get("rounds"));
+  const count=Number(d.get("courtCount")),games=Number(d.get("rounds")),playoffSize=Number(d.get("playoffSize"));
   if(!Number.isInteger(count)||count<1||count>1000)throw Error("Bitte 1–1000 Tennisplätze einstellen.");
   if(!Number.isInteger(games)||games<1||games>8)throw Error("Bitte 1–8 Spiele je Team einstellen.");
+  if(![2,4,8,16].includes(playoffSize))throw Error("Bitte 2, 4, 8 oder 16 Teams für die Endrunde wählen.");
+  if(t?.doubles.playoffs && playoffSize!==doublesPlayoffSize(t))
+    throw Error("Bitte zuerst die laufenden Play-offs zurücknehmen, bevor die Qualifikationszahl geändert wird.");
   if(t?.doubles.draw&&(count!==t.courts.length||games!==t.rounds))
     throw Error("Bitte vor Änderungen an Platzanzahl oder Spielanzahl zuerst die Auslosung zurücknehmen.");
   const scoring=readScoringFields(form);
@@ -495,7 +557,7 @@ function saveSettings(t,form,isCreate) {
   const values={
     name,date:String(d.get("date")),startTime:String(d.get("startTime")),
     endTime:String(d.get("endTime")||"")||null,timeMode:scoring.matchMode==="points"?"fixed":d.get("timeMode")==="fit"?"fit":"fixed",...scoring,
-    reservePlayoffs:d.has("reservePlayoffs"),duration:Number(d.get("duration")),breakMinutes:Number(d.get("breakMinutes")),
+    reservePlayoffs:d.has("reservePlayoffs"),playoffSize,duration:Number(d.get("duration")),breakMinutes:Number(d.get("breakMinutes")),
     rounds:games,courts,entryFeeCents:standard,feeCategories:cats
   };
   const preview={...(t||{}),...values,type:"doubles"};
@@ -682,7 +744,7 @@ document.addEventListener("click",event=>{
     closeDialog();flash("Ergebnis zurückgesetzt.");
   });
   if(act==="playoffs-generate")return run(()=>{
-    if(!confirm("Die besten acht zugelassenen Teams nach Rangliste für die Play-offs setzen?"))return;
+    if(!confirm("Die besten "+doublesPlayoffSize(t)+" zugelassenen Teams nach Rangliste für die Play-offs setzen?"))return;
     replaceDoubles(t,{playoffs:createDoublesPlayoffs(t)});
     flash("Play-offs ausgelost.");
   });
@@ -706,6 +768,9 @@ document.addEventListener("click",event=>{
 });
 document.addEventListener("change",event=>{
   const el=event.target,t=active();
+  if(el.id==="doubles-tournament-select")return run(()=>{
+    store.setActive(el.value);view="overview";currentRound=0;render();
+  });
   if(el.id==="doubles-import"&&el.files?.[0]){
     const file=el.files[0];
     if(file.size>3000000){flash("Die Sicherung ist zu groß (maximal 3 MB).",true);el.value="";return;}
