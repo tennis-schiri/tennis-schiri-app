@@ -4,7 +4,7 @@ import {verifyRibbonDraw} from "./draw.js?v=061";
 import {normalizeRibbonResult,ribbonStandings} from "./results.js?v=086";
 import {verifyRibbonFinals} from "./finals.js?v=086";
 import {plannedRound,clockFor} from "./operations.js?v=091";
-import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding} from "./doubles.js?v=091";
+import {verifyDoublesDraw,doublesStandings,doublesPlayoffStatus,doublesPlanRound,doublesPlayoffSize,doublesPlayoffStages,doublesPlayoffSeeding} from "./doubles.js?v=092";
 
 const validResult=r=>r?.winner===1||r?.winner===2;
 const sourceRound=(t,index)=>{
