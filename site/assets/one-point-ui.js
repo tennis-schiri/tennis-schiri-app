@@ -32,7 +32,7 @@ function flash(message,bad=false) {
 function run(fn) {try{return fn();}catch(error){flash(error?.message||"Aktion fehlgeschlagen.",true);return null;}}
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
-    '<a class="doubles-logo" href="./index.html">TENN<span>I</span>LO <small style="font-size:.48em;letter-spacing:.02em;color:#c9dcda"> / ONE POINT CUP</small></a>'+
+    '<a class="doubles-logo tournament-app-brand" href="./index.html"><img class="tournament-brand-logo" src="./assets/tennilo-tournament-logo.png" alt="TENNILO Tournament" width="1361" height="390"><small> / ONE POINT CUP</small></a>'+
     '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.1</span></div></header>';
 }
 function hint() {

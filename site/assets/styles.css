@@ -390,3 +390,10 @@ button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.
 .demo-panel-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .demo-panel button:disabled{opacity:.48;cursor:not-allowed}
 @media(max-width:640px){.demo-panel{align-items:stretch}.demo-panel-actions{width:100%}.demo-panel-actions button{flex:1 1 auto}}
+
+/* Approved TT04 Tournament product mark in the application navigation. */
+.tournament-brand-logo{display:block;width:clamp(170px,24vw,275px);max-width:100%;height:auto;max-height:72px;object-fit:contain;object-position:left center;border-radius:7px}
+.brand-button:has(.tournament-brand-logo){display:inline-flex;align-items:center;padding:0;border:0;background:transparent;color:inherit}
+.brand-link:has(.tournament-brand-logo),.roadmap-brand:has(.tournament-brand-logo),.tournament-app-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.roadmap-brand:has(.tournament-brand-logo) small,.tournament-app-brand small{font-size:11px;letter-spacing:.02em;color:#c9dcda}
+@media(max-width:600px){.tournament-brand-logo{width:clamp(150px,50vw,225px)}}

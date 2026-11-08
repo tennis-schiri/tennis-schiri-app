@@ -83,7 +83,7 @@ function dIcon(kind) {
 }
 function header() {
   return '<header class="shell-header"><div class="header-inner">'+
-    '<a class="brand brand-link" href="./index.html">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></a>'+
+    '<a class="brand brand-link" href="./index.html"><img class="tournament-brand-logo" src="./assets/tennilo-tournament-logo.png" alt="TENNILO Tournament" width="1361" height="390"></a>'+
     '<span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.5</span></div></header>';
 }
 function note() {
@@ -106,7 +106,7 @@ function livePanel(t) {
 }
 function home() {
   const all=doublesList();
-  return '<main class="wrap welcome double-intro"><div class="eyebrow">Tennis-Schiri / Digitale Turnierorganisation · Doppelturnier</div>'+
+  return '<main class="wrap welcome double-intro"><div class="eyebrow">TENNILO Tournament / Digitale Turnierorganisation · Doppelturnier</div>'+
     '<h1>Feste Teams.<br><em>Gemeinsame Siege.</em></h1>'+
     '<p class="lead">Doppelturniere mit festen Paarungen, Vorrunde, Livetabelle und frei wählbarer Endrunde organisieren.</p>'+
     '<div class="welcome-actions"><button class="btn primary" data-act="new">'+dIcon("plus")+' Doppelturnier anlegen</button>'+
@@ -143,7 +143,7 @@ function nav(t) {
     '</nav><button type="button" class="btn side-new" data-act="new">'+dIcon("plus")+' Neues Turnier</button>'+
     '<div class="double-sidebar-links"><button class="btn ghost small" data-act="backup">'+dIcon("download")+' Daten sichern</button>'+
     '<button class="btn ghost small" data-act="import">'+dIcon("upload")+' Daten laden</button></div>'+
-    '<div class="sidebar-foot">TENNILO · TENNIS-SCHIRI<br><span>TESTBUILD · 2026</span></div></aside>';
+    '<div class="sidebar-foot">TENNILO TOURNAMENT<br><span>TESTBUILD · 2026</span></div></aside>';
 }
 
 function sectionHead(labelText,title,description,actions="") {
@@ -536,7 +536,7 @@ function render() {
       t.courts.length+' Plätze · '+t.rounds+' Spiele je Team · Top '+doublesPlayoffSize(t)+' Play-offs</p></div>'+
     '<div class="hero-orbit" aria-hidden="true"><div class="tennis-ball"></div></div></div>'+
     '<section class="screen double-main">'+demoPanel(t)+(tabs[view]||overview)(t)+'</section>'+
-    '<footer class="double-footer">© Tennis-Schiri · TENNILO Doppelturnier v0.9.5 · Geschützte Testversion · Daten nur lokal</footer>'+
+    '<footer class="double-footer">© Tennis-Schiri · TENNILO Tournament · Doppelturnier v0.9.5 · Geschützte Testversion · Daten nur lokal</footer>'+
     '<input type="file" id="doubles-import" accept=".json,application/json" hidden></main></div>';
 }
 

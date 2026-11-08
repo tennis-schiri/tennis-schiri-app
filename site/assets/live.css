@@ -113,3 +113,8 @@ button{font:inherit;cursor:pointer}
 
 /* v0.9.5 – named elimination stage is visible as the main TV phase, not only a heading */
 .live-phase.live-playoff-phase{background:var(--lime);color:var(--navy);font-size:clamp(13px,1.6vw,23px);text-transform:uppercase;box-shadow:0 4px 18px rgba(231,255,106,.11)}
+
+/* Original TENNILO Tournament TT04 mark in the Live monitor */
+.live-brand .tournament-brand-logo{display:block;width:clamp(155px,20vw,255px);max-height:70px;height:auto;object-fit:contain;border-radius:7px}
+.live-brand:has(.tournament-brand-logo){display:flex;gap:15px;align-items:center}
+@media(max-width:620px){.live-brand .tournament-brand-logo{width:145px}}

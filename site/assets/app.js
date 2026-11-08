@@ -92,7 +92,7 @@ function icon(name) {
 
 function header() {
   return `<header class="shell-header"><div class="header-inner">
-    <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite">TENNIS<span>-SCHIRI</span><small> / TURNIERMANAGER</small></button>
+    <button type="button" class="brand brand-button" data-action="home" aria-label="Zur Startseite"><img class="tournament-brand-logo" src="./assets/tennilo-tournament-logo.png" alt="TENNILO Tournament" width="1361" height="390"></button>
     <span class="dev-chip">GESCHÜTZTE TESTVERSION · V0.9.1</span>
   </div></header>`;
 }
@@ -120,7 +120,7 @@ function intro() {
     </article>`).join("")}</div>
   </section>` : "";
   return `<main class="wrap welcome">
-    <div class="eyebrow">Tennis-Schiri / Digitale Turnierorganisation</div>
+    <div class="eyebrow">TENNILO Tournament / Digitale Turnierorganisation</div>
     <h1>Weniger Orga.<br><em>Mehr Tennis.</em></h1>
     <p class="lead">Organisiere Schleifchenturniere, Doppelturniere mit festen Teams oder einen One Point Cup – mit Auslosung, Ergebnissen und Kasse.</p>
     <div class="welcome-actions">
@@ -131,7 +131,7 @@ function intro() {
       <button class="btn ghost" data-action="demo">Beispielturnier laden</button>
       <button class="btn ghost" data-action="demo-filler">Auffüllrunde testen</button>
     </div>
-    <section class="advisor-invite" aria-label="Turnierberater"><div><div class="eyebrow">DER TENNILO TURNIERBERATER</div><h2>Welches Turnier passt zu euch?</h2><p>Personen, Plätze, Zeitfenster und Ziel eingeben. Machbarkeit und Formate vergleichen.</p></div><button type="button" class="btn primary" data-action="advisor-open">Turnierberater starten ${icon("arrow")}</button></section>
+    <section class="advisor-invite" aria-label="Turnierberater"><div><div class="eyebrow">DER TENNILO TOURNAMENT TURNIERBERATER</div><h2>Welches Turnier passt zu euch?</h2><p>Personen, Plätze, Zeitfenster und Ziel eingeben. Machbarkeit und Formate vergleichen.</p></div><button type="button" class="btn primary" data-action="advisor-open">Turnierberater starten ${icon("arrow")}</button></section>
     ${savedTournaments}
     <div class="format-grid">
       <article class="format-card current"><div class="eyebrow">01 / IN ENTWICKLUNG</div><h2>Schleifchenturnier</h2><p>Teilnehmer, Spielstärken, Anwesenheit und Einstellungen an einem Ort.</p><span>VERSION 0.9.1</span></article>
@@ -168,7 +168,7 @@ function advisorPage() {
   }).join(""):'';
   const valid=advisorResults?.filter(item=>item.feasible).length||0;
   return '<main class="advisor-shell"><div class="advisor-heading"><div>'+
-    '<div class="eyebrow">TENNILO / PLANUNGSASSISTENT</div>'+
+    '<div class="eyebrow">TENNILO TOURNAMENT / PLANUNGSASSISTENT</div>'+
     '<h1>Das passende Turnier. <em>Für euren Tag.</em></h1>'+
     '<p>Wir vergleichen die vorhandenen Turnierarten anhand von Teilnehmerzahl, Platzkapazität, Zeit und eurem Ziel. Die Berechnung erfolgt mit den echten Auslosungs- und Zeitmodellen.</p></div>'+
     '<button type="button" class="btn ghost" data-action="home">Zur Startseite</button></div>'+
@@ -225,7 +225,7 @@ function sidebar(t) {
       <button data-action="tab" data-tab="settings" class="${view === "settings" ? "selected" : ""}">${icon("settings")} Einstellungen</button>
     </nav>
     <button class="btn side-new" data-action="new">${icon("plus")} Neues Turnier</button>
-    <div class="sidebar-foot">INSTA TENNIS-SCHIRI<br><span>TESTBUILD · 2026</span></div>
+    <div class="sidebar-foot">TENNILO TOURNAMENT<br><span>TESTBUILD · 2026</span></div>
   </aside>`;
 }
 

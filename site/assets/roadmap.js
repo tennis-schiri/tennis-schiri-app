@@ -112,7 +112,7 @@ function renderResults(){
 function render(){
   const role=state.session.role;
   const user=role==="admin"?"Projektleitung":role==="commenter"?"Mitwirkend":role==="viewer"?"Nur lesen":"Lesemodus";
-  root.innerHTML='<main class="rm-container"><div class="rm-top"><a href="./index.html" class="rm-back">← Zur TENNILO-App</a>'+
+  root.innerHTML='<main class="rm-container"><div class="rm-top"><a href="./index.html" class="rm-back">← Zur TENNILO Tournament-App</a>'+
     '<div class="rm-access"><span class="rm-role-dot '+role+'"></span><span>'+esc(user)+(role!=="guest"?" · "+esc(state.session.label):"")+'</span>'+
     (role==="guest"?'<button class="btn subtle small" data-action="login">Anmelden</button>':
       '<button class="btn subtle small" data-action="logout">Abmelden</button>')+
@@ -120,7 +120,7 @@ function render(){
       '<button class="btn ghost small" data-action="profile">Mein Konto</button>':
       '<button class="btn ghost small" data-action="upgrade">Benutzerkonto einrichten</button>'):'')+
     (isAdmin()?'<button class="btn ghost small" data-action="members">Nutzer verwalten</button>':'')+'</div></div>'+
-    '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / ROADMAP & IDEEN</div>'+
+    '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO TOURNAMENT / ROADMAP & IDEEN</div>'+
     '<h1>Was kommt als <em>Nächstes?</em></h1>'+
     '<p>Entwicklung verfolgen, Prioritäten erkennen und gemeinsam Ideen sammeln. Jeder Punkt zeigt den aktuellen Stand – vom ersten Gedanken bis zur Testversion.</p>'+
     '<div class="rm-hero-actions">'+(canComment()?
@@ -205,7 +205,7 @@ function credentialsForm(kind,button,{username="",needsOld=false}={}){
     '<button class="btn primary" type="submit">'+button+'</button></form>';
 }
 function loginModal(){
-  showModal("Bei TENNILO Roadmap anmelden",
+  showModal("Bei TENNILO Tournament Roadmap anmelden",
     '<p class="rm-modal-note">Mit deinem persönlichen Benutzernamen und Passwort kannst du jederzeit Ideen einreichen oder kommentieren.</p>'+
     credentialsForm("login-account","Anmelden")+
     '<details class="rm-legacy"><summary>Noch einen alten Zugangscode?</summary>'+
@@ -215,7 +215,7 @@ function loginModal(){
 }
 function registrationModal(){
   if(!pendingInviteToken)return;
-  showModal("Willkommen bei der TENNILO-Roadmap",
+  showModal("Willkommen bei der TENNILO Tournament-Roadmap",
     '<p class="rm-modal-note">Du wurdest eingeladen. Lege einmalig einen Benutzernamen und ein sicheres Passwort fest. Den Link brauchst du danach nicht mehr.</p>'+
     credentialsForm("register-invite","Konto erstellen & anmelden"));
 }
@@ -302,7 +302,7 @@ async function load(){
       state={items:seed.items||[],session:{role:"guest",label:"Gast",csrf:""},
         members:[],storagePersistent:false,bootstrapAvailable:false,offline:true};
     }catch{
-      root.innerHTML='<main class="rm-container"><div class="rm-alert"><strong>Roadmap gerade nicht erreichbar.</strong><p>'+esc(error.message)+'</p><a href="./index.html">Zur TENNILO-App</a></div></main>';
+      root.innerHTML='<main class="rm-container"><div class="rm-alert"><strong>Roadmap gerade nicht erreichbar.</strong><p>'+esc(error.message)+'</p><a href="./index.html">Zur TENNILO Tournament-App</a></div></main>';
       return;
     }
   }
