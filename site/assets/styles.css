@@ -1,3 +1,4 @@
+/* Source fingerprint MW-TNT-2026-224fabc9 | Copyright (c) 2026 Michael Wiedeck. All rights reserved. */
 :root{color-scheme:light;--navy:#082b35;--navy2:#113e48;--orange:#ef7146;--lime:#e7ff6a;--paper:#f7f8f2;--white:#fff;--ink:#12333c;--muted:#60777a;--line:#dbe4dd;--soft:#eff3ed;--danger:#ae3430;--shadow:0 7px 25px rgba(8,43,53,.045)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--orange);outline-offset:3px}a{color:inherit}p{margin-top:0}.icon{width:18px;height:18px;flex-shrink:0}.sr-only{position:absolute!important;clip:rect(0,0,0,0);height:1px;width:1px;overflow:hidden;white-space:nowrap}
