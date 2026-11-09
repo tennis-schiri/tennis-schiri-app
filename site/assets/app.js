@@ -1,3 +1,4 @@
+/* Source fingerprint MW-TNT-2026-224fabc9 | Copyright (c) 2026 Michael Wiedeck. All rights reserved. */
 import { BrowserTournamentStore, todayLocal } from "./storage.js?v=095";
 import {demoCountLimits,makeDemoCopy,fillDemoResults} from "./demo-data.js?v=088";
 import {scoringRules,scoreModeFields,readScoringFields,assertScoringChangeAllowed} from "./match-scoring.js?v=086";
