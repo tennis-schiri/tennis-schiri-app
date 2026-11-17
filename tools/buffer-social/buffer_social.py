@@ -162,8 +162,8 @@ def parse_buffer_time(value):
 
 def main():
     mode = os.environ.get("MODE", "check").lower().strip()
-    if mode not in {"check", "schedule"}:
-        raise ValueError("MODE muss check oder schedule sein.")
+    if mode not in {"check", "preview", "schedule"}:
+        raise ValueError("MODE muss check, preview oder schedule sein.")
 
     orgs = organizations()
     if mode == "check":
@@ -185,7 +185,7 @@ def main():
         print("READ-ONLY-TEST OK. Kein Post angelegt oder veröffentlicht.")
         return
 
-    if os.environ.get("CONFIRM", "").strip() != "JA":
+    if mode == "schedule" and os.environ.get("CONFIRM", "").strip() != "JA":
         raise ValueError("Terminierung nur mit CONFIRM=JA. Andernfalls keine Änderung.")
     handle = required_env("CHANNEL").lower().lstrip("@")
     kind = required_env("POST_TYPE").lower()
@@ -220,6 +220,10 @@ def main():
         f"{len(scheduled)} aktuell bei Buffer geplante Posts.",
         flush=True,
     )
+    if mode == "preview":
+        print("VORABTEST ERFOLGREICH: Bild, Kanal und Termin sind vorbereitet.")
+        print("Kein Buffer-Post erstellt. Bitte vor echtem Schedule Metricool-Kollisionen prüfen.")
+        return
     # The provided timestamp must NOT also be scheduled at Metricool;
     # cross-provider duplicate checking isn't available from this workflow.
     query = (
