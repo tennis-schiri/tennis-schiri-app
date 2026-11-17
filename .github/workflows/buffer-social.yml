@@ -1,0 +1,80 @@
+name: Buffer · Instagram prüfen und planen
+
+on:
+  workflow_dispatch:
+    inputs:
+      modus:
+        description: "Erst 'check' ausführen; 'schedule' plant einen echten Post."
+        required: true
+        type: choice
+        default: check
+        options:
+          - check
+          - schedule
+      kanal:
+        description: "Instagram-Konto (nur für schedule)"
+        required: false
+        type: choice
+        default: tennis.schiri
+        options:
+          - tennis.schiri
+          - tennilo.app
+      format:
+        description: "Veröffentlichungsformat (nur für schedule)"
+        required: false
+        type: choice
+        default: story
+        options:
+          - story
+          - post
+      zeit_berlin:
+        description: "Exakte Ortszeit, z. B. 2026-12-28 18:00"
+        required: false
+        type: string
+      bild_direktlink:
+        description: "Öffentlicher HTTPS-Direktlink zur PNG/JPEG/WebP-Datei"
+        required: false
+        type: string
+      caption:
+        description: "Feed-Caption (Stories haben keine automatische Caption)"
+        required: false
+        type: string
+      bestaetigen:
+        description: "NUR bei schedule: JA eintippen. Vorher Metricool-Duplikate prüfen!"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buffer-social-manual
+  cancel-in-progress: false
+
+jobs:
+  buffer:
+    name: Buffer API · ${{ inputs.modus }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Python bereitstellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: API-Verbindung prüfen bzw. Termin freigeben
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          MODE: ${{ inputs.modus }}
+          CHANNEL: ${{ inputs.kanal }}
+          POST_TYPE: ${{ inputs.format }}
+          DATE_BERLIN: ${{ inputs.zeit_berlin }}
+          MEDIA_URL: ${{ inputs.bild_direktlink }}
+          CAPTION: ${{ inputs.caption }}
+          CONFIRM: ${{ inputs.bestaetigen }}
+        run: python tools/buffer-social/buffer_social.py
