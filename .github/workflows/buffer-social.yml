@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       modus:
-        description: "Erst 'check' ausführen; 'schedule' plant einen echten Post."
+        description: "preview prueft Bild/Kanal/Termin ohne Post; schedule plant mit JA."
         required: true
         type: choice
-        default: check
+        default: preview
         options:
           - check
+          - preview
           - schedule
       kanal:
         description: "Instagram-Konto (nur für schedule)"
@@ -28,13 +29,15 @@ on:
           - story
           - post
       zeit_berlin:
-        description: "Exakte Ortszeit, z. B. 2026-12-28 18:00"
+        description: "Ortszeit Europe/Berlin; Test 24.11.2026 18:00"
         required: false
         type: string
+        default: "2026-11-24 18:00"
       bild_direktlink:
         description: "Öffentlicher HTTPS-Direktlink zur PNG/JPEG/WebP-Datei"
         required: false
         type: string
+        default: "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/2026-11-24-tennis-schiri-communityfrage.png"
       caption:
         description: "Feed-Caption (Stories haben keine automatische Caption)"
         required: false
