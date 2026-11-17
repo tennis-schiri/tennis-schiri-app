@@ -60,3 +60,25 @@ Offizielle Buffer-Erklärung: https://developers.buffer.com/guides/hosting-media
 
 **Nach dem ersten erfolgreichen Test** können wir eine geregelte wöchentliche Übergabe der
 freien Buffer-Warteschlangenplätze entwerfen. Bis dahin alle bestehenden Metricool-Termine unverändert lassen.
+
+## Vorbereiteter Story-Test (24. November 2026)
+
+**Status:** Grafik und Eingabewerte vorbereitet, **noch NICHT in Buffer terminiert**.
+
+- Kanal: `@tennis.schiri`
+- Format: `story`, ohne Caption und ohne native Instagram-Sticker
+- Termin: Dienstag, **24.11.2026, 18:00 Uhr Europe/Berlin**
+- Grafik: 1080 × 1920 px, echtes Tennis-Schiri-Logo, Community-Frage „Was macht ein gutes Tennisturnier aus?“
+- GitHub-Direktlink (öffentlich): `https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/2026-11-24-tennis-schiri-communityfrage.png`
+- Google-Drive-Kopie: `https://drive.google.com/file/d/1ZbfMvCidXwWerwH1JVL9G1z5jKs1kjay/view`
+- Geplanter Termin in Metricool auf @tennis.schiri: **keiner** (am 17.11.2026 abgeglichen).
+
+### Empfohlene sichere Abfolge
+
+1. [Workflow öffnen](https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/buffer-social.yml) → **Run workflow**.
+2. Standardmodus `preview` **unverändert lassen**. Testbild, Account und Uhrzeit sind vorausgefüllt; `bestaetigen` bleibt leer.
+3. Run starten und im Protokoll nach `VORABTEST ERFOLGREICH` suchen. Dieser Schritt lädt nichts zu Buffer hoch.
+4. Nur nach erfolgreichem Preview erneut den Workflow starten, diesmal `modus=schedule` und `bestaetigen=JA`.
+5. Nach dem Planen in [Buffer Publish](https://publish.buffer.com/) das **automatische** Story-Posting überprüfen. Geplante Veröffentlichung bleibt bis 24.11.2026 offen; erst danach kann der echte Publikationserfolg beurteilt werden.
+
+**Achtung:** Die frei zugängliche Grafik ist bewusst allgemeiner Tennis-Content, kein rein technisches Testmotiv. Sie ist trotzdem nur für einen einmaligen Test vorgesehen. In Metricool bestehende Beiträge nicht ändern.
