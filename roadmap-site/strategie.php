@@ -1,13 +1,7 @@
 <?php
 declare(strict_types=1);
-$https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (string)($_SERVER['SERVER_PORT'] ?? '') === '443';
-$basic = strtolower((string)($_SERVER['AUTH_TYPE'] ?? '')) === 'basic' &&
-    trim((string)($_SERVER['REMOTE_USER'] ?? ($_SERVER['PHP_AUTH_USER'] ?? ''))) !== '';
-if (!$https || !$basic) {
-    http_response_code(403);
-    header('Content-Type: text/plain; charset=UTF-8');
-    exit('Diese Seite benötigt HTTPS und den aktivierten Verzeichnisschutz.');
-}
+define('TENNILO_ROADMAP_INTERNAL_STRATEGY',true);
+require __DIR__ . '/roadmap-session-guard.php';
 header('Cache-Control: private, no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
