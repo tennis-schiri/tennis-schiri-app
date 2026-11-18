@@ -111,3 +111,20 @@ test('Alle sechs Mini-Apps bleiben in Demo und nativer Planung getrennt',()=>{
   }
   assert.ok(html.includes('rm-mini-overview'),'eigenständige Wer-muss-Gestaltung');
 });
+
+test('Mini-App-Karten und Listen bleiben auf dunklem Hintergrund lesbar',()=>{
+  const css=fs.readFileSync(path.join(root,'roadmap-site/extra.css'),'utf8');
+  const rule=(selector)=>css.split('}').find(block=>block.split('{')[0].trim()===selector)?.split('{')[1]||'';
+  for(const [selector,color] of [
+    ['.standalone-roadmap .rm-mini-card>strong','#faf9ff'],
+    ['.standalone-roadmap .rm-mini-card>p','#d4d4e5'],
+    ['.standalone-roadmap .rm-mini-card .rm-card-foot','#c2c5dc'],
+    ['.standalone-roadmap .rm-mini-row .rm-list-main small','#cbd0e4'],
+    ['.standalone-roadmap .rm-mini-row .rm-list-priority','#d2d5e8'],
+    ['.standalone-roadmap .rm-mini-streams button strong','#f7f5ff']
+  ]){
+    assert.ok(rule(selector).includes('color:'+color),selector+' muss helle Schrift verwenden');
+  }
+  assert.ok(css.includes('.rm-mini-card{border-left:4px solid var(--app-accent'));
+  assert.ok(css.includes('background:linear-gradient(130deg,#24213c,#151727)'));
+});
