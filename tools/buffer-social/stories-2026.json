@@ -893,5 +893,6 @@
       "source_disabled": true
     }
   ],
-  "approved_at": "2026-11-18"
+  "approved_at": "2026-11-18",
+  "audit": "2026-11-18: GitHub Push-Aktion erneut ausgelöst; bitte Buffer Queue / status/last-buffer-queue.txt prüfen."
 }
