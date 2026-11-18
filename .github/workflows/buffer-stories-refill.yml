@@ -2,6 +2,9 @@ name: Buffer · Instagram-Stories automatisch nachfüllen
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "tools/buffer-social/QUEUE_ENABLED.txt"
   schedule:
     - cron: "17 */2 * * *"
 
