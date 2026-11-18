@@ -169,21 +169,35 @@ try {
 
     // Initial owner is created from the password hash generated from GitHub Secrets.
     // Migrated accounts, comments and legacy access codes remain untouched.
+    define('TENNILO_ROADMAP_INTERNAL_ADMIN', true);
+    $initial = require __DIR__ . '/roadmap-initial-admin.php';
+    if (!is_array($initial) ||
+        !is_string($initial['username'] ?? null) ||
+        !is_string($initial['passwordHash'] ?? null) ||
+        !preg_match('/^[a-z0-9][a-z0-9._-]{2,39}$/D', $initial['username']) ||
+        strlen($initial['passwordHash']) < 40) {
+        rm_error(503, 'Administratorkonto ist nicht sicher eingerichtet.');
+    }
     if ($state['ownerAccount'] === null && $state['adminHash'] === null) {
-        define('TENNILO_ROADMAP_INTERNAL_ADMIN', true);
-        $initial = require __DIR__ . '/roadmap-initial-admin.php';
-        if (!is_array($initial) ||
-            !is_string($initial['username'] ?? null) ||
-            !is_string($initial['passwordHash'] ?? null) ||
-            !preg_match('/^[a-z0-9][a-z0-9._-]{2,39}$/D', $initial['username']) ||
-            strlen($initial['passwordHash']) < 40) {
-            rm_error(503, 'Administratorkonto ist nicht sicher eingerichtet.');
-        }
+        // First account; never overwrite existing owner, invite or comment records.
         $state['ownerAccount'] = [
             'username' => $initial['username'],
             'passwordHash' => $initial['passwordHash'],
             'createdAt' => gmdate('c')
         ];
+        rm_write_state($dir, $state);
+    } elseif (is_string($initial['resetVersion'] ?? null) &&
+              preg_match('/^[0-9]{1,25}$/D', $initial['resetVersion']) &&
+              !hash_equals((string)($state['ownerResetVersion'] ?? ''), $initial['resetVersion'])) {
+        // Explicit workflow opt-in: restore administrator access, preserve all
+        // roadmap items, comments, invitations, and user roles.
+        $state['ownerAccount'] = [
+            'username' => $initial['username'],
+            'passwordHash' => $initial['passwordHash'],
+            'createdAt' => gmdate('c')
+        ];
+        $state['adminHash'] = null;
+        $state['ownerResetVersion'] = $initial['resetVersion'];
         rm_write_state($dir, $state);
     }
 
