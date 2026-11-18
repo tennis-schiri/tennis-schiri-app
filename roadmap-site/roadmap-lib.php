@@ -79,7 +79,16 @@ function rm_seed(string $file): array {
     return $data['items'];
 }
 
-function rm_merge(array $saved, array $seed): array {
+function rm_item_id_list(mixed $raw): array {
+    if (!is_array($raw)) return [];
+    $seen = [];
+    foreach (array_slice($raw, 0, 300) as $id) {
+        if (is_string($id) && preg_match('/^[a-z0-9-]{2,70}$/D', $id)) $seen[$id] = true;
+    }
+    return array_keys($seen);
+}
+
+function rm_merge(array $saved, array $seed, array $retiredIds = []): array {
     $items = is_array($saved['items'] ?? null) ? $saved['items'] : [];
     $ids = [];
     $prior = is_array($saved['officialBaseline'] ?? null) ? $saved['officialBaseline'] : [];
@@ -133,8 +142,56 @@ function rm_merge(array $saved, array $seed): array {
             ? $saved['ownerResetVersion'] : null,
         'invites' => is_array($saved['invites'] ?? null) ? $saved['invites'] : [],
         'officialBaseline' => $currentBaseline,
+        // Stabile Grabsteine: gelöscht bleibt gelöscht, auch wenn GitHub den Seed neu einspielt.
+        'deletedItemIds' => rm_item_id_list($saved['deletedItemIds'] ?? []),
+        // Aus dem offiziellen Seed entfernte Dubletten bleiben archiviert, statt wieder aufzutauchen.
+        'retiredItemIds' => rm_item_id_list($retiredIds),
         'items' => array_values($items)
     ];
+}
+
+function rm_is_active_item(array $state, string $id): bool {
+    if (in_array($id, $state['deletedItemIds'] ?? [], true) ||
+        in_array($id, $state['retiredItemIds'] ?? [], true)) return false;
+    foreach ($state['items'] as $item) if (($item['id'] ?? null) === $id) return true;
+    return false;
+}
+
+function rm_active_items(array $state): array {
+    $hidden = array_fill_keys(array_merge($state['deletedItemIds'] ?? [],
+        $state['retiredItemIds'] ?? []), true);
+    return array_values(array_filter($state['items'],
+        fn($item) => is_array($item) && !isset($hidden[$item['id'] ?? ''])));
+}
+
+function rm_trashed_items(array $state): array {
+    $deleted = array_fill_keys($state['deletedItemIds'] ?? [], true);
+    $retired = array_fill_keys($state['retiredItemIds'] ?? [], true);
+    return array_values(array_filter($state['items'],
+        fn($item) => is_array($item) && isset($deleted[$item['id'] ?? '']) &&
+            !isset($retired[$item['id'] ?? ''])));
+}
+
+function rm_delete_item(array &$state, string $id): bool {
+    if (!rm_is_active_item($state, $id)) rm_error(404, 'Eintrag nicht gefunden oder bereits gelöscht.');
+    $state['deletedItemIds'][] = $id;
+    $state['deletedItemIds'] = rm_item_id_list($state['deletedItemIds']);
+    return true;
+}
+
+function rm_restore_item(array &$state, string $id): bool {
+    if (in_array($id, $state['retiredItemIds'] ?? [], true))
+        rm_error(409, 'Diese Dublette wurde in der offiziellen Roadmap zusammengeführt.');
+    if (!in_array($id, $state['deletedItemIds'] ?? [], true))
+        rm_error(404, 'Eintrag ist nicht im Papierkorb.');
+    $exists = false;
+    foreach ($state['items'] as $item) {
+        if (($item['id'] ?? null) === $id) { $exists = true; break; }
+    }
+    if (!$exists) rm_error(404, 'Gespeicherter Eintrag nicht gefunden.');
+    $state['deletedItemIds'] = array_values(array_filter($state['deletedItemIds'],
+        fn($entry) => $entry !== $id));
+    return true;
 }
 
 function rm_public_item(array $item): array {
