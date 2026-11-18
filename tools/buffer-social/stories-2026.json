@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "note": "Enabled only after corresponding Metricool story is disabled. DO NOT schedule until verified.",
+  "note": "Migration vorbereiten: Erst medien sichern, dann Metricool-Story als Draft kennzeichnen, verifizieren, im Manifest freigeben und Buffer Queue automatisch füllen. Alles standardmäßig gesperrt.",
   "created": "2026-11-18",
   "buffer_max_queue": 10,
   "stories": [
