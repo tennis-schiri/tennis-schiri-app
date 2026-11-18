@@ -58,7 +58,7 @@ Secrets: https://github.com/tennis-schiri/tennis-schiri-app/settings/secrets/act
 **Direkter Actions-Link:**
 https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/roadmap-subdomain.yml
 
-Dort `Run workflow → main → Run workflow` auswählen. Nur bei manuellem Start prüft der Workflow PHP und JavaScript, bereitet die **originalen Markenlogos** aus dem öffentlichen TENNILO-Website-Repository vor, prüft HTTP 401 und lädt anschließend ausschließlich 13 freigegebene Roadmap-Dateien hoch.
+Dort `Run workflow → main → Run workflow` auswählen. Nur bei manuellem Start prüft der Workflow PHP und JavaScript, bereitet die **originalen Markenlogos** aus dem öffentlichen TENNILO-Website-Repository vor, prüft HTTP 401 und lädt anschließend ausschließlich 14 freigegebene Roadmap-Dateien hoch.
 
 Keine `.htaccess` oder private Serverdateien werden angerührt. Kein automatisches Veröffentlichen und kein Löschen fremder Dateien.
 
