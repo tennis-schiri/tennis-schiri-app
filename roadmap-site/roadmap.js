@@ -1,4 +1,4 @@
-// TENNILO Roadmap v0.8.4 – shared, private development board.
+// TENNILO Roadmap v0.9 – product streams and daily status-review link.
 const root=document.getElementById("roadmap-app");
 const modalRoot=document.getElementById("roadmap-modal");
 const toastRoot=document.getElementById("roadmap-toast");
@@ -15,6 +15,10 @@ const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform 
 let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],offline:false};
 const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"]];
+const SCORE_STREAMS=[["demo","Web-Demo"],["native","iPhone & Apple Watch"],["test","Tests & Qualität"],["release","Beta & Veröffentlichung"],["sports","Weitere Sportarten"],["platform","Plattform & Schnittstellen"]];
+const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/issues?q=is%3Aissue+%22TENNILO+Roadmap+Tagesabgleich%22";
+function scoreStream(item){return SCORE_STREAMS.some(([k])=>k===item.workstream)?item.workstream:"native";}
+function scoreStreamLabel(item){return SCORE_STREAMS.find(([k])=>k===scoreStream(item))?.[1]||"Entwicklung";}
 function productOf(item){
  if(item.category==="TENNILO Score")return "score";
  if(item.category==="TENNILO Umpire")return "umpire";
@@ -22,7 +26,7 @@ function productOf(item){
  if(item.category==="TENNILO Plattform")return "platform";
  return "tournament";
 }
-let filterProduct="all";
+let filterProduct="all",filterScoreStream="all";
 let view="board",query="",filterStatus="all",filterCategory="all",filterPriority="all";
 let activeItem=null;
 let pendingInviteToken=null;
@@ -63,6 +67,17 @@ function summary(){
     '<div class="rm-overview-stat"><span>Geplant / Ideen</span><strong>'+(counts.planned+counts.idea)+'</strong><small>Für später vorgemerkt</small></div></div>'+
     '<div class="rm-progress" aria-label="'+done+' von '+total+' Themen auf der Testseite"><span></span></div>';
 }
+function scoreOverview(){
+  if(filterProduct!=="score")return "";
+  const scoreItems=state.items.filter(x=>productOf(x)==="score");
+  return '<section class="rm-score-overview" aria-label="Score-Entwicklungsbereiche">'+
+    '<div class="rm-score-overview-heading"><div><h2>Score: Entwicklung nach Bereichen</h2><p>Web-Demo, native Apps und Tests werden getrennt bewertet. Ein GitHub-Commit ist kein bestandener Gerätetest.</p></div>'+
+    '<a href="'+ROADMAP_REVIEW_URL+'" target="_blank" rel="noopener noreferrer">Täglichen GitHub-Abgleich ansehen</a></div>'+
+    '<div class="rm-score-streams">'+
+    '<button type="button" data-action="score-stream" data-stream="all" class="'+(filterScoreStream==="all"?"active":"")+'" aria-pressed="'+(filterScoreStream==="all")+'"><strong>Alle</strong><span>'+scoreItems.length+' Themen</span></button>'+
+    SCORE_STREAMS.map(([key,label])=>'<button type="button" data-action="score-stream" data-stream="'+key+'" class="'+(filterScoreStream===key?"active":"")+'" aria-pressed="'+(filterScoreStream===key)+'"><strong>'+label+'</strong><span>'+scoreItems.filter(x=>scoreStream(x)===key).length+' Themen</span></button>').join("")+
+    '</div></section>';
+}
 function controls(){
   return '<nav class="rm-product-filters" aria-label="Produkt auswählen">'+PRODUCTS.map(([id,label])=>
     '<button type="button" data-action="product" data-product="'+id+'"'+(id===filterProduct?' class="selected"':'')+' aria-pressed="'+(id===filterProduct?'true':'false')+'">'+label+'</button>').join("")+'</nav>'+
@@ -71,6 +86,7 @@ function controls(){
     '<button type="button" data-action="view" data-view="board" class="'+(view==="board"?"active":"")+'">Board</button>'+
     '<button type="button" data-action="view" data-view="list" class="'+(view==="list"?"active":"")+'">Liste</button></div></div>'+
     '<div class="rm-filter-bar">'+
+    (filterProduct==="score"?'<label><span>Score-Bereich</span><select id="rm-filter-score-stream">'+[['all','Alle Score-Bereiche'],...SCORE_STREAMS].map(([key,title])=>'<option value="'+key+'"'+(filterScoreStream===key?' selected':'')+'>'+title+'</option>').join('')+'</select></label>':'')+
     '<label class="rm-search"><span class="sr-only">Roadmap durchsuchen</span><input id="rm-search" type="search" placeholder="Themen und Ideen suchen …" value="'+esc(query)+'"></label>'+
     '<label><span>Status</span><select id="rm-filter-status">'+[['all','Alle Status'],...STATUS.map(x=>[x.key,x.short])].map(([v,t])=>'<option value="'+esc(v)+'"'+(filterStatus===v?" selected":"")+'>'+esc(t)+'</option>').join("")+'</select></label>'+
     '<label><span>Bereich</span><select id="rm-filter-category">'+[['all','Alle Bereiche'],...CATEGORIES.map(x=>[x,x])].map(([v,t])=>'<option value="'+esc(v)+'"'+(filterCategory===v?" selected":"")+'>'+esc(t)+'</option>').join("")+'</select></label>'+
@@ -81,6 +97,7 @@ function itemsFiltered(){
   const q=query.toLocaleLowerCase("de-DE").trim();
   return state.items.filter(x=>
     (filterProduct==="all"||productOf(x)===filterProduct)&&
+    (filterProduct!=="score"||filterScoreStream==="all"||scoreStream(x)===filterScoreStream)&&
     (filterStatus==="all"||x.status===filterStatus)&&
     (filterCategory==="all"||x.category===filterCategory)&&
     (filterPriority==="all"||x.priority===filterPriority)&&
@@ -90,7 +107,7 @@ function itemsFiltered(){
 function card(x){
   const comments=Array.isArray(x.comments)?x.comments.length:0;
   return '<button type="button" class="rm-card" data-action="detail" data-id="'+esc(x.id)+'" aria-label="'+esc(x.title)+' öffnen">'+
-    '<div class="rm-card-top"><span class="rm-category">'+esc(x.category)+'</span>'+
+    '<div class="rm-card-top"><span class="rm-category">'+esc(productOf(x)==="score"?scoreStreamLabel(x):x.category)+'</span>'+
     '<span class="rm-priority '+esc(x.priority)+'" title="Priorität '+esc(PRIORITY[x.priority]||"Offen")+'">'+esc(PRIORITY[x.priority]||"Offen")+'</span></div>'+
     '<strong>'+esc(x.title)+'</strong>'+
     '<p>'+esc(x.description)+'</p>'+
@@ -116,7 +133,7 @@ function renderResults(){
       ["high","medium","low"].indexOf(a.priority)-["high","medium","low"].indexOf(b.priority));
     target.innerHTML='<div class="rm-list">'+sorted.map(x=>
       '<div class="rm-list-row"><span class="rm-status-chip status-'+esc(x.status)+'">'+esc(statusOf(x.status).short)+'</span>'+
-      '<div class="rm-list-main"><strong>'+esc(x.title)+'</strong><small>'+esc(x.category)+' · '+esc(x.milestone||"Offen")+'</small></div>'+
+      '<div class="rm-list-main"><strong>'+esc(x.title)+'</strong><small>'+esc(productOf(x)==="score"?scoreStreamLabel(x):x.category)+' · '+esc(x.milestone||"Offen")+'</small></div>'+
       '<span class="rm-list-priority">'+esc(PRIORITY[x.priority]||"")+'</span>'+
       '<button class="btn ghost small" type="button" data-action="detail" data-id="'+esc(x.id)+'">Ansehen</button></div>').join("")+'</div>';
   }
@@ -158,6 +175,7 @@ function render(){
     '<a class="btn rm-outline" href="./strategie.php">Gesamte Planung lesen</a></div></div>'+
     '<div class="rm-hero-decoration" aria-hidden="true"><span></span><span></span><span></span></div></section>'+
     summary()+
+    scoreOverview()+
     (state.offline?'<div class="rm-alert"><strong>Nur vorläufige Ansicht.</strong> Der gemeinsame Kommentarserver ist gerade nicht erreichbar. Änderungen sind momentan nicht möglich.</div>':'')+
     (!state.storagePersistent&&!state.offline?'<div class="rm-data-note"><strong>Testbetrieb:</strong> Die Beiträge liegen derzeit in einem privaten Server-Temp-Verzeichnis. Für eine dauerhaft verlässliche Ideensammlung muss ein persistenter privater Speicherpfad auf dem Hosting eingerichtet werden.</div>':'')+
     (state.bootstrapAvailable?'<div class="rm-setup"><div><strong>Einmalige Einrichtung</strong><p>Lege deinen eigenen Benutzernamen und ein sicheres Passwort für die Projektleitung fest.</p></div><button class="btn primary" data-action="bootstrap-account">Projektleitung einrichten</button></div>':'')+
@@ -349,7 +367,8 @@ document.addEventListener("click",event=>{
   const b=event.target.closest("[data-action]");
   if(!b)return;
   const act=b.dataset.action,id=b.dataset.id;
-  if(act==="product"){filterProduct=b.dataset.product;filterCategory="all";render();return;}
+  if(act==="product"){filterProduct=b.dataset.product;filterCategory="all";filterScoreStream="all";render();return;}
+  if(act==="score-stream"){filterProduct="score";filterScoreStream=b.dataset.stream;render();return;}
   if(act==="view"){view=b.dataset.view;render();return;}
   if(act==="detail"){detail(id);return;}
   if(act==="close"){closeModal();return;}
@@ -402,7 +421,8 @@ document.addEventListener("input",event=>{
   }
 });
 document.addEventListener("change",event=>{
-  if(event.target.id==="rm-filter-status")filterStatus=event.target.value;
+  if(event.target.id==="rm-filter-score-stream")filterScoreStream=event.target.value;
+  else if(event.target.id==="rm-filter-status")filterStatus=event.target.value;
   else if(event.target.id==="rm-filter-category")filterCategory=event.target.value;
   else if(event.target.id==="rm-filter-priority")filterPriority=event.target.value;
   else return;
