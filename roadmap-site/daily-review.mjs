@@ -1,4 +1,4 @@
-// TENNILO Roadmap: täglicher GitHub-Abgleich, bewusst ohne automatische Status-Freigaben.
+// Gemeinsame Projekt-Roadmap: täglicher GitHub-Abgleich, bewusst ohne automatische Status-Freigaben.
 // Benötigt GITHUB_TOKEN mit contents:read und issues:write im Roadmap-Repository.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -92,7 +92,7 @@ export function renderReport(snapshots,stats,when,since){
   const candidates=snapshots.flatMap(x=>x.commits.filter(c=>c.taskIds.length));
   return [
     issueMarker,
-    '# TENNILO Roadmap – Tagesabgleich',
+    '# Projekt-Roadmap – Tagesabgleich',
     '',
     '**Geprüft:** '+when+' (UTC) · **Fenster ab:** '+since+' (UTC).',
     '**Roadmap-Themen:** '+stats.total+' · **Score-Themen:** '+stats.score+' · **Mini-App-Themen:** '+stats.miniapps+'.',
@@ -129,9 +129,9 @@ async function run(){
   }
   let out;
   if(existing){
-    out=await request(target+'/'+existing.number,{method:'PATCH',body:{title:'TENNILO Roadmap Tagesabgleich',body,state:'open'}});
+    out=await request(target+'/'+existing.number,{method:'PATCH',body:{title:'Projekt-Roadmap – täglicher Entwicklungsabgleich',body,state:'open'}});
   }else{
-    out=await request(target,{method:'POST',body:{title:'TENNILO Roadmap Tagesabgleich',body}});
+    out=await request(target,{method:'POST',body:{title:'Projekt-Roadmap – täglicher Entwicklungsabgleich',body}});
   }
   console.log('Tagesabgleich aktualisiert: '+out.html_url);
   console.log('Quellen: '+snapshots.map(x=>x.source.name+': '+x.commits.length).join(', '));
