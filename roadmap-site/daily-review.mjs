@@ -14,6 +14,7 @@ const sources=[
   {repo:'tennis-schiri/tennilo-score',name:'TENNILO Score'},
   {repo:'tennilo-umpire/umpire-app',name:'TENNILO Umpire'},
   {repo:'tennis-schiri/tennilo-website',name:'TENNILO Website'},
+  {repo:'tennis-schiri/wer-muss-app',name:'Wer muss?! & Mini-Apps'},
 ];
 
 export function parseRoadmap(){
@@ -94,7 +95,7 @@ export function renderReport(snapshots,stats,when,since){
     '# TENNILO Roadmap – Tagesabgleich',
     '',
     '**Geprüft:** '+when+' (UTC) · **Fenster ab:** '+since+' (UTC).',
-    '**Roadmap-Themen:** '+stats.total+' · **Score-Themen:** '+stats.score+'.',
+    '**Roadmap-Themen:** '+stats.total+' · **Score-Themen:** '+stats.score+' · **Mini-App-Themen:** '+stats.miniapps+'.',
     '',
     'Dieser Abgleich liest tägliche GitHub-Codeänderungen. Er verändert **keine Roadmap-Status, Konten, Kommentare oder Web-Dateien**. Ein Commit bedeutet weder „auf der Demo live“ noch „auf iPhone/Watch getestet“. Letzteres wird nur nach bestätigten Gerätetests eingetragen.',
     '',
@@ -102,7 +103,7 @@ export function renderReport(snapshots,stats,when,since){
     '## Zu prüfen',
     candidates.length?'Commit-Nachrichten mit expliziter \u0060RM(item-id)\u0060-Zuordnung: '+candidates.map(c=>c.taskIds.join(', ')).join(' · '):'Keine expliziten Roadmap-IDs in neuen Commit-Nachrichten. Fachlichen Stand bei relevanten Änderungen manuell gegen die Aufgaben prüfen.',
     '',
-    'Auch prüfen: neue Ideen aus Google Drive und Entwicklungschats, reale Geräte-/Beta-Tests und Änderungen, die nicht als GitHub-Commit erfasst werden. Dafür hat dieser Workflow **keinen automatischen Zugriff**.',
+    'Auch prüfen: neue Ideen aus Google Drive und Entwicklungschats (auch Mini-App-Ideenliste), reale Geräte-/Beta-Tests und Änderungen, die nicht als GitHub-Commit erfasst werden. Dafür hat dieser Workflow **keinen automatischen Zugriff**.',
     '',
     '**Bearbeitungsregel:** Erst nach Code-/Demo-/Gerätetest die konkrete Aufgabe aktualisieren. Die geschützte Website wird weiterhin über den [manuellen TENNILO-Roadmap-Upload](https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/roadmap-subdomain.yml) veröffentlicht.',
     ''
@@ -116,7 +117,8 @@ async function run(){
   const since=new Date(now.getTime()-36*3600*1000).toISOString();
   const snapshots=[];
   for(const source of sources) snapshots.push(await recent(source,since,ids));
-  const stats={total:all.length,score:all.filter(x=>x.category==='TENNILO Score').length};
+  const stats={total:all.length,score:all.filter(x=>x.category==='TENNILO Score').length,
+    miniapps:all.filter(x=>x.category==='Weitere Apps').length};
   const body=renderReport(snapshots,stats,now.toISOString(),since);
   const target='/repos/'+repo+'/issues';
   let existing=null;
