@@ -4,7 +4,7 @@ declare(strict_types=1);
 $username = strtolower(trim((string)(getenv('ROADMAP_ADMIN_USERNAME') ?: '')));
 $password = (string)(getenv('ROADMAP_ADMIN_PASSWORD') ?: '');
 if (!preg_match('/^[a-z0-9][a-z0-9._-]{2,39}$/D', $username) ||
-    in_array($username, ['gast','system'], true)) {
+    in_array($username, ['gast','admin','system'], true)) {
     fwrite(STDERR, "ROADMAP_ADMIN_USERNAME fehlt oder ist ungültig (3–40 Zeichen).\n");
     exit(1);
 }
