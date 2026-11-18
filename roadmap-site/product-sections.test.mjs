@@ -25,7 +25,7 @@ const sandbox={
   clearTimeout(){},
   console
 };
-vm.runInNewContext(safeScript+\`
+vm.runInNewContext(safeScript+`
   globalThis.__sections={
     PRODUCTS,PRODUCT_STREAMS,productOf,productStream,productStreamOptions,streamLabel,
     setItems(items){state.items=items;},
@@ -34,7 +34,7 @@ vm.runInNewContext(safeScript+\`
     overview(){return productOverview();},
     filtered(){return itemsFiltered();}
   };
-\`,sandbox,{filename:'roadmap.js'});
+`,sandbox,{filename:'roadmap.js'});
 const ui=sandbox.__sections;
 
 test('Alle fünf Produkte haben eigene Entwicklungsbereiche',()=>{
