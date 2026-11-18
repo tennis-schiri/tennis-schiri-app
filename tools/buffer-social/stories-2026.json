@@ -922,9 +922,10 @@
         "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide3.png",
         "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide4.png"
       ],
-      "enabled": false,
-      "source_disabled": false,
+      "enabled": true,
+      "source_disabled": true,
       "reason": "Einmalige November-Ausnahme zur Einhaltung des Metricool-Free-Limits; vier Folien bleiben erhalten."
     }
-  ]
+  ],
+  "november_exception": "Regelcheck 04 am 29.11.2026: vier Folien als Buffer-Karussell, um Metricool-Limit einzuhalten. Alle Dezember-Feed-Posts unverändert."
 }
