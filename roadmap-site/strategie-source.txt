@@ -1,0 +1,135 @@
+﻿TENNILO – Gemeinsame Produkt-Roadmap
+Tournament · Score · Umpire · Business | Aktualisiert: 18.11.2026
+Arbeitsdokument – strategische Vorschläge, keine verbindlich beschlossenen Funktionen oder Veröffentlichungstermine. Technischer Projektstatus und verbindliche Entscheidungen bleiben im GitHub-Repository dokumentiert.
+1. Vision und Positionierung
+TENNILO soll eine einfach bedienbare, browserbasierte Plattform für Tennisvereine, Freizeitturniere und freie Veranstalter werden. Leitgedanke: „Weniger Orga. Mehr Tennis.“ Kernfokus: gesellige Vereins- und Hobbyturniere sowie klassische Einzel-, Doppel- und Mixedturniere.
+Marke/Domain: tennilo.de ist nach Bestätigung des Projektinhabers gesichert und wird auf app.tennis-schiri.de weitergeleitet. Technische Zieladresse der aktuellen Entwicklungsapp: https://app.tennis-schiri.de/index.html. Eine Markenschutzprüfung ist damit nicht automatisch abgeschlossen.
+2. Ausgangslage am 05.11.2026
+Bereits vereinbarte Reihenfolge der ersten Turnierarten: 1. Schleifchenturnier, 2. Doppelturnier mit festen Paaren, 3. One Point Cup.
+GitHub-Code v0.3.2 (noch nicht als live veröffentlicht bestätigt): mehrere Turniere; Teilnehmer und Anwesenheit; Stärkegruppen; frei wählbare/benennbare Plätze; reguläre Schleifchen-Auslosungsrunden; Ergebniswahl und kompakte Darstellung nach Speicherung; Schleifchen-Zwischenstand; JSON-Export/Import. Letzter bestätigter Live-Upload: v0.3.1.
+Noch offen für das Kernformat: regelgerechte Auffüllrunde, Endrunde, vollständige Endwertung, robuste Browser- und Praxistests. Für produktiven Mehrgerätebetrieb fehlen außerdem Server-Datenbank, Benutzerkonten, Zugriffsrechte, Synchronisierung, Datensicherung und Sicherheitsfreigabe.
+3. Turnierarten – priorisierte Ideen
+A | Zuerst (bereits vereinbarte Richtung)
+• Schleifchenturnier – laufende Entwicklung abschließen und für echte Turniere absichern.
+• Doppelturnier mit festen Paaren – Spielpläne, Ergebniswertung und Rangliste für Doppel/Mixed.
+• One Point Cup – sehr kurze Duelle in Event- oder K.-o.-Struktur.
+B | Hoher Mehrwert als nächste Formate
+• Jeder gegen jeden – für kleinere Gruppen, mit automatischer Tabelle.
+• K.-o.-Turnier – inklusive Freilosen, Setzliste, Turnierbaum und automatischer Fortschreibung.
+• Gruppenphase + K.-o. – Gruppenwertungen und Übernahme qualifizierter Spieler in Endrunde.
+• K.-o. mit Trostrunde – garantierte zusätzliche Spiele für frühe Verlierer.
+• Rauf-und-runter-Turnier – Auf- und Abstieg zwischen Plätzen nach jeder Runde.
+• Mixed-Rotation / Partnerwechsel – Partner möglichst variieren und Leistungen individuell werten.
+C | Optionale spätere Formate
+• Tie-Break-Cup – kurze Matches im Match- oder Satz-Tie-Break.
+• Team-Cup / Davis-Cup-Modus – Mannschaftsduelle aus Einzeln und Doppeln.
+• Leitersystem / Forderungspyramide – längerfristige vereinsinterne Ranglisten.
+• Schweizer System – Mehr-Runden-Turnier ohne klassisches Ausscheiden.
+Fachliche Grundlage: Für jede neue Turnierart zuerst die vorhandenen PDF-/Excel-Vorlagen aus dem Google-Drive-Ordner „Turnierformate“ lesen, Sonderregeln und Testfälle beschreiben und getrennte Auslosungs-/Wertungsmodule vorsehen.
+4. Funktionen – priorisierte Produktideen
+Betriebssicherheit und Live-Erlebnis | sehr hoch
+• Serverseitige Speicherung und Mehrgeräte-Synchronisierung, mit Backups und Wiederherstellung.
+• Organisator-Login, Rollen für Helfer und sichere Schreibrechte.
+• Öffentliche Live-Ansicht für Spielplan, aktuelle Spiele, Ergebnisse und Tabellen (nur lesend).
+• Ersatzspieler, Nachmeldungen, Abmeldungen und nachvollziehbare Anpassung laufender Auslosungen.
+• Zuverlässiger Turnierabschluss mit Endwertung, Siegeranzeige und Plausibilitätsprüfung.
+Turnierorganisation | hoch
+• Check-in/Anwesenheit direkt vor Turnierbeginn.
+• Automatische Zeit-, Runden- und Platzplanung einschließlich Wechsel- und Pausenzeiten.
+• QR-Code und öffentlicher Link zu einer Turnierseite.
+• Monitor-/Beameransicht fürs Clubhaus ohne Eingabeoberfläche.
+• PDF-/Druckexport: Spielpläne, Ergebnisse, Tabellen, ggf. Urkunden.
+• Flexible Zählweisen: Sätze, Match-Tie-Break, kurze Sätze, No-Ad, Games auf Zeit, reine Siegpunkte.
+• Nenngeldverwaltung (zunächst ausschließlich Barzahlung vor Ort): Betrag pro Turnier bzw. Konkurrenz festlegen; bei Teilnehmern den Status „offen“ oder „bar bezahlt“ manuell setzen; Zahlungen beim Check-in erfassen; Übersicht über erwartetes, erhaltenes und offenes Nenngeld. Keine Überweisung oder Online-Zahlung innerhalb der App in der ersten Ausbaustufe.
+Komfort und Wachstum | hoch bis später
+• Selbstanmeldung, Teilnehmergrenzen und Warteliste.
+• Ein Event mit mehreren Konkurrenzen (Einzel, Doppel, Mixed).
+• Turniervorlagen speichern bzw. Vorjahresturniere kopieren.
+• Ergebnisfreigabe durch Gegner/Turnierleitung, optional per Teilnehmerlink.
+• Benachrichtigungen über nächste Begegnung, Platzwechsel und Änderungen (später).
+• Turnierassistent: Aus Spielerzahl, verfügbaren Plätzen, Zeit und Spielwünschen passende Formate vorschlagen (später).
+5. Entwicklungsphasen – empfohlene Reihenfolge
+Phase 1 – Schleifchenturnier fertig und belastbar machen
+Auffüllrunde gemäß bestehendem V7-Regelwerk, Endrunde, Tabelle und Turnierabschluss; Tests von Auslosung, Ergebniskorrekturen, Sonderfällen und echter Browserbedienung. v0.3.2 zunächst regulär testen/veröffentlichen, sofern vom Projektinhaber freigegeben.
+Phase 2 – Live-Fähigkeit und sichere Datenbasis
+Backend mit PHP/MySQL (zur vorhandenen ALL-INKL-Umgebung passend, aber noch nicht fest entschieden), Datenmodell für mehrere Turnierarten, Konten/Rollen, Mehrgeräte-Synchronisierung, öffentlich lesbare Turnieransichten, Backups und Datenschutzprüfung. Erst dann für tatsächliche Turniere anbieten.
+Phase 3 – Weitere Kernformate
+Feste Doppelpaare und One Point Cup wie bereits geplant; danach Jeder gegen jeden, K.-o. und Gruppenphase + K.-o. auf wiederverwendbaren Komponenten für Auslosung, Ergebnisse und Ranglisten.
+Phase 4 – Attraktive Vereinsplattform
+Rauf-und-runter, Mixed-Rotation, Trostrunde, Nenngeldverwaltung mit Barzahlung vor Ort, QR-Code/Clubhaus-Anzeige, Teilnehmer-Selbstanmeldung, Exporte, Vorlagen und intelligente Formatberatung. Reihenfolge nach Pilotfeedback anpassen.
+6. Produkt- und Technikprinzipien
+• Auslosungslogik, Zählweise/Ergebniserfassung und Ranglistenberechnung voneinander trennen. Verschiedene Turnierarten dürfen gemeinsame Bausteine nutzen.
+• Bestehendes Design in Petrol, Orange und Limettengrün beibehalten; mobile Nutzung als Hauptfall betrachten.
+• Realistische Platz- und Spielerzahl berücksichtigen; keine künstliche Sieben-Plätze-Grenze.
+• Fehler- und Sonderfälle automatisiert testen, bevor ein Format als fertig gilt.
+• Offizielle LK-/Ranglistenanbindung sowie allgemeine Mitgliederverwaltung, Platzbuchung und Beitragsabrechnung vorerst nicht zum Kernprodukt machen.
+• Veröffentlichung auf app.tennis-schiri.de weiterhin nur nach ausdrücklicher Freigabe; GitHub-Code ist nicht gleich Live-Version.
+7. Kommerzielle Perspektive (noch offen)
+Als späteres Testmodell denkbar: kostenloses Kleinturnier, bezahltes Einzelturnier und Vereins-Jahrespaket. Preise und Grenzen erst nach tatsächlichem Funktionsumfang, Pilotfeedback und Wettbewerbsabgleich festlegen. Keine bereits beschlossenen Tarife.
+8. Abgrenzung und nächste Produktentscheidung
+Verbindlich sind nur die bereits in der GitHub-Projektdokumentation festgehaltenen Grundlagen: zunächst Schleifchenturnier, danach Doppelturnier und One Point Cup, bisherige Design- und Deploymentprinzipien. Alle weiteren Formate und Komfortfunktionen sind Vorschläge zur gemeinsamen Priorisierung.
+Nächster konkreter Entwicklungsschritt bleibt: v0.3.2 im Browser testen; danach Auffüllrunde, Endrunde und fertige Schleifchenwertung.
+9. Projektverweise
+Code und Entscheidungen: https://github.com/tennis-schiri/tennis-schiri-app
+Drive-Dokumentation: https://drive.google.com/drive/folders/1w6WBQH0o5MEwnKn3ZuuN43HiHaxvMnBg
+Turnierformat-Bibliothek: https://drive.google.com/drive/folders/1aPuhuzKZvif5RnfXXVcJsGCkRL6wepfs
+
+
+10. Erweiterung: Tennilo Business – Hotels, Resorts und Tennisreiseveranstalter
+Status: Idee / später prüfen. Priorität: Mittel; nach stabilem Vereins-MVP und Praxistests.
+Zielgruppen: Tennisreiseveranstalter (z. B. Sunball), Ferienclubs, Hotels und Resorts mit regelmäßig organisierten Gästeturnieren.
+Nutzen: Tennistrainer führen spontane oder geplante Gästeturniere mit wechselnden Teilnehmenden durch; Turnierorganisation mobil, schnelle Anmeldung per QR-Code, Live-Spielpläne/Ergebnisse und Ausgabe auf Hotelbildschirmen.
+Zusätzliche Anforderungen: Mandanten-/Standortstruktur, mehrere Trainer und Rollen, zentrale Veranstalterverwaltung, mehrsprachige Oberfläche, wiederverwendbare Formate/Vorlagen, optional Hotel-Branding und Sponsorendarstellung, Datenschutz und ggf. Offline-/Schlechtverbindungsbetrieb.
+Preisideen (unverbindlich): Einzelhotel/Resort 149–249 € pro Jahr; Veranstalter bis zehn Standorte 990 € pro Jahr; größere Veranstalter individueller Rahmenvertrag. Lizenzmetrik (Standorte, Trainer, gleichzeitige Turniere) im Pilot klären.
+Validierung: Mit einem Reiseveranstalter oder Hotel Pilotphase durchführen; Turnierhäufigkeit, Trainer-Workflow und Zahlungsbereitschaft testen. Keine separate App entwickeln, sondern Business-Funktionen auf derselben technischen Basis wie Tennilo Club.
+
+
+11. Gemeinsame TENNILO-Produktfamilie – Gesamtplanung ab 18.11.2026
+Ab diesem Abschnitt gilt eine gemeinsame Roadmap für TENNILO Tournament, TENNILO Score, TENNILO Umpire und die spätere TENNILO-Business-Erweiterung. Die Abschnitte 1–10 bleiben als ursprünglicher Planungsstand vom 05./06.11.2026 erhalten; dort genannte Versionsstände und „nächste Schritte“ sind historische Momentaufnahmen und nicht automatisch der heutige Entwicklungsstatus.
+Produktlinien und Rolle:
+• TENNILO Tournament: Turniere erstellen und organisieren, Teilnehmer, Auslosungen, Spielpläne, Ergebnisse, Endrunden und öffentliche Live-Ansichten.
+• TENNILO Score: Match-Punktzählung auf iPhone/Apple Watch, perspektivisch Android/Wear OS, mit Offline-Betrieb, Match-Archiv, Statistiken und externer Spielstandsanzeige.
+• TENNILO Umpire: modulares Schiedsrichter-Cockpit (Basic/Pro), digitale Scorecard, Zeit- und Regelereignisse sowie Ausgabe an Zuschaueranzeigen und kompatible externe Scoreboards.
+• TENNILO Business: spätere Erweiterung von Tournament für Hotels, Resorts und Tennisreiseveranstalter; keine eigenständige App als Grundannahme.
+• Weitere Sportarten: Tischtennis ausdrücklich als geplante Erweiterung von TENNILO Score aufnehmen; noch kein zugesagter Entwicklungs- oder Veröffentlichungstermin.
+
+
+12. TENNILO Score – Roadmap
+Stand 18.11.2026: Die umfangreiche Web-Demo dient als verbindliche Funktions- und Designreferenz. Ein erstes iPhone-/Apple-Watch-Xcode-Projekt wurde mit kostenlosem Personal Team gebaut und auf beiden Geräten gestartet. Die echte Watch-/iPhone-Synchronisierung ist noch zu testen und zu stabilisieren; der native Stand darf nicht mit vollständiger Demo-Parität gleichgesetzt werden.
+Priorität S1 – Native Tennis-Testversion: Oberfläche und Funktionen der Demo auf iPhone und Apple Watch übertragen: Einzel, Doppel, Mixed; flexible Zählweisen; Aufschlag-/Rückschlagreihenfolge; korrekte Tiebreaks; UNDO; Aufgabe/Matchende; Live-Verlauf, Statistik, Match-Archiv; Scoreboard-Querformat; Deutsch/Englisch. Kleinere Apple-Watch-Displays (u. a. Series 9, 41 mm) ausdrücklich testen.
+Priorität S2 – Offline und Synchronisierung: Die Uhr muss während des Matches ohne ständige iPhone-Verbindung zählen können; revisionssichere Ereignisse, Wiederverbindung, Konfliktbehandlung und Abgleich zwischen beiden Geräten implementieren und mit echten Geräten testen. Lokale Daten dauerhaft sichern und nach App-Neustart wiederherstellen.
+Meilenstein S3 – Praxistest: Geplanter exklusiver Beta-Test beim LK-Turnier am 27.12.2026 in Bad Saarow mit Apple-Watch-Nutzung. Termin ist ein Testziel, keine Zusage zur Veröffentlichung einer marktreifen App. Vorher robuste Match- und Akku-/Verbindungstests.
+Später S4 – Weitere Geräte und Marktstart: Android und Wear OS, Praxistests, App-Store-/Play-Store-Vorbereitung. Kommunikationsziel „Coming Spring 2027“ bleibt eine Planung, keine verbindliche Freigabe.
+Später S5 – Tischtennis: eigene Sportart in TENNILO Score mit sportartspezifischer Zähl- und Aufschlaglogik (11-Punkte-Sätze, Zwei-Punkte-Abstand, Aufschlagwechsel, Seitenwechsel, Doppelreihenfolge), eigenen Regeln, Tests und angepasster Darstellung. Erst nach stabiler Tennisversion fachlich ausarbeiten; nicht als bloßes Design-Skin behandeln.
+
+
+13. TENNILO Tournament – Fortführung
+Die Turnier-Roadmap aus Abschnitten 1–10 bleibt bestehen: zunächst die Kernformate Schleifchenturnier, feste Doppelpaare und One Point Cup, anschließend weitere Formate nach Nutzen und Praxistests. Parallel wichtige Grundfunktionen absichern: Check-in/Nenngeld vor Ort, Playoffs/Endrunden, Platzzuweisung, Live-Ansichten, Speicherung/Mehrgerätefähigkeit, Rechte und Backups. Verbindliche Umsetzungsstände vor einer neuen Terminplanung mit GitHub abgleichen.
+Perspektivisch: Ergebnisse und Match-Informationen aus Score und Umpire kontrolliert übernehmen, ohne beide Apps für eigenständige Nutzung an Tournament zu binden.
+
+
+14. TENNILO Umpire – vorbereiteter Roadmap-Punkt
+Status: Konzept und frühe technische Grundversion; eigene Weiterentwicklung nach Stabilisierung der vorrangigen Score-Arbeiten. Es existiert bereits eine Ideensammlung zum modularen Bedienkonzept. Kein Veröffentlichungsdatum beschlossen.
+U1 – Grundlagen: Basic-/Pro-Modus, gut lesbarer Spielstand, einfache Punktvergabe, Undo, regelkonforme Einzel-/Doppel-Zählung, Zeitstempel und korrigierbares Ereignisprotokoll; gemeinsame, geprüfte Match-Logik mit Score prüfen.
+U2 – Schiedsrichterfunktionen: digitale Scorecard, Aufschlagfehler/Ass/Doppelfehler, Zeitkontrollen, Verwarnungen/Strafen, medizinische und andere Unterbrechungen, Aufgabe/Disqualifikation, Korrekturen und PDF-Abschlussbericht.
+U3 – Anzeigen: Classic, Broadcast, Club und Stream-Overlay für externe Monitore und Browser; Anbindung geeigneter LED-Scoreboards nur nach Prüfung konkreter Geräte und Schnittstellen.
+U4 – Anbindung: Match aus Tournament übernehmen, Ergebnis/Spielbericht zurückgeben; optionale gemeinsame Daten- und Synchronisierungskomponenten, ohne den Offline-Betrieb zu gefährden.
+Referenz-Konzept: https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit
+
+
+15. Gemeinsame Technik, Abhängigkeiten und Qualität
+• Einheitliche TENNILO-Markenfamilie und wiederverwendbare Gestaltung, aber gerätespezifische Bedienoberflächen.
+• Eine fachlich sauber getestete Tennis-Zähllogik und ein versioniertes Match-/Ereignismodell, soweit die Anforderungen von Score und Umpire tatsächlich übereinstimmen; andere Sportarten als getrennte Regelmodule.
+• Klare Datenhoheit: Wer erfasst den Punkt, wer darf korrigieren, wie wird bei Offline-/Online-Wechseln synchronisiert, und wie werden alte Matchakten migriert?
+• Alle Anwendungen in Deutsch und Englisch; weitere Sprachen erst nach Bedarf.
+• Sicherheit, Datenschutz, lokale Speicherrobustheit, Backups, Fehlertests und reale Geräte-/Turniertests vor produktiver Freigabe.
+• Externe Anzeige-/Turnierintegrationen als optionale Schnittstellen entwickeln. Score und Umpire müssen auch eigenständig einsetzbar bleiben.
+
+
+16. Gesamtprioritäten und Statuspflege
+Jetzt / nächster Meilenstein: Score-Native-App mit Demo-Parität sowie zuverlässig funktionierender Apple-Watch-/iPhone-Synchronisierung; Tournament unabhängig davon weiter absichern.
+27.12.2026: angepeilter TENNILO-Score-Beta-Praxistest in Bad Saarow (vorbehaltlich funktionierender Testversion).
+Danach: Score-Pilotfeedback und weitere Plattformen; Tournament-Ausbau nach vereinbarten Turnierformaten; Umpire-Kernmodul gezielt entwickeln und die Anzeige-/Schnittstellenarchitektur abstimmen.
+Später / ohne Termin: Score-Tischtennis, TENNILO Business und Umpire-Profi-/Hardware-Ausbau. TENNILO Net bleibt wegen nicht nachgewiesener Millimeter-Messgenauigkeit zurückgestellt, nicht aktiv eingeplant.
+Statusregeln: In dieser gemeinsamen Roadmap jede Idee mit Produkt, Priorität, Status (Idee / geplant / in Entwicklung / im Test / veröffentlicht), Abhängigkeit und ggf. Zieltermin führen. Keine Zieltermine aus älteren Dokumenten als zugesagt behandeln. Technischen Ist-Stand stets im jeweiligen GitHub-Repository bestätigen.
+Projektverweise: Tournament https://github.com/tennis-schiri/tennis-schiri-app · Score https://github.com/tennis-schiri/tennilo-score · Umpire https://github.com/tennilo-umpire/umpire-app
