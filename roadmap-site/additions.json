@@ -6,23 +6,27 @@
     {
       "id": "score-native",
       "title": "Score: native iPhone-/Apple-Watch-App",
-      "description": "Funktions- und Designumfang der Web-Demo auf die echten Apple-Geräte übertragen.",
+      "description": "Die umfangreiche Score-Demo auf iPhone und Apple Watch nativ nutzbar machen; erster echter iPhone-Gerätetest am 17.11.2026 erfolgt.",
       "category": "TENNILO Score",
       "status": "progress",
       "priority": "high",
       "milestone": "Testversion 1.0",
-      "nextStep": "Vollständige Demo-Funktionen in Xcode umsetzen und auf realen Geräten prüfen.",
+      "nextStep": "Den Sync-/Matchstart-Fehler von 17.11. reproduzieren; anschließend Demo-Parität auf iPhone und Watch anhand der Checkliste herstellen und testen.",
       "benefit": "Tenniszählung am Handgelenk und Spielstand am iPhone, ohne eine abgespeckte Bedienoberfläche.",
       "scope": "Einzel, Doppel, Mixed; flexible Zählweisen und Tiebreaks; Aufschlagwahl; Punkte und UNDO; Aufgabe; Verlauf; Statistiken; Archiv; Scoreboard und DE/EN.",
-      "currentState": "Die Web-Demo ist die Funktionsreferenz. Ein erstes natives Xcode-Grundgerüst ist auf iPhone und Watch gestartet, aber noch nicht funktionsgleich.",
+      "currentState": "WEB-DEMO: seit 16./17.11.2026 umfangreich programmiert, einschließlich Matchansichten, Doppel/Mixed, Querformat, DE/EN und Archiv. NATIV: am 17.11.2026 Xcode-Build erfolgreich; iPhone verbunden und erster App-Test auf dem echten Gerät. Apple Watch gekoppelt, aber Match-Übernahme/Synchronisierung noch nicht zuverlässig. Das im GitHub dokumentierte native Startgerüst ist noch nicht demo-gleichwertig.",
       "openPoints": "Native UI, Regelparität und Synchronisierung anhand echter Matchfälle testen.",
       "doneWhen": "Alle verbindlichen Demo-Funktionen lassen sich auf den Geräten zuverlässig bedienen.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -35,18 +39,22 @@
       "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
-      "nextStep": "WatchConnectivity prüfen; Wiederverbindung und Konfliktfälle mit echten Geräten testen.",
+      "nextStep": "Erst Startzustand und Matchübergabe auf echten Geräten beheben, danach Punkttransfer, Undo, Unterbrechung und Wiederverbindung prüfen.",
       "benefit": "Punkte auf der Uhr zählen und jederzeit den korrekten Stand am iPhone sehen.",
       "scope": "Geteiltes Match-Ereignisprotokoll, Zustandsabfrage beim Watch-Start, Übertragungsbestätigung, Retry, Akku-/Netzausfall und Wiederverbindung.",
-      "currentState": "Der erste Praxistest zeigte eine Warteanzeige trotz laufendem Match. Ein Synchronisierungs-Fix ist vorbereitet, aber auf Geräten noch nicht bestätigt.",
+      "currentState": "ERSTER GERÄTETEST 17.11.2026: Ein Match war auf dem iPhone gestartet, während die Watch noch eine Warte-/Verbindungsanzeige zeigte. Verbindung und Entwicklungsmodus waren eingerichtet; eine funktionierende Watch-/iPhone-Match-Synchronisierung ist damit noch NICHT nachgewiesen. In der Web-Demo ist die Zählung separat simuliert.",
       "openPoints": "Doppelte Punkte, verspätete Ereignisse und parallel bearbeitete Matches verhindern.",
       "doneWhen": "Ein durchgehendes Match mit Verbindungsabbrüchen ergibt auf beiden Geräten denselben Stand.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -56,21 +64,25 @@
       "title": "Score: Offline-Matches und Archiv",
       "description": "Matches auf dem Gerät dauerhaft sichern und nach App-Neustart fortsetzen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Native Testversion",
-      "nextStep": "Web-Demo-Speicherung für iOS und watchOS mit Wiederherstellung übertragen.",
+      "nextStep": "Vorhandene Demo-Archivfunktionen und Backup-Import als Referenz verwenden; native Speicherung auf iPhone und Watch mit Neustarts testen.",
       "benefit": "Keine verlorenen Matches auf dem Platz, auch bei fehlender Verbindung.",
       "scope": "Laufendes Match lokal speichern, Verlauf und UNDO erhalten, beendete Matches archivieren, Backups und Datenmigration berücksichtigen.",
-      "currentState": "In der Web-Demo existiert lokale Speicherung über IndexedDB. Für native Geräte noch zu übertragen.",
+      "currentState": "WEB-DEMO: IndexedDB-Matchspeicherung, Wiederherstellung nach Neuladen, Offline-Archiv mit Navigation und lokaler JSON-Backup-Import wurden am 17.11.2026 in GitHub umgesetzt. NATIV: Watch-Grundgerüst enthält lokale JSON-Speicherung; robuste iPhone-/Watch-Wiederherstellung und synchrones Archiv bleiben ungetestet.",
       "openPoints": "Speicherausfall, App-Neustart und Offline-Szenarien testen.",
       "doneWhen": "Ein Match bleibt auf beiden Geräten auch nach Neustart konsistent erhalten.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -80,21 +92,25 @@
       "title": "Score: Tenniszählweisen und Doppel-/Mixed-Regeln",
       "description": "Alle Matchvarianten und Sonderfälle der Demo zuverlässig nativ abbilden.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Testversion 1.0",
-      "nextStep": "Regeltests für Doppel-Aufschlag, Tiebreak und Aufgabe übernehmen.",
+      "nextStep": "Demo-Regelvarianten und echte Doppel-Aufschläger-/Rückschlägerwahl vollständig in den nativen Kern übernehmen und gegen Tests prüfen.",
       "benefit": "Regelkonformer Spielstand ohne manuelle Nachberechnung.",
       "scope": "Einzel, Doppel, Mixed; Satz-/Match-Tiebreaks; No-Ad/andere konfigurierbare Zählweisen; Aufschlagreihenfolge; Spielerzuordnung im Doppel; Aufgabe.",
-      "currentState": "Die Web-Demo modelliert die Regelvarianten; Native-App noch nicht vollständig umgesetzt.",
+      "currentState": "WEB-DEMO: umfangreiche Tenniszählung für Einzel/Doppel/Mixed, Tiebreaks, Aufgabe und Aufschlagwahl bereits programmiert. NATIV: Swift-Zählkern/Watch-Einstellassistent und Tests vorhanden; Doppel-Einzelspielerrotation und vollständige iPhone-Demo-Parität fehlen. Erster iPhone-Gerätetest am 17.11.2026 erfolgt.",
       "openPoints": "Sonderfälle und rückwirkende Korrekturen fachlich prüfen.",
       "doneWhen": "Alle definierten Matchkonfigurationen bestehen automatische und praktische Tests.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -107,18 +123,22 @@
       "status": "planned",
       "priority": "high",
       "milestone": "27.12.2026",
-      "nextStep": "Stabile App auf Testgeräten installieren und vor Turnierbeginn echte Testmatches durchspielen.",
+      "nextStep": "Geräte-Synchronisierung und vollständige Matchabläufe stabilisieren, danach vor Ort mit Apple Watch und unabhängiger Ergebnisnotiz testen.",
       "benefit": "Reale Rückmeldungen zur Bedienbarkeit unter Turnierbedingungen.",
       "scope": "Test mit Apple Watch; Erfassung, UNDO, Aufschlaganzeige, Ausfallsicherheit, Akkulaufzeit und Feedback protokollieren.",
-      "currentState": "Als exklusiver Beta-Test vorgesehen; keine Zusage einer marktreifen Veröffentlichung.",
+      "currentState": "Der Beta-Pilot am 27.12.2026 ist geplant. Als Vorbereitung wurde am 17.11.2026 die native App erstmals auf dem eigenen iPhone per Xcode gestartet; die Watch-/iPhone-Synchronisierung ist noch nicht stabil. Eine einsatzfähige Beta ist damit nicht bestätigt.",
       "openPoints": "Fehlerfreie Installation, Sync und vollständiger Matchablauf sind Voraussetzungen.",
       "doneWhen": "Ein Testmatch lässt sich vor Ort ohne Datenverlust erfassen.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -134,15 +154,19 @@
       "nextStep": "Plattformstrategie und gemeinsame Regel-Engine festlegen.",
       "benefit": "Die App ist später nicht auf Apple-Nutzer begrenzt.",
       "scope": "Android-Oberfläche, Wear-OS-Uhr, Offline-Logik, Datenmodell und plattformübergreifende Tests.",
-      "currentState": "Geplant für später; aktuell liegt der Fokus auf Apple.",
+      "currentState": "WEB-DEMO: eine runde Wear-OS-Uhrenansicht wurde am 16.11.2026 als Vorschau ergänzt; das ist noch keine Android-/Wear-OS-App. Nativer Android-Ausbau folgt später.",
       "openPoints": "Gerätevielfalt, technische Architektur und Wartungskosten bestimmen.",
       "doneWhen": "Ein definiertes Android-Testgerät absolviert dieselben Matchfälle wie iOS.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -182,15 +206,19 @@
       "nextStep": "Erst nach stabilen Praxistests über Veröffentlichung entscheiden.",
       "benefit": "Eine belastbare Veröffentlichung statt eines vorzeitigen Starts.",
       "scope": "App-Review, mehrsprachige Store-Texte, Screenshots, Fehlerberichte, rechtliche Informationen und ggf. Lizenzmodell.",
-      "currentState": "Kommunikationsziel „Coming Spring 2027“; kein verbindlicher Release-Termin.",
+      "currentState": "Kommunikationsziel „Coming Spring 2027“. Die Web-Demo ist bereits umfangreich, aber erst am 17.11.2026 begann der reale iPhone-Gerätetest; keine vollständige native Beta und kein freigegebener Store-Release.",
       "openPoints": "Kostenpflichtiger Apple-Developer-Account erst für Verteilung und Store nötig.",
       "doneWhen": "Abnahmekriterien sind erfüllt und Veröffentlichung explizit freigegeben.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -416,21 +444,25 @@
       "title": "SCORE-01 · Tennis-Matchstart und Zählweisen",
       "description": "Einzel, Doppel und Mixed sowie variable Zählweisen regelkonform starten.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Matchstart-Konfiguration und Regeltestmatrix aus der Demo in die native App übernehmen.",
       "benefit": "Einzel, Doppel und Mixed sowie variable Zählweisen regelkonform starten.",
       "scope": "Einzel, Doppel und Mixed mit eigenständigem Matchstart und verlässlich konfigurierbaren Zählweisen (Sätze, Tiebreak, Match-Tiebreak, No-Ad und weitere vereinbarte Varianten); die Regeln müssen durch automatisierte Sonderfalltests abgesichert werden.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Einzel/Doppel/Mixed, Zähloptionen und Tiebreaks im HTML-Prototyp implementiert. NATIV: Swift-Zählkern und Konfigurationsassistent vorhanden, vollständiger Funktionsabgleich fehlt.",
       "openPoints": "Matchstart-Konfiguration und Regeltestmatrix aus der Demo in die native App übernehmen.",
       "doneWhen": "Automatisierte Tests und reale Matches bestehen die definierten Zählvarianten.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -440,21 +472,25 @@
       "title": "SCORE-02 · Ersten Aufschläger im Doppel wählen",
       "description": "Alle vier Personen bei der Aufschlägerwahl eindeutig unterscheiden.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Wahlablauf Team → Person beziehungsweise vier Namen auf Watch/iPhone überprüfen.",
       "benefit": "Alle vier Personen bei der Aufschlägerwahl eindeutig unterscheiden.",
       "scope": "Im Doppel/Mixed zunächst Team und Aufschlägerwahl übersichtlich erfassen; bei der Auswahl des ersten Aufschlägers alle vier individuellen Namen anzeigen oder zunächst das Team und anschließend die direkte Personenauswahl. Die Rückschlag- und spätere Aufschlagreihenfolge fachlich korrekt abbilden.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: seit 16.11. zuerst Team und anschließend individuellen ersten Aufschläger wählen. NATIV: Teamwahl vorhanden, individuelle Doppel-/Mixed-Aufschlag- und Rückschlagfolge unvollständig.",
       "openPoints": "Wahlablauf Team → Person beziehungsweise vier Namen auf Watch/iPhone überprüfen.",
       "doneWhen": "Erster Aufschläger und Rückschlagfolge stimmen in jedem Doppel-/Mixed-Test.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -464,21 +500,25 @@
       "title": "SCORE-03 · Tennisball beim richtigen Aufschläger",
       "description": "Das Aufschlagzeichen direkt beim zuständigen Spielernamen zeigen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Doppel-/Mixed-Ansicht und Wechsel des individuellen Aufschlägers testen.",
       "benefit": "Das Aufschlagzeichen direkt beim zuständigen Spielernamen zeigen.",
       "scope": "Aufschlagkennzeichnung als Tennisball direkt beim betreffenden Namen, nicht als zusätzliche Zeile unter dem Scoreboard. Bei Doppel/Mixed beide Namen eines Teams untereinander, der Ball nur an der tatsächlich aufschlagenden Person.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: tatsächlicher Doppel-/Mixed-Aufschläger seit 17.11. direkt beim Namen markiert. NATIV: Personenrotation auf Watch und iPhone noch nicht vollständig übertragen.",
       "openPoints": "Doppel-/Mixed-Ansicht und Wechsel des individuellen Aufschlägers testen.",
       "doneWhen": "Das Symbol folgt der tatsächlichen Person statt dem Team oder einem Footer.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -488,21 +528,25 @@
       "title": "SCORE-04 · Ruhige Punkttasten und UNDO",
       "description": "Namen zentriert lassen, Tennisball seitlich und UNDO immer erreichbar.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Punktflächen auf Watch und iPhone bei allen Aufschlagwechseln prüfen.",
       "benefit": "Namen zentriert lassen, Tennisball seitlich und UNDO immer erreichbar.",
       "scope": "Punktflächen: Name zentriert, Aufschlag-Tennisball stabil links oder rechts; keine springenden Beschriftungen beim Wechsel. UNDO schnell und zuverlässig erreichen, auch auf der Watch.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: zentrierte Namen, seitliches Tennisball-Symbol und UNDO umgesetzt. NATIV: Watch-Punkttasten und UNDO im Startgerüst, Design-/Funktionsvergleich mit Demo offen.",
       "openPoints": "Punktflächen auf Watch und iPhone bei allen Aufschlagwechseln prüfen.",
       "doneWhen": "Bedienelemente springen nicht und Punkte lassen sich sicher zurücknehmen.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -512,21 +556,25 @@
       "title": "SCORE-05 · Aufgabe und Matchende",
       "description": "Ein Match regulär oder durch Aufgabe nachvollziehbar beenden.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Aufgabe-Dialog, Endergebnis und Auswirkungen auf Archiv/Statistik testen.",
       "benefit": "Ein Match regulär oder durch Aufgabe nachvollziehbar beenden.",
       "scope": "Matchende durch regulären Sieg und durch Aufgabe samt eindeutiger Ergebnis-/Abschlussdarstellung. Weitere Sonderfälle (Abbruch, Disqualifikation) gesondert auf Scope und Regelwirkung prüfen.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Aufgabe (RET) einschließlich Bestätigung, Teilstand und UNDO seit 16.11. implementiert. NATIV: noch nicht für alle Matchendefälle nachgewiesen.",
       "openPoints": "Aufgabe-Dialog, Endergebnis und Auswirkungen auf Archiv/Statistik testen.",
       "doneWhen": "Match wird mit eindeutigem Abschlussgrund korrekt archiviert.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -536,21 +584,25 @@
       "title": "SCORE-06 · iPhone: alle Sätze im Blick",
       "description": "Die vollständige Satzübersicht ohne horizontales Scrollen anzeigen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Satzanzeige bei Best-of-3/5 und kleinen iPhone-Displays prüfen.",
       "benefit": "Die vollständige Satzübersicht ohne horizontales Scrollen anzeigen.",
       "scope": "Im iPhone-Hauptbildschirm bleibt die vollständige Satz-/Spiel-/Punktetabelle oben sichtbar; alle Sätze gleichzeitig ohne seitliches Scrollen.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: iPhone-Kopfzeile mit allen fünf Sätzen ohne seitliches Scrollen seit 16.11. vorhanden. NATIV: iPhone-Demo-Parität offen.",
       "openPoints": "Satzanzeige bei Best-of-3/5 und kleinen iPhone-Displays prüfen.",
       "doneWhen": "Alle Sätze bleiben im oberen Live-Spielstand gleichzeitig sichtbar.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -560,21 +612,25 @@
       "title": "SCORE-07 · Match und Verlauf gemeinsam anzeigen",
       "description": "Statistiken und Matchverlauf in einem Bereich umschalten.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Register mit dauerhaft sichtbarem Live-Spielstand im nativen iPhone umsetzen.",
       "benefit": "Statistiken und Matchverlauf in einem Bereich umschalten.",
       "scope": "„Match“/Statistik und „Verlauf“ in einem gemeinsamen Bereich mit Umschaltung; der obere Live-Spielstand bleibt in beiden Ansichten sichtbar.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Match-Statistiken und Verlauf seit 17.11. innerhalb des simulierten iPhones zusammengeführt. NATIV: Übernahme in iPhone-App offen.",
       "openPoints": "Register mit dauerhaft sichtbarem Live-Spielstand im nativen iPhone umsetzen.",
       "doneWhen": "Der Spielstand bleibt beim Wechsel zwischen Statistik und Verlauf sichtbar.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -584,21 +640,25 @@
       "title": "SCORE-08 · Automatischer Live-Verlauf",
       "description": "Im Live-Verlauf automatisch das aktuelle Spiel anzeigen und klare Begriffe verwenden.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Autoscroll nach jeder Punkteingabe und Bezeichnung Match-Archiv testen.",
       "benefit": "Im Live-Verlauf automatisch das aktuelle Spiel anzeigen und klare Begriffe verwenden.",
       "scope": "Live-Verlauf während eines Matches automatisch zum aktuellen Spiel scrollen. Die Bezeichnung „Verlauf“ für den Punktverlauf verwenden; „Match-Archiv“ bzw. „Historie“ für abgeschlossene/gespeicherte Matches, nicht für die Live-Ansicht.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: automatischer Sprung zum aktuellen Spiel bereits seit 16.11.; Live-Verlauf und separates Archiv seit 17.11. NATIV: Übernahme offen.",
       "openPoints": "Autoscroll nach jeder Punkteingabe und Bezeichnung Match-Archiv testen.",
       "doneWhen": "Aktueller Verlauf ist sofort sichtbar; Archiv und Live-Verlauf sind getrennt.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -608,21 +668,25 @@
       "title": "SCORE-09 · Zahnrad-Menü auf Watch und iPhone",
       "description": "Einstellungen einschließlich rechtlicher Punkte direkt auf beiden Geräten öffnen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Zahnrad-Menü, rechtsbezogene Unterpunkte und dauerhafte UNDO-Position testen.",
       "benefit": "Einstellungen einschließlich rechtlicher Punkte direkt auf beiden Geräten öffnen.",
       "scope": "Zahnrad-Menü sowohl auf Apple Watch als auch auf iPhone mit den tatsächlich verfügbaren Einstellungen sowie vorgesehenen rechtlichen Unterpunkten. Auf der Watch bleibt UNDO außerhalb des Einstellungsmenüs erreichbar.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Watch-Zahnrad mit Steuerung/Korrektur/Impressum/Datenschutz und iPhone-Menü seit 16.11. programmiert. NATIV: Einstellmenü und Rechtstexte noch abzugleichen.",
       "openPoints": "Zahnrad-Menü, rechtsbezogene Unterpunkte und dauerhafte UNDO-Position testen.",
       "doneWhen": "Menü ist erreichbar, ohne dass UNDO auf der Watch verloren geht.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -632,21 +696,25 @@
       "title": "SCORE-10 · Scoreboard richtig im Querformat",
       "description": "Das Querformat groß und mit lesbarem Tiebreak-Stand anzeigen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Querformat, Drehung des Demo-Handys und Tiebreak-Abstände prüfen.",
       "benefit": "Das Querformat groß und mit lesbarem Tiebreak-Stand anzeigen.",
       "scope": "Scoreboard-Modus am Smartphone im Querformat, einschließlich korrekt gedrehter Demo-Geräteansicht; Querformat nicht kleiner darstellen als Hochformat. Tennisball beim aufschlagenden Namen, Tiebreak-Anzeige mit genügend Abstand zum Satzstand und gut lesbarer Größe.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Querformat-Scoreboard, echte Drehung der Telefonvorschau, Aufschlagball am Namen und Tiebreak-Abstände am 17.11. umgesetzt. NATIV: noch nicht als vollwertige Scoreboard-Ansicht bestätigt.",
       "openPoints": "Querformat, Drehung des Demo-Handys und Tiebreak-Abstände prüfen.",
       "doneWhen": "Landscape-Scoreboard ist größer statt kleiner und zeigt alle Werte klar.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -656,21 +724,25 @@
       "title": "SCORE-11 · Deutsch und Englisch umschalten",
       "description": "Alle Ansichten einschließlich Archiv und Scoreboard zweisprachig anbieten.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Übersetzungsschlüssel, Sprachwechsel während Matches und Rechtsseiten prüfen.",
       "benefit": "Alle Ansichten einschließlich Archiv und Scoreboard zweisprachig anbieten.",
       "scope": "Deutsch und Englisch vollständig und einfach umschaltbar; dies gilt für Bedienung, Einstellungen, Match-/Archivtexte und Anzeigen.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: DE/EN-Umschaltung inklusive kombinierter Ansichten und Scoreboard-Steuerung vorhanden. NATIV: Watch-Sprachkatalog im Code, iPhone und durchgängige Lokalisierung noch zu verifizieren.",
       "openPoints": "Übersetzungsschlüssel, Sprachwechsel während Matches und Rechtsseiten prüfen.",
       "doneWhen": "Es bleiben keine nicht übersetzten Bedien- oder Fehlermeldungen.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -680,21 +752,25 @@
       "title": "SCORE-12 · Kleine Apple Watches testen",
       "description": "Lesbarkeit und sichere Punkttasten auf 41-mm-Watches gewährleisten.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Series 9 mit 41 mm und weiteren Displaygrößen real bedienen.",
       "benefit": "Lesbarkeit und sichere Punkttasten auf 41-mm-Watches gewährleisten.",
       "scope": "Geradlinige, kontrastreiche Bedienung auf kleinen Apple Watches einschließlich Series 9 (41 mm); Trefferflächen, Schriften, Darstellung und Bedienfehler mit echter Hardware prüfen.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Apple-Watch-Vorschau und kleine Proportionen überarbeitet. REALGERÄT: erster Gerätetest am 17.11., aber keine bestätigte vollständige 41-mm-Layout-Abnahme.",
       "openPoints": "Series 9 mit 41 mm und weiteren Displaygrößen real bedienen.",
       "doneWhen": "Zentrale Funktionen lassen sich auf kleinen Watches fehlerarm bedienen.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -704,21 +780,25 @@
       "title": "SCORE-13 · Offline-Datenspeicherung",
       "description": "Laufende und beendete Matches lokal ausfallsicher sichern.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Neustart- und Datenwiederherstellungstests auf Watch und iPhone umsetzen.",
       "benefit": "Laufende und beendete Matches lokal ausfallsicher sichern.",
       "scope": "Vollständige, dauerhafte Offline-Speicherung von Matches und Ereignissen. Neustart und App-Wechsel dürfen laufende oder abgeschlossene Matches nicht verlieren.",
-      "currentState": "Die Web-Demo bietet eine lokale Speicher-/Archivgrundlage; native Umsetzung und Wiederherstellung sind separat zu verifizieren.",
+      "currentState": "WEB-DEMO: IndexedDB-Speicherung, Auto-Save, Wiederherstellung und JSON-Backup-Import am 17.11. ergänzt. NATIV: Watch speichert lokal; iPhone-/Watch-Ausfalltests fehlen.",
       "openPoints": "Neustart- und Datenwiederherstellungstests auf Watch und iPhone umsetzen.",
       "doneWhen": "Nach App-Neustart sind Match und protokollierte Punkte vollständig.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -728,21 +808,25 @@
       "title": "SCORE-14 · Eigenständiges Match-Archiv",
       "description": "Abgeschlossene Matches getrennt vom laufenden Verlauf wiederfinden.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Archivnavigation, Detailansicht und Wiederaufruf nativ umsetzen.",
       "benefit": "Abgeschlossene Matches getrennt vom laufenden Verlauf wiederfinden.",
       "scope": "Eigenständiges Match-Archiv mit Wiederaufruf abgeschlossener Matches sowie klarer Trennung zwischen Live-Verlauf, Archiv und Statistik. Das Archiv zunächst in der Demo als Referenz umsetzen und dann in die nativen Apps übertragen.",
-      "currentState": "Die Web-Demo bietet eine lokale Speicher-/Archivgrundlage; native Umsetzung und Wiederherstellung sind separat zu verifizieren.",
+      "currentState": "WEB-DEMO: eigenes Offline-Match-Archiv mit Navigation, Löschen und Wiederherstellung seit 17.11. programmiert. NATIV: vollständige Übertragung noch offen.",
       "openPoints": "Archivnavigation, Detailansicht und Wiederaufruf nativ umsetzen.",
       "doneWhen": "Matches bleiben dauerhaft auffindbar mit Ergebnis und Verlauf.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -752,21 +836,25 @@
       "title": "SCORE-15 · Punktgenaues Ereignisprotokoll",
       "description": "Punkte, UNDO, Korrekturen und ableitbare Statistiken sauber erfassen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Ereignisschema, Korrekturmodell und Statistikgrenzen testen.",
       "benefit": "Punkte, UNDO, Korrekturen und ableitbare Statistiken sauber erfassen.",
       "scope": "Punktgenaues Ereignisprotokoll als Grundlage für UNDO, nachvollziehbare Korrekturen, Match-Statistiken und einen lesbaren chronologischen Verlauf. Keine Statistiken als gemessen ausgeben, deren zugrunde liegende Ereignisse gar nicht erfasst wurden.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "WEB-DEMO: Punktverlauf, Undo, Korrekturen und Matchübersicht vorhanden. NATIV: versioniertes, synchronisierbares Ereignismodell noch nicht vollständig nachgewiesen.",
       "openPoints": "Ereignisschema, Korrekturmodell und Statistikgrenzen testen.",
       "doneWhen": "Jeder sichtbare Statistikwert lässt sich aus erfassten Daten begründen.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -782,15 +870,19 @@
       "nextStep": "WatchConnectivity, Ereignis-Replay und Konfliktfälle auf Geräten testen.",
       "benefit": "Watch muss offline zählen und spätere Ereignisse mit iPhone abgleichen.",
       "scope": "Apple Watch zählt auch ohne dauerhafte iPhone-Verbindung eigenständig weiter; beim Wiederverbinden müssen Matchstand und Ereignisprotokoll zuverlässig abgeglichen werden, ohne doppelte Punkte oder verdeckte Konflikte.",
-      "currentState": "Native Watch-/iPhone-Synchronisierung ist in Entwicklung, aber nicht vollständig auf echten Geräten bestätigt.",
+      "currentState": "REALGERÄT 17.11.: Match lief auf dem iPhone, Watch zeigte noch eine Warteanzeige. Native Synchronisierung bleibt offen; Watch-Zählkern kann unabhängig Punkte zählen, muss aber geräteübergreifend geprüft werden.",
       "openPoints": "WatchConnectivity, Ereignis-Replay und Konfliktfälle auf Geräten testen.",
       "doneWhen": "Auch nach Verbindungsverlust stimmen Stand und Ereignisse überein.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -848,21 +940,25 @@
       "title": "SCORE-19 · Demo-Parität auf echten Geräten prüfen",
       "description": "Die native Testversion mit dem Funktionsumfang der Demo abgleichen.",
       "category": "TENNILO Score",
-      "status": "planned",
+      "status": "progress",
       "priority": "high",
       "milestone": "Vor Beta-Test",
       "nextStep": "Funktions-Checkliste für iPhone und Watch vollständig abarbeiten.",
       "benefit": "Die native Testversion mit dem Funktionsumfang der Demo abgleichen.",
       "scope": "Demo-Parität von Watch und iPhone vor Betafreigabe funktional prüfen, inklusive Einstellungen, Punktvergabe, Zählwechsel, UNDO, Aufgabe, Archiv, Verlauf, Statistik, Scoreboard und DE/EN.",
-      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "currentState": "ERSTER ABGLEICH 17.11.: native App auf echtem iPhone gestartet; die Watch-Verbindung und die gegenüber der umfangreichen Web-Demo fehlenden Funktionen wurden als Abnahmepunkte sichtbar. Kein vollständiger Paritätstest bestanden.",
       "openPoints": "Funktions-Checkliste für iPhone und Watch vollständig abarbeiten.",
       "doneWhen": "Alle für die Beta zugesagten Demo-Funktionen sind auf echten Geräten geprüft.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
@@ -983,6 +1079,118 @@
       "references": [
         {
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-demo-scoring-2026-11",
+      "title": "Score-Web-Demo: Tenniszählung, Watch-/iPhone-Bedienung und DE/EN",
+      "description": "Bedienbare Web-Demo mit Einzel/Doppel/Mixed, Aufschlagwahl, Tiebreak/No-Ad, Aufgabe, Verlauf und Watch-/iPhone-Vorschau.",
+      "scope": "Konfiguration und Punktezählung, Doppel- und Mixed-Logik, Watch-Zahnrad mit Aktionen, iPhone-Live-Tabelle mit fünf Sätzen, kombinierte Match-/Verlaufsansicht, DE/EN und visuelle Korrekturen.",
+      "currentState": "WEB-DEMO: durch GitHub-Commits vom 16. und 17.11.2026 belegter, umfangreicher Funktionsstand; die Website score.tennilo.de wird als Demo genutzt. Das ist noch keine gleichwertige native iPhone-/Watch-App.",
+      "nextStep": "Demo-Funktionen als verbindliche Prüfliste für die native Testversion festhalten; neue Änderungen weiterhin in beiden Ansichten abgleichen.",
+      "doneWhen": "Web-Demo bietet die dokumentierten Bedienfunktionen und ist Referenz für native Abnahmetests.",
+      "status": "online",
+      "milestone": "Demo · 16.–17.11.2026",
+      "priority": "high",
+      "category": "TENNILO Score",
+      "benefit": "Bedienbare Web-Demo mit Einzel/Doppel/Mixed, Aufschlagwahl, Tiebreak/No-Ad, Aufgabe, Verlauf und Watch-/iPhone-Vorschau.",
+      "openPoints": "Demo-Funktionen als verbindliche Prüfliste für die native Testversion festhalten; neue Änderungen weiterhin in beiden Ansichten abgleichen.",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-demo-scoreboard-2026-11",
+      "title": "Score-Web-Demo: Live-Scoreboard im Querformat",
+      "description": "Querformat-Scoreboard in der Telefonvorschau mit Satz-/Punktestand, Aufschlag beim richtigen Namen und Tiebreak-Anzeige.",
+      "scope": "Korrekte Drehung der iPhone-Vorschau, große Darstellung im Querformat, individueller Doppel-/Mixed-Aufschläger, Tiebreak-Abstand, Anzeigezeit und DE/EN.",
+      "currentState": "WEB-DEMO: zwischen 16. und 17.11.2026 programmiert und mehrfach nachgebessert; entsprechende Commits für Drehung, Größe, Aufschlagpunkt und TB-Abstände vorhanden. Native Umsetzung separat offen.",
+      "nextStep": "Scoreboard im nativen iPhone-Querformat nachbauen und auf echtem Gerät prüfen.",
+      "doneWhen": "Demo-Scoreboard ist als funktionale/visuelle Referenz vorhanden; native Entsprechung in separatem Arbeitspunkt testen.",
+      "status": "online",
+      "milestone": "Demo · 17.11.2026",
+      "priority": "high",
+      "category": "TENNILO Score",
+      "benefit": "Querformat-Scoreboard in der Telefonvorschau mit Satz-/Punktestand, Aufschlag beim richtigen Namen und Tiebreak-Anzeige.",
+      "openPoints": "Scoreboard im nativen iPhone-Querformat nachbauen und auf echtem Gerät prüfen.",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-demo-archive-2026-11",
+      "title": "Score-Web-Demo: Offline-Match-Archiv und JSON-Backup",
+      "description": "Dauerhafte lokale Speicherung, Auto-Save, Wiederherstellung und ein eigenes Match-Archiv in der Web-Demo.",
+      "scope": "IndexedDB-Matchspeicher, automatisches Sichern laufender Matches, Archivliste und Wiederaufruf, korrekte Matchdaten/-zeiten beim Neuladen, Löschlogik und lokaler JSON-Import mit Formatprüfung.",
+      "currentState": "WEB-DEMO: am 17.11.2026 in mehreren Commits implementiert und korrigiert. Native iPhone-/Watch-Persistenz, robuste Synchronisierung und Praxistests bleiben gesonderte Aufgaben.",
+      "nextStep": "Archiv und Backup auf Demo-Seite regressionsprüfen; anschließend native Wiederherstellung auf echten Geräten testen.",
+      "doneWhen": "Demo kann laufende und abgeschlossene Matches ohne Cloud-Konto wiederfinden und lokale Backups importieren.",
+      "status": "online",
+      "milestone": "Demo · 17.11.2026",
+      "priority": "high",
+      "category": "TENNILO Score",
+      "benefit": "Dauerhafte lokale Speicherung, Auto-Save, Wiederherstellung und ein eigenes Match-Archiv in der Web-Demo.",
+      "openPoints": "Archiv und Backup auf Demo-Seite regressionsprüfen; anschließend native Wiederherstellung auf echten Geräten testen.",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-first-iphone-test-2026-11-17",
+      "title": "Score: erster echter iPhone-/Apple-Watch-Gerätetest (17.11.)",
+      "description": "Erster erfolgreicher Xcode-Build und Start der nativen Test-App auf echtem iPhone; Apple Watch verbunden, Sync-Problem entdeckt.",
+      "scope": "Xcode/Entwicklermodus und Geräteverbindung eingerichtet, Build erfolgreich, App auf realem iPhone gestartet. Die Watch war eingebunden, zeigte aber trotz laufendem Match auf dem iPhone zunächst einen Wartezustand.",
+      "currentState": "17.11.2026: Xcode meldete „Build Succeeded“; erster iPhone-Gerätetest durchgeführt, Watch-Verbindung eingerichtet. Der Matchstart am iPhone wurde sichtbar, auf der Watch war die Match-Übernahme noch nicht zuverlässig. Es war ein technischer Ersttest, keine abgeschlossene Beta oder erfolgreiche Synchronisierungsabnahme. Lokaler Xcode-Test kann dem dokumentierten GitHub-Startgerüst voraus sein.",
+      "nextStep": "Den Watch-Wartezustand reproduzieren und beheben; danach vollständiges Testmatch auf beiden Geräten inklusive UNDO, Reconnect und Neustart.",
+      "doneWhen": "Erster nativer iPhone-Build und Gerätestart erfolgt (17.11.); nächster Meilenstein: stabiler gemeinsamer Matchablauf mit Watch.",
+      "status": "progress",
+      "milestone": "Erster Gerätetest · 17.11.2026",
+      "priority": "high",
+      "category": "TENNILO Score",
+      "benefit": "Erster erfolgreicher Xcode-Build und Start der nativen Test-App auf echtem iPhone; Apple Watch verbunden, Sync-Problem entdeckt.",
+      "openPoints": "Den Watch-Wartezustand reproduzieren und beheben; danach vollständiges Testmatch auf beiden Geräten inklusive UNDO, Reconnect und Neustart.",
+      "updatedAt": "2026-11-18T10:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – Quellcode und Entwicklungsstand",
+          "url": "https://github.com/tennis-schiri/tennilo-score"
+        },
+        {
+          "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
