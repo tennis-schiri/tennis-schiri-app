@@ -185,18 +185,18 @@
       "status": "idea",
       "priority": "medium",
       "milestone": "Später",
-      "nextStep": "Nach stabiler Tennisversion eigene Tischtennis-Regellogik spezifizieren.",
+      "nextStep": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
       "benefit": "TENNILO Score kann später über Tennis hinaus eingesetzt werden.",
-      "scope": "11-Punkte-Sätze, zwei Punkte Vorsprung, Aufschlagwechsel, Seitenwechsel, korrekte Doppel-Aufschlagreihenfolge, passende Anzeige und Tests.",
+      "scope": "Tischtennis als eigene Score-Sportart mit 11-Punkte-Sätzen, mindestens zwei Punkten Abstand, Aufschlagwechsel einschließlich Einstand, Seitenwechsel und korrekter Doppelreihenfolge. Eigene Regeltests statt reines Grafik-Umschalten.",
       "currentState": "Ausdrücklich als Roadmap-Idee aufgenommen; noch nicht entwickelt.",
-      "openPoints": "Eigene Regel-Engine statt lediglich Texte und Farben umzuschalten.",
-      "doneWhen": "Regelfälle und Gerätetests für Einzel und Doppel sind bestanden.",
-      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "openPoints": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
+      "doneWhen": "Tischtennis-Einzel und Doppel bestehen fachliche und Gerätetests.",
+      "updatedAt": "2026-11-18T11:15:00+01:00",
       "origin": "official",
       "comments": [],
       "references": [
         {
-          "title": "Gemeinsame TENNILO-Roadmap",
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ],
@@ -1016,31 +1016,6 @@
       "workstream": "platform"
     },
     {
-      "id": "score-detail-21",
-      "title": "SCORE-21 · Tischtennis als eigene Sportart",
-      "description": "Tischtennis mit korrekten Zähl-, Aufschlag- und Doppelregeln ergänzen.",
-      "category": "TENNILO Score",
-      "status": "idea",
-      "priority": "medium",
-      "milestone": "Später",
-      "nextStep": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
-      "benefit": "Tischtennis mit korrekten Zähl-, Aufschlag- und Doppelregeln ergänzen.",
-      "scope": "Tischtennis als eigene Score-Sportart mit 11-Punkte-Sätzen, mindestens zwei Punkten Abstand, Aufschlagwechsel einschließlich Einstand, Seitenwechsel und korrekter Doppelreihenfolge. Eigene Regeltests statt reines Grafik-Umschalten.",
-      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
-      "openPoints": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
-      "doneWhen": "Tischtennis-Einzel und Doppel bestehen fachliche und Gerätetests.",
-      "updatedAt": "2026-11-18T10:00:00+01:00",
-      "origin": "official",
-      "comments": [],
-      "references": [
-        {
-          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
-          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
-        }
-      ],
-      "workstream": "sports"
-    },
-    {
       "id": "score-detail-22",
       "title": "SCORE-22 · Externe Anzeigen und App-Schnittstellen",
       "description": "Scoreboard-Ausgabe und TENNILO-Anbindung optional ermöglichen.",
@@ -1306,5 +1281,8 @@
       ],
       "workstream": "sports"
     }
+  ],
+  "retiredIds": [
+    "score-detail-21"
   ]
 }
