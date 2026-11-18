@@ -29,7 +29,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-watch-sync",
@@ -57,7 +58,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-offline",
@@ -85,7 +87,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-match-logic",
@@ -113,7 +116,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-beta-bad-saarow",
@@ -141,7 +145,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "release"
     },
     {
       "id": "score-android",
@@ -169,7 +174,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "platform"
     },
     {
       "id": "score-tabletennis",
@@ -193,7 +199,8 @@
           "title": "Gemeinsame TENNILO-Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "sports"
     },
     {
       "id": "score-release-2027",
@@ -221,7 +228,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "release"
     },
     {
       "id": "umpire-basic-pro",
@@ -465,7 +473,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-02",
@@ -493,7 +502,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-03",
@@ -521,7 +531,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-04",
@@ -549,7 +560,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-05",
@@ -577,7 +589,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-06",
@@ -605,7 +618,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-07",
@@ -633,7 +647,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-08",
@@ -661,7 +676,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-09",
@@ -689,7 +705,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-10",
@@ -717,7 +734,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-11",
@@ -745,7 +763,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-12",
@@ -773,7 +792,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "test"
     },
     {
       "id": "score-detail-13",
@@ -801,7 +821,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-14",
@@ -829,7 +850,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-15",
@@ -857,7 +879,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-16",
@@ -885,7 +908,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "native"
     },
     {
       "id": "score-detail-17",
@@ -909,7 +933,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "test"
     },
     {
       "id": "score-detail-18",
@@ -933,7 +958,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "release"
     },
     {
       "id": "score-detail-19",
@@ -961,7 +987,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "test"
     },
     {
       "id": "score-detail-20",
@@ -985,7 +1012,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "platform"
     },
     {
       "id": "score-detail-21",
@@ -1009,7 +1037,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "sports"
     },
     {
       "id": "score-detail-22",
@@ -1033,7 +1062,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "platform"
     },
     {
       "id": "score-detail-23",
@@ -1057,7 +1087,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "test"
     },
     {
       "id": "score-detail-24",
@@ -1081,7 +1112,8 @@
           "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "platform"
     },
     {
       "id": "score-demo-scoring-2026-11",
@@ -1109,7 +1141,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "demo"
     },
     {
       "id": "score-demo-scoreboard-2026-11",
@@ -1137,7 +1170,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "demo"
     },
     {
       "id": "score-demo-archive-2026-11",
@@ -1165,7 +1199,8 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "demo"
     },
     {
       "id": "score-first-iphone-test-2026-11-17",
@@ -1193,7 +1228,83 @@
           "title": "TENNILO Score – gemeinsame Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "test"
+    },
+    {
+      "id": "score-padel",
+      "title": "Score: Padel als Sportart",
+      "description": "Padel als eigenständigen Sportmodus mit korrekten Zähl- und Matchformaten vorbereiten.",
+      "scope": "Einzel-/Doppelkonfiguration nach tatsächlich unterstützten Padel-Wettbewerbsregeln, Satz- und Tiebreakvarianten, Aufschlag- und Seitenwechsel, Ergebniserfassung, Archiv und Sportart-spezifische Tests.",
+      "nextStep": "Nach stabilem Tennis-MVP die maßgeblichen Padel-Regeln und gewünschte Matchformate prüfen; erst dann Datenmodell und Bedienung spezifizieren.",
+      "openPoints": "Welche Padel-Verbands- und Freizeitformate werden unterstützt? Unterschiede in Zähl- und Aufschlagregeln vor Implementierung verifizieren.",
+      "doneWhen": "Ein vollständiger Padel-Matchablauf besteht Regeltests und echte Geräteprüfungen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach stabilem Tennis-MVP",
+      "benefit": "TENNILO Score kann später als Watch-first-Zählhilfe für zusätzliche Rückschlagsportarten genutzt werden.",
+      "currentState": "Bereits am 16.11.2026 als langfristige Produktidee dokumentiert. Noch kein Sportartmodul oder Termin freigegeben.",
+      "updatedAt": "2026-11-18T11:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – vorgemerkte Rückschlagsportarten",
+          "url": "https://github.com/tennis-schiri/tennilo-score/blob/main/docs/ENTWICKLUNG.md"
+        }
+      ],
+      "workstream": "sports"
+    },
+    {
+      "id": "score-pickleball",
+      "title": "Score: Pickleball als Sportart",
+      "description": "Pickleball mit eigenem Punkte- und Aufschlagmodell statt Tennis-Skin vormerken.",
+      "scope": "Einzel und Doppel, konfigurierbare Siegpunktzahl/Siegabstand, passende Aufschlagberechtigung und Doppel-Aufschlagreihenfolge, Service-/Rally-Scoring-Varianten nur nach Regelprüfung, archivfähiges Matchmodell.",
+      "nextStep": "Aktuelle Pickleball-Regelvarianten und Wettkampfformate sammeln, dann separate Aufschlag-/Zähl-Engine planen.",
+      "openPoints": "Unterschiedliche Wertungsarten und Service-Modelle je Wettbewerb; fachlich validieren.",
+      "doneWhen": "Konfigurierte Pickleball-Matches werden mit richtiger Aufschlaganzeige regelgetreu gezählt.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach stabilem Tennis-MVP",
+      "benefit": "TENNILO Score kann später als Watch-first-Zählhilfe für zusätzliche Rückschlagsportarten genutzt werden.",
+      "currentState": "Bereits am 16.11.2026 als langfristige Produktidee dokumentiert. Noch kein Sportartmodul oder Termin freigegeben.",
+      "updatedAt": "2026-11-18T11:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – vorgemerkte Rückschlagsportarten",
+          "url": "https://github.com/tennis-schiri/tennilo-score/blob/main/docs/ENTWICKLUNG.md"
+        }
+      ],
+      "workstream": "sports"
+    },
+    {
+      "id": "score-beach-tennis",
+      "title": "Score: Beach Tennis als Sportart",
+      "description": "Beach Tennis mit eigenen Zählweisen und wettbewerbsspezifischem Matchablauf vorbereiten.",
+      "scope": "Satzformate, Aufschlag-/Seitenwechsel, No-Ad-/Tiebreak-Regeln und ggf. abweichende Matchformate als fachlich überprüfte Sportartmodule; gleiche Offline-/Archivprinzipien wie Tennis.",
+      "nextStep": "Fachliche Regelspezifikation vornehmen; danach Zähllogik und passende Watch-/Phone-Ansichten konzipieren.",
+      "openPoints": "Für welche Verbands- und Freizeitformate gelten welche Zählweisen? Regelversion vor Implementierung festlegen.",
+      "doneWhen": "Beach-Tennis-Testfälle und echte Matchabläufe bestehen die definierten Regelprüfungen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach stabilem Tennis-MVP",
+      "benefit": "TENNILO Score kann später als Watch-first-Zählhilfe für zusätzliche Rückschlagsportarten genutzt werden.",
+      "currentState": "Bereits am 16.11.2026 als langfristige Produktidee dokumentiert. Noch kein Sportartmodul oder Termin freigegeben.",
+      "updatedAt": "2026-11-18T11:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Score – vorgemerkte Rückschlagsportarten",
+          "url": "https://github.com/tennis-schiri/tennilo-score/blob/main/docs/ENTWICKLUNG.md"
+        }
+      ],
+      "workstream": "sports"
     }
   ]
 }
