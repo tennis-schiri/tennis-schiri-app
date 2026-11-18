@@ -74,6 +74,11 @@ jobs:
           cp roadmap-site/roadmap-lib.php roadmap-site/dist/roadmap-lib.php
           cp roadmap-site/roadmap.js roadmap-site/dist/assets/roadmap.js
           cp roadmap-site/extra.css roadmap-site/dist/assets/extra.css
+          # Originale JUXILO-JX04-Vektoren aus dem bereits freigegebenen Drive-Set.
+          for logo in juxilo-jx04-logo-white.svg juxilo-jx04-j-icon.svg; do
+            test -s "roadmap-site/$logo"
+            cp "roadmap-site/$logo" "roadmap-site/dist/assets/$logo"
+          done
           cp site/assets/styles.css roadmap-site/dist/assets/styles.css
           cp site/assets/roadmap.css roadmap-site/dist/assets/roadmap.css
           for logo in tennilo-logo-dark.png tennilo-tournament-cutout.png tennilo-score-cutout.png tennilo-score-cutout-dark.png tennilo-umpire-cutout.png; do
@@ -172,6 +177,7 @@ jobs:
             assets/tennilo-score-cutout-dark.png
             assets/tennilo-umpire-cutout.png
             assets/wm04b-logo.svg
+            assets/juxilo-jx04-logo-white.svg assets/juxilo-jx04-j-icon.svg
             assets/pl05-icon.webp assets/fc05-icon.webp
             assets/nk05-icon.webp assets/ne05-icon.webp assets/vd05-icon.webp
           )
@@ -183,7 +189,7 @@ jobs:
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
           done
-          echo 'Projekt-Roadmap hochgeladen (27 Dateien). Persönlichen Login jetzt prüfen.'
+          echo 'Projekt-Roadmap einschließlich JUXILO-JX04 hochgeladen (29 Dateien). Persönlichen Login jetzt prüfen.'
 
       - name: Kontrollieren, dass ohne Login keine Roadmap-Daten ausgeliefert werden
         shell: bash
