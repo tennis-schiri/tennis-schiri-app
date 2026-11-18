@@ -74,4 +74,11 @@ expectRoadmapError(function() use (&$streamState) {
 },'Entwicklungsbereich');
 assertRoadmap($streamState['items'][0]['workstream']==='sports','Ungültige Zuordnung überschreibt nicht den Stand');
 
+assertRoadmap(in_array('Weitere Apps',RM_CATEGORIES,true),'Eigenständige Apps als Kategorie');
+$miniState=rm_merge([],[$canonical]);
+$mini=rm_new_item(['title'=>'Neue kleine App','description'=>'Vorschlag',
+    'category'=>'Weitere Apps'],'Tester','2026-11-18');
+assertRoadmap($mini['category']==='Weitere Apps','Mini-App-Idee zulässig');
+$edited=rm_update_item($miniState,'score-tabletennis',['workstream'=>'wer-muss'],'2026-11-18');
+assertRoadmap($edited['workstream']==='wer-muss','Mini-App-Arbeitsbereich zulässig');
 echo "Roadmap-Portal: Löschen, Papierkorb, Wiederherstellen und Dubletten-Migration OK.\n";
