@@ -1,0 +1,32 @@
+name: Buffer · Instagram-Stories automatisch nachfüllen
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: buffer-social-queue
+  cancel-in-progress: false
+
+jobs:
+  refill:
+    name: Buffer Free · Stories nachfüllen (max. 10 je Kanal)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Python vorbereiten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Story-Warteschlangen nachfüllen
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+        run: python tools/buffer-social/refill_stories.py
