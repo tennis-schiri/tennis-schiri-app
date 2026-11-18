@@ -4,9 +4,9 @@ declare(strict_types=1);
 require_once __DIR__ . '/roadmap-lib.php';
 
 /**
- * TENNILO Roadmap API. The surrounding test-site HTTP Basic Auth protects
- * reading. Personal roadmap accounts use password_hash/password_verify and
- * one-time registration links. Existing code-based users can migrate safely.
+ * TENNILO Roadmap API. Roadmap data is sent only after a verified personal
+ * login. Accounts use password_hash/password_verify and one-time registration
+ * links. Existing code-based users can migrate safely.
  * This is NOT the unpublished TENNILO account/licensing backend.
  */
 const RM_MAX_REQUEST = 12000;
@@ -25,16 +25,6 @@ function rm_reply(array $payload, int $code=200): never {
 function rm_is_https(): bool {
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
         (string) ($_SERVER['SERVER_PORT'] ?? '') === '443';
-}
-
-function rm_basic_user(): ?string {
-    // Only trust the identity of an Apache-authenticated request, never a raw Basic header.
-    if (strtolower((string) ($_SERVER['AUTH_TYPE'] ?? '')) !== 'basic') return null;
-    foreach (['REMOTE_USER','REDIRECT_REMOTE_USER','PHP_AUTH_USER'] as $key) {
-        $value = $_SERVER[$key] ?? null;
-        if (is_string($value) && trim($value) !== '') return $value;
-    }
-    return null;
 }
 
 function rm_storage(): array {
@@ -355,15 +345,6 @@ try {
     } elseif ($action === 'logout') {
         unset($_SESSION['roadmapHash'],$_SESSION['roadmapAccount'],$_SESSION['roadmapCredentialProof']);
         session_regenerate_id(true);
-    } elseif ($action === 'bootstrap') {
-        if ($state['adminHash'] !== null || $state['ownerAccount']!==null || rm_basic_user() === null)
-            rm_error(403, 'Die erstmalige Einrichtung ist nicht verfügbar.');
-        $ownerCode = rm_secret();
-        $state['adminHash'] = hash('sha256', $ownerCode);
-        session_regenerate_id(true);
-        $_SESSION['roadmapHash'] = $state['adminHash'];
-        $response['ownerCode'] = $ownerCode; // Shown ONCE. Never saved in plaintext.
-        rm_write_state($dir, $state);
     } else {
         if (($_SESSION['roadmapLastWrite'] ?? 0) + 2 > time())
             rm_error(429, 'Bitte kurz warten, bevor du erneut etwas speicherst.');
