@@ -11,7 +11,7 @@ const RM_PRIORITIES = ['low', 'medium', 'high'];
 const RM_DETAIL_FIELDS = ['benefit'=>900, 'scope'=>1400, 'currentState'=>1400,
     'openPoints'=>1400, 'doneWhen'=>1000];
 const RM_OFFICIAL_FIELDS = ['title','description','category','status','priority','milestone',
-    'nextStep','benefit','scope','currentState','openPoints','doneWhen','references'];
+    'nextStep','benefit','scope','currentState','openPoints','doneWhen','references','workstream'];
 
 function rm_references(mixed $raw): array {
     if (!is_array($raw)) return [];
@@ -139,7 +139,7 @@ function rm_merge(array $saved, array $seed): array {
 
 function rm_public_item(array $item): array {
     $allowed = ['id','title','description','category','status','priority',
-        'milestone','nextStep','updatedAt','origin',...array_keys(RM_DETAIL_FIELDS)];
+        'milestone','nextStep','updatedAt','origin','workstream',...array_keys(RM_DETAIL_FIELDS)];
     $out = [];
     foreach ($allowed as $key) $out[$key] = $item[$key] ?? '';
     $out['references'] = rm_references($item['references'] ?? []);
