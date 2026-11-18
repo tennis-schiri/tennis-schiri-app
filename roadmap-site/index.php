@@ -19,15 +19,15 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071625">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Projekt-Roadmap · TENNILO &amp; weitere Apps</title>
+  <title>Projekt-Roadmap · TENNILO &amp; JUXILO</title>
   <link rel="icon" href="./favicon.ico?v=2" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=2">
   <link rel="icon" type="image/png" sizes="192x192" href="./favicon-192.png?v=2">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=2">
   <link rel="stylesheet" href="./assets/styles.css?v=1">
   <link rel="stylesheet" href="./assets/roadmap.css?v=1">
-  <link rel="stylesheet" href="./assets/extra.css?v=6">
-  <script type="module" src="./assets/roadmap.js?v=5"></script>
+  <link rel="stylesheet" href="./assets/extra.css?v=7">
+  <script type="module" src="./assets/roadmap.js?v=6"></script>
 </head>
 <body class="roadmap-body standalone-roadmap">
   <header class="rm-site-header">
@@ -47,9 +47,9 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
 
   <section class="rm-project-intro" aria-label="TENNILO Projekte und Demos">
     <div class="rm-project-heading">
-      <div><span class="rm-kicker">TENNILO + EIGENSTÄNDIGE APPS</span>
+      <div><span class="rm-kicker">TENNILO + JUXILO</span>
       <h2>Alle Projekte. Ein Überblick.</h2></div>
-      <p>Gemeinsame Planung für TENNILO und die unabhängige Wer-muss-Appfamilie. Die Testseiten sind eigene Projekte und können unterschiedliche Zugänge haben.</p>
+      <p>TENNILO und JUXILO teilen sich die Entwicklungs-Roadmap. JUXILO bündelt sechs Spaß-Apps; Wer muss?! bleibt eine davon und die bisherige Browser-Testzentrale besteht vorerst weiter.</p>
     </div>
     <div class="rm-demo-grid">
       <article class="rm-demo-card demo-tournament">
@@ -72,10 +72,11 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <p>Perspektive für Hotels, Resorts und Reiseveranstalter.</p>
         <span class="rm-demo-upcoming">Konzeptphase</span>
       </article>
-      <article class="rm-demo-card demo-miniapps">
-        <div class="rm-demo-label"><img src="./assets/wm04b-logo.svg" alt="Wer muss?!" loading="lazy" width="54" height="54"><strong>WER MUSS?! &amp; CO.</strong></div>
-        <p>Sechs unabhängige Mini-Apps: kleine Reaktions-, Balance- und Partyspiele. Eigenständige Planung, eigenes Design.</p>
-        <a href="https://github.com/tennis-schiri/wer-muss-app/tree/main/demo" target="_blank" rel="noopener noreferrer">Browser-Prototypen im GitHub ansehen <span aria-hidden="true">↗</span></a>
+      <article class="rm-demo-card demo-miniapps demo-juxilo">
+        <div class="rm-demo-label rm-juxilo-demo-label"><img src="./assets/juxilo-jx04-logo-white.svg" alt="JUXILO" loading="lazy" width="158" height="107"></div>
+        <p><strong>Sechs Spaß-Apps, eine Dachmarke.</strong> Wer muss?!, Punktlandung!, Fingerchaos, Nicht kleckern!, Nur noch einmal! und Völlig daneben! behalten ihre eigenen Namen und Logos.</p>
+        <span class="rm-demo-upcoming">Wer-muss-Browser-Testzentrale bleibt bestehen</span>
+        <a href="https://github.com/tennis-schiri/wer-muss-app/tree/main/demo" target="_blank" rel="noopener noreferrer">Browser-Prototypen in GitHub ansehen <span aria-hidden="true">↗</span></a>
       </article>
     </div>
   </section>
@@ -86,7 +87,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <div id="roadmap-modal"></div>
   <div id="roadmap-toast" class="roadmap-toast" role="status" aria-live="polite"></div>
   <footer class="rm-site-footer">
-    <p>Projekt-Roadmap · TENNILO &amp; weitere Apps · interne Entwicklungs- und Ideensammlung · Stand wird im Board gepflegt</p>
+    <p>Projekt-Roadmap · TENNILO &amp; JUXILO · interne Entwicklungs- und Ideensammlung · Stand wird im Board gepflegt</p>
     <p><a href="./strategie.php">Gesamte Planung</a> · <a href="https://tennilo.de/">tennilo.de</a></p>
   </footer>
 </body>
