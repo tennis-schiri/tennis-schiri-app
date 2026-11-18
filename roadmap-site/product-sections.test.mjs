@@ -59,8 +59,8 @@ test('Alle offiziellen Themen sind genau einem gültigen Bereich zugeordnet',()=
     assert.notEqual(ui.productStream(item),'other','Ohne Entwicklungsbereich: '+item.id);
     assert.ok(ui.streamLabel(item).length>0,item.id);
   }
-  assert.ok(ids.size>=96,'TENNILO- und Mini-App-Themen ohne Verlust');
-  assert.equal(items.filter(x=>x.category==='Weitere Apps').length,16,'16 Mini-App-Einträge');
+  assert.ok(ids.size>=97,'TENNILO- und JUXILO-Themen ohne Verlust');
+  assert.equal(items.filter(x=>x.category==='Weitere Apps').length,17,'17 JUXILO-/Mini-App-Einträge');
 });
 
 test('Die Gesamtübersicht zeigt alle Projekte mit den echten Themenzahlen',()=>{
@@ -96,7 +96,7 @@ test('Nicht zugewiesene Ideen erscheinen unter Weitere Themen',()=>{
   assert.ok(ui.productStreamOptions('umpire',[custom]).some(([key,label])=>key==='other'&&label==='Weitere Themen'));
 });
 
-test('Alle sechs Mini-Apps bleiben in Demo und nativer Planung getrennt',()=>{
+test('Unter JUXILO bleiben alle sechs Mini-Apps in Demo und nativer Planung getrennt',()=>{
   const slugs=['wer-muss','punktlandung','fingerchaos','nicht-kleckern','nur-noch-einmal','voellig-daneben'];
   for(const slug of slugs){
     assert.ok(items.some(x=>x.id==='mini-'+slug+'-demo'&&x.status==='test'),slug+' Demo');
@@ -109,7 +109,10 @@ test('Alle sechs Mini-Apps bleiben in Demo und nativer Planung getrennt',()=>{
   for(const icon of ['wm04b-logo.svg','pl05-icon.webp','fc05-icon.webp','nk05-icon.webp','ne05-icon.webp','vd05-icon.webp']){
     assert.ok(html.includes(icon),'Originalicon '+icon);
   }
-  assert.ok(html.includes('rm-mini-overview'),'eigenständige Wer-muss-Gestaltung');
+  assert.ok(html.includes('rm-mini-overview'),'eigenständige JUXILO-Gestaltung');
+  assert.ok(html.includes('juxilo-jx04-logo-white.svg'),'JUXILO JX04-Original-Logo');
+  assert.ok(html.includes('JUXILO: Entwicklung nach Bereichen'),'JUXILO sichtbar als Dachmarke');
+  assert.ok(items.some(x=>x.id==='juxilo-brand-jx04'&&x.workstream==='studio'),'eigenständige Dachmarken-Aufgabe');
 });
 
 test('Mini-App-Karten und Listen bleiben auf dunklem Hintergrund lesbar',()=>{
@@ -127,4 +130,26 @@ test('Mini-App-Karten und Listen bleiben auf dunklem Hintergrund lesbar',()=>{
   }
   assert.ok(css.includes('.rm-mini-card{border-left:4px solid var(--app-accent'));
   assert.ok(css.includes('background:linear-gradient(130deg,#24213c,#151727)'));
+});
+
+test('JUXILO ist Dachmarke, kein siebtes Spiel – und die Originalvektoren werden ausgeliefert',()=>{
+  const index=fs.readFileSync(path.join(root,'roadmap-site/index.php'),'utf8');
+  const workflow=fs.readFileSync(path.join(root,'.github/workflows/roadmap-subdomain.yml'),'utf8');
+  const js=fs.readFileSync(path.join(root,'roadmap-site/roadmap.js'),'utf8');
+  const css=fs.readFileSync(path.join(root,'roadmap-site/extra.css'),'utf8');
+  const mini=items.filter(x=>x.category==='Weitere Apps');
+  assert.equal(mini.length,17);
+  assert.equal(mini.filter(x=>x.id.endsWith('-demo')).length,6);
+  assert.equal(mini.filter(x=>x.id.endsWith('-native')).length,6);
+  assert.ok(mini.some(x=>x.id==='juxilo-brand-jx04'&&x.title.includes('JUXILO')));
+  assert.ok(js.includes('["miniapps","JUXILO"]'),'Dachmarke als Projektfilter');
+  assert.ok(js.includes('["wer-muss","Wer muss?!"]'),'Wer muss?! als Einzel-App');
+  assert.ok(index.includes('alt="JUXILO"'),'JUXILO-Logo auf Roadmap-Startseite');
+  assert.ok(index.includes('TENNILO &amp; JUXILO'),'zwei getrennte Marken');
+  assert.ok(css.includes('#53006d')&&css.includes('#ffc700'),'JX04-Farben');
+  for(const logo of ['juxilo-jx04-logo-white.svg','juxilo-jx04-j-icon.svg']){
+    const raw=fs.readFileSync(path.join(root,'roadmap-site',logo),'utf8');
+    assert.match(raw,/<svg\b/);
+    assert.ok(workflow.includes('assets/'+logo),'Live-Upload mit '+logo);
+  }
 });
