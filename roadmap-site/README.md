@@ -95,6 +95,7 @@ Die Demo-Links werden **nach dem Login** im Roadmap-Portal angezeigt. Ein Roadma
 - `roadmap-site/roadmap-lib.php`: Datenmodell, Speicherung und Sicherheitsprüfungen
 - `roadmap-site/regenerate-seed.mjs`: kombiniert `site/roadmap-seed.json` und `roadmap-site/additions.json`
 - `roadmap-site/make-admin-config.php`: erstellt Admin-Hash ausschließlich in GitHub Actions
+- `roadmap-site/make-favicon.py`: erzeugt aus dem **Original-TENNILO-Icon** `favicon.ico`, `favicon-32.png`, `favicon-192.png` und `apple-touch-icon.png` (transparente Außenbereiche bleiben erhalten)
 - `roadmap-site/extra.css`: Login- und Portalgestaltung
 - `.github/workflows/roadmap-subdomain.yml`: manueller FTPS-Upload
 
