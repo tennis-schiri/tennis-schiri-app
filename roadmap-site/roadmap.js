@@ -1,4 +1,4 @@
-// TENNILO Roadmap v1.1 – unified development areas for every product.
+// Project Roadmap v1.2 – TENNILO and independently branded mini-apps.
 const root=document.getElementById("roadmap-app");
 const modalRoot=document.getElementById("roadmap-modal");
 const toastRoot=document.getElementById("roadmap-toast");
@@ -11,10 +11,10 @@ const STATUS=[
   {key:"online",title:"Auf Testseite",hint:"Bereits auf der geschützten Testseite",short:"Online (Test)"}
 ];
 const PRIORITY={high:"Hoch",medium:"Mittel",low:"Niedrig"};
-const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO Business","TENNILO Plattform"];
+const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO Business","TENNILO Plattform","Weitere Apps"];
 let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],deletedItems:[],offline:false};
-const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"]];
+const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"],["miniapps","Wer muss?! & Co."]];
 const PRODUCT_STREAMS={
   tournament:[["formats","Turnierformate"],["operations","Turnierbetrieb"],["live","Live & Anzeige"],
     ["ux","Produkt & Bedienung"],["access","Plattform & Zugang"],["quality","Tests & Qualität"]],
@@ -24,21 +24,40 @@ const PRODUCT_STREAMS={
     ["display","Anzeigen & Scoreboards"],["integration","Schnittstellen"]],
   business:[["offers","Angebot & Zielgruppen"],["booking","Plattform & Buchungen"],["pilot","Pilotpartner & Tests"]],
   platform:[["data","Daten & Matchmodell"],["security","Konten & Sicherheit"],
-    ["standards","Sprachen & Standards"],["integration","Integrationen"]]
+    ["standards","Sprachen & Standards"],["integration","Integrationen"]],
+  miniapps:[["studio","App-Werkstatt"],["wer-muss","Wer muss?!"],["punktlandung","Punktlandung!"],
+    ["fingerchaos","Fingerchaos"],["nicht-kleckern","Nicht kleckern!"],
+    ["nur-noch-einmal","Nur noch einmal!"],["voellig-daneben","Völlig daneben!"],
+    ["ideas","Weitere Ideen"]]
 };
 const PRODUCT_OVERVIEWS={
   tournament:"Turnierformate, Turnierbetrieb, Live-Anzeige und Plattformaufbau getrennt verfolgen.",
   score:"Web-Demo, native Apps und Gerätetests getrennt bewerten. Ein Commit ist kein bestandener Gerätetest.",
   umpire:"Bedienkonzept, digitale Scorecard, Regelkontrollen und externe Anzeigen getrennt planen.",
   business:"Angebote, mögliche Buchungsfunktionen und spätere Pilotpartner unterscheiden.",
-  platform:"Gemeinsame Matchdaten, Nutzerkonten und Produktstandards projektübergreifend verfolgen."
+  platform:"Gemeinsame Matchdaten, Nutzerkonten und Produktstandards projektübergreifend verfolgen.",
+  miniapps:"Eigenständige Spaß-Apps außerhalb von TENNILO: Browser-Demos, native Apps und weitere Ideen. Farben und Original-Icons der Mini-App-Werkstatt."
 };
+const MINI_ICONS={"studio":"wm04b-logo.svg","wer-muss":"wm04b-logo.svg",
+  "punktlandung":"pl05-icon.webp","fingerchaos":"fc05-icon.webp",
+  "nicht-kleckern":"nk05-icon.webp","nur-noch-einmal":"ne05-icon.webp",
+  "voellig-daneben":"vd05-icon.webp"};
+const MINI_TONES=new Set(["studio","wer-muss","punktlandung","fingerchaos",
+  "nicht-kleckern","nur-noch-einmal","voellig-daneben","ideas"]);
+function miniIcon(key){
+  const image=MINI_ICONS[key];
+  return image?'<img class="rm-mini-icon" src="./assets/'+image+'" alt="" loading="lazy" decoding="async">':'';
+}
+function miniTone(item){return productOf(item)==="miniapps"&&MINI_TONES.has(productStream(item))
+  ?' rm-mini-'+productStream(item):'';}
+
 const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/issues/3";
 function productOf(item){
  if(item.category==="TENNILO Score")return "score";
  if(item.category==="TENNILO Umpire")return "umpire";
  if(item.category==="TENNILO Business")return "business";
  if(item.category==="TENNILO Plattform")return "platform";
+ if(item.category==="Weitere Apps")return "miniapps";
  return "tournament";
 }
 function productStream(item){
@@ -104,20 +123,20 @@ function productOverview(){
       '<div class="rm-product-streams rm-project-streams">'+PRODUCTS.filter(([id])=>id!=="all").map(([id,label])=>{
         const items=state.items.filter(x=>productOf(x)===id);
         const active=items.filter(x=>x.status==="progress"||x.status==="test").length;
-        return '<button type="button" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+
+        return '<button type="button" class="rm-project-card rm-project-'+esc(id)+'" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+(id==="miniapps"?miniIcon("wer-muss"):'')+
           '<strong>'+esc(label)+'</strong><span>'+items.length+' Themen · '+active+' in Arbeit/Prüfung</span></button>';
       }).join('')+'</div></section>';
   }
   const product=filterProduct,items=state.items.filter(x=>productOf(x)===product);
   const name=PRODUCTS.find(([id])=>id===product)?.[1]||product;
-  return '<section class="rm-product-overview" aria-label="'+esc(name)+'-Entwicklungsbereiche">'+
+  return '<section class="rm-product-overview'+(product==="miniapps"?' rm-mini-overview':'')+'" aria-label="'+esc(name)+'-Entwicklungsbereiche">'+
     '<div class="rm-product-overview-heading"><div><h2>'+esc(name)+': Entwicklung nach Bereichen</h2><p>'+
       esc(PRODUCT_OVERVIEWS[product]||"Entwicklung nach Themenbereichen")+'</p></div>'+
     '<a href="'+ROADMAP_REVIEW_URL+'" target="_blank" rel="noopener noreferrer">Täglichen GitHub-Abgleich ansehen</a></div>'+
-    '<div class="rm-product-streams">'+
+    '<div class="rm-product-streams'+(product==="miniapps"?' rm-mini-streams':'')+'">'+
     '<button type="button" data-action="stream" data-stream="all" class="'+(filterStream==="all"?"active":"")+'" aria-pressed="'+(filterStream==="all")+'"><strong>Alle</strong><span>'+items.length+' Themen</span></button>'+
     productStreamOptions(product,items).map(([key,label])=>
-      '<button type="button" data-action="stream" data-stream="'+esc(key)+'" class="'+(filterStream===key?"active":"")+'" aria-pressed="'+(filterStream===key)+'"><strong>'+esc(label)+'</strong><span>'+
+      '<button type="button" data-action="stream" data-stream="'+esc(key)+'" class="'+(product==="miniapps"?'rm-mini-stream rm-mini-'+esc(key)+' ':'')+(filterStream===key?"active":"")+'" aria-pressed="'+(filterStream===key)+'">'+(product==="miniapps"?miniIcon(key):'')+'<strong>'+esc(label)+'</strong><span>'+
       items.filter(x=>productStream(x)===key).length+' Themen</span></button>').join('')+
     '</div></section>';
 }
@@ -149,8 +168,8 @@ function itemsFiltered(){
 }
 function card(x){
   const comments=Array.isArray(x.comments)?x.comments.length:0;
-  return '<button type="button" class="rm-card" data-action="detail" data-id="'+esc(x.id)+'" aria-label="'+esc(x.title)+' öffnen">'+
-    '<div class="rm-card-top"><span class="rm-category">'+esc(streamLabel(x))+'</span>'+
+  return '<button type="button" class="rm-card'+(productOf(x)==="miniapps"?' rm-mini-card':'')+miniTone(x)+'" data-action="detail" data-id="'+esc(x.id)+'" aria-label="'+esc(x.title)+' öffnen">'+
+    '<div class="rm-card-top">'+(productOf(x)==="miniapps"?miniIcon(productStream(x)):'')+'<span class="rm-category">'+esc(streamLabel(x))+'</span>'+
     '<span class="rm-priority '+esc(x.priority)+'" title="Priorität '+esc(PRIORITY[x.priority]||"Offen")+'">'+esc(PRIORITY[x.priority]||"Offen")+'</span></div>'+
     '<strong>'+esc(x.title)+'</strong>'+
     '<p>'+esc(x.description)+'</p>'+
@@ -175,8 +194,8 @@ function renderResults(){
       STATUS.findIndex(s=>s.key===b.status)-STATUS.findIndex(s=>s.key===a.status)||
       ["high","medium","low"].indexOf(a.priority)-["high","medium","low"].indexOf(b.priority));
     target.innerHTML='<div class="rm-list">'+sorted.map(x=>
-      '<div class="rm-list-row"><span class="rm-status-chip status-'+esc(x.status)+'">'+esc(statusOf(x.status).short)+'</span>'+
-      '<div class="rm-list-main"><strong>'+esc(x.title)+'</strong><small>'+esc(streamLabel(x))+' · '+esc(x.milestone||"Offen")+'</small></div>'+
+      '<div class="rm-list-row'+(productOf(x)==="miniapps"?' rm-mini-row':'')+miniTone(x)+'"><span class="rm-status-chip status-'+esc(x.status)+'">'+esc(statusOf(x.status).short)+'</span>'+
+      '<div class="rm-list-main">'+(productOf(x)==="miniapps"?miniIcon(productStream(x)):'')+'<strong>'+esc(x.title)+'</strong><small>'+esc(streamLabel(x))+' · '+esc(x.milestone||"Offen")+'</small></div>'+
       '<span class="rm-list-priority">'+esc(PRIORITY[x.priority]||"")+'</span>'+
       '<button class="btn ghost small" type="button" data-action="detail" data-id="'+esc(x.id)+'">Ansehen</button></div>').join("")+'</div>';
   }
@@ -194,7 +213,7 @@ function renderLogin(){
     '<input name="code" type="password" autocomplete="off" pattern="[a-f0-9]{48}" minlength="48" maxlength="48" required></label>'+
     '<button class="btn subtle" type="submit">Einmalig mit Code anmelden</button></form></details>'+
     '</section><aside class="rm-login-side" aria-hidden="true"><span>TENNILO</span>'+
-    '<strong>Gemeinsam<br>weiterentwickeln.</strong><p>Tournament · Score · Umpire · Business</p></aside></main>';
+    '<strong>Gemeinsam<br>weiterentwickeln.</strong><p>TENNILO · Wer muss?! &amp; Co.</p></aside></main>';
 }
 function render(){
   if(state.session?.role==="guest"){renderLogin();return;}
@@ -211,8 +230,8 @@ function render(){
     (isAdmin()?'<button class="btn ghost small" data-action="members">Nutzer verwalten</button>'+ 
       '<button class="btn ghost small" data-action="trash">Papierkorb ('+(state.deletedItems?.length||0)+')</button>':'')+'</div></div>'+
     '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / GEMEINSAME PRODUKT-ROADMAP</div>'+
-    '<h1>Ein Ökosystem. <em>Viele Ideen.</em></h1>'+
-    '<p>Tournament, Score, Umpire und Business an einem Ort. Entwicklungen verfolgen, Entscheidungen nachvollziehen und gemeinsam Ideen sammeln.</p>'+
+    '<h1>Alle Projekte. <em>Eine Roadmap.</em></h1>'+
+    '<p>TENNILO Tournament, Score, Umpire und Business sowie eigenständige Mini-Apps wie Wer muss?! – getrennte Projekte, gemeinsamer Entwicklungsüberblick.</p>'+
     '<div class="rm-hero-actions">'+(canComment()?
       '<button class="btn rm-lime" data-action="idea">+ Neue Idee einreichen</button>':
       '<button class="btn rm-lime" data-action="login">Anmelden und mitmachen</button>')+
@@ -273,7 +292,7 @@ function detail(id){
   let body='<div class="rm-detail-meta"><span class="rm-status-chip status-'+esc(x.status)+'">'+esc(statusOf(x.status).short)+'</span>'+
     '<span class="rm-priority '+esc(x.priority)+'">'+esc(PRIORITY[x.priority]||"Offen")+'</span>'+
     '<span>'+esc(x.category)+'</span></div>'+
-    '<div class="rm-detail-intro"><span class="rm-detail-eyebrow">KURZBESCHREIBUNG</span><p class="rm-detail-description">'+esc(x.description)+'</p></div>'+
+    '<div class="rm-detail-intro">'+(productOf(x)==="miniapps"?miniIcon(productStream(x)):'')+'<span class="rm-detail-eyebrow">KURZBESCHREIBUNG</span><p class="rm-detail-description">'+esc(x.description)+'</p></div>'+
     '<div class="rm-detail-facts"><div><small>Meilenstein</small><strong>'+esc(x.milestone||"Offen")+'</strong></div>'+
     '<div><small>Nächster Schritt</small><strong>'+esc(x.nextStep||"Noch nicht festgelegt")+'</strong></div>'+
     '<div><small>Aktualisiert</small><strong>'+esc(niceDate(x.updatedAt))+'</strong></div></div>'+    detailsHtml(x)+
