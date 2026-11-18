@@ -60,7 +60,7 @@ jobs:
           cp roadmap-site/extra.css roadmap-site/dist/assets/extra.css
           cp site/assets/styles.css roadmap-site/dist/assets/styles.css
           cp site/assets/roadmap.css roadmap-site/dist/assets/roadmap.css
-          for logo in tennilo-logo-dark.png tennilo-tournament-cutout.png tennilo-score-cutout.png tennilo-umpire-cutout.png; do
+          for logo in tennilo-logo-dark.png tennilo-tournament-cutout.png tennilo-score-cutout.png tennilo-score-cutout-dark.png tennilo-umpire-cutout.png; do
             test -s "brand-source/public/assets/$logo"
             cp "brand-source/public/assets/$logo" "roadmap-site/dist/assets/$logo"
           done
