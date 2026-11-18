@@ -308,6 +308,7 @@ async function load(){
     state={...data,offline:false};
     render();
   }catch(error){
+    state.offline=true;
     root.innerHTML='<main class="rm-container"><div class="rm-alert"><strong>Geschützte Roadmap derzeit nicht verfügbar.</strong><p>'+esc(error.message)+'</p><p>Bitte Passwortschutz und privaten Speicher auf dem Webspace prüfen.</p></div></main>';
   }
 }
