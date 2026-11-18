@@ -11,6 +11,9 @@ on:
         options:
           - preview
           - live
+  push:
+    paths:
+      - 'tools/buffer-social/stories-2026.json'
   schedule:
     # Jeden Tag viermal; nie Cron als Garant für minutengenaue Ausführung verstehen.
     - cron: "18 1,7,13,19 * * *"
