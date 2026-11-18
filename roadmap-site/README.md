@@ -5,7 +5,7 @@ Eigenständiges Roadmap-Portal mit **persönlichem Login statt ALL-INKL-Verzeich
 ## Bedienkonzept
 
 1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
-2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 74 initialen Themen (darunter 24 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 78 initialen Themen (darunter 24 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
 3. `strategie.php` zeigt alle 17 Kapitel der Gesamtplanung – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
 4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
 5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
@@ -68,7 +68,7 @@ Auf `Run workflow → main → Run workflow` klicken. Push auf `main` registrier
 
 Der manuelle Workflow:
 - übernimmt die **Original-TENNILO-Logos** aus dem Website-Repository;
-- kombiniert 33 bisherige Tournament-Themen und 41 Produkt-/Plattform-Ergänzungen (einschließlich 24 detaillierter Score-Aufgaben);
+- kombiniert 33 bisherige Tournament-Themen und 45 Produkt-/Plattform-Ergänzungen (einschließlich 24 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen und dem ersten realen Gerätetest vom 17.11.2026);
 - generiert die geschützte Seed-PHP-Datei und die initiale Admin-Konfiguration;
 - prüft Syntax, bestehende Roadmap-Tests und HTTPS;
 - überträgt nur die **17** ausdrücklich freigegebenen Dateien per FTPS, ohne zu löschen, ohne `.htaccess` zu ersetzen und ohne die Tournament-App zu verändern;
