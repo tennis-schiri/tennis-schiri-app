@@ -5,7 +5,7 @@ Eigenständiges Roadmap-Portal mit **persönlichem Login statt ALL-INKL-Verzeich
 ## Bedienkonzept
 
 1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
-2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 80 initialen Themen (darunter 24 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 80 initialen Themen (darunter 23 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
 3. `strategie.php` zeigt alle 17 Kapitel der Gesamtplanung – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
 4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
 5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
@@ -117,3 +117,16 @@ Die Projektleitung kann einzelne Roadmap-Themen in der Detailansicht über **Ein
 Die bereits doppelt vorhandene Score-Tischtennis-Detailaufgabe `score-detail-21` wurde mit dem ursprünglichen Thema `score-tabletennis` zusammengeführt. Die alte ID steht als `retiredIds` im Roadmap-Seed und wird beim Merge auch in vorhandenen Serverdaten ausgeblendet, ohne alte Kommentare im privaten Speicher zu löschen. Eine stillgelegte offizielle Dublette kann nicht über den Nutzer-Papierkorb wiederhergestellt werden.
 
 Die neue Lösch-/Wiederherstellungslogik wird vor dem manuellen Upload mit `tests/roadmap-portal-delete.php` auf der CI-Laufzeit geprüft.
+
+## Entwicklung nach Bereichen für alle Projekte
+
+Das Board bietet jetzt dieselbe Bereichsübersicht für alle fünf Arbeitsstränge:
+- **Tournament:** Turnierformate, Turnierbetrieb, Live & Anzeige, Produkt & Bedienung, Plattform & Zugang, Tests & Qualität.
+- **Score:** Web-Demo, iPhone & Apple Watch, Tests & Qualität, Beta & Veröffentlichung, weitere Sportarten, Plattform & Schnittstellen.
+- **Umpire:** Bedienkonzept, Scorecard & Zählung, Regeln & Zeitkontrollen, Anzeigen & Scoreboards, Schnittstellen.
+- **Business:** Angebot & Zielgruppen, Plattform & Buchungen, Pilotpartner & Tests.
+- **Übergreifend:** Daten & Matchmodell, Konten & Sicherheit, Sprachen & Standards, Integrationen.
+
+Der Filter **Alle Projekte** zeigt die fünf Produktbereiche mit der Anzahl der Roadmap-Themen an. Nach Auswahl eines Produktes erscheinen dessen einzelne Entwicklungsbereiche als filterbare Kacheln; der Kanban-Status wird davon unabhängig geführt. Die vorhandenen Tournament-Fachkategorien werden direkt abgebildet, für die übrigen Produkte liegt die Zuordnung im offiziellen Seed-Feld `workstream`. Neue Ideen ohne explizite Zuordnung erscheinen unter **Weitere Themen** und können von der Projektleitung im Bearbeitungsdialog kategorisiert werden. Die geschützte Server-Datenbank (Konten, Einladungen, Kommentare, Statusbearbeitungen und Papierkorb) bleibt erhalten.
+
+Tests: `node --test roadmap-site/product-sections.test.mjs` ist sowohl in der manuellen Subdomain-Auslieferung als auch im unabhängigen Code-Prüfworkflow aktiviert. Ein Deployment erfolgt weiterhin ausschließlich manuell.
