@@ -37,7 +37,9 @@ Wenn ALL-INKL einen eigenen absoluten Speicherpfad anbietet, kann `TENNILO_ROADM
 
 Vor dem Umzug der alten Roadmap den privaten `state.json`-Stand sichern. Bei gemeinsamer privater Speicherstruktur kann die neue Domain dieselben Daten verwenden. Andernfalls `state.json` außerhalb des Webroots in den privaten Zielordner kopieren, **bevor** erstmals neue Nutzer angemeldet werden. Der alte Stand bleibt als Backup erhalten; niemals eine echte `state.json` auf einen öffentlichen FTP-Webpfad, ins Repo oder in eine Demo kopieren.
 
-Bestehende Konten haben Vorrang. Die beim Deployment hinterlegten Admin-Zugangsdaten werden **nur beim ersten Einrichten eines noch nicht vorhandenen Eigentümerkontos** verwendet; sie überschreiben keine bestehenden Konten, Kommentare oder Zugänge. Eine spätere Änderung des GitHub-Secrets ändert daher nicht automatisch das Konto-Passwort. Dafür nach Login die Kontofunktion nutzen.
+Bestehende Konten haben Vorrang. Normalerweise werden die Secrets **nur beim erstmaligen Anlegen eines Eigentümerkontos** verwendet. Neue Secrets ändern ein bestehendes Passwort nicht automatisch.
+
+**Falls die Admin-Anmeldung nicht mehr funktioniert:** Vor dem Upload `ROADMAP_ADMIN_USERNAME` und `ROADMAP_ADMIN_PASSWORD` prüfen. Unter **Actions → TENNILO Roadmap → Run workflow** die Option `reset_admin_login` auf **true** setzen. Damit wird der Admin-Zugang einmalig auf die Werte dieser beiden Secrets gesetzt. Alle Roadmap-Themen, Kommentare, anderen Benutzerkonten, Einladungen und Rollen bleiben erhalten. Der Reset greift beim nächsten Aufruf der Roadmap-API und wird anhand der Workflow-Laufnummer als einmalig angewendet. Ohne aktivierte Option werden vorhandene Admin-Konten nicht verändert. Falls ein Benutzer nach fünf falschen Anmeldeversuchen vorübergehend gesperrt ist, 15 Minuten abwarten und erst dann erneut anmelden.
 
 ## GitHub Secrets: fünf Werte
 
