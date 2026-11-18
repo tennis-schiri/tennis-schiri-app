@@ -1,4 +1,4 @@
-// TENNILO Roadmap v0.9 – product streams and daily status-review link.
+// TENNILO Roadmap v1.0 – admin-only trash with durable tombstones.
 const root=document.getElementById("roadmap-app");
 const modalRoot=document.getElementById("roadmap-modal");
 const toastRoot=document.getElementById("roadmap-toast");
@@ -13,7 +13,7 @@ const STATUS=[
 const PRIORITY={high:"Hoch",medium:"Mittel",low:"Niedrig"};
 const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO Business","TENNILO Plattform"];
 let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
-  bootstrapAvailable:false,storagePersistent:false,members:[],offline:false};
+  bootstrapAvailable:false,storagePersistent:false,members:[],deletedItems:[],offline:false};
 const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"]];
 const SCORE_STREAMS=[["demo","Web-Demo"],["native","iPhone & Apple Watch"],["test","Tests & Qualität"],["release","Beta & Veröffentlichung"],["sports","Weitere Sportarten"],["platform","Plattform & Schnittstellen"]];
 const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/issues/3";
@@ -165,7 +165,8 @@ function render(){
     (role!=="guest"?(state.session.account?
       '<button class="btn ghost small" data-action="profile">Mein Konto</button>':
       '<button class="btn ghost small" data-action="upgrade">Benutzerkonto einrichten</button>'):'')+
-    (isAdmin()?'<button class="btn ghost small" data-action="members">Nutzer verwalten</button>':'')+'</div></div>'+
+    (isAdmin()?'<button class="btn ghost small" data-action="members">Nutzer verwalten</button>'+ 
+      '<button class="btn ghost small" data-action="trash">Papierkorb ('+(state.deletedItems?.length||0)+')</button>':'')+'</div></div>'+
     '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / GEMEINSAME PRODUKT-ROADMAP</div>'+
     '<h1>Ein Ökosystem. <em>Viele Ideen.</em></h1>'+
     '<p>Tournament, Score, Umpire und Business an einem Ort. Entwicklungen verfolgen, Entscheidungen nachvollziehen und gemeinsam Ideen sammeln.</p>'+
@@ -233,7 +234,8 @@ function detail(id){
     '<div class="rm-detail-facts"><div><small>Meilenstein</small><strong>'+esc(x.milestone||"Offen")+'</strong></div>'+
     '<div><small>Nächster Schritt</small><strong>'+esc(x.nextStep||"Noch nicht festgelegt")+'</strong></div>'+
     '<div><small>Aktualisiert</small><strong>'+esc(niceDate(x.updatedAt))+'</strong></div></div>'+    detailsHtml(x)+
-    (isAdmin()?'<div class="rm-detail-admin"><button class="btn subtle small" data-action="edit" data-id="'+esc(id)+'">Status und Details bearbeiten</button></div>':'')+
+    (isAdmin()?'<div class="rm-detail-admin"><button class="btn subtle small" data-action="edit" data-id="'+esc(id)+'">Status und Details bearbeiten</button>'+
+      '<button class="btn ghost small rm-delete-item" data-action="delete-item" data-id="'+esc(id)+'">Eintrag löschen</button></div>':'')+
     '<div class="rm-comments"><div class="rm-comments-head"><h3>Diskussion</h3><span>'+comments.length+' Kommentar'+(comments.length===1?'':'e')+'</span></div>'+
     (comments.length?comments.map(c=>'<article class="rm-comment"><div><strong>'+esc(c.author)+'</strong><small>'+esc(niceDate(c.createdAt))+'</small>'+
       (isAdmin()?'<button type="button" class="rm-remove" data-action="delete-comment" data-id="'+esc(id)+'" data-comment="'+esc(c.id)+'" aria-label="Kommentar löschen">Entfernen</button>':'')+
@@ -311,6 +313,16 @@ function editModal(id){
       '<label class="rm-field">'+title+'<small>'+hint+'</small>'+
       '<textarea name="'+key+'" rows="'+(key==="scope"||key==="openPoints"?5:4)+'" maxlength="'+({benefit:900,scope:1400,currentState:1400,openPoints:1400,doneWhen:1000}[key])+'" placeholder="Hier die ausführlichen Informationen eintragen …">'+esc(x[key]||"")+'</textarea></label>').join("")+
     '<button class="btn primary" type="submit">Änderungen speichern</button></form>',{wide:true});
+}
+function trashModal(){
+  if(!isAdmin())return;
+  const deleted=Array.isArray(state.deletedItems)?state.deletedItems:[];
+  showModal("Papierkorb – "+deleted.length+" Einträge",
+    '<p class="rm-modal-note">Gelöschte Roadmap-Themen sind nicht mehr im Board sichtbar. Inhalte und Kommentare bleiben im privaten Speicher erhalten. Du kannst sie hier wiederherstellen; sie erscheinen auch nach Updates nicht automatisch erneut.</p>'+
+    (deleted.length?'<div class="rm-members">'+deleted.map(x=>
+      '<div class="rm-member"><div><strong>'+esc(x.title)+'</strong><small>'+esc(x.category)+' · '+esc(x.id)+'</small></div>'+
+      '<div class="rm-member-actions"><button type="button" class="btn subtle small" data-action="restore-item" data-id="'+esc(x.id)+'">Wiederherstellen</button></div></div>'
+    ).join('')+'</div>':'<p class="rm-no-comments">Der Papierkorb ist leer.</p>'),{wide:true});
 }
 function membersModal(){
   if(!isAdmin())return;
@@ -391,6 +403,17 @@ document.addEventListener("click",event=>{
   if(act==="idea"){if(canComment())ideaModal();else loginModal();return;}
   if(act==="edit"){editModal(id);return;}
   if(act==="members"){membersModal();return;}
+  if(act==="trash"){trashModal();return;}
+  if(act==="delete-item"){
+    if(!isAdmin())return;
+    const record=itemById(id);
+    if(!record||!confirm('Eintrag „'+record.title+'“ aus der Roadmap löschen?\n\nDer Inhalt und die Kommentare bleiben im Papierkorb erhalten.'))return;
+    return run("delete-item",{itemId:id},()=>{closeModal();toast("Eintrag in den Papierkorb verschoben.");});
+  }
+  if(act==="restore-item"){
+    if(!isAdmin())return;
+    return run("restore-item",{itemId:id},()=>{trashModal();toast("Eintrag wiederhergestellt.");});
+  }
   if(act==="bootstrap")return run("bootstrap",{},result=>{
     if(result.ownerCode)codeModal("Dein Projektleitungs-Zugang",result.ownerCode);
   });
