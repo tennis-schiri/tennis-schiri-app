@@ -1,0 +1,49 @@
+name: Buffer · Story-Warteschlangen nachfüllen
+
+on:
+  workflow_dispatch:
+    inputs:
+      modus:
+        type: choice
+        description: "preview prüft nur; live überträgt freigegebene Storys"
+        default: preview
+        required: true
+        options:
+          - preview
+          - live
+  schedule:
+    # Jeden Tag viermal; nie Cron als Garant für minutengenaue Ausführung verstehen.
+    - cron: "18 1,7,13,19 * * *"
+permissions:
+  contents: read
+
+concurrency:
+  group: buffer-instagram-queue
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    name: Buffer Queue sicher auffüllen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Migrationsdaten abrufen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Nur freigegebene und aus Metricool entfernte Stories nachfüllen
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          PREVIEW_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.modus != 'live' }}
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            export PREVIEW_ONLY=false
+          fi
+          python tools/buffer-social/queue_sync.py
