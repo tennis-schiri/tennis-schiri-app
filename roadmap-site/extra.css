@@ -97,3 +97,27 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 @media(max-width:760px){.rm-site-nav{align-items:flex-start;flex-wrap:wrap;gap:9px}.rm-topnav{width:100%;gap:5px}.rm-topnav a{font-size:11px;padding:9px}.rm-project-heading{display:block}.rm-project-heading p{margin-top:14px}.strategy-layout{display:block}.strategy-toc{position:static;max-height:210px;margin-bottom:20px}.strategy-hero{padding-top:35px}}
 @media(max-width:480px){.rm-demo-grid{grid-template-columns:1fr}.rm-demo-card{min-height:155px}.rm-project-intro{padding-top:24px}.rm-project-heading h2{font-size:27px}.rm-site-footer{justify-content:center}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Private account login: the project cards and roadmap are visible only after session verification. */
+.standalone-roadmap .rm-project-intro{display:none}
+.standalone-roadmap.rm-authenticated .rm-project-intro{display:block}
+.rm-login-outer{max-width:1250px;margin:clamp(30px,7vw,95px) auto 100px;padding:0 clamp(20px,4vw,50px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:18px}
+.rm-login-panel,.rm-login-side{background:#10293d;border:1px solid #36576c;border-radius:23px;padding:clamp(28px,4.8vw,63px)}
+.rm-login-panel{color:#ecf8ff}
+.rm-login-panel .rm-login-overline{font-size:10px;letter-spacing:.18em;font-weight:900;color:#bdf45c}
+.rm-login-panel h1{font-size:clamp(31px,4vw,53px);line-height:1.1;letter-spacing:-.06em;margin:17px 0}
+.rm-login-panel>p{color:#b2cbdc;font-size:14px;line-height:1.7;max-width:480px}
+.rm-login-panel form{max-width:450px;margin:27px 0}
+.rm-login-panel .rm-field{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;color:#bbd4e4;font-size:12px;font-weight:850}
+.rm-login-panel .rm-field input{min-height:48px;background:#07192b;color:#fff;border:1px solid #466276;border-radius:10px;padding:12px 15px;font-size:15px;min-width:0}
+.rm-login-panel .rm-field input:focus-visible{outline:2px solid #bdf45c;outline-offset:2px}
+.rm-login-panel .rm-account-form .btn{background:#bdf45c;color:#0b2830;border:0;border-radius:10px;min-height:47px;font-weight:900;cursor:pointer;padding:12px 25px}
+.rm-login-panel .rm-login-help{font-size:12px;color:#8ca9be}
+.rm-login-panel .rm-login-legacy{margin-top:25px;border-top:1px solid #375268;padding-top:15px;color:#c4d4e1;font-size:12px}
+.rm-login-panel summary{cursor:pointer;font-weight:750}
+.rm-login-side{display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;background:radial-gradient(circle at 95% 14%,#557e6c55,transparent 42%),linear-gradient(135deg,#1c4650,#11263d)}
+.rm-login-side:after{content:"";position:absolute;width:380px;height:380px;border:2px solid #bdf45c44;border-radius:50%;bottom:-160px;right:-150px;box-shadow:0 0 0 55px #bdf45c0c,0 0 0 110px #bdf45c08}
+.rm-login-side>span{color:#bdf45c;font-weight:950;letter-spacing:.25em;font-size:11px}
+.rm-login-side>strong{font-size:clamp(29px,3.8vw,49px);line-height:1.14;letter-spacing:-.05em;color:#effbff;position:relative;z-index:1}
+.rm-login-side>p{font-size:12px;color:#d1dfeb;position:relative;z-index:1}
+@media(max-width:720px){.rm-login-outer{grid-template-columns:1fr}.rm-login-side{min-height:190px;padding:27px;gap:20px}.rm-login-panel{padding:28px}}
