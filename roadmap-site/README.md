@@ -1,12 +1,12 @@
 # TENNILO – gemeinsame Roadmap auf roadmap.tennilo.de
 
-Eigenständiges Roadmap-Portal mit **persönlichem Login statt ALL-INKL-Verzeichnisschutz**, für TENNILO Tournament, Score, Umpire, Business und Plattformthemen.
+Geschütztes Roadmap-Portal mit persönlichem Login für TENNILO Tournament, Score, Umpire, Business, Plattformthemen **und die eigenständige Wer-muss-Mini-App-Familie**. Mini-Apps gehören nicht zur TENNILO-Marke; nur die Planung läuft gemeinsam.
 
 ## Bedienkonzept
 
 1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
-2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 80 initialen Themen (darunter 23 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
-3. `strategie.php` zeigt alle 17 Kapitel der Gesamtplanung – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 96 initialen Themen (darunter 23 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+3. `strategie.php` zeigt alle 18 Kapitel der Gesamtplanung (17 TENNILO-Kapitel plus eigenständige Mini-App-Ergänzung) – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
 4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
 5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
 
@@ -68,7 +68,7 @@ Auf `Run workflow → main → Run workflow` klicken. Push auf `main` registrier
 
 Der manuelle Workflow:
 - übernimmt die **Original-TENNILO-Logos** aus dem Website-Repository;
-- kombiniert 33 bisherige Tournament-Themen und 47 Produkt-/Plattform-Ergänzungen (einschließlich 23 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
+- kombiniert 33 bisherige Tournament-Themen und 63 zusätzliche Aufgaben einschließlich 16 eigenständiger Mini-App-Themen (einschließlich 23 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
 - generiert die geschützte Seed-PHP-Datei und die initiale Admin-Konfiguration;
 - prüft Syntax, bestehende Roadmap-Tests und HTTPS;
 - überträgt nur die **17** ausdrücklich freigegebenen Dateien per FTPS, ohne zu löschen, ohne `.htaccess` zu ersetzen und ohne die Tournament-App zu verändern;
@@ -120,13 +120,39 @@ Die neue Lösch-/Wiederherstellungslogik wird vor dem manuellen Upload mit `test
 
 ## Entwicklung nach Bereichen für alle Projekte
 
-Das Board bietet jetzt dieselbe Bereichsübersicht für alle fünf Arbeitsstränge:
+Das Board bietet jetzt dieselbe Bereichsübersicht für alle sechs Arbeitsstränge:
 - **Tournament:** Turnierformate, Turnierbetrieb, Live & Anzeige, Produkt & Bedienung, Plattform & Zugang, Tests & Qualität.
 - **Score:** Web-Demo, iPhone & Apple Watch, Tests & Qualität, Beta & Veröffentlichung, weitere Sportarten, Plattform & Schnittstellen.
 - **Umpire:** Bedienkonzept, Scorecard & Zählung, Regeln & Zeitkontrollen, Anzeigen & Scoreboards, Schnittstellen.
 - **Business:** Angebot & Zielgruppen, Plattform & Buchungen, Pilotpartner & Tests.
 - **Übergreifend:** Daten & Matchmodell, Konten & Sicherheit, Sprachen & Standards, Integrationen.
 
-Der Filter **Alle Projekte** zeigt die fünf Produktbereiche mit der Anzahl der Roadmap-Themen an. Nach Auswahl eines Produktes erscheinen dessen einzelne Entwicklungsbereiche als filterbare Kacheln; der Kanban-Status wird davon unabhängig geführt. Die vorhandenen Tournament-Fachkategorien werden direkt abgebildet, für die übrigen Produkte liegt die Zuordnung im offiziellen Seed-Feld `workstream`. Neue Ideen ohne explizite Zuordnung erscheinen unter **Weitere Themen** und können von der Projektleitung im Bearbeitungsdialog kategorisiert werden. Die geschützte Server-Datenbank (Konten, Einladungen, Kommentare, Statusbearbeitungen und Papierkorb) bleibt erhalten.
+Der Filter **Alle Projekte** zeigt die sechs Produktbereiche mit der Anzahl der Roadmap-Themen an. Nach Auswahl eines Produktes erscheinen dessen einzelne Entwicklungsbereiche als filterbare Kacheln; der Kanban-Status wird davon unabhängig geführt. Die vorhandenen Tournament-Fachkategorien werden direkt abgebildet, für die übrigen Produkte liegt die Zuordnung im offiziellen Seed-Feld `workstream`. Neue Ideen ohne explizite Zuordnung erscheinen unter **Weitere Themen** und können von der Projektleitung im Bearbeitungsdialog kategorisiert werden. Die geschützte Server-Datenbank (Konten, Einladungen, Kommentare, Statusbearbeitungen und Papierkorb) bleibt erhalten.
 
 Tests: `node --test roadmap-site/product-sections.test.mjs` ist sowohl in der manuellen Subdomain-Auslieferung als auch im unabhängigen Code-Prüfworkflow aktiviert. Ein Deployment erfolgt weiterhin ausschließlich manuell.
+
+## Unabhängige Wer-muss-Mini-Apps – eigenes Branding
+
+Die Roadmap enthält nun **16 Aufgaben** für die unabhängige Mini-App-Werkstatt. Für jede der sechs Apps werden **Browser-Prototyp** und **native iPhone-/Android-App** getrennt betrachtet, ohne einen Browser-Prototyp als Store-App zu bezeichnen:
+
+1. Wer muss?! (Flutter-Grundgerüst in Entwicklung)
+2. Punktlandung!
+3. Fingerchaos
+4. Nicht kleckern!
+5. Nur noch einmal!
+6. Völlig daneben!
+
+Hinzu kommen gemeinsame Browser-Werkstatt, DE/EN, unverbindliche Preis-/Bundleidee (Einzelpreis 1,99 €, Bundle 7,99 €) und der getrennte App-Ideenpool. Die Idee „TENNILO Umpire“ aus dem Pool bleibt ausschließlich im bestehenden TENNILO-Bereich, nicht als Dublette in den Mini-Apps.
+
+**Quellen:**
+- https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit
+- https://docs.google.com/document/d/1DL2-1gqF3syUkLWOqrCJ4p6_3H4E1MeSH3GFGXQMZPw/edit
+- https://github.com/tennis-schiri/wer-muss-app
+
+Die Roadmap benutzt die **freigegebenen Original-Icons WM04b, PL05, FC05, NK05, NE05 und VD05** aus dem Wer-muss-Repository. Der manuelle Roadmap-Workflow checkt das **öffentliche** Repository separat aus und übernimmt das Logo WM04b-SVG sowie die fünf WebP-Icons. Die Farben stammen aus der Wer-muss-Designfamilie: Nachtblau #111224, Zitronengelb #f5f36d, Lavendel #b6a5ff, Mint #71e6c8, Koralle #ff9288, Eisblau #85b9ff.
+
+Die tatsächliche veröffentlichte Browser-Demo-Ziel-URL ist **nicht durch die GitHub-Quelldateien verifiziert**. Deshalb verlinkt die Roadmap-Startseite zunächst auf das GitHub-Demo-Verzeichnis und behauptet keinen erfolgreichen Website-Upload. Manuelle Wer-muss-Uploads laufen weiterhin separat über https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-test.yml.
+
+Die Projekt-Übersicht zeigt unter `Alle Projekte` auch **Wer muss?! & Co.** mit acht farbigen Themenbereichen; App-Karten und Listen erhalten die zum jeweiligen Original-Icon passende Akzentfarbe. Die Editier-, Kommentar- und Löschfunktion samt serverseitiger Authentifizierung bleibt unverändert. Die gemeinsame Roadmap kann nun maximal 250 offizielle Seeds enthalten (bisher 100), damit weitere App-Ideen hinzukommen können, ohne bestehende Einträge zu entfernen.
+
+**Täglicher GitHub-Abgleich:** Der Workflow `roadmap-site/daily-review.mjs` bezieht künftig auch `tennis-schiri/wer-muss-app` ein. Er protokolliert nur beobachtbare Codeänderungen und führt keine automatische Statusfreigabe und **keinen FTP-Live-Upload** durch. Die Roadmap bleibt nur über den ausdrücklich manuellen Upload auf der Subdomain veröffentlichbar.
