@@ -36,6 +36,11 @@ vm.runInNewContext(safeScript+`
   };
 `,sandbox,{filename:'roadmap.js'});
 const ui=sandbox.__sections;
+// HTML-Sonderzeichen werden von der Website aus Sicherheitsgründen maskiert.
+// Der Test prüft die tatsächliche HTML-Ausgabe, nicht den unmaskierten Produktnamen.
+const htmlEscape=value=>String(value).replace(/[&<>"']/g,char=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[char]));
 
 test('Alle Projektfamilien einschließlich unabhängiger Mini-Apps haben eigene Entwicklungsbereiche',()=>{
   assert.deepEqual(Array.from(ui.PRODUCTS.map(x=>x[0])),['all','tournament','score','umpire','business','platform','miniapps']);
@@ -64,7 +69,7 @@ test('Die Gesamtübersicht zeigt alle Projekte mit den echten Themenzahlen',()=>
   const html=ui.overview();
   for(const [product,label] of ui.PRODUCTS.slice(1)){
     assert.match(html,new RegExp('data-product="'+product+'"'));
-    assert.ok(html.includes(label),label);
+    assert.ok(html.includes(htmlEscape(label)),label);
   }
 });
 
@@ -74,7 +79,7 @@ test('Für jedes Projekt sind Bereichsschaltflächen und Statusfilter verfügbar
     ui.setProduct(product);
     const ownItems=items.filter(x=>ui.productOf(x)===product);
     const html=ui.overview();
-    assert.ok(html.includes(label+': Entwicklung nach Bereichen'),label);
+    assert.ok(html.includes(htmlEscape(label)+': Entwicklung nach Bereichen'),label);
     assert.ok(html.includes('data-action="stream"'),product);
     assert.equal(ui.filtered().length,ownItems.length,product);
     for(const [stream] of ui.PRODUCT_STREAMS[product]){
