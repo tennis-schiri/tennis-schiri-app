@@ -121,3 +121,20 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 .rm-login-side>strong{font-size:clamp(29px,3.8vw,49px);line-height:1.14;letter-spacing:-.05em;color:#effbff;position:relative;z-index:1}
 .rm-login-side>p{font-size:12px;color:#d1dfeb;position:relative;z-index:1}
 @media(max-width:720px){.rm-login-outer{grid-template-columns:1fr}.rm-login-side{min-height:190px;padding:27px;gap:20px}.rm-login-panel{padding:28px}}
+
+
+/* Score: Entwicklungsbereiche getrennt von allgemeinen Kanban-Status anzeigen */
+.rm-score-overview{max-width:1560px;margin:20px auto 0;padding:22px clamp(18px,3.2vw,36px);border:1px solid #315266;border-radius:19px;background:linear-gradient(145deg,#123146,#102133)}
+.rm-score-overview-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.rm-score-overview-heading h2{margin:0 0 7px;color:#f2fcff;font-size:clamp(18px,2vw,24px);letter-spacing:-.025em}
+.rm-score-overview-heading p{margin:0;color:#a8c5d5;max-width:700px;font-size:13px;line-height:1.5}
+.rm-score-overview-heading a{color:#bdf45c;font-size:12px;font-weight:750;text-underline-offset:3px}
+.rm-score-streams{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.rm-score-streams button{appearance:none;cursor:pointer;text-align:left;border:1px solid #355568;border-radius:12px;background:#0c2030;color:#e7f2fa;padding:14px 13px;display:flex;flex-direction:column;gap:8px;min-height:77px}
+.rm-score-streams button strong{font-size:12px;font-weight:850;line-height:1.35}
+.rm-score-streams button span{color:#97b6cb;font-size:11px}
+.rm-score-streams button.active{border-color:#bdf45c;background:#1d3b39;box-shadow:inset 0 0 0 1px #bdf45c55}
+.rm-score-streams button.active span{color:#d8edc2}
+.rm-score-streams button:focus-visible{outline:2px solid #bdf45c;outline-offset:3px}
+@media(max-width:1000px){.rm-score-streams{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.rm-score-overview{margin:14px 14px 0;padding:18px 14px}.rm-score-streams{grid-template-columns:repeat(2,minmax(0,1fr))}}
