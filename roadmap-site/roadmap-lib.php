@@ -11,7 +11,8 @@ const RM_PRIORITIES = ['low', 'medium', 'high'];
 const RM_WORKSTREAMS = ['formats','operations','live','ux','access','quality',
     'demo','native','test','release','sports','platform','concept','scoring',
     'rules','display','integration','offers','booking','pilot','data','security',
-    'standards','other'];
+    'standards','studio','wer-muss','punktlandung','fingerchaos','nicht-kleckern',
+    'nur-noch-einmal','voellig-daneben','ideas','other'];
 // Ausschließlich Detailansicht, niemals Bestandteil der kompakten Karten.
 const RM_DETAIL_FIELDS = ['benefit'=>900, 'scope'=>1400, 'currentState'=>1400,
     'openPoints'=>1400, 'doneWhen'=>1000];
@@ -34,7 +35,7 @@ function rm_references(mixed $raw): array {
 const RM_CATEGORIES = [
     'Turnierformate', 'Turnierbetrieb', 'Live & Anzeige',
     'Plattform & Zugang', 'Produkt & Bedienung', 'Tests & Qualität',
-    'TENNILO Score', 'TENNILO Umpire', 'TENNILO Business', 'TENNILO Plattform'
+    'TENNILO Score', 'TENNILO Umpire', 'TENNILO Business', 'TENNILO Plattform', 'Weitere Apps'
 ];
 
 function rm_error(int $code, string $message): never {
@@ -69,7 +70,7 @@ function rm_seed(string $file): array {
     $raw = file_get_contents($file);
     $data = $raw === false ? null : json_decode($raw, true);
     if (!is_array($data) || ($data['schemaVersion'] ?? null) !== 1 ||
-        !is_array($data['items'] ?? null) || count($data['items']) > 100) {
+        !is_array($data['items'] ?? null) || count($data['items']) > 250) {
         rm_error(503, 'Roadmap-Daten sind ungültig.');
     }
     $seen = [];
