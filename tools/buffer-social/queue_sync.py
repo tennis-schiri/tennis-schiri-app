@@ -24,17 +24,21 @@ def due_utc(local):
     return d.astimezone(dt.timezone.utc)
 
 
-def build_post(channel_id, due, media):
+def build_post(channel_id, due, media_urls, kind='story', caption=''):
     # Matches the tested createPost mutation, including Instagram Story metadata.
+    if kind not in {'post','story'}: raise ValueError('Ungültiger Instagram-Typ')
+    if not isinstance(media_urls, list) or not media_urls: raise ValueError('Kein Bildmaterial')
+    if kind == 'story' and len(media_urls) != 1: raise ValueError('Story erwartet ein einzelnes Bild')
+    assets = '[' + ','.join('{ image: { url: '+qstr(u)+' } }' for u in media_urls) + ']'
     stamp = due.isoformat(timespec="milliseconds").replace("+00:00","Z")
     return (
         "mutation { createPost(input: {"
-        ' text: "",'
+        f" text: {qstr(caption if kind == 'post' else '')},"
         f" channelId: {qstr(channel_id)},"
         " schedulingType: automatic, mode: customScheduled,"
         f" dueAt: {qstr(stamp)},"
-        f" assets: [{{ image: {{ url: {qstr(media)} }} }}],"
-        " metadata: {instagram: {type: story, shouldShareToFeed: false}}"
+        f" assets: {assets},"
+        f" metadata: {{instagram: {{type: {kind}, shouldShareToFeed: {'true' if kind == 'post' else 'false'} }}}}"
         "}) { ... on PostActionSuccess { post { id dueAt text } } "
         "... on MutationError { message } } }"
     )
@@ -42,7 +46,7 @@ def build_post(channel_id, due, media):
 
 def main():
     manifest = json.loads(Path(__file__).with_name("stories-2026.json").read_text(encoding="utf-8"))
-    stories = manifest["stories"]
+    stories = manifest["stories"] + manifest.get("extra_posts", [])
     now = dt.datetime.now(dt.timezone.utc)
     eligible = [x for x in stories
                 if x.get("enabled") is True and x.get("source_disabled") is True
@@ -96,8 +100,9 @@ def main():
                 print(f"  VORSCHAU {post['date_berlin']}: {post['media_url']}")
                 continue
             try:
-                verify_media_url(post["media_url"])
-                response = gql(build_post(channel["id"],date,post["media_url"]))
+                images = post.get("media_urls") or [post["media_url"]]
+                for img in images: verify_media_url(img)
+                response = gql(build_post(channel["id"],date,images,post.get("kind","story"),post.get("caption","")))
                 result = response.get("createPost") or {}
                 if result.get("message"):
                     raise RuntimeError(result["message"])
