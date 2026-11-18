@@ -22,7 +22,7 @@ jobs:
       - run: echo 'Workflow ist eingerichtet. Kein automatischer Live-Upload.'
 
   deploy:
-    name: Geschützte Roadmap per FTPS veröffentlichen
+    name: Passwortgeschützte Roadmap per FTPS veröffentlichen
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -56,6 +56,7 @@ jobs:
           cp roadmap-site/index.php roadmap-site/dist/index.php
           cp roadmap-site/strategie.php roadmap-site/dist/strategie.php
           cp roadmap-site/roadmap-api.php roadmap-site/dist/roadmap-api.php
+          cp roadmap-site/roadmap-session-guard.php roadmap-site/dist/roadmap-session-guard.php
           cp roadmap-site/roadmap-lib.php roadmap-site/dist/roadmap-lib.php
           cp roadmap-site/roadmap.js roadmap-site/dist/assets/roadmap.js
           cp roadmap-site/extra.css roadmap-site/dist/assets/extra.css
@@ -67,6 +68,14 @@ jobs:
           done
           node roadmap-site/regenerate-seed.mjs
 
+      - name: Initialen persönlichen Administrator-Zugang vorbereiten
+        shell: bash
+        env:
+          ROADMAP_ADMIN_USERNAME: ${{ secrets.ROADMAP_ADMIN_USERNAME }}
+          ROADMAP_ADMIN_PASSWORD: ${{ secrets.ROADMAP_ADMIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          php roadmap-site/make-admin-config.php
       - name: JavaScript, PHP und Roadmap-Inhalte prüfen
         shell: bash
         run: |
@@ -82,16 +91,15 @@ jobs:
           grep -Fq 'Tischtennis' roadmap-site/dist/strategie.php
           test ! -f roadmap-site/dist/roadmap-seed.json
 
-      - name: Passwortschutz der Subdomain VOR Upload prüfen
+      - name: HTTPS der Roadmap-Subdomain prüfen
         shell: bash
         run: |
           set -euo pipefail
           status="$(curl --silent --show-error --max-time 20 --output /dev/null --write-out '%{http_code}' https://roadmap.tennilo.de/)"
-          if [[ "$status" != '401' ]]; then
-            echo "::error::Upload verweigert. roadmap.tennilo.de antwortet ohne Anmeldung mit HTTP $status statt 401. Bitte zuerst den ALL-INKL-Verzeichnisschutz für die gesamte Subdomain aktivieren."
-            exit 1
-          fi
-          echo 'HTTP-Basic-Verzeichnisschutz bestätigt.'
+          case "$status" in
+            200|301|302|303|307|308|401|403|404) echo "HTTPS erreichbar: HTTP $status";;
+            *) echo "::error::HTTPS der Roadmap-Subdomain nicht erreichbar (HTTP $status)."; exit 1;;
+          esac
 
       - name: Nur Roadmap-Dateien per FTPS hochladen
         shell: bash
@@ -109,7 +117,7 @@ jobs:
           # Kein .htaccess-Upload, keine Löschbefehle und kein Zugang zur Turnier-App.
           files=(
             index.html index.php strategie.php
-            roadmap-api.php roadmap-lib.php roadmap-seed.php
+            roadmap-api.php roadmap-lib.php roadmap-session-guard.php roadmap-seed.php roadmap-initial-admin.php
             assets/styles.css assets/roadmap.css assets/roadmap.js assets/extra.css
             assets/tennilo-logo-dark.png
             assets/tennilo-tournament-cutout.png
@@ -125,4 +133,20 @@ jobs:
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
           done
-          echo 'TENNILO Roadmap hochgeladen (15 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
+          echo 'TENNILO Roadmap hochgeladen (17 Dateien). Persönlichen Login jetzt prüfen.'
+
+      - name: Kontrollieren, dass ohne Login keine Roadmap-Daten ausgeliefert werden
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --max-time 30 \
+            --header 'Accept: application/json' \
+            https://roadmap.tennilo.de/roadmap-api.php > /tmp/tennilo-roadmap-guest.json
+          jq -e '.ok == true and .session.role == "guest" and (.items | length) == 0 and (.members | length) == 0' \
+            /tmp/tennilo-roadmap-guest.json >/dev/null ||
+              { echo '::error::Roadmap-API hat den unangemeldeten Zugriff nicht korrekt gesperrt.'; exit 1; }
+          strategy_status="$(curl --silent --show-error --max-time 20 --output /dev/null --write-out '%{http_code}' https://roadmap.tennilo.de/strategie.php)"
+          [[ "$strategy_status" == '303' ]] || { echo "::error::Vollständige Strategie ist ohne Login zugreifbar (HTTP $strategy_status)."; exit 1; }
+          phpseed_status="$(curl --silent --show-error --max-time 20 --output /dev/null --write-out '%{http_code}' https://roadmap.tennilo.de/roadmap-seed.php)"
+          [[ "$phpseed_status" == '404' ]] || { echo "::error::Roadmap-Seed nicht geschützt (HTTP $phpseed_status)."; exit 1; }
+          echo 'Gastschutz, Login-Weiterleitung und Seed-Schutz bestätigt.'
