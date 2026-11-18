@@ -16,7 +16,7 @@ let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],offline:false};
 const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"]];
 const SCORE_STREAMS=[["demo","Web-Demo"],["native","iPhone & Apple Watch"],["test","Tests & Qualität"],["release","Beta & Veröffentlichung"],["sports","Weitere Sportarten"],["platform","Plattform & Schnittstellen"]];
-const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/issues?q=is%3Aissue+%22TENNILO+Roadmap+Tagesabgleich%22";
+const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/issues/3";
 function scoreStream(item){return SCORE_STREAMS.some(([k])=>k===item.workstream)?item.workstream:"native";}
 function scoreStreamLabel(item){return SCORE_STREAMS.find(([k])=>k===scoreStream(item))?.[1]||"Entwicklung";}
 function productOf(item){
