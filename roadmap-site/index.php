@@ -26,8 +26,8 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=2">
   <link rel="stylesheet" href="./assets/styles.css?v=1">
   <link rel="stylesheet" href="./assets/roadmap.css?v=1">
-  <link rel="stylesheet" href="./assets/extra.css?v=2">
-  <script type="module" src="./assets/roadmap.js?v=2"></script>
+  <link rel="stylesheet" href="./assets/extra.css?v=3">
+  <script type="module" src="./assets/roadmap.js?v=3"></script>
 </head>
 <body class="roadmap-body standalone-roadmap">
   <header class="rm-site-header">
