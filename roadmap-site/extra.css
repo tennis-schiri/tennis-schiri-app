@@ -18,7 +18,7 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 .rm-kicker{font-weight:900;letter-spacing:.16em;color:var(--rm-mint);font-size:10px}
 .rm-project-heading h2{font-size:clamp(25px,3.6vw,43px);letter-spacing:-.052em;color:#f5f8ff;margin:9px 0 0}
 .rm-project-heading p{max-width:510px;font-size:13px;line-height:1.6;color:#9cb6ca;margin:0}
-.rm-demo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rm-demo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
 .rm-demo-card{min-width:0;padding:21px 20px;border:1px solid #304b61;border-radius:17px;background:linear-gradient(155deg,#152b3c,#0b1d2e);display:flex;flex-direction:column;min-height:204px;gap:12px}
 .rm-demo-card.demo-tournament{border-top:3px solid #c1fa67}
 .rm-demo-card.demo-score{border-top:3px solid #73d9f4}
