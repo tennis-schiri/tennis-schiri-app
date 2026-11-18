@@ -1,4 +1,4 @@
-// Project Roadmap v1.2 – TENNILO and independently branded mini-apps.
+// Project Roadmap v1.3 – TENNILO + JUXILO umbrella brand for six mini-apps.
 const root=document.getElementById("roadmap-app");
 const modalRoot=document.getElementById("roadmap-modal");
 const toastRoot=document.getElementById("roadmap-toast");
@@ -14,7 +14,7 @@ const PRIORITY={high:"Hoch",medium:"Mittel",low:"Niedrig"};
 const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO Business","TENNILO Plattform","Weitere Apps"];
 let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],deletedItems:[],offline:false};
-const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"],["miniapps","Wer muss?! & Co."]];
+const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"],["miniapps","JUXILO"]];
 const PRODUCT_STREAMS={
   tournament:[["formats","Turnierformate"],["operations","Turnierbetrieb"],["live","Live & Anzeige"],
     ["ux","Produkt & Bedienung"],["access","Plattform & Zugang"],["quality","Tests & Qualität"]],
@@ -25,7 +25,7 @@ const PRODUCT_STREAMS={
   business:[["offers","Angebot & Zielgruppen"],["booking","Plattform & Buchungen"],["pilot","Pilotpartner & Tests"]],
   platform:[["data","Daten & Matchmodell"],["security","Konten & Sicherheit"],
     ["standards","Sprachen & Standards"],["integration","Integrationen"]],
-  miniapps:[["studio","App-Werkstatt"],["wer-muss","Wer muss?!"],["punktlandung","Punktlandung!"],
+  miniapps:[["studio","JUXILO & App-Werkstatt"],["wer-muss","Wer muss?!"],["punktlandung","Punktlandung!"],
     ["fingerchaos","Fingerchaos"],["nicht-kleckern","Nicht kleckern!"],
     ["nur-noch-einmal","Nur noch einmal!"],["voellig-daneben","Völlig daneben!"],
     ["ideas","Weitere Ideen"]]
@@ -36,9 +36,9 @@ const PRODUCT_OVERVIEWS={
   umpire:"Bedienkonzept, digitale Scorecard, Regelkontrollen und externe Anzeigen getrennt planen.",
   business:"Angebote, mögliche Buchungsfunktionen und spätere Pilotpartner unterscheiden.",
   platform:"Gemeinsame Matchdaten, Nutzerkonten und Produktstandards projektübergreifend verfolgen.",
-  miniapps:"Eigenständige Spaß-Apps außerhalb von TENNILO: Browser-Demos, native Apps und weitere Ideen. Farben und Original-Icons der Mini-App-Werkstatt."
+  miniapps:"JUXILO ist die Dachmarke für sechs eigenständige Spaß-Apps – darunter Wer muss?!. Browser-Prototypen, native Apps und weitere Ideen werden getrennt geführt; die Wer-muss-Testzentrale bleibt vorerst bestehen."
 };
-const MINI_ICONS={"studio":"wm04b-logo.svg","wer-muss":"wm04b-logo.svg",
+const MINI_ICONS={"studio":"juxilo-jx04-j-icon.svg","wer-muss":"wm04b-logo.svg",
   "punktlandung":"pl05-icon.webp","fingerchaos":"fc05-icon.webp",
   "nicht-kleckern":"nk05-icon.webp","nur-noch-einmal":"ne05-icon.webp",
   "voellig-daneben":"vd05-icon.webp"};
@@ -118,19 +118,21 @@ function summary(){
 function productOverview(){
   if(filterProduct==="all"){
     return '<section class="rm-product-overview" aria-label="Alle Projektbereiche">'+
-      '<div class="rm-product-overview-heading"><div><h2>Entwicklung nach Projekten</h2><p>Alle fünf Arbeitsbereiche in einer Roadmap. Wähle ein Projekt, um seine Entwicklungsbereiche, Fortschritte und nächsten Schritte zu sehen.</p></div>'+
+      '<div class="rm-product-overview-heading"><div><h2>Entwicklung nach Projekten</h2><p>TENNILO und JUXILO gemeinsam geplant, aber als eigenständige Marken geführt. Wähle ein Produkt oder eine Appfamilie für ihre Entwicklungsbereiche.</p></div>'+
       '<a href="'+ROADMAP_REVIEW_URL+'" target="_blank" rel="noopener noreferrer">Täglichen GitHub-Abgleich ansehen</a></div>'+
       '<div class="rm-product-streams rm-project-streams">'+PRODUCTS.filter(([id])=>id!=="all").map(([id,label])=>{
         const items=state.items.filter(x=>productOf(x)===id);
         const active=items.filter(x=>x.status==="progress"||x.status==="test").length;
-        return '<button type="button" class="rm-project-card rm-project-'+esc(id)+'" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+(id==="miniapps"?miniIcon("wer-muss"):'')+
+        return '<button type="button" class="rm-project-card rm-project-'+esc(id)+'" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+(id==="miniapps"?'<img class="rm-mini-icon rm-juxilo-project-icon" src="./assets/juxilo-jx04-j-icon.svg" alt="" loading="lazy">' :'')+
           '<strong>'+esc(label)+'</strong><span>'+items.length+' Themen · '+active+' in Arbeit/Prüfung</span></button>';
       }).join('')+'</div></section>';
   }
   const product=filterProduct,items=state.items.filter(x=>productOf(x)===product);
   const name=PRODUCTS.find(([id])=>id===product)?.[1]||product;
   return '<section class="rm-product-overview'+(product==="miniapps"?' rm-mini-overview':'')+'" aria-label="'+esc(name)+'-Entwicklungsbereiche">'+
-    '<div class="rm-product-overview-heading"><div><h2>'+esc(name)+': Entwicklung nach Bereichen</h2><p>'+
+    '<div class="rm-product-overview-heading"><div>'+
+      (product==="miniapps"?'<div class="rm-juxilo-brand"><img src="./assets/juxilo-jx04-logo-white.svg" alt="JUXILO – JX04" loading="lazy" decoding="async"><span>Dachmarke für sechs Spaß-Apps</span></div>':'')+
+      '<h2>'+esc(name)+': Entwicklung nach Bereichen</h2><p>'+
       esc(PRODUCT_OVERVIEWS[product]||"Entwicklung nach Themenbereichen")+'</p></div>'+
     '<a href="'+ROADMAP_REVIEW_URL+'" target="_blank" rel="noopener noreferrer">Täglichen GitHub-Abgleich ansehen</a></div>'+
     '<div class="rm-product-streams'+(product==="miniapps"?' rm-mini-streams':'')+'">'+
@@ -213,7 +215,7 @@ function renderLogin(){
     '<input name="code" type="password" autocomplete="off" pattern="[a-f0-9]{48}" minlength="48" maxlength="48" required></label>'+
     '<button class="btn subtle" type="submit">Einmalig mit Code anmelden</button></form></details>'+
     '</section><aside class="rm-login-side" aria-hidden="true"><span>TENNILO</span>'+
-    '<strong>Gemeinsam<br>weiterentwickeln.</strong><p>TENNILO · Wer muss?! &amp; Co.</p></aside></main>';
+    '<strong>Gemeinsam<br>weiterentwickeln.</strong><p>TENNILO · JUXILO</p></aside></main>';
 }
 function render(){
   if(state.session?.role==="guest"){renderLogin();return;}
@@ -231,7 +233,7 @@ function render(){
       '<button class="btn ghost small" data-action="trash">Papierkorb ('+(state.deletedItems?.length||0)+')</button>':'')+'</div></div>'+
     '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / GEMEINSAME PRODUKT-ROADMAP</div>'+
     '<h1>Alle Projekte. <em>Eine Roadmap.</em></h1>'+
-    '<p>TENNILO Tournament, Score, Umpire und Business sowie eigenständige Mini-Apps wie Wer muss?! – getrennte Projekte, gemeinsamer Entwicklungsüberblick.</p>'+
+    '<p>TENNILO mit Tournament, Score, Umpire und Business – und JUXILO als eigenständige Dachmarke für sechs Spaß-Apps einschließlich Wer muss?!. Eine gemeinsame Roadmap, zwei Markenwelten.</p>'+
     '<div class="rm-hero-actions">'+(canComment()?
       '<button class="btn rm-lime" data-action="idea">+ Neue Idee einreichen</button>':
       '<button class="btn rm-lime" data-action="login">Anmelden und mitmachen</button>')+
