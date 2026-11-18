@@ -14,13 +14,20 @@ if (strlen($password) < 16 || strlen($password) > 72 ||
     fwrite(STDERR, "ROADMAP_ADMIN_PASSWORD muss 16–72 Bytes lang sein, ohne Steuerzeichen.\n");
     exit(1);
 }
+$reset = getenv('ROADMAP_ADMIN_RESET') === 'true';
+$resetId = (string)(getenv('ROADMAP_ADMIN_RESET_ID') ?: '');
+if ($reset && !preg_match('/^[0-9]{1,25}$/D', $resetId)) {
+    fwrite(STDERR, "Manueller Admin-Reset ohne gültige Workflow-ID verweigert.\n");
+    exit(1);
+}
 $hash = password_hash($password, PASSWORD_DEFAULT);
 if ($hash === false) {
     fwrite(STDERR, "Password hashing failed.\n"); exit(1);
 }
 $src = "<?php\ndeclare(strict_types=1);\n".
     "if (!defined('TENNILO_ROADMAP_INTERNAL_ADMIN')) { http_response_code(404); exit; }\n".
-    "return ".var_export(['username'=>$username, 'passwordHash'=>$hash], true).";\n";
+    "return ".var_export(['username'=>$username, 'passwordHash'=>$hash,
+        'resetVersion'=>$reset ? $resetId : null], true).";\n";
 $target = __DIR__.'/dist/roadmap-initial-admin.php';
 if (!is_dir(dirname($target)) && !mkdir(dirname($target), 0700, true)) exit(1);
 if (file_put_contents($target, $src, LOCK_EX) === false) exit(1);
