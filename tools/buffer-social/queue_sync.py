@@ -48,6 +48,7 @@ def main():
     manifest = json.loads(Path(__file__).with_name("stories-2026.json").read_text(encoding="utf-8"))
     stories = manifest["stories"] + manifest.get("extra_posts", [])
     now = dt.datetime.now(dt.timezone.utc)
+    print(f'BUFFER-QUEUE-LAUF UTC: {now.isoformat(timespec="seconds")}')
     eligible = [x for x in stories
                 if x.get("enabled") is True and x.get("source_disabled") is True
                 and due_utc(x["date_berlin"]) >= now + dt.timedelta(minutes=35)]
