@@ -63,4 +63,15 @@ $fresh=rm_merge([],[$canonical],['score-detail-21']);
 assertRoadmap(count(rm_active_items($fresh))===1,'Neues Portal ohne zweite Tischtennis-Aufgabe');
 assertRoadmap(count(rm_trashed_items($fresh))===0,'Stille Stilllegung nicht als Nutzer-Löschung geführt');
 
+
+// Die Zuordnung neuer Umpire-/Business-Ideen zu Entwicklungsbereichen ist
+// ausschließlich der Projektleitung vorbehalten und serverseitig geprüft.
+$streamState=rm_merge([],[$canonical]);
+$changed=rm_update_item($streamState,'score-tabletennis',['workstream'=>'sports'],'2026-11-18');
+assertRoadmap($changed['workstream']==='sports','Entwicklungsbereich vom Admin bearbeitbar');
+expectRoadmapError(function() use (&$streamState) {
+    rm_update_item($streamState,'score-tabletennis',['workstream'=>'beliebig'],'2026-11-18');
+},'Entwicklungsbereich');
+assertRoadmap($streamState['items'][0]['workstream']==='sports','Ungültige Zuordnung überschreibt nicht den Stand');
+
 echo "Roadmap-Portal: Löschen, Papierkorb, Wiederherstellen und Dubletten-Migration OK.\n";
