@@ -1,12 +1,10 @@
 <?php
 declare(strict_types=1);
 $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (string)($_SERVER['SERVER_PORT'] ?? '') === '443';
-$basic = strtolower((string)($_SERVER['AUTH_TYPE'] ?? '')) === 'basic' &&
-    trim((string)($_SERVER['REMOTE_USER'] ?? ($_SERVER['PHP_AUTH_USER'] ?? ''))) !== '';
-if (!$https || !$basic) {
+if (!$https) {
     http_response_code(403);
     header('Content-Type: text/plain; charset=UTF-8');
-    exit('TENNILO Roadmap erfordert HTTPS und einen aktivierten Verzeichnisschutz.');
+    exit('TENNILO Roadmap erfordert eine sichere HTTPS-Verbindung.');
 }
 header('Cache-Control: private, no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
