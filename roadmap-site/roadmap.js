@@ -66,7 +66,7 @@ function summary(){
 function controls(){
   return '<nav class="rm-product-filters" aria-label="Produkt auswählen">'+PRODUCTS.map(([id,label])=>
     '<button type="button" data-action="product" data-product="'+id+'"'+(id===filterProduct?' class="selected"':'')+' aria-pressed="'+(id===filterProduct?'true':'false')+'">'+label+'</button>').join("")+'</nav>'+
-    '<div class="rm-controls'><div class="rm-control-title"><div><h2>Entwicklungsübersicht</h2><p>Klicke einen Punkt an, um Details, Kommentare und nächste Schritte zu sehen.</p></div>'+
+    '<div class="rm-controls">'<div class="rm-control-title"><div><h2>Entwicklungsübersicht</h2><p>Klicke einen Punkt an, um Details, Kommentare und nächste Schritte zu sehen.</p></div>'+
     '<div class="rm-view-switch" role="group" aria-label="Ansicht wechseln">'+
     '<button type="button" data-action="view" data-view="board" class="'+(view==="board"?"active":"")+'">Board</button>'+
     '<button type="button" data-action="view" data-view="list" class="'+(view==="list"?"active":"")+'">Liste</button></div></div>'+
