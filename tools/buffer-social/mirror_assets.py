@@ -18,7 +18,13 @@ def main():
         raise SystemExit("usage: mirror_assets.py manifest.json public_media_dir")
     manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
     root = Path(sys.argv[2]).resolve()
-    data = manifest.get("stories") or []
+    data = list(manifest.get("stories") or [])
+    for extra in manifest.get("extra_posts") or []:
+        urls = extra.get("source_urls") or []
+        paths = extra.get("asset_paths") or []
+        if not urls or len(urls) != len(paths):
+            raise ValueError("Unvollständiges Extra-Post-Medienmanifest")
+        data.extend({"source_url": u, "asset_path": p} for u,p in zip(urls,paths))
     done = existing = 0
     for index, entry in enumerate(data, 1):
         source = entry["source_url"]
