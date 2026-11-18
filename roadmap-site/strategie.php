@@ -28,7 +28,7 @@ header("Content-Security-Policy: default-src 'self'; style-src 'self'; img-src '
 <div class="strategy-hero"><div class="eyebrow">TENNILO / STRATEGIE & PLANUNG</div>
 <h1>Die gesamte Roadmap.</h1>
 <p>Die vollständige gemeinsame Produkt-Roadmap aus dem Google-Drive-Arbeitsdokument: Tournament, Score, Umpire, Business und die übergreifende Entwicklung.</p>
-<p class="strategy-historic">Hinweis: Die Kapitel 1–10 enthalten ursprüngliche Planungsstände vom 05./06.11.2026. Die Kapitel 11–16 enthalten die übergreifende Ergänzung vom 18.11.2026. Den aktuell redaktionell gepflegten Status findest du im <a href="./index.php" style="color:#bdf45c">Roadmap-Board</a>.</p></div>
+<p class="strategy-historic">Hinweis: Die Kapitel 1–10 enthalten ursprüngliche Planungsstände vom 05./06.11.2026. Die Kapitel 11–16 enthalten die übergreifende Ergänzung vom 18.11.2026. Den aktuell redaktionell gepflegten Status findest du im <a href="./index.php">Roadmap-Board</a>.</p></div>
 <div class="strategy-layout"><aside class="strategy-toc" aria-label="Inhaltsverzeichnis"><strong>Inhalt</strong><a href="#kapitel-1">1. Vision und Positionierung</a>
 <a href="#kapitel-2">2. Ausgangslage am 05.11.2026</a>
 <a href="#kapitel-3">3. Turnierarten – priorisierte Ideen</a>
