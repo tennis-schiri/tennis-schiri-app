@@ -104,6 +104,8 @@ Später S4 – Weitere Geräte und Marktstart: Android und Wear OS, Praxistests,
 Später S5 – Tischtennis: eigene Sportart in TENNILO Score mit sportartspezifischer Zähl- und Aufschlaglogik (11-Punkte-Sätze, Zwei-Punkte-Abstand, Aufschlagwechsel, Seitenwechsel, Doppelreihenfolge), eigenen Regeln, Tests und angepasster Darstellung. Erst nach stabiler Tennisversion fachlich ausarbeiten; nicht als bloßes Design-Skin behandeln.
 
 
+Später S6 – Zusätzliche Rückschlagsportarten: Padel, Pickleball und Beach Tennis waren bereits seit 16.11.2026 als spätere TENNILO-Score-Erweiterungen dokumentiert und erhalten eigene Roadmap-Aufgaben. Gemeinsam mit Tischtennis sollen sie erst nach einer stabilen Tennisversion fachlich ausgearbeitet werden, mit eigenen Regelmodulen, Aufschlag-/Zähllogiken und Gerätetests; kein zugesagter Entwicklungs- oder Veröffentlichungstermin.
+
 13. TENNILO Tournament – Fortführung
 Die Turnier-Roadmap aus Abschnitten 1–10 bleibt bestehen: zunächst die Kernformate Schleifchenturnier, feste Doppelpaare und One Point Cup, anschließend weitere Formate nach Nutzen und Praxistests. Parallel wichtige Grundfunktionen absichern: Check-in/Nenngeld vor Ort, Playoffs/Endrunden, Platzzuweisung, Live-Ansichten, Speicherung/Mehrgerätefähigkeit, Rechte und Backups. Verbindliche Umsetzungsstände vor einer neuen Terminplanung mit GitHub abgleichen.
 Perspektivisch: Ergebnisse und Match-Informationen aus Score und Umpire kontrolliert übernehmen, ohne beide Apps für eigenständige Nutzung an Tournament zu binden.
