@@ -129,6 +129,8 @@ function rm_merge(array $saved, array $seed): array {
             is_string($saved['ownerAccount']['username'] ?? null) &&
             is_string($saved['ownerAccount']['passwordHash'] ?? null)
             ? $saved['ownerAccount'] : null,
+        'ownerResetVersion' => is_string($saved['ownerResetVersion'] ?? null)
+            ? $saved['ownerResetVersion'] : null,
         'invites' => is_array($saved['invites'] ?? null) ? $saved['invites'] : [],
         'officialBaseline' => $currentBaseline,
         'items' => array_values($items)
