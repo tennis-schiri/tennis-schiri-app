@@ -90,16 +90,21 @@ def buffer_scheduled(org_id, channel_id):
     raise RuntimeError("Queue pagination exceeded limit")
 
 
-def schedule(channel_id, due, media_url):
+def schedule(channel_id, due, item):
+    kind=item.get("format","story")
+    caption=item.get("caption","") if kind=="post" else ""
+    assets=", ".join(
+        "{ image: { url: "+qstr(url)+" } }" for url in item["media_urls"]
+    )
     query=(
         "mutation { createPost(input: { "
-        'text: "" '
+        f"text: {qstr(caption)} "
         f"channelId: {qstr(channel_id)} "
         "schedulingType: automatic "
         "mode: customScheduled "
         f"dueAt: {qstr(utc_graphql(due))} "
-        f"assets: [{{ image: {{ url: {qstr(media_url)} }} }}] "
-        "metadata: {instagram: {type: story, shouldShareToFeed: false}} "
+        f"assets: [{assets}] "
+        f"metadata: {{instagram: {{type: {kind}, shouldShareToFeed: {'true' if kind=='post' else 'false'} }} }} "
         "}) { ... on PostActionSuccess { post { id dueAt } } ... on MutationError { message } } }"
     )
     reply=gql(query).get("createPost") or {}
@@ -116,7 +121,7 @@ def main():
         print("Buffer queue disabled: migration approval file not installed. No changes.")
         return
     data=json.loads(QUEUE.read_text(encoding="utf-8"))
-    if data.get("version")!=1 or len(data.get("posts",[]))!=74:
+    if data.get("version")!=1 or len(data.get("posts",[]))!=77:
         raise ValueError("Story manifest changed unexpectedly; stop and review")
     posts=data["posts"]
     unique=set()
@@ -127,8 +132,15 @@ def main():
         unique.add(key)
         if entry["account"] not in {"tennis.schiri","tennilo.app"}:
             raise ValueError("Unexpected Instagram account")
-        if len(entry.get("media_urls",[]))!=1:
+        if entry.get("format","story") not in {"story","post"}:
+            raise ValueError("Unsupported Instagram format")
+        images=entry.get("media_urls",[])
+        if not 1<=len(images)<=10:
+            raise ValueError("Each item must have between 1 and 10 images")
+        if entry.get("format","story")=="story" and len(images)!=1:
             raise ValueError("Each story must have precisely one image")
+        if entry.get("format","story")=="post" and not entry.get("caption"):
+            raise ValueError("Feed carousel missing original caption")
     orgs=organizations()
     linked=[]
     for org in orgs:
@@ -153,11 +165,12 @@ def main():
             key=lambda item:item[0]
         )
         ready=[(due,p) for due,p in pending if due>now+SAFETY_MARGIN and due not in occupied]
-        print(f"@{handle}: {len(queued)} scheduled, {slots} slots free, {len(ready)} future unqueued stories")
+        print(f"@{handle}: {len(queued)} scheduled, {slots} slots free, {len(ready)} future unqueued items")
         for due,post in ready[:slots]:
             try:
-                verify_image(post["media_urls"][0])
-                out=schedule(channel["id"],due,post["media_urls"][0])
+                for url in post["media_urls"]:
+                    verify_image(url)
+                out=schedule(channel["id"],due,post)
                 occupied.add(due)
                 created_count+=1
                 print(f"  scheduled {post['local_time']} -> Buffer {out['id']}")
