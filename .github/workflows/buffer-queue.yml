@@ -18,7 +18,7 @@ on:
     # Jeden Tag viermal; nie Cron als Garant für minutengenaue Ausführung verstehen.
     - cron: "18 1,7,13,19 * * *"
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: buffer-instagram-queue
@@ -33,7 +33,7 @@ jobs:
       - name: Migrationsdaten abrufen
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Python einrichten
         uses: actions/setup-python@v5
@@ -49,4 +49,23 @@ jobs:
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
             export PREVIEW_ONLY=false
           fi
-          python tools/buffer-social/queue_sync.py
+          set -o pipefail
+          python tools/buffer-social/queue_sync.py | tee "$RUNNER_TEMP/buffer-queue-log.txt"
+
+      - name: Aktuellen Buffer-Queue-Stand sichern
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp "$RUNNER_TEMP/buffer-queue-log.txt" "$RUNNER_TEMP/buffer-queue-latest.txt"
+          git fetch origin buffer-media
+          git switch -C buffer-media origin/buffer-media
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p status
+          cp "$RUNNER_TEMP/buffer-queue-latest.txt" status/last-buffer-queue.txt
+          git add -- status/last-buffer-queue.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Aktualisiere Bericht zur Buffer-Warteschlange"
+            git push origin HEAD:buffer-media
+          fi
