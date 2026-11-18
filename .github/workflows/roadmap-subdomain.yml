@@ -72,6 +72,7 @@ jobs:
             test -s "brand-source/public/assets/$logo"
             cp "brand-source/public/assets/$logo" "roadmap-site/dist/assets/$logo"
           done
+          python3 roadmap-site/make-favicon.py
           node roadmap-site/regenerate-seed.mjs
 
       - name: Initialen persönlichen Administrator-Zugang vorbereiten
