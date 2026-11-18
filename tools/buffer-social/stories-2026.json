@@ -894,5 +894,37 @@
     }
   ],
   "approved_at": "2026-11-18",
-  "audit": "2026-11-18: GitHub Push-Aktion erneut ausgelöst; bitte Buffer Queue / status/last-buffer-queue.txt prüfen."
+  "audit": "2026-11-18: GitHub Push-Aktion erneut ausgelöst; bitte Buffer Queue / status/last-buffer-queue.txt prüfen.",
+  "extra_posts": [
+    {
+      "channel": "tennis.schiri",
+      "kind": "post",
+      "date_berlin": "2026-11-29 10:00",
+      "caption": "🎾 REGELCHECK #04: Ball hochgeworfen und wieder aufgefangen – Aufschlagfehler?\n\nDu willst aufschlagen, wirfst den Ball hoch – und merkst: Der Wurf passt nicht. Also brichst du ab und fängst den Ball wieder auf.\n\n✅ KEIN FEHLER! Du darfst den Ball mit der Hand oder mit dem Schläger auffangen. Du kannst ihn auch einfach aufspringen lassen und erneut werfen. Entscheidend ist: Du hast keinen Schlagversuch unternommen.\n\n❌ Versuchst du hingegen tatsächlich, den Ball zu schlagen, und verfehlst ihn, ist das ein Aufschlagfehler.\n\n📖 Grundlage: ITF-Tennisregeln 2026, Regel 19 (Fall 1).\n\n💬 Hat bei euch schon mal jemand einen Fehler für einen abgebrochenen Aufschlagwurf gefordert?\n🔖 Speichern für das nächste Match!\n\n#Tennis #Tennisregeln #Aufschlag #Regelcheck #TennisSchiri",
+      "source_metricool_uuid": "-5880437842024972074",
+      "source_metricool_id": 419942927,
+      "metricool_brand_id": "7761449",
+      "source_urls": [
+        "https://static.metricool.com/planner/202611/7761449-file-8806524155844223300.png",
+        "https://static.metricool.com/planner/202611/7761449-file-8515555791630147988.png",
+        "https://static.metricool.com/planner/202611/7761449-file-3529770709516717725.png",
+        "https://static.metricool.com/planner/202611/7761449-file-3961326347027384510.png"
+      ],
+      "asset_paths": [
+        "stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide1.png",
+        "stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide2.png",
+        "stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide3.png",
+        "stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide4.png"
+      ],
+      "media_urls": [
+        "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide1.png",
+        "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide2.png",
+        "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide3.png",
+        "https://raw.githubusercontent.com/tennis-schiri/tennis-schiri-app/buffer-media/stories/2026-11-29_1000_tennis-schiri_feed-regelcheck04_slide4.png"
+      ],
+      "enabled": false,
+      "source_disabled": false,
+      "reason": "Einmalige November-Ausnahme zur Einhaltung des Metricool-Free-Limits; vier Folien bleiben erhalten."
+    }
+  ]
 }
