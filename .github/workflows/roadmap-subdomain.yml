@@ -1,0 +1,126 @@
+name: TENNILO Roadmap – manuell auf roadmap.tennilo.de
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/roadmap-subdomain.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennilo-roadmap-subdomain
+  cancel-in-progress: false
+
+jobs:
+  register:
+    name: Workflow registrieren – kein Upload
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'Workflow ist eingerichtet. Kein automatischer Live-Upload.'
+
+  deploy:
+    name: Geschützte Roadmap per FTPS veröffentlichen
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: TENNILO-Quellcode abrufen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Originale TENNILO-Markenbilder abrufen
+        uses: actions/checkout@v4
+        with:
+          repository: tennis-schiri/tennilo-website
+          ref: main
+          path: brand-source
+          persist-credentials: false
+
+      - name: Echte transparente Logos unverändert vorbereiten
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet 'Pillow>=10,<13'
+          ( cd brand-source && python3 scripts/prepare_transparent_logos.py )
+
+      - name: Separates Roadmap-Release zusammenstellen
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p roadmap-site/dist/assets
+          cp roadmap-site/index.php roadmap-site/dist/index.php
+          cp roadmap-site/strategie.php roadmap-site/dist/strategie.php
+          cp roadmap-site/roadmap-api.php roadmap-site/dist/roadmap-api.php
+          cp roadmap-site/roadmap-lib.php roadmap-site/dist/roadmap-lib.php
+          cp roadmap-site/roadmap.js roadmap-site/dist/assets/roadmap.js
+          cp roadmap-site/extra.css roadmap-site/dist/assets/extra.css
+          cp site/assets/styles.css roadmap-site/dist/assets/styles.css
+          cp site/assets/roadmap.css roadmap-site/dist/assets/roadmap.css
+          for logo in tennilo-logo-dark.png tennilo-tournament-cutout.png tennilo-score-cutout.png tennilo-umpire-cutout.png; do
+            test -s "brand-source/public/assets/$logo"
+            cp "brand-source/public/assets/$logo" "roadmap-site/dist/assets/$logo"
+          done
+          node roadmap-site/regenerate-seed.mjs
+
+      - name: JavaScript, PHP und Roadmap-Inhalte prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2 oder neuer erforderlich.\n"); exit(1); }'
+          for file in roadmap-site/dist/*.php; do php -l "$file"; done
+          node --check roadmap-site/dist/assets/roadmap.js
+          node --check roadmap-site/regenerate-seed.mjs
+          php tests/roadmap.php
+          php tests/roadmap-storage.php
+          php -r 'define("TENNILO_ROADMAP_INTERNAL_SEED",true); $s=require "roadmap-site/dist/roadmap-seed.php"; if(count($s["items"])<50){exit(1);} echo "Board: ".count($s["items"])." Eintraege\n";'
+          grep -Fq 'TENNILO Umpire' roadmap-site/dist/strategie.php
+          grep -Fq 'Tischtennis' roadmap-site/dist/strategie.php
+          test ! -f roadmap-site/dist/roadmap-seed.json
+
+      - name: Passwortschutz der Subdomain VOR Upload prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl --silent --show-error --max-time 20 --output /dev/null --write-out '%{http_code}' https://roadmap.tennilo.de/)"
+          if [[ "$status" != '401' ]]; then
+            echo "::error::Upload verweigert. roadmap.tennilo.de antwortet ohne Anmeldung mit HTTP $status statt 401. Bitte zuerst den ALL-INKL-Verzeichnisschutz für die gesamte Subdomain aktivieren."
+            exit 1
+          fi
+          echo 'HTTP-Basic-Verzeichnisschutz bestätigt.'
+
+      - name: Nur Roadmap-Dateien per FTPS hochladen
+        shell: bash
+        env:
+          FTP_HOST: ${{ secrets.ROADMAP_FTP_HOST }}
+          FTP_USER: ${{ secrets.ROADMAP_FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.ROADMAP_FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${FTP_HOST:?Secret ROADMAP_FTP_HOST fehlt}"
+          : "${FTP_USER:?Secret ROADMAP_FTP_USER fehlt}"
+          : "${FTP_PASSWORD:?Secret ROADMAP_FTP_PASSWORD fehlt}"
+
+          # FTP-Zugang MUSS bereits im Verzeichnis der Subdomain starten.
+          # Kein .htaccess-Upload, keine Löschbefehle und kein Zugang zur Turnier-App.
+          files=(
+            index.php strategie.php
+            roadmap-api.php roadmap-lib.php roadmap-seed.php
+            assets/styles.css assets/roadmap.css assets/roadmap.js assets/extra.css
+            assets/tennilo-logo-dark.png
+            assets/tennilo-tournament-cutout.png
+            assets/tennilo-score-cutout.png
+            assets/tennilo-umpire-cutout.png
+          )
+          for relative in "${files[@]}"; do
+            file="roadmap-site/dist/$relative"
+            test -s "$file"
+            echo "Roadmap-Datei: $relative"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --user "${FTP_USER}:${FTP_PASSWORD}" \
+              --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
+          done
+          echo 'TENNILO Roadmap hochgeladen (13 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
