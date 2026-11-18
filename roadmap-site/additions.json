@@ -1292,23 +1292,27 @@
     },
     {
       "id": "mini-portal",
-      "title": "Wer muss?! – gemeinsame Mini-App-Werkstatt",
-      "description": "Eine gemeinsame Browser-Zentrale mit sechs Testspielen im WM04b-Originaldesign.",
+      "title": "JUXILO – Mini-App-Werkstatt und bestehende Wer-muss-Testzentrale",
+      "description": "Die sechs Spaß-Apps gehören künftig zur Dachmarke JUXILO; die bereits bestehende Wer-muss-Website bündelt ihre Browser-Tests vorerst weiterhin.",
       "category": "Weitere Apps",
       "status": "test",
       "workstream": "studio",
       "priority": "high",
-      "scope": "Sechs Browser-Prototypen unter /apps/<slug>/, gemeinsame App-Übersicht, Navigation, Neustart/Startseite, rechtliche Seiten und echte Logo-Sets.",
-      "currentState": "Hauptseite und sechs Unterseiten sind in GitHub vorhanden. FTPS-Workflow ist manuell. Live-Erreichbarkeit und tatsächliche Veröffentlichung nicht unabhängig geprüft.",
-      "nextStep": "Browser-Testseiten auf iPhone/Android durchspielen und Ziel-Domain/FTPS-Upload verifizieren.",
+      "scope": "JUXILO als übergeordnete Marke darstellen, ohne die bestehende Wer-muss-Domain, FTP-Struktur, Testseiten oder App-Namen umzubenennen. Sechs Browser-Prototypen unter /apps/<slug>/, Original-Logos, Navigation, Neustart/Startseite und rechtliche Seiten bleiben bestehen.",
+      "currentState": "Die gemeinsame Website und alle sechs Test-Unterseiten liegen im Repository tennis-schiri/wer-muss-app; JUXILO ist derzeit nur als Oberbegriff der Spaß-Apps beschlossen. Noch keine Umstellung der Website auf JUXILO nachgewiesen.",
+      "nextStep": "Separaten Markenauftritt der Wer-muss-Testzentrale unter JUXILO entwerfen und abnehmen, bevor die Website selbst geändert wird; Browser-Demos auf echten Geräten prüfen.",
       "milestone": "Gemeinsame Browser-Werkstatt",
-      "benefit": "Eine gemeinsame Browser-Zentrale mit sechs Testspielen im WM04b-Originaldesign.",
-      "openPoints": "Browser-Testseiten auf iPhone/Android durchspielen und Ziel-Domain/FTPS-Upload verifizieren.",
+      "benefit": "Die sechs Spaß-Apps gehören künftig zur Dachmarke JUXILO; die bereits bestehende Wer-muss-Website bündelt ihre Browser-Tests vorerst weiterhin.",
+      "openPoints": "Separaten Markenauftritt der Wer-muss-Testzentrale unter JUXILO entwerfen und abnehmen, bevor die Website selbst geändert wird; Browser-Demos auf echten Geräten prüfen.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
         {
           "title": "Mini-App-Ideen – Projektliste",
           "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        },
+        {
+          "title": "JUXILO JX04 – freigegebenes Logo- und Vektorset",
+          "url": "https://drive.google.com/drive/folders/1xwhvnokNzuSBnsYHh0yYYXMCKi85pM0G"
         }
       ],
       "origin": "official",
@@ -1617,8 +1621,8 @@
     },
     {
       "id": "mini-i18n",
-      "title": "Mini-Apps: gemeinsame DE/EN-Sprachumschaltung",
-      "description": "Die Mini-App-Werkstatt und künftige native Apps konsequent zweisprachig anbieten.",
+      "title": "JUXILO – Deutsch/Englisch in allen sechs Apps",
+      "description": "Alle sechs Apps der JUXILO-Familie einheitlich auf Deutsch und Englisch anbieten.",
       "category": "Weitere Apps",
       "status": "test",
       "workstream": "studio",
@@ -1627,7 +1631,7 @@
       "currentState": "Browser-Testseiten und Wer-muss-Flutter-App haben laut GitHub-Dokumentation DE/EN. Native Versionen der übrigen fünf Apps noch nicht umgesetzt.",
       "nextStep": "Persistenz und Sprachwechsel auf allen sechs Browser-Demos und in Flutter prüfen.",
       "milestone": "Mehrsprachigkeit · Code vorhanden",
-      "benefit": "Die Mini-App-Werkstatt und künftige native Apps konsequent zweisprachig anbieten.",
+      "benefit": "Alle sechs Apps der JUXILO-Familie einheitlich auf Deutsch und Englisch anbieten.",
       "openPoints": "Persistenz und Sprachwechsel auf allen sechs Browser-Demos und in Flutter prüfen.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
@@ -1642,17 +1646,17 @@
     },
     {
       "id": "mini-pricing",
-      "title": "Mini-App-Preise und Spielesammlung als Bundle",
-      "description": "Einheitliche Einzelpreise und eine Wer-muss-Spielesammlung prüfen.",
+      "title": "JUXILO – Einzelpreise und Sechser-Bundle",
+      "description": "Eine gemeinsame JUXILO-Spielesammlung aus sechs eigenständigen Spaß-Apps mit einheitlicher Preisidee prüfen.",
       "category": "Weitere Apps",
       "status": "idea",
       "workstream": "studio",
       "priority": "medium",
       "scope": "Preisidee vom 08.11.2026: je Einzel-App 1,99 €, Gesamtbundle 7,99 €. iOS-App-Bundle, bei Android eventuell eigene Sammel-App statt AAB-Bundle als Verkaufsprodukt.",
-      "currentState": "Preisvorschlag in Google Drive; kein finaler Preis, kein Store-Angebot, keine Markteinführung.",
+      "currentState": "Preisvorschlag vom 08.11.2026: 1,99 € je App und 7,99 € für die komplette Sammlung; keine freigegebenen Store-Preise oder Store-Listings. JUXILO ist die Dachmarke, kein siebtes Spiel.",
       "nextStep": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
       "milestone": "Preis-/Store-Konzept · Idee",
-      "benefit": "Einheitliche Einzelpreise und eine Wer-muss-Spielesammlung prüfen.",
+      "benefit": "Eine gemeinsame JUXILO-Spielesammlung aus sechs eigenständigen Spaß-Apps mit einheitlicher Preisidee prüfen.",
       "openPoints": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
@@ -1688,6 +1692,35 @@
       ],
       "origin": "official",
       "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "juxilo-brand-jx04",
+      "title": "JUXILO – Dachmarke und JX04-Logo-Set",
+      "description": "JUXILO als übergeordneten Namen für genau die sechs Spaß-Apps etablieren. Wer muss?! bleibt eine Einzel-App.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "priority": "high",
+      "workstream": "studio",
+      "milestone": "Dachmarke beschlossen · JX04-Logo-Set vorhanden",
+      "scope": "Markenarchitektur definieren: JUXILO = Dachmarke, darunter Wer muss?!, Punktlandung!, Fingerchaos, Nicht kleckern!, Nur noch einmal! und Völlig daneben! Vorhandene Einzel-App-Icons und ihre Namen bleiben unverändert. Das bereits erstellte JX04-Set (Weißlogo, J-Maskottchen, Varianten und Farbpalette) als Entwurfsgrundlage für die UI nutzen.",
+      "currentState": "JUXILO ist als vorläufige Dachmarke der sechs Spaß-Apps festgelegt. Das JX04-Vektorset liegt in Google Drive. Website und Repositories heißen noch Wer muss?!; weder Rebranding noch App-Store-Start ist damit erfolgt.",
+      "nextStep": "Markenauftritt für App-Übersicht und später die Produktseiten abgestimmt umsetzen. JX04-Vektordateien vor verbindlichem Marken-/Druckeinsatz final optisch abnehmen.",
+      "doneWhen": "JUXILO wird als Dachmarke verwendet, alle sechs Einzel-Apps sind korrekt zugeordnet, Original-Logos bleiben erhalten und keine bestehende URL wird unabsichtlich geändert.",
+      "benefit": "Eine klare, gemeinsame Identität für die sechs eigenständigen Spaß-Apps ohne Verwechslung mit TENNILO oder Wer muss?! als Einzel-App.",
+      "openPoints": "JX04-Vektorneuzeichnung vor endgültigem Markeneinsatz visuell abnehmen; Wer-muss-Website erst nach separatem Beschluss umgestalten.",
+      "references": [
+        {
+          "title": "JUXILO JX04 – Vektor- und Transparenzset",
+          "url": "https://drive.google.com/drive/folders/1xwhvnokNzuSBnsYHh0yYYXMCKi85pM0G"
+        },
+        {
+          "title": "Mini-App-Ideen – sechs ausgewählte Spaß-Apps",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T15:53:00+01:00",
       "comments": []
     }
   ],
