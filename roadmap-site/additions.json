@@ -253,7 +253,8 @@
           "title": "TENNILO Umpire – Konzept",
           "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
         }
-      ]
+      ],
+      "workstream": "concept"
     },
     {
       "id": "umpire-scorecard",
@@ -277,7 +278,8 @@
           "title": "TENNILO Umpire – Konzept",
           "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
         }
-      ]
+      ],
+      "workstream": "scoring"
     },
     {
       "id": "umpire-officiating",
@@ -301,7 +303,8 @@
           "title": "TENNILO Umpire – Konzept",
           "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
         }
-      ]
+      ],
+      "workstream": "rules"
     },
     {
       "id": "umpire-screens",
@@ -325,7 +328,8 @@
           "title": "TENNILO Umpire – Konzept",
           "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
         }
-      ]
+      ],
+      "workstream": "display"
     },
     {
       "id": "umpire-integration",
@@ -349,7 +353,8 @@
           "title": "TENNILO Umpire – Konzept",
           "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
         }
-      ]
+      ],
+      "workstream": "integration"
     },
     {
       "id": "business-resorts",
@@ -373,7 +378,8 @@
           "title": "Gemeinsame TENNILO-Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "offers"
     },
     {
       "id": "plattform-matchmodell",
@@ -397,7 +403,8 @@
           "title": "Gemeinsame TENNILO-Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "data"
     },
     {
       "id": "plattform-accounts",
@@ -421,7 +428,8 @@
           "title": "Gemeinsame TENNILO-Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "security"
     },
     {
       "id": "plattform-sprachen",
@@ -445,7 +453,8 @@
           "title": "Gemeinsame TENNILO-Roadmap",
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
-      ]
+      ],
+      "workstream": "standards"
     },
     {
       "id": "score-detail-01",
