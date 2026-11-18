@@ -121,7 +121,24 @@ function renderResults(){
       '<button class="btn ghost small" type="button" data-action="detail" data-id="'+esc(x.id)+'">Ansehen</button></div>').join("")+'</div>';
   }
 }
+function renderLogin(){
+  document.body.classList.remove("rm-authenticated");
+  root.innerHTML='<main class="rm-login-outer"><section class="rm-login-panel">'+
+    '<span class="rm-login-overline">TENNILO / PRIVATER ENTWICKLUNGSBEREICH</span>'+
+    '<h1>Willkommen zur Roadmap.</h1>'+
+    '<p>Bitte melde dich mit deinem persönlichen Benutzernamen und Passwort an. Nur eingeladene Personen erhalten Zugriff auf die Entwicklungsplanung.</p>'+
+    credentialsForm("login-account","Roadmap öffnen")+
+    '<p class="rm-login-help">Noch keinen Zugang? Bitte die Projektleitung um einen persönlichen Einladungslink.</p>'+
+    '<details class="rm-login-legacy"><summary>Alten Zugangscode verwenden</summary>'+
+    '<form data-form="login" class="rm-account-form"><label class="rm-field">Alter Code'+
+    '<input name="code" type="password" autocomplete="off" pattern="[a-f0-9]{48}" minlength="48" maxlength="48" required></label>'+
+    '<button class="btn subtle" type="submit">Einmalig mit Code anmelden</button></form></details>'+
+    '</section><aside class="rm-login-side" aria-hidden="true"><span>TENNILO</span>'+
+    '<strong>Gemeinsam<br>weiterentwickeln.</strong><p>Tournament · Score · Umpire · Business</p></aside></main>';
+}
 function render(){
+  if(state.session?.role==="guest"){renderLogin();return;}
+  document.body.classList.add("rm-authenticated");
   const role=state.session.role;
   const user=role==="admin"?"Projektleitung":role==="commenter"?"Mitwirkend":role==="viewer"?"Nur lesen":"Lesemodus";
   root.innerHTML='<main class="rm-container"><div class="rm-top"><a href="https://tennilo.de/" class="rm-back" rel="noopener noreferrer" target="_blank">← TENNILO-Website</a>'+
@@ -217,7 +234,7 @@ function credentialsForm(kind,button,{username="",needsOld=false}={}){
     '<button class="btn primary" type="submit">'+button+'</button></form>';
 }
 function loginModal(){
-  showModal("Bei TENNILO Tournament Roadmap anmelden",
+  showModal("Bei TENNILO Roadmap anmelden",
     '<p class="rm-modal-note">Mit deinem persönlichen Benutzernamen und Passwort kannst du jederzeit Ideen einreichen oder kommentieren.</p>'+
     credentialsForm("login-account","Anmelden")+
     '<details class="rm-legacy"><summary>Noch einen alten Zugangscode?</summary>'+
@@ -227,7 +244,7 @@ function loginModal(){
 }
 function registrationModal(){
   if(!pendingInviteToken)return;
-  showModal("Willkommen bei der TENNILO Tournament-Roadmap",
+  showModal("Willkommen bei der TENNILO Roadmap",
     '<p class="rm-modal-note">Du wurdest eingeladen. Lege einmalig einen Benutzernamen und ein sicheres Passwort fest. Den Link brauchst du danach nicht mehr.</p>'+
     credentialsForm("register-invite","Konto erstellen & anmelden"));
 }
