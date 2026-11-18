@@ -410,6 +410,582 @@
           "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
         }
       ]
+    },
+    {
+      "id": "score-detail-01",
+      "title": "SCORE-01 · Tennis-Matchstart und Zählweisen",
+      "description": "Einzel, Doppel und Mixed sowie variable Zählweisen regelkonform starten.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Matchstart-Konfiguration und Regeltestmatrix aus der Demo in die native App übernehmen.",
+      "benefit": "Einzel, Doppel und Mixed sowie variable Zählweisen regelkonform starten.",
+      "scope": "Einzel, Doppel und Mixed mit eigenständigem Matchstart und verlässlich konfigurierbaren Zählweisen (Sätze, Tiebreak, Match-Tiebreak, No-Ad und weitere vereinbarte Varianten); die Regeln müssen durch automatisierte Sonderfalltests abgesichert werden.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Matchstart-Konfiguration und Regeltestmatrix aus der Demo in die native App übernehmen.",
+      "doneWhen": "Automatisierte Tests und reale Matches bestehen die definierten Zählvarianten.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-02",
+      "title": "SCORE-02 · Ersten Aufschläger im Doppel wählen",
+      "description": "Alle vier Personen bei der Aufschlägerwahl eindeutig unterscheiden.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Wahlablauf Team → Person beziehungsweise vier Namen auf Watch/iPhone überprüfen.",
+      "benefit": "Alle vier Personen bei der Aufschlägerwahl eindeutig unterscheiden.",
+      "scope": "Im Doppel/Mixed zunächst Team und Aufschlägerwahl übersichtlich erfassen; bei der Auswahl des ersten Aufschlägers alle vier individuellen Namen anzeigen oder zunächst das Team und anschließend die direkte Personenauswahl. Die Rückschlag- und spätere Aufschlagreihenfolge fachlich korrekt abbilden.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Wahlablauf Team → Person beziehungsweise vier Namen auf Watch/iPhone überprüfen.",
+      "doneWhen": "Erster Aufschläger und Rückschlagfolge stimmen in jedem Doppel-/Mixed-Test.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-03",
+      "title": "SCORE-03 · Tennisball beim richtigen Aufschläger",
+      "description": "Das Aufschlagzeichen direkt beim zuständigen Spielernamen zeigen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Doppel-/Mixed-Ansicht und Wechsel des individuellen Aufschlägers testen.",
+      "benefit": "Das Aufschlagzeichen direkt beim zuständigen Spielernamen zeigen.",
+      "scope": "Aufschlagkennzeichnung als Tennisball direkt beim betreffenden Namen, nicht als zusätzliche Zeile unter dem Scoreboard. Bei Doppel/Mixed beide Namen eines Teams untereinander, der Ball nur an der tatsächlich aufschlagenden Person.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Doppel-/Mixed-Ansicht und Wechsel des individuellen Aufschlägers testen.",
+      "doneWhen": "Das Symbol folgt der tatsächlichen Person statt dem Team oder einem Footer.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-04",
+      "title": "SCORE-04 · Ruhige Punkttasten und UNDO",
+      "description": "Namen zentriert lassen, Tennisball seitlich und UNDO immer erreichbar.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Punktflächen auf Watch und iPhone bei allen Aufschlagwechseln prüfen.",
+      "benefit": "Namen zentriert lassen, Tennisball seitlich und UNDO immer erreichbar.",
+      "scope": "Punktflächen: Name zentriert, Aufschlag-Tennisball stabil links oder rechts; keine springenden Beschriftungen beim Wechsel. UNDO schnell und zuverlässig erreichen, auch auf der Watch.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Punktflächen auf Watch und iPhone bei allen Aufschlagwechseln prüfen.",
+      "doneWhen": "Bedienelemente springen nicht und Punkte lassen sich sicher zurücknehmen.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-05",
+      "title": "SCORE-05 · Aufgabe und Matchende",
+      "description": "Ein Match regulär oder durch Aufgabe nachvollziehbar beenden.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Aufgabe-Dialog, Endergebnis und Auswirkungen auf Archiv/Statistik testen.",
+      "benefit": "Ein Match regulär oder durch Aufgabe nachvollziehbar beenden.",
+      "scope": "Matchende durch regulären Sieg und durch Aufgabe samt eindeutiger Ergebnis-/Abschlussdarstellung. Weitere Sonderfälle (Abbruch, Disqualifikation) gesondert auf Scope und Regelwirkung prüfen.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Aufgabe-Dialog, Endergebnis und Auswirkungen auf Archiv/Statistik testen.",
+      "doneWhen": "Match wird mit eindeutigem Abschlussgrund korrekt archiviert.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-06",
+      "title": "SCORE-06 · iPhone: alle Sätze im Blick",
+      "description": "Die vollständige Satzübersicht ohne horizontales Scrollen anzeigen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Satzanzeige bei Best-of-3/5 und kleinen iPhone-Displays prüfen.",
+      "benefit": "Die vollständige Satzübersicht ohne horizontales Scrollen anzeigen.",
+      "scope": "Im iPhone-Hauptbildschirm bleibt die vollständige Satz-/Spiel-/Punktetabelle oben sichtbar; alle Sätze gleichzeitig ohne seitliches Scrollen.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Satzanzeige bei Best-of-3/5 und kleinen iPhone-Displays prüfen.",
+      "doneWhen": "Alle Sätze bleiben im oberen Live-Spielstand gleichzeitig sichtbar.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-07",
+      "title": "SCORE-07 · Match und Verlauf gemeinsam anzeigen",
+      "description": "Statistiken und Matchverlauf in einem Bereich umschalten.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Register mit dauerhaft sichtbarem Live-Spielstand im nativen iPhone umsetzen.",
+      "benefit": "Statistiken und Matchverlauf in einem Bereich umschalten.",
+      "scope": "„Match“/Statistik und „Verlauf“ in einem gemeinsamen Bereich mit Umschaltung; der obere Live-Spielstand bleibt in beiden Ansichten sichtbar.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Register mit dauerhaft sichtbarem Live-Spielstand im nativen iPhone umsetzen.",
+      "doneWhen": "Der Spielstand bleibt beim Wechsel zwischen Statistik und Verlauf sichtbar.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-08",
+      "title": "SCORE-08 · Automatischer Live-Verlauf",
+      "description": "Im Live-Verlauf automatisch das aktuelle Spiel anzeigen und klare Begriffe verwenden.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Autoscroll nach jeder Punkteingabe und Bezeichnung Match-Archiv testen.",
+      "benefit": "Im Live-Verlauf automatisch das aktuelle Spiel anzeigen und klare Begriffe verwenden.",
+      "scope": "Live-Verlauf während eines Matches automatisch zum aktuellen Spiel scrollen. Die Bezeichnung „Verlauf“ für den Punktverlauf verwenden; „Match-Archiv“ bzw. „Historie“ für abgeschlossene/gespeicherte Matches, nicht für die Live-Ansicht.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Autoscroll nach jeder Punkteingabe und Bezeichnung Match-Archiv testen.",
+      "doneWhen": "Aktueller Verlauf ist sofort sichtbar; Archiv und Live-Verlauf sind getrennt.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-09",
+      "title": "SCORE-09 · Zahnrad-Menü auf Watch und iPhone",
+      "description": "Einstellungen einschließlich rechtlicher Punkte direkt auf beiden Geräten öffnen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Zahnrad-Menü, rechtsbezogene Unterpunkte und dauerhafte UNDO-Position testen.",
+      "benefit": "Einstellungen einschließlich rechtlicher Punkte direkt auf beiden Geräten öffnen.",
+      "scope": "Zahnrad-Menü sowohl auf Apple Watch als auch auf iPhone mit den tatsächlich verfügbaren Einstellungen sowie vorgesehenen rechtlichen Unterpunkten. Auf der Watch bleibt UNDO außerhalb des Einstellungsmenüs erreichbar.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Zahnrad-Menü, rechtsbezogene Unterpunkte und dauerhafte UNDO-Position testen.",
+      "doneWhen": "Menü ist erreichbar, ohne dass UNDO auf der Watch verloren geht.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-10",
+      "title": "SCORE-10 · Scoreboard richtig im Querformat",
+      "description": "Das Querformat groß und mit lesbarem Tiebreak-Stand anzeigen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Querformat, Drehung des Demo-Handys und Tiebreak-Abstände prüfen.",
+      "benefit": "Das Querformat groß und mit lesbarem Tiebreak-Stand anzeigen.",
+      "scope": "Scoreboard-Modus am Smartphone im Querformat, einschließlich korrekt gedrehter Demo-Geräteansicht; Querformat nicht kleiner darstellen als Hochformat. Tennisball beim aufschlagenden Namen, Tiebreak-Anzeige mit genügend Abstand zum Satzstand und gut lesbarer Größe.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Querformat, Drehung des Demo-Handys und Tiebreak-Abstände prüfen.",
+      "doneWhen": "Landscape-Scoreboard ist größer statt kleiner und zeigt alle Werte klar.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-11",
+      "title": "SCORE-11 · Deutsch und Englisch umschalten",
+      "description": "Alle Ansichten einschließlich Archiv und Scoreboard zweisprachig anbieten.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Übersetzungsschlüssel, Sprachwechsel während Matches und Rechtsseiten prüfen.",
+      "benefit": "Alle Ansichten einschließlich Archiv und Scoreboard zweisprachig anbieten.",
+      "scope": "Deutsch und Englisch vollständig und einfach umschaltbar; dies gilt für Bedienung, Einstellungen, Match-/Archivtexte und Anzeigen.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Übersetzungsschlüssel, Sprachwechsel während Matches und Rechtsseiten prüfen.",
+      "doneWhen": "Es bleiben keine nicht übersetzten Bedien- oder Fehlermeldungen.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-12",
+      "title": "SCORE-12 · Kleine Apple Watches testen",
+      "description": "Lesbarkeit und sichere Punkttasten auf 41-mm-Watches gewährleisten.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Series 9 mit 41 mm und weiteren Displaygrößen real bedienen.",
+      "benefit": "Lesbarkeit und sichere Punkttasten auf 41-mm-Watches gewährleisten.",
+      "scope": "Geradlinige, kontrastreiche Bedienung auf kleinen Apple Watches einschließlich Series 9 (41 mm); Trefferflächen, Schriften, Darstellung und Bedienfehler mit echter Hardware prüfen.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Series 9 mit 41 mm und weiteren Displaygrößen real bedienen.",
+      "doneWhen": "Zentrale Funktionen lassen sich auf kleinen Watches fehlerarm bedienen.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-13",
+      "title": "SCORE-13 · Offline-Datenspeicherung",
+      "description": "Laufende und beendete Matches lokal ausfallsicher sichern.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Neustart- und Datenwiederherstellungstests auf Watch und iPhone umsetzen.",
+      "benefit": "Laufende und beendete Matches lokal ausfallsicher sichern.",
+      "scope": "Vollständige, dauerhafte Offline-Speicherung von Matches und Ereignissen. Neustart und App-Wechsel dürfen laufende oder abgeschlossene Matches nicht verlieren.",
+      "currentState": "Die Web-Demo bietet eine lokale Speicher-/Archivgrundlage; native Umsetzung und Wiederherstellung sind separat zu verifizieren.",
+      "openPoints": "Neustart- und Datenwiederherstellungstests auf Watch und iPhone umsetzen.",
+      "doneWhen": "Nach App-Neustart sind Match und protokollierte Punkte vollständig.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-14",
+      "title": "SCORE-14 · Eigenständiges Match-Archiv",
+      "description": "Abgeschlossene Matches getrennt vom laufenden Verlauf wiederfinden.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Archivnavigation, Detailansicht und Wiederaufruf nativ umsetzen.",
+      "benefit": "Abgeschlossene Matches getrennt vom laufenden Verlauf wiederfinden.",
+      "scope": "Eigenständiges Match-Archiv mit Wiederaufruf abgeschlossener Matches sowie klarer Trennung zwischen Live-Verlauf, Archiv und Statistik. Das Archiv zunächst in der Demo als Referenz umsetzen und dann in die nativen Apps übertragen.",
+      "currentState": "Die Web-Demo bietet eine lokale Speicher-/Archivgrundlage; native Umsetzung und Wiederherstellung sind separat zu verifizieren.",
+      "openPoints": "Archivnavigation, Detailansicht und Wiederaufruf nativ umsetzen.",
+      "doneWhen": "Matches bleiben dauerhaft auffindbar mit Ergebnis und Verlauf.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-15",
+      "title": "SCORE-15 · Punktgenaues Ereignisprotokoll",
+      "description": "Punkte, UNDO, Korrekturen und ableitbare Statistiken sauber erfassen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Ereignisschema, Korrekturmodell und Statistikgrenzen testen.",
+      "benefit": "Punkte, UNDO, Korrekturen und ableitbare Statistiken sauber erfassen.",
+      "scope": "Punktgenaues Ereignisprotokoll als Grundlage für UNDO, nachvollziehbare Korrekturen, Match-Statistiken und einen lesbaren chronologischen Verlauf. Keine Statistiken als gemessen ausgeben, deren zugrunde liegende Ereignisse gar nicht erfasst wurden.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Ereignisschema, Korrekturmodell und Statistikgrenzen testen.",
+      "doneWhen": "Jeder sichtbare Statistikwert lässt sich aus erfassten Daten begründen.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-16",
+      "title": "SCORE-16 · Watch zählt selbständig und synchronisiert",
+      "description": "Watch muss offline zählen und spätere Ereignisse mit iPhone abgleichen.",
+      "category": "TENNILO Score",
+      "status": "progress",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "WatchConnectivity, Ereignis-Replay und Konfliktfälle auf Geräten testen.",
+      "benefit": "Watch muss offline zählen und spätere Ereignisse mit iPhone abgleichen.",
+      "scope": "Apple Watch zählt auch ohne dauerhafte iPhone-Verbindung eigenständig weiter; beim Wiederverbinden müssen Matchstand und Ereignisprotokoll zuverlässig abgeglichen werden, ohne doppelte Punkte oder verdeckte Konflikte.",
+      "currentState": "Native Watch-/iPhone-Synchronisierung ist in Entwicklung, aber nicht vollständig auf echten Geräten bestätigt.",
+      "openPoints": "WatchConnectivity, Ereignis-Replay und Konfliktfälle auf Geräten testen.",
+      "doneWhen": "Auch nach Verbindungsverlust stimmen Stand und Ereignisse überein.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-17",
+      "title": "SCORE-17 · Ausfälle und lange Matches testen",
+      "description": "Verbindung, Akku und Neustarts unter Praxisbedingungen absichern.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Testplan für Unterbrechung, niedrigem Akku, Neustarts und lange Spiele durchführen.",
+      "benefit": "Verbindung, Akku und Neustarts unter Praxisbedingungen absichern.",
+      "scope": "App-Schließen/Neustart, Unterbrechung, Bluetooth-Ausfall, Wiederverbindung, niedrigem Akku, Watch-/iPhone-Neustart und langen Matches als reproduzierbare Testszenarien aufnehmen.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Testplan für Unterbrechung, niedrigem Akku, Neustarts und lange Spiele durchführen.",
+      "doneWhen": "Kein Testfall führt zu doppelten oder verlorenen Punkten.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-18",
+      "title": "SCORE-18 · Beta-Test: Teilnahmebedingungen",
+      "description": "Bad-Saarow-Test mit Apple Watch und vereinbartem Gegenwert planen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "27.12.2026",
+      "nextStep": "Einladung und Ablauf ohne künstliche Teilnehmerobergrenze vorbereiten.",
+      "benefit": "Bad-Saarow-Test mit Apple Watch und vereinbartem Gegenwert planen.",
+      "scope": "Geplanter Praxistest am 27.12.2026 beim LK-Turnier in Bad Saarow: Für Teilnehmende ist eine Apple Watch Voraussetzung; keine künstliche Begrenzung der Teilnehmerzahl; als Gegenwert die fertige App bei Marktreife kostenlos. Testziel, kein zugesagter Marktstart.",
+      "currentState": "Beta-Test geplant, nicht durchgeführt.",
+      "openPoints": "Einladung und Ablauf ohne künstliche Teilnehmerobergrenze vorbereiten.",
+      "doneWhen": "Apple Watch ist Voraussetzung; fertige App bei Marktreife für Tester gratis.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-19",
+      "title": "SCORE-19 · Demo-Parität auf echten Geräten prüfen",
+      "description": "Die native Testversion mit dem Funktionsumfang der Demo abgleichen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "Funktions-Checkliste für iPhone und Watch vollständig abarbeiten.",
+      "benefit": "Die native Testversion mit dem Funktionsumfang der Demo abgleichen.",
+      "scope": "Demo-Parität von Watch und iPhone vor Betafreigabe funktional prüfen, inklusive Einstellungen, Punktvergabe, Zählwechsel, UNDO, Aufgabe, Archiv, Verlauf, Statistik, Scoreboard und DE/EN.",
+      "currentState": "Anforderung aus Web-Demo und Entwicklungsabsprachen; der entsprechende native Umsetzungsstand ist separat zu prüfen.",
+      "openPoints": "Funktions-Checkliste für iPhone und Watch vollständig abarbeiten.",
+      "doneWhen": "Alle für die Beta zugesagten Demo-Funktionen sind auf echten Geräten geprüft.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-20",
+      "title": "SCORE-20 · Android und Wear OS",
+      "description": "TENNILO Score perspektivisch für Android und Wear OS anbieten.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach Apple-Beta",
+      "nextStep": "Nach Apple-Pilot Architektur, Betriebssysteme und Testgeräte festlegen.",
+      "benefit": "TENNILO Score perspektivisch für Android und Wear OS anbieten.",
+      "scope": "Android und Wear OS mit möglichst gleicher fachlicher Zähllogik, aber plattformgerechter Oberfläche.",
+      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
+      "openPoints": "Nach Apple-Pilot Architektur, Betriebssysteme und Testgeräte festlegen.",
+      "doneWhen": "Gleiche Regeltests bestehen auf den unterstützten Android-Geräten.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-21",
+      "title": "SCORE-21 · Tischtennis als eigene Sportart",
+      "description": "Tischtennis mit korrekten Zähl-, Aufschlag- und Doppelregeln ergänzen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Später",
+      "nextStep": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
+      "benefit": "Tischtennis mit korrekten Zähl-, Aufschlag- und Doppelregeln ergänzen.",
+      "scope": "Tischtennis als eigene Score-Sportart mit 11-Punkte-Sätzen, mindestens zwei Punkten Abstand, Aufschlagwechsel einschließlich Einstand, Seitenwechsel und korrekter Doppelreihenfolge. Eigene Regeltests statt reines Grafik-Umschalten.",
+      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
+      "openPoints": "Nach Tennis-Stabilisierung getrennte Tischtennis-Regeltests spezifizieren.",
+      "doneWhen": "Tischtennis-Einzel und Doppel bestehen fachliche und Gerätetests.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-22",
+      "title": "SCORE-22 · Externe Anzeigen und App-Schnittstellen",
+      "description": "Scoreboard-Ausgabe und TENNILO-Anbindung optional ermöglichen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Schnittstellen später",
+      "nextStep": "Unabhängige Ausgabe, Datenhoheit und kompatible Protokolle konzipieren.",
+      "benefit": "Scoreboard-Ausgabe und TENNILO-Anbindung optional ermöglichen.",
+      "scope": "Eigenständige Zuschauer-/Scoreboard-Ausgabe und optionale Anbindung an TENNILO Tournament oder Umpire, ohne Offline-Zählen oder Standalone-Nutzung von Score voraussetzungspflichtig zu machen; konkrete Hardware-/Datenprotokolle erst nach technischer Prüfung festlegen.",
+      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
+      "openPoints": "Unabhängige Ausgabe, Datenhoheit und kompatible Protokolle konzipieren.",
+      "doneWhen": "Score bleibt offline und eigenständig nutzbar, auch ohne Integration.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-23",
+      "title": "SCORE-23 · Umfang der Matchstatistiken festlegen",
+      "description": "Statistiken aus Punktverlauf und optionale Zusatzeingaben trennen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Statistik-Konzept",
+      "nextStep": "Statistikkatalog mit Erfassungsaufwand und Plausibilitätsregeln erstellen.",
+      "benefit": "Statistiken aus Punktverlauf und optionale Zusatzeingaben trennen.",
+      "scope": "Welche Matchstatistiken erfordern zusätzliche Eingaben (z. B. Asse, Doppelfehler, Breakchancen), und welche lassen sich zuverlässig aus dem reinen Punktverlauf ableiten? Scope und Eingabeaufwand für Score getrennt vom Profi-Cockpit Umpire festlegen.",
+      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
+      "openPoints": "Statistikkatalog mit Erfassungsaufwand und Plausibilitätsregeln erstellen.",
+      "doneWhen": "Jede Zahl hat eine belegbare Grundlage und klare Eingabeanforderung.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-detail-24",
+      "title": "SCORE-24 · Match-Export, Backup und Datenschutz",
+      "description": "Matchakten exportierbar und lokal sicher verwaltbar machen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Datenschutz & Export",
+      "nextStep": "Exportformat, Löschung, Datenmigration und Sicherungsstrategie definieren.",
+      "benefit": "Matchakten exportierbar und lokal sicher verwaltbar machen.",
+      "scope": "Export, Backup und datenschutzfreundliche Weitergabe einzelner Matchakten einschließlich möglicher Lösch-/Korrekturregeln spezifizieren; nicht mit bereits umgesetzter Cloud-Synchronisierung gleichsetzen.",
+      "currentState": "Spätere Ausbaustufe, keine Veröffentlichung oder fertige Implementierung bestätigt.",
+      "openPoints": "Exportformat, Löschung, Datenmigration und Sicherungsstrategie definieren.",
+      "doneWhen": "Export und Wiederherstellung sind geprüft; keine Daten werden ungewollt geteilt.",
+      "updatedAt": "2026-11-18T10:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO – gemeinsame Produkt-Roadmap, Abschnitt 17",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
     }
   ]
 }
