@@ -209,3 +209,62 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 .standalone-roadmap .rm-mini-streams button span{color:#d0cde3!important}
 .standalone-roadmap .rm-mini-streams button.active span{color:#f6f2fc!important}
 .standalone-roadmap .rm-mini-overview .rm-product-overview-heading p{color:#d2cee5!important}
+
+/* JUXILO / JX04: eigenständige Dachmarke nur für die sechs Spaß-Apps.
+   JX04-Originalfarben aus dem Google-Drive-Vektorset:
+   Purpur #53006d, Pink #ff00a8, Orange #ff8a00, Gelb #ffc700, Blau #00b3ff. */
+.standalone-roadmap .rm-project-card.rm-project-miniapps{
+  --app-accent:#ffc700!important;
+  background:radial-gradient(circle at 100% 0%,#8b12535e,transparent 60%),
+    linear-gradient(135deg,#39094f,#1b102f)!important;
+  border-color:#a546bd!important;
+  border-top:3px solid #ff8a00!important
+}
+.standalone-roadmap .rm-project-card.rm-project-miniapps strong{color:#fff9ff!important;letter-spacing:.035em}
+.standalone-roadmap .rm-project-card.rm-project-miniapps span{color:#e9d2ed!important}
+.rm-juxilo-project-icon{background:transparent!important;border-radius:0!important;object-fit:contain!important;width:42px!important;height:42px!important}
+.rm-mini-studio{--app-accent:#ffc700}
+.standalone-roadmap .rm-mini-overview{
+  background:radial-gradient(circle at 100% 0%,#7f155466,transparent 47%),
+    linear-gradient(132deg,#320b45,#190f2e)!important;
+  border-color:#93499a!important
+}
+.rm-juxilo-brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 15px}
+.rm-juxilo-brand img{display:block;width:150px;height:104px;object-fit:contain;object-position:left center;flex:none}
+.rm-juxilo-brand span{font-size:11px;font-weight:850;letter-spacing:.05em;
+  color:#ffe9fb;background:#5b2179;border:1px solid #9a559f;padding:9px 13px;border-radius:999px}
+.standalone-roadmap .rm-mini-overview .rm-product-overview-heading a{color:#ffcf57!important}
+.standalone-roadmap .rm-mini-overview .rm-product-overview-heading h2{color:#fff9ff!important}
+.standalone-roadmap .rm-mini-overview .rm-product-overview-heading p{color:#e5d3ed!important}
+.standalone-roadmap .rm-mini-streams button{
+  background:#271637!important;border-color:#614172!important;
+  color:#fdf6ff!important
+}
+.standalone-roadmap .rm-mini-streams button.rm-mini-studio{border-top-color:#ffc700!important}
+.standalone-roadmap .rm-mini-streams button.rm-mini-stream.active{
+  background:#4b285f!important;border-color:var(--app-accent,#ffc700)!important
+}
+.standalone-roadmap .rm-mini-streams button span{color:#d7c4df!important}
+.standalone-roadmap .rm-mini-streams button.active span{color:#fcf4ff!important}
+.standalone-roadmap .rm-mini-card.rm-mini-studio{--app-accent:#ffc700}
+.standalone-roadmap .rm-mini-card.rm-mini-studio .rm-category{color:#ffd450!important}
+.standalone-roadmap .rm-demo-card.demo-juxilo{
+  background:radial-gradient(circle at 100% 0%,#800e5855,transparent 62%),
+    linear-gradient(150deg,#370946,#180f2b)!important;
+  border-color:#814b91!important;border-top-color:#ff8a00!important;
+  color:#fcf8ff
+}
+.rm-demo-card.demo-juxilo .rm-juxilo-demo-label{display:flex;align-items:center;justify-content:flex-start;min-height:88px}
+.rm-demo-card.demo-juxilo .rm-juxilo-demo-label img{
+  display:block;width:146px;height:103px;max-width:100%;object-fit:contain;
+  object-position:left center;border-radius:0;background:transparent
+}
+.rm-demo-card.demo-juxilo p{color:#edddf2!important}
+.rm-demo-card.demo-juxilo p strong{color:#fff7fe}
+.rm-demo-card.demo-juxilo .rm-demo-upcoming{color:#ffe082;font-size:11px}
+.rm-demo-card.demo-juxilo a{color:#ffd35c!important}
+@media(max-width:600px){
+  .rm-juxilo-brand img{width:110px;height:75px}
+  .rm-juxilo-brand span{font-size:10px}
+  .rm-demo-card.demo-juxilo .rm-juxilo-demo-label img{width:132px;height:96px}
+}
