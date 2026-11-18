@@ -150,7 +150,7 @@ try {
     })();
     $seed = $seedDocument['items'] ?? null;
     $retiredIds = $seedDocument['retiredIds'] ?? [];
-    if (!is_array($seed) || count($seed) > 100) rm_error(503, 'Roadmap-Daten ungültig.');
+    if (!is_array($seed) || count($seed) > 250) rm_error(503, 'Roadmap-Daten ungültig.');
     $seen = [];
     foreach ($seed as $item) {
         $id = $item['id'] ?? '';
@@ -372,7 +372,7 @@ try {
             if (!in_array($identity['role'], ['admin','commenter'], true))
                 rm_error(403, 'Für Ideen und Kommentare ist ein Schreibzugang nötig.');
             if ($action === 'idea') {
-                if (count($state['items']) >= 200) rm_error(422, 'Die Ideensammlung ist voll.');
+                if (count($state['items']) >= 400) rm_error(422, 'Die Ideensammlung ist voll.');
                 $idea = rm_new_item($data, $identity['label'], $now);
                 $state['items'][] = $idea;
                 $response['itemId'] = $idea['id'];
