@@ -50,7 +50,7 @@ https://github.com/tennis-schiri/tennis-schiri-app/settings/secrets/actions
 | `ROADMAP_FTP_HOST` | FTP-Host von ALL-INKL, ohne `ftp://` |
 | `ROADMAP_FTP_USER` | separater FTP-Nutzer, der im Roadmap-Verzeichnis startet |
 | `ROADMAP_FTP_PASSWORD` | FTP-Kennwort |
-| `ROADMAP_ADMIN_USERNAME` | selbst gewählter Admin-Benutzername, 3–40 Zeichen: a–z, Zahlen, Punkt, Bindestrich, Unterstrich |
+| `ROADMAP_ADMIN_USERNAME` | selbst gewählter Admin-Benutzername, 3–40 Zeichen: a–z, Zahlen, Punkt, Bindestrich, Unterstrich (nicht „admin“, „gast“ oder „system“) |
 | `ROADMAP_ADMIN_PASSWORD` | starkes Admin-Passwort, mindestens 16 Zeichen (16–72 Bytes) |
 
 Das Admin-Passwort wird im CI zu einem Passwort-Hash verarbeitet und **niemals im Repository** gespeichert oder im Actions-Log ausgegeben. `roadmap-initial-admin.php` wird erst beim manuell gestarteten Workflow aus den Secrets erzeugt und nur als ausführbares, nicht als Text auslieferbares PHP auf den Server übertragen. Direkter Zugriff antwortet mit HTTP 404.
