@@ -116,7 +116,7 @@ def main():
         print("Buffer queue disabled: migration approval file not installed. No changes.")
         return
     data=json.loads(QUEUE.read_text(encoding="utf-8"))
-    if data.get("version")!=1 or len(data.get("posts",[]))!=73:
+    if data.get("version")!=1 or len(data.get("posts",[]))!=74:
         raise ValueError("Story manifest changed unexpectedly; stop and review")
     posts=data["posts"]
     unique=set()
