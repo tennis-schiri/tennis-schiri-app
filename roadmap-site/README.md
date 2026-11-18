@@ -5,7 +5,7 @@ Eigenständiges Roadmap-Portal mit **persönlichem Login statt ALL-INKL-Verzeich
 ## Bedienkonzept
 
 1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
-2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 81 initialen Themen (darunter 24 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 80 initialen Themen (darunter 24 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
 3. `strategie.php` zeigt alle 17 Kapitel der Gesamtplanung – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
 4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
 5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
@@ -68,7 +68,7 @@ Auf `Run workflow → main → Run workflow` klicken. Push auf `main` registrier
 
 Der manuelle Workflow:
 - übernimmt die **Original-TENNILO-Logos** aus dem Website-Repository;
-- kombiniert 33 bisherige Tournament-Themen und 48 Produkt-/Plattform-Ergänzungen (einschließlich 24 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
+- kombiniert 33 bisherige Tournament-Themen und 47 Produkt-/Plattform-Ergänzungen (einschließlich 23 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
 - generiert die geschützte Seed-PHP-Datei und die initiale Admin-Konfiguration;
 - prüft Syntax, bestehende Roadmap-Tests und HTTPS;
 - überträgt nur die **17** ausdrücklich freigegebenen Dateien per FTPS, ohne zu löschen, ohne `.htaccess` zu ersetzen und ohne die Tournament-App zu verändern;
@@ -106,6 +106,14 @@ Die Demo-Links werden **nach dem Login** im Roadmap-Portal angezeigt. Ein Roadma
 - `roadmap-site/daily-review.mjs` ermittelt GitHub-Commits von Tournament, Score, Umpire und TENNILO Website aus einem überlappenden 36-Stunden-Fenster.
 - `.github/workflows/roadmap-daily-review.yml` läuft täglich um 05:13 UTC (06:13 MEZ / 07:13 MESZ) und ist zusätzlich manuell startbar. Der Workflow aktualisiert **ein einziges GitHub-Issue** `TENNILO Roadmap Tagesabgleich` mit Commit-Links, ohne Live-Upload oder automatische Status-Freigabe.
 - Explizite Aufgabenreferenzen in Commit-Nachrichten werden als `RM(score-detail-01)` geschrieben. Sie erlauben eine konkrete Zuordnung; ein GitHub-Commit beweist nur Code-Aktivität, nicht erfolgreiche Demo-/Gerätetests.
-- Im Score-Bereich der Online-Roadmap lassen sich Web-Demo, iPhone & Watch, Tests, Beta, weitere Sportarten und Plattform getrennt filtern. Die 39 Score-Einträge enthalten die späteren Sportarten Padel, Pickleball, Beach Tennis und Tischtennis.
+- Im Score-Bereich der Online-Roadmap lassen sich Web-Demo, iPhone & Watch, Tests, Beta, weitere Sportarten und Plattform getrennt filtern. Die 38 Score-Einträge enthalten die späteren Sportarten Padel, Pickleball, Beach Tennis und Tischtennis.
 - Der tägliche zusätzliche ChatGPT-Abgleich prüft, soweit verbunden, auch Google Drive und dokumentierte Entwicklungstests. Unklare Änderungen bleiben Vorschläge. Die auf dem Webserver liegenden Benutzerkonten, Einladungen, Kommentare und manuelle Statusanpassungen werden nicht ersetzt.
 - **Live-Veröffentlichung bleibt manuell:** https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/roadmap-subdomain.yml
+
+## Einträge löschen und wiederherstellen
+
+Die Projektleitung kann einzelne Roadmap-Themen in der Detailansicht über **Eintrag löschen** nach einer Bestätigung in den **Papierkorb** verschieben. Gelöschte Punkte sind für andere Benutzer unsichtbar, bleiben einschließlich Kommentaren aber im privaten `state.json` erhalten. Die Projektleitung kann sie über den Papierkorb wiederherstellen. Gelöschte IDs werden in `deletedItemIds` gesichert und bei jeder Seed-Synchronisierung berücksichtigt, damit ein Upload sie nicht unbeabsichtigt erneut anlegt. Gäste und eingeladene Nutzer dürfen keine Einträge löschen.
+
+Die bereits doppelt vorhandene Score-Tischtennis-Detailaufgabe `score-detail-21` wurde mit dem ursprünglichen Thema `score-tabletennis` zusammengeführt. Die alte ID steht als `retiredIds` im Roadmap-Seed und wird beim Merge auch in vorhandenen Serverdaten ausgeblendet, ohne alte Kommentare im privaten Speicher zu löschen. Eine stillgelegte offizielle Dublette kann nicht über den Nutzer-Papierkorb wiederhergestellt werden.
+
+Die neue Lösch-/Wiederherstellungslogik wird vor dem manuellen Upload mit `tests/roadmap-portal-delete.php` auf der CI-Laufzeit geprüft.
