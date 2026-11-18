@@ -7,6 +7,11 @@ declare(strict_types=1);
  */
 const RM_STATUSES = ['idea', 'planned', 'progress', 'test', 'online'];
 const RM_PRIORITIES = ['low', 'medium', 'high'];
+// Gleiche Schlüssel wie die Produktbereiche der Roadmap-Oberfläche.
+const RM_WORKSTREAMS = ['formats','operations','live','ux','access','quality',
+    'demo','native','test','release','sports','platform','concept','scoring',
+    'rules','display','integration','offers','booking','pilot','data','security',
+    'standards','other'];
 // Ausschließlich Detailansicht, niemals Bestandteil der kompakten Karten.
 const RM_DETAIL_FIELDS = ['benefit'=>900, 'scope'=>1400, 'currentState'=>1400,
     'openPoints'=>1400, 'doneWhen'=>1000];
@@ -307,6 +312,9 @@ function rm_update_item(array &$state, string $id, array $data, string $now): ar
         if (isset($data['status'])) $item['status'] = rm_enum($data['status'], RM_STATUSES, 'Status');
         if (isset($data['priority'])) $item['priority'] = rm_enum($data['priority'], RM_PRIORITIES, 'Priorität');
         if (isset($data['category'])) $item['category'] = rm_enum($data['category'], RM_CATEGORIES, 'Bereich');
+        if (isset($data['workstream'])) {
+            $item['workstream'] = rm_enum($data['workstream'], RM_WORKSTREAMS, 'Entwicklungsbereich');
+        }
         foreach (['title'=>140,'description'=>2500,'milestone'=>140,'nextStep'=>500] as $field=>$limit) {
             if (isset($data[$field])) $item[$field] = rm_text($data[$field], $limit, $field);
         }
