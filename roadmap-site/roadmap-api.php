@@ -35,15 +35,15 @@ function rm_storage(): array {
         $custom, sys_get_temp_dir());
 }
 
-function rm_load_state(string $file, array $seed): array {
-    if (!is_file($file)) return rm_merge([], $seed);
+function rm_load_state(string $file, array $seed, array $retiredIds = []): array {
+    if (!is_file($file)) return rm_merge([], $seed, $retiredIds);
     $raw = @file_get_contents($file);
     if ($raw === false || strlen($raw) > 3500000) rm_error(503, 'Roadmap-Speicher nicht lesbar.');
     $saved = json_decode($raw, true);
     if (!is_array($saved) || ($saved['schemaVersion'] ?? 1) !== 1) {
         rm_error(503, 'Roadmap-Speicher hat eine ungültige Version.');
     }
-    return rm_merge($saved, $seed);
+    return rm_merge($saved, $seed, $retiredIds);
 }
 
 function rm_write_state(string $dir, array $state): void {
@@ -149,6 +149,7 @@ try {
         return require __DIR__ . '/roadmap-seed.php';
     })();
     $seed = $seedDocument['items'] ?? null;
+    $retiredIds = $seedDocument['retiredIds'] ?? [];
     if (!is_array($seed) || count($seed) > 100) rm_error(503, 'Roadmap-Daten ungültig.');
     $seen = [];
     foreach ($seed as $item) {
@@ -165,7 +166,7 @@ try {
     // invitations, comments and manual edits. Keep the old file for rollback.
     // This happens before any bootstrap: missing or corrupt legacy data fails closed.
     if ($legacyDir !== null) rm_migrate_legacy_state($dir, $legacyDir);
-    $state = rm_load_state($dir . '/state.json', $seed);
+    $state = rm_load_state($dir . '/state.json', $seed, $retiredIds);
 
     // Initial owner is created from the password hash generated from GitHub Secrets.
     // Migrated accounts, comments and legacy access codes remain untouched.
@@ -217,10 +218,15 @@ try {
         if (($_GET['export'] ?? '') === '1') {
             if ($identity['role'] !== 'admin') rm_error(403, 'Nur die Projektleitung kann exportieren.');
             rm_reply(['schemaVersion'=>1,'exportedAt'=>gmdate('c'),
-                'items'=>array_map('rm_public_item', $state['items'])]);
+                'items'=>array_map('rm_public_item', rm_active_items($state)),
+                'deletedItems'=>array_map('rm_public_item', rm_trashed_items($state)),
+                'retiredItems'=>array_map('rm_public_item', array_values(array_filter($state['items'],
+                    fn($item)=>in_array($item['id']??'', $state['retiredItemIds']??[],true))))]);
         }
         rm_reply([
-            'ok'=>true,'items'=>array_map('rm_public_item', $state['items']),
+            'ok'=>true,'items'=>array_map('rm_public_item', rm_active_items($state)),
+            'deletedItems'=>$identity['role']==='admin'?
+                array_map('rm_public_item',rm_trashed_items($state)):[],
             'session'=>['role'=>$identity['role'],'label'=>$identity['label'],
                 'csrf'=>$_SESSION['roadmapCsrf'],'account'=>$identity['account']??false,
                 'username'=>$identity['username']??null],
@@ -372,15 +378,25 @@ try {
                 $response['itemId'] = $idea['id'];
             } else {
                 $id = rm_text($data['itemId'] ?? null, 80, 'Eintrag');
+                if (!rm_is_active_item($state, $id)) rm_error(404, 'Eintrag nicht gefunden.');
                 rm_add_comment($state, $id, $identity['label'], $data['text'] ?? null, $now);
             }
         } else {
             if ($identity['role'] !== 'admin') rm_error(403, 'Nur die Projektleitung kann den Status ändern.');
             if ($action === 'update') {
                 $id = rm_text($data['itemId'] ?? null, 80, 'Eintrag');
+                if (!rm_is_active_item($state, $id)) rm_error(404, 'Eintrag nicht gefunden.');
                 rm_update_item($state, $id, $data, $now);
+            } elseif ($action === 'delete-item') {
+                $id = rm_text($data['itemId'] ?? null, 80, 'Eintrag');
+                rm_delete_item($state, $id);
+            } elseif ($action === 'restore-item') {
+                $id = rm_text($data['itemId'] ?? null, 80, 'Eintrag');
+                rm_restore_item($state, $id);
             } elseif ($action === 'delete-comment') {
-                rm_delete_comment($state, rm_text($data['itemId'] ?? null, 80, 'Eintrag'),
+                $id = rm_text($data['itemId'] ?? null, 80, 'Eintrag');
+                if (!rm_is_active_item($state, $id)) rm_error(404, 'Eintrag nicht gefunden.');
+                rm_delete_comment($state, $id,
                     rm_text($data['commentId'] ?? null, 80, 'Kommentar'), $now);
             } elseif ($action === 'rotate-owner') {
                 if ($state['ownerAccount']!==null)rm_error(403,'Bitte dein Benutzerkonto verwalten.');
