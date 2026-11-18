@@ -349,6 +349,8 @@ function editModal(id){
     '<div class="rm-form-grid"><label class="rm-field">Status'+formValue("status",x.status,STATUS.map(v=>[v.key,v.title]))+'</label>'+
     '<label class="rm-field">Priorität'+formValue("priority",x.priority,[["high","Hoch"],["medium","Mittel"],["low","Niedrig"]])+'</label></div>'+
     '<label class="rm-field">Bereich'+categorySelect(x.category)+'</label>'+
+    (productOf(x)!=="tournament"?'<label class="rm-field">Entwicklungsbereich'+
+      formValue("workstream",productStream(x),productStreamOptions(productOf(x),[x]))+'</label>':'')+
     '<label class="rm-field">Meilenstein<input name="milestone" maxlength="140" required value="'+esc(x.milestone)+'"></label>'+
     '<label class="rm-field">Nächster Schritt<textarea name="nextStep" rows="3" maxlength="500" required>'+esc(x.nextStep)+'</textarea></label>'+
     '<div class="rm-edit-details-head"><h3>Ausführliche Details</h3><p>Diese Felder erscheinen ausschließlich nach dem Öffnen eines Roadmap-Punktes. Sie sind optional und können jederzeit erweitert werden.</p></div>'+
@@ -525,7 +527,7 @@ document.addEventListener("submit",event=>{
   }
   if(kind==="edit")return run("update",{itemId:form.dataset.id,
     title:d.get("title"),description:d.get("description"),status:d.get("status"),
-    priority:d.get("priority"),category:d.get("category"),
+    priority:d.get("priority"),category:d.get("category"),workstream:d.get("workstream"),
     milestone:d.get("milestone"),nextStep:d.get("nextStep"),
     ...Object.fromEntries(DETAIL_SECTIONS.map(([key])=>[key,d.get(key)]))},
     ()=>{closeModal();detail(form.dataset.id);toast("Status und Details aktualisiert.");});
