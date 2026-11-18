@@ -15,7 +15,13 @@ for(const item of items){
   ids.add(item.id);
 }
 if(items.length>100)throw new Error('Maximal 100 Seeds erlaubt');
-const combined={schemaVersion:1,updated:additions.updated,source:'Tournament-GitHub und gemeinsame TENNILO-Roadmap',items};
+const retiredIds=additions.retiredIds??[];
+if(!Array.isArray(retiredIds)||retiredIds.length>100||
+  retiredIds.some(id=>typeof id!=='string'||!/^[a-z0-9-]{2,70}$/.test(id)||ids.has(id))||
+  new Set(retiredIds).size!==retiredIds.length){
+  throw new Error('Ungültige oder weiterhin aktive stillgelegte Roadmap-ID');
+}
+const combined={schemaVersion:1,updated:additions.updated,source:'Tournament-GitHub und gemeinsame TENNILO-Roadmap',items,retiredIds};
 const json=JSON.stringify(combined,null,2);
 if(json.includes('ROADMAP_SOURCE_DATA'))throw new Error('PHP Nowdoc delimiter collides with data');
 const php=[
