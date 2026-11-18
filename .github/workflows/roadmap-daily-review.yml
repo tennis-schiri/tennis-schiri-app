@@ -1,0 +1,39 @@
+name: TENNILO Roadmap – täglicher Entwicklungsabgleich
+
+# Prüft GitHub-Code, nicht die private Server-Datenbank und nicht den Live-Upload.
+# Zeit: 05:13 UTC = 06:13 MEZ / 07:13 MESZ (GitHub-Zeitplan kann verzögert starten).
+on:
+  schedule:
+    - cron: '13 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: tennilo-roadmap-daily-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    name: Roadmap gegen aktuelle Entwicklungs-Commits abgleichen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Roadmap-Quellcode auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Tagesprüfer und Roadmap-Daten testen
+        run: |
+          node --check roadmap-site/daily-review.mjs
+          node --test roadmap-site/daily-review.test.mjs
+      - name: GitHub-Commits prüfen und einen Tagesbericht aktualisieren
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node roadmap-site/daily-review.mjs
