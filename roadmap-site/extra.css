@@ -189,3 +189,23 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 .rm-demo-card.demo-miniapps p{color:#d3cfea}
 .rm-demo-card.demo-miniapps a{color:#f5f36d}
 @media(max-width:600px){.rm-mini-streams .rm-mini-icon{width:34px;height:34px}.rm-demo-card.demo-miniapps .rm-demo-label strong{font-size:16px}}
+
+/* Lesbarkeit der dunklen Wer-muss-Roadmap-Karten:
+   Die allgemeine Tournament-Card nutzt dunkle Texte auf hellen Karten.
+   Mini-App-Karten sind dagegen dunkel und benötigen eigene Kontrastfarben. */
+.standalone-roadmap .rm-mini-card{color:#f9f8ff!important}
+.standalone-roadmap .rm-mini-card>strong{color:#faf9ff!important}
+.standalone-roadmap .rm-mini-card>p{color:#d4d4e5!important}
+.standalone-roadmap .rm-mini-card .rm-card-foot{
+  color:#c2c5dc!important;border-top-color:#504a68!important
+}
+.standalone-roadmap .rm-mini-card .rm-card-foot span{color:#c2c5dc!important}
+.standalone-roadmap .rm-mini-row{color:#f9f8ff!important;border-bottom-color:#504a68!important}
+.standalone-roadmap .rm-mini-row .rm-list-main strong{color:#faf9ff!important}
+.standalone-roadmap .rm-mini-row .rm-list-main small{color:#cbd0e4!important}
+.standalone-roadmap .rm-mini-row .rm-list-priority{color:#d2d5e8!important}
+.standalone-roadmap .rm-mini-streams button{color:#f7f5ff!important}
+.standalone-roadmap .rm-mini-streams button strong{color:#f7f5ff!important}
+.standalone-roadmap .rm-mini-streams button span{color:#d0cde3!important}
+.standalone-roadmap .rm-mini-streams button.active span{color:#f6f2fc!important}
+.standalone-roadmap .rm-mini-overview .rm-product-overview-heading p{color:#d2cee5!important}
