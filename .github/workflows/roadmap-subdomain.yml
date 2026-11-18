@@ -52,6 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p roadmap-site/dist/assets
+          cp roadmap-site/index.html roadmap-site/dist/index.html
           cp roadmap-site/index.php roadmap-site/dist/index.php
           cp roadmap-site/strategie.php roadmap-site/dist/strategie.php
           cp roadmap-site/roadmap-api.php roadmap-site/dist/roadmap-api.php
@@ -107,7 +108,7 @@ jobs:
           # FTP-Zugang MUSS bereits im Verzeichnis der Subdomain starten.
           # Kein .htaccess-Upload, keine Löschbefehle und kein Zugang zur Turnier-App.
           files=(
-            index.php strategie.php
+            index.html index.php strategie.php
             roadmap-api.php roadmap-lib.php roadmap-seed.php
             assets/styles.css assets/roadmap.css assets/roadmap.js assets/extra.css
             assets/tennilo-logo-dark.png
@@ -124,4 +125,4 @@ jobs:
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
           done
-          echo 'TENNILO Roadmap hochgeladen (14 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
+          echo 'TENNILO Roadmap hochgeladen (15 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
