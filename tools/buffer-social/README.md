@@ -1,3 +1,30 @@
+# Instagram-Veröffentlichungsstandard ab 1. Dezember 2026
+
+**Automatisch:** Metricool für Feed-Beiträge/Karussells, Buffer für sämtliche Stories.
+
+**Status 18.11.2026:**
+- Dezember: Tennis-Schiri **18 Feed-Posts bei Metricool** und **40 Stories im Buffer-Migrationsplan**.
+- Dezember: TENNILO **7 Feed-Posts bei Metricool** und **29 Stories im Buffer-Migrationsplan**.
+- Alle 69 Dezember-Stories sind bei Metricool nur noch **Entwürfe** (`draft=true, autoPublish=false`).
+- November Tennis-Schiri: fünf Rest-Stories (20., 22., 25., 27., 29.11.) via Buffer statt Metricool.
+- Einmalige Ausnahme 29.11.: Regelcheck #04 mit **vier Folien und vollständiger Caption** via Buffer (Metricool-Original als Entwurf); diese Ausnahme dient der 20-Beiträge-Grenze.
+- Bereits vor dem Umbau bei Buffer geplante Test-Story: 24.11.2026, 18:00 Uhr.
+- 74 Storys und ein Feed-Karussell sind in [`stories-2026.json`](./stories-2026.json) inventarisiert. Nur `enabled=true` und `source_disabled=true` werden von der Action eingeplant.
+- Die öffentlich benötigten Originalgrafiken befinden sich auf dem **separaten GitHub-Zweig `buffer-media`**, nicht im Website-Quellcode.
+- Der automatische [Buffer-Queue-Workflow](https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/buffer-queue.yml) läuft regelmäßig und bei Änderungen des Migrationsplans.
+- Der [aktuelle Statusbericht](https://github.com/tennis-schiri/tennis-schiri-app/blob/buffer-media/status/last-buffer-queue.txt) zeigt freie Warteschlangenplätze und neu geplante Buffer-Beiträge.
+- [Medien-Spiegelung](https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/buffer-assets.yml) kopiert Originalbilder aus der bestehenden Planung. Sie selbst veröffentlicht nichts.
+- Google-Kalender „Tennis-Schiri“ trägt den Veröffentlichungsweg in den Story-Terminen; diese Kalendertermine führen keine Veröffentlichungen aus.
+
+**Sicherheit:** Buffers Free-Queue umfasst höchstens zehn gleichzeitig geplante Beiträge je Instagram-Kanal.
+Es wird nie ein aktiver Metricool-Termin automatisch zusätzlich in Buffer eingestellt. Feed-Inhalte bleiben unverändert;
+der November-Karussell-Sonderfall wird vollständig als vierteiliger Feed-Post übernommen.
+
+**Offener Praxistest:** Der 24. November muss noch zeigen, dass Buffer die geplante Story tatsächlich auf Instagram veröffentlicht.
+Die erfolgreiche API-Terminierung bestätigt die reale Veröffentlichung noch nicht.
+
+---
+
 # Buffer ↔ GitHub Actions (Tennis-Schiri & TENNILO)
 
 **Status:** Bridge installiert; **nicht** mit Buffer verbunden und **keine Beiträge übertragen**.
