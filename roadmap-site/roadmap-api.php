@@ -130,7 +130,6 @@ function rm_members(array $state): array {
 
 try {
     if (!rm_is_https()) rm_error(403, 'Roadmap erfordert HTTPS.');
-    if (rm_basic_user() === null) rm_error(403, 'Roadmap benötigt den Passwortschutz der Testseite.');
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     if (!in_array($method, ['GET','POST'], true)) {
         header('Allow: GET, POST');
@@ -165,9 +164,40 @@ try {
     // This happens before any bootstrap: missing or corrupt legacy data fails closed.
     if ($legacyDir !== null) rm_migrate_legacy_state($dir, $legacyDir);
     $state = rm_load_state($dir . '/state.json', $seed);
+
+    // Initial owner is created from the password hash generated from GitHub Secrets.
+    // Migrated accounts, comments and legacy access codes remain untouched.
+    if ($state['ownerAccount'] === null && $state['adminHash'] === null) {
+        define('TENNILO_ROADMAP_INTERNAL_ADMIN', true);
+        $initial = require __DIR__ . '/roadmap-initial-admin.php';
+        if (!is_array($initial) ||
+            !is_string($initial['username'] ?? null) ||
+            !is_string($initial['passwordHash'] ?? null) ||
+            !preg_match('/^[a-z0-9][a-z0-9._-]{2,39}$/D', $initial['username']) ||
+            strlen($initial['passwordHash']) < 40) {
+            rm_error(503, 'Administratorkonto ist nicht sicher eingerichtet.');
+        }
+        $state['ownerAccount'] = [
+            'username' => $initial['username'],
+            'passwordHash' => $initial['passwordHash'],
+            'createdAt' => gmdate('c')
+        ];
+        rm_write_state($dir, $state);
+    }
+
     $identity = rm_identity($state);
 
     if ($method === 'GET') {
+        // Do not expose roadmap items or comments before login.
+        if ($identity['role'] === 'guest') {
+            rm_reply([
+                'ok'=>true, 'items'=>[],
+                'session'=>['role'=>'guest', 'label'=>'Gast',
+                    'csrf'=>$_SESSION['roadmapCsrf'], 'account'=>false],
+                'bootstrapAvailable'=>false, 'storagePersistent'=>$persistent,
+                'members'=>[]
+            ]);
+        }
         if (($_GET['export'] ?? '') === '1') {
             if ($identity['role'] !== 'admin') rm_error(403, 'Nur die Projektleitung kann exportieren.');
             rm_reply(['schemaVersion'=>1,'exportedAt'=>gmdate('c'),
@@ -178,8 +208,7 @@ try {
             'session'=>['role'=>$identity['role'],'label'=>$identity['label'],
                 'csrf'=>$_SESSION['roadmapCsrf'],'account'=>$identity['account']??false,
                 'username'=>$identity['username']??null],
-            'bootstrapAvailable'=>$state['adminHash']===null &&
-                $state['ownerAccount']===null && rm_basic_user()!==null,
+            'bootstrapAvailable'=>false,
             'storagePersistent'=>$persistent,
             'members'=>$identity['role']==='admin'?rm_members($state):[]
         ]);
@@ -204,6 +233,10 @@ try {
         rm_error(403, 'Sitzung ungültig. Seite neu laden.');
     }
     $action = $data['action'] ?? '';
+    if ($identity['role'] === 'guest' &&
+        !in_array($action, ['login-account','register-invite','login'], true)) {
+        rm_error(403, 'Bitte zuerst mit deinem persönlichen Konto anmelden.');
+    }
     $now = gmdate('c');
     $response = ['ok'=>true];
 
@@ -221,16 +254,6 @@ try {
             current(array_filter($state['invites'], fn($m)=>($m['id']??null)===$id));
         rm_account_session($id, $entry['passwordHash']);
         rm_login_rate(false);
-    } elseif ($action === 'bootstrap-account') {
-        if ($state['adminHash'] !== null || $state['ownerAccount'] !== null)
-            rm_error(403, 'Die erstmalige Einrichtung ist nicht verfügbar.');
-        $username = rm_username($data['username'] ?? null);
-        $password = rm_password($data['password'] ?? null);
-        $state['ownerAccount'] = ['username'=>$username,
-            'passwordHash'=>password_hash($password, PASSWORD_DEFAULT),
-            'createdAt'=>$now];
-        rm_account_session('owner', $state['ownerAccount']['passwordHash']);
-        rm_write_state($dir, $state);
     } elseif ($action === 'register-invite') {
         $token = $data['token'] ?? null;
         if (!rm_valid_code($token)) rm_error(403, 'Einladungslink ungültig oder abgelaufen.');
