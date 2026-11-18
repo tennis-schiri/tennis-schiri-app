@@ -2,6 +2,12 @@ name: TENNILO Roadmap – manuell auf roadmap.tennilo.de
 
 on:
   workflow_dispatch:
+    inputs:
+      reset_admin_login:
+        description: 'Admin-Zugang mit ROADMAP_ADMIN_* neu setzen (bestehende Roadmap-Daten behalten)'
+        required: false
+        default: false
+        type: boolean
   push:
     paths:
       - '.github/workflows/roadmap-subdomain.yml'
@@ -73,6 +79,8 @@ jobs:
         env:
           ROADMAP_ADMIN_USERNAME: ${{ secrets.ROADMAP_ADMIN_USERNAME }}
           ROADMAP_ADMIN_PASSWORD: ${{ secrets.ROADMAP_ADMIN_PASSWORD }}
+          ROADMAP_ADMIN_RESET: ${{ inputs.reset_admin_login && 'true' || 'false' }}
+          ROADMAP_ADMIN_RESET_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
           php roadmap-site/make-admin-config.php
