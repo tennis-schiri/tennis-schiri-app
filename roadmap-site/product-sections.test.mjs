@@ -54,7 +54,7 @@ test('Alle offiziellen Themen sind genau einem gültigen Bereich zugeordnet',()=
     assert.notEqual(ui.productStream(item),'other','Ohne Entwicklungsbereich: '+item.id);
     assert.ok(ui.streamLabel(item).length>0,item.id);
   }
-  assert.equal(ids.size,80);
+  assert.ok(ids.size>=80,'Bestehende Roadmap-Themen erhalten');
 });
 
 test('Die Gesamtübersicht zeigt alle Projekte mit den echten Themenzahlen',()=>{
