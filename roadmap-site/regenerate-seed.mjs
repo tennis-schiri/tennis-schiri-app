@@ -14,7 +14,7 @@ for(const item of items){
   }
   ids.add(item.id);
 }
-if(items.length>100)throw new Error('Maximal 100 Seeds erlaubt');
+if(items.length>250)throw new Error('Maximal 250 Seeds erlaubt');
 const retiredIds=additions.retiredIds??[];
 if(!Array.isArray(retiredIds)||retiredIds.length>100||
   retiredIds.some(id=>typeof id!=='string'||!/^[a-z0-9-]{2,70}$/.test(id)||ids.has(id))||
