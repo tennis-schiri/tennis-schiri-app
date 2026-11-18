@@ -1,0 +1,59 @@
+name: Buffer · Story-Grafiken sichern
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/buffer-assets.yml'
+      - 'tools/buffer-social/stories-2026.json'
+      - 'tools/buffer-social/mirror_assets.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: buffer-media-backup
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    name: Originalgrafiken nach buffer-media kopieren (kein Instagram-Post)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: GitHub Hauptzweig auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Original-Manifest und Sicherungsskript bereitstellen
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp tools/buffer-social/stories-2026.json "$RUNNER_TEMP/buffer-manifest.json"
+          cp tools/buffer-social/mirror_assets.py "$RUNNER_TEMP/buffer-mirror.py"
+
+      - name: Öffentlichen Medienzweig auschecken
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin buffer-media
+          git switch -C buffer-media origin/buffer-media
+
+      - name: Grafiken sichern (noch KEINE Terminierung)
+        shell: bash
+        run: python3 "$RUNNER_TEMP/buffer-mirror.py" "$RUNNER_TEMP/buffer-manifest.json" "$GITHUB_WORKSPACE"
+
+      - name: Gesicherte Grafiken einchecken
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- stories/
+          if git diff --cached --quiet; then
+            echo "Alle Story-Grafiken sind bereits gesichert."
+          else
+            git commit -m "Sichere geplante Instagram-Story-Grafiken fuer Buffer"
+            git push origin HEAD:buffer-media
+          fi
