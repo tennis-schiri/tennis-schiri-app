@@ -37,9 +37,9 @@ vm.runInNewContext(safeScript+`
 `,sandbox,{filename:'roadmap.js'});
 const ui=sandbox.__sections;
 
-test('Alle fünf Produkte haben eigene Entwicklungsbereiche',()=>{
-  assert.deepEqual(Array.from(ui.PRODUCTS.map(x=>x[0])),['all','tournament','score','umpire','business','platform']);
-  for(const key of ['tournament','score','umpire','business','platform']){
+test('Alle Projektfamilien einschließlich unabhängiger Mini-Apps haben eigene Entwicklungsbereiche',()=>{
+  assert.deepEqual(Array.from(ui.PRODUCTS.map(x=>x[0])),['all','tournament','score','umpire','business','platform','miniapps']);
+  for(const key of ['tournament','score','umpire','business','platform','miniapps']){
     assert.ok(ui.PRODUCT_STREAMS[key]?.length>=3,key);
   }
 });
@@ -54,7 +54,8 @@ test('Alle offiziellen Themen sind genau einem gültigen Bereich zugeordnet',()=
     assert.notEqual(ui.productStream(item),'other','Ohne Entwicklungsbereich: '+item.id);
     assert.ok(ui.streamLabel(item).length>0,item.id);
   }
-  assert.ok(ids.size>=80,'Bestehende Roadmap-Themen erhalten');
+  assert.ok(ids.size>=96,'TENNILO- und Mini-App-Themen ohne Verlust');
+  assert.equal(items.filter(x=>x.category==='Weitere Apps').length,16,'16 Mini-App-Einträge');
 });
 
 test('Die Gesamtübersicht zeigt alle Projekte mit den echten Themenzahlen',()=>{
@@ -88,4 +89,20 @@ test('Nicht zugewiesene Ideen erscheinen unter Weitere Themen',()=>{
   const custom={id:'custom-idea',title:'Vorschlag',description:'',category:'TENNILO Umpire',status:'idea',priority:'medium'};
   assert.equal(ui.productStream(custom),'other');
   assert.ok(ui.productStreamOptions('umpire',[custom]).some(([key,label])=>key==='other'&&label==='Weitere Themen'));
+});
+
+test('Alle sechs Mini-Apps bleiben in Demo und nativer Planung getrennt',()=>{
+  const slugs=['wer-muss','punktlandung','fingerchaos','nicht-kleckern','nur-noch-einmal','voellig-daneben'];
+  for(const slug of slugs){
+    assert.ok(items.some(x=>x.id==='mini-'+slug+'-demo'&&x.status==='test'),slug+' Demo');
+    assert.ok(items.some(x=>x.id==='mini-'+slug+'-native'),slug+' Native');
+    assert.ok(ui.PRODUCT_STREAMS.miniapps.some(([key])=>key===slug),slug+' Bereich');
+  }
+  ui.setItems(items);
+  ui.setProduct('miniapps');
+  const html=ui.overview();
+  for(const icon of ['wm04b-logo.svg','pl05-icon.webp','fc05-icon.webp','nk05-icon.webp','ne05-icon.webp','vd05-icon.webp']){
+    assert.ok(html.includes(icon),'Originalicon '+icon);
+  }
+  assert.ok(html.includes('rm-mini-overview'),'eigenständige Wer-muss-Gestaltung');
 });
