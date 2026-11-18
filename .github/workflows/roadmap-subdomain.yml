@@ -124,4 +124,4 @@ jobs:
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
           done
-          echo 'TENNILO Roadmap hochgeladen (13 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
+          echo 'TENNILO Roadmap hochgeladen (14 Dateien). Zugang und Persistenz anschließend im Browser prüfen.'
