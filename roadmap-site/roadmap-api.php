@@ -104,16 +104,28 @@ function rm_account_session(string $id, string $passwordHash): void {
     $_SESSION['roadmapAccount'] = $id;
     $_SESSION['roadmapCredentialProof'] = hash('sha256', $passwordHash);
 }
-function rm_login_rate(bool $failed): void {
-    $until = (int)($_SESSION['roadmapLoginWindow'] ?? 0);
-    if ($until < time()) {
-        $_SESSION['roadmapLoginWindow'] = time() + 900;
-        $_SESSION['roadmapLoginFailures'] = 0;
+function rm_login_rate(?bool $failed, string $dir): void {
+    // Persisted rate limiting to prevent bypass simply by clearing session cookies.
+    // The private directory is outside the web root.
+    $remote = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    $file = $dir . '/.login-rate-' . hash('sha256', $remote);
+    $now = time();
+    $entry = is_file($file) ? json_decode((string)@file_get_contents($file),true) : null;
+    if (!is_array($entry) || (int)($entry['until']??0) <= $now) {
+        $entry = ['until'=>$now+900,'failures'=>0];
     }
-    if ((int)($_SESSION['roadmapLoginFailures'] ?? 0) >= 5)
+    if ((int)$entry['failures'] >= 5) {
         rm_error(429, 'Zu viele Anmeldeversuche. Bitte später erneut versuchen.');
-    if ($failed) $_SESSION['roadmapLoginFailures']++;
-    else $_SESSION['roadmapLoginFailures'] = 0;
+    }
+    if ($failed === true) {
+        $entry['failures']++;
+        if (@file_put_contents($file, json_encode($entry), LOCK_EX) === false ||
+            !@chmod($file, 0600)) {
+            rm_error(503, 'Anmeldeschutz nicht verfügbar.');
+        }
+    } elseif ($failed === false) {
+        if (is_file($file)) @unlink($file);
+    }
 }
 
 function rm_members(array $state): array {
@@ -242,18 +254,18 @@ try {
 
     // Login and bootstrap use the same CSRF and HTTPS checks as all writes.
     if ($action === 'login-account') {
-        rm_login_rate(false); // Checks the existing failure window before verifying credentials.
+        rm_login_rate(null, $dir); // Check before verifying credentials.
         $username = rm_username($data['username'] ?? null);
         $password = is_string($data['password'] ?? null) ? $data['password'] : '';
         $id = rm_authenticate($state, $username, $password);
         if ($id === null) {
-            rm_login_rate(true);
+            rm_login_rate(true, $dir);
             rm_error(403, 'Benutzername oder Passwort nicht korrekt.');
         }
         $entry = $id === 'owner' ? $state['ownerAccount'] :
             current(array_filter($state['invites'], fn($m)=>($m['id']??null)===$id));
         rm_account_session($id, $entry['passwordHash']);
-        rm_login_rate(false);
+        rm_login_rate(false, $dir);
     } elseif ($action === 'register-invite') {
         $token = $data['token'] ?? null;
         if (!rm_valid_code($token)) rm_error(403, 'Einladungslink ungültig oder abgelaufen.');
