@@ -102,6 +102,23 @@ jobs:
           grep -Fq 'TENNILO Umpire' roadmap-site/dist/strategie.php
           grep -Fq 'Tischtennis' roadmap-site/dist/strategie.php
           test ! -f roadmap-site/dist/roadmap-seed.json
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          root = Path("roadmap-site/dist")
+          for name, expected in [
+              ("favicon.ico", (256, 256)),
+              ("favicon-32.png", (32, 32)),
+              ("favicon-192.png", (192, 192)),
+              ("apple-touch-icon.png", (180, 180)),
+          ]:
+              with Image.open(root / name) as icon:
+                  if name == "favicon.ico":
+                      assert (256, 256) in icon.info.get("sizes", set()), "Missing 256px ICO"
+                  else:
+                      assert icon.size == expected, (name, icon.size)
+              print("Favicon OK:", name)
+          PY
 
       - name: HTTPS der Roadmap-Subdomain prüfen
         shell: bash
@@ -129,6 +146,7 @@ jobs:
           # Kein .htaccess-Upload, keine Löschbefehle und kein Zugang zur Turnier-App.
           files=(
             index.html index.php strategie.php
+            favicon.ico favicon-32.png favicon-192.png apple-touch-icon.png
             roadmap-api.php roadmap-lib.php roadmap-session-guard.php roadmap-seed.php roadmap-initial-admin.php
             assets/styles.css assets/roadmap.css assets/roadmap.js assets/extra.css
             assets/tennilo-logo-dark.png
@@ -145,7 +163,7 @@ jobs:
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" "ftp://${FTP_HOST}:21/$relative"
           done
-          echo 'TENNILO Roadmap hochgeladen (17 Dateien). Persönlichen Login jetzt prüfen.'
+          echo 'TENNILO Roadmap hochgeladen (21 Dateien). Persönlichen Login jetzt prüfen.'
 
       - name: Kontrollieren, dass ohne Login keine Roadmap-Daten ausgeliefert werden
         shell: bash
