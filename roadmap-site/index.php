@@ -57,7 +57,7 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <a href="https://app.tennis-schiri.de/index.html" target="_blank" rel="noopener noreferrer">Tournament-Demo öffnen <span aria-hidden="true">↗</span></a>
       </article>
       <article class="rm-demo-card demo-score">
-        <div class="rm-demo-label"><img src="./assets/tennilo-score-cutout.png" alt="TENNILO Score" loading="lazy"></div>
+        <div class="rm-demo-label"><img src="./assets/tennilo-score-cutout-dark.png" alt="TENNILO Score" loading="lazy"></div>
         <p>Spielstände am Smartphone und an der Watch erfassen.</p>
         <a href="https://score.tennilo.de/" target="_blank" rel="noopener noreferrer">Score-Demo öffnen <span aria-hidden="true">↗</span></a>
       </article>
