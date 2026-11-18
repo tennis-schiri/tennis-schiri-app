@@ -1289,6 +1289,406 @@
         }
       ],
       "workstream": "sports"
+    },
+    {
+      "id": "mini-portal",
+      "title": "Wer muss?! – gemeinsame Mini-App-Werkstatt",
+      "description": "Eine gemeinsame Browser-Zentrale mit sechs Testspielen im WM04b-Originaldesign.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "studio",
+      "priority": "high",
+      "scope": "Sechs Browser-Prototypen unter /apps/<slug>/, gemeinsame App-Übersicht, Navigation, Neustart/Startseite, rechtliche Seiten und echte Logo-Sets.",
+      "currentState": "Hauptseite und sechs Unterseiten sind in GitHub vorhanden. FTPS-Workflow ist manuell. Live-Erreichbarkeit und tatsächliche Veröffentlichung nicht unabhängig geprüft.",
+      "nextStep": "Browser-Testseiten auf iPhone/Android durchspielen und Ziel-Domain/FTPS-Upload verifizieren.",
+      "milestone": "Gemeinsame Browser-Werkstatt",
+      "benefit": "Eine gemeinsame Browser-Zentrale mit sechs Testspielen im WM04b-Originaldesign.",
+      "openPoints": "Browser-Testseiten auf iPhone/Android durchspielen und Ziel-Domain/FTPS-Upload verifizieren.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-wer-muss-demo",
+      "title": "Wer muss?! · Browser-Demo",
+      "description": "Zufällige Auswahl eines Fingers nach Countdown auf einem Smartphone.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "wer-muss",
+      "priority": "high",
+      "scope": "Multitouch-Demo mit 3/5/10-Sekunden-Countdown und Zufallsauswahl. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/wer-muss/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Zufällige Auswahl eines Fingers nach Countdown auf einem Smartphone.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-wer-muss-native",
+      "title": "Wer muss?! · iPhone-/Android-App",
+      "description": "Flutter-App mit Multitouch-Fingern, Countdown, Startbildschirm und DE/EN.",
+      "category": "Weitere Apps",
+      "status": "progress",
+      "workstream": "wer-muss",
+      "priority": "high",
+      "scope": "Flutter-App mit Multitouch-Fingern, Countdown, Startbildschirm und DE/EN. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Flutter-Code für iPhone/Android vorhanden; echtes iPhone und Mehrfinger-Tests stehen aus.",
+      "nextStep": "iPhone-Geräte-Build, Multitouch-Grenzfälle, Neustart und DE/EN prüfen.",
+      "milestone": "Native App · aktive Entwicklung",
+      "benefit": "Flutter-App mit Multitouch-Fingern, Countdown, Startbildschirm und DE/EN.",
+      "openPoints": "iPhone-Geräte-Build, Multitouch-Grenzfälle, Neustart und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-punktlandung-demo",
+      "title": "Punktlandung! · Browser-Demo",
+      "description": "Stoppuhr möglichst exakt auf einer Zielzeit anhalten.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "punktlandung",
+      "priority": "medium",
+      "scope": "Browser-Prototyp mit Zielzeiten und verdeckter Anzeige. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/punktlandung/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Stoppuhr möglichst exakt auf einer Zielzeit anhalten.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-punktlandung-native",
+      "title": "Punktlandung! · iPhone-/Android-App",
+      "description": "Native iPhone-/Android-App mit Zeitmessung, Bestzeiten und möglichen Duellen.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "workstream": "punktlandung",
+      "priority": "medium",
+      "scope": "Native iPhone-/Android-App mit Zeitmessung, Bestzeiten und möglichen Duellen. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Browser-Prototyp im GitHub-Code, noch kein nativer Build.",
+      "nextStep": "Flutter-Startversion und Zeitmess-Tests planen.",
+      "milestone": "Native App · nach Browser-Test",
+      "benefit": "Native iPhone-/Android-App mit Zeitmessung, Bestzeiten und möglichen Duellen.",
+      "openPoints": "Flutter-Startversion und Zeitmess-Tests planen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-fingerchaos-demo",
+      "title": "Fingerchaos · Browser-Demo",
+      "description": "Reaktionsspiel: richtige Kreise treffen, falsche vermeiden.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "fingerchaos",
+      "priority": "medium",
+      "scope": "Browser-Test mit grünen Treffern, korallfarbenen Fallen und 20-Sekunden-Runden. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/fingerchaos/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Reaktionsspiel: richtige Kreise treffen, falsche vermeiden.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-fingerchaos-native",
+      "title": "Fingerchaos · iPhone-/Android-App",
+      "description": "Mobile Reaktions-App mit Zielen, Fehlerwertung und lokalen Bestzeiten.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "workstream": "fingerchaos",
+      "priority": "medium",
+      "scope": "Mobile Reaktions-App mit Zielen, Fehlerwertung und lokalen Bestzeiten. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Browser-Prototyp im GitHub-Code, noch kein nativer Build.",
+      "nextStep": "Touchflächen, Reaktionszeiten und Schwierigkeitsstufen testen.",
+      "milestone": "Native App · nach Browser-Test",
+      "benefit": "Mobile Reaktions-App mit Zielen, Fehlerwertung und lokalen Bestzeiten.",
+      "openPoints": "Touchflächen, Reaktionszeiten und Schwierigkeitsstufen testen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-nicht-kleckern-demo",
+      "title": "Nicht kleckern! · Browser-Demo",
+      "description": "Eine randvolle virtuelle Kaffeetasse möglichst gut ausbalancieren.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "nicht-kleckern",
+      "priority": "medium",
+      "scope": "Browser-Demo mit kippender Kaffeetasse; Sensor-Test optional. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/nicht-kleckern/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Eine randvolle virtuelle Kaffeetasse möglichst gut ausbalancieren.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-nicht-kleckern-native",
+      "title": "Nicht kleckern! · iPhone-/Android-App",
+      "description": "Native App mit Bewegungssensoren, Kaffee-Füllstand und Kalibrierung.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "workstream": "nicht-kleckern",
+      "priority": "medium",
+      "scope": "Native App mit Bewegungssensoren, Kaffee-Füllstand und Kalibrierung. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Browser-Prototyp vorhanden; native Sensor-Tests fehlen.",
+      "nextStep": "Sensorzugriff auf iOS/Android und Kalibrierung erproben.",
+      "milestone": "Native App · nach Browser-Test",
+      "benefit": "Native App mit Bewegungssensoren, Kaffee-Füllstand und Kalibrierung.",
+      "openPoints": "Sensorzugriff auf iOS/Android und Kalibrierung erproben.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-nur-noch-einmal-demo",
+      "title": "Nur noch einmal! · Browser-Demo",
+      "description": "Ballon aufblasen und rechtzeitig aufhören, bevor er platzt.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "nur-noch-einmal",
+      "priority": "medium",
+      "scope": "Browser-Prototyp mit Gedrückthalten, Wachstum und Risiko-Spielmechanik. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/nur-noch-einmal/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Ballon aufblasen und rechtzeitig aufhören, bevor er platzt.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-nur-noch-einmal-native",
+      "title": "Nur noch einmal! · iPhone-/Android-App",
+      "description": "Touch-and-Hold-Spiel mit Risiko, Wertung und Highscores.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "workstream": "nur-noch-einmal",
+      "priority": "medium",
+      "scope": "Touch-and-Hold-Spiel mit Risiko, Wertung und Highscores. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Browser-Prototyp vorhanden; keine native App bestätigt.",
+      "nextStep": "Touch-Steuerung und faire Punktelogik auf dem Gerät prüfen.",
+      "milestone": "Native App · nach Browser-Test",
+      "benefit": "Touch-and-Hold-Spiel mit Risiko, Wertung und Highscores.",
+      "openPoints": "Touch-Steuerung und faire Punktelogik auf dem Gerät prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-voellig-daneben-demo",
+      "title": "Völlig daneben! · Browser-Demo",
+      "description": "Absurde Schätzfragen für zwei bis vier Personen.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "voellig-daneben",
+      "priority": "medium",
+      "scope": "Browser-Prototyp als lokales 2–4-Spieler-Schätzspiel. Gemeinsames WM04b-Design, eigenes freigegebenes Logo und jederzeit Neustart/Startseite.",
+      "currentState": "Browser-Prototyp im GitHub-Repository unter demo/apps/voellig-daneben/index.html. Nicht mit einem Store-Build oder bestätigtem Live-Upload gleichsetzen.",
+      "nextStep": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "milestone": "Browser-Prototyp · GitHub vorhanden",
+      "benefit": "Absurde Schätzfragen für zwei bis vier Personen.",
+      "openPoints": "Prototyp mit Touch-Bedienung auf iPhone/Android und DE/EN prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-voellig-daneben-native",
+      "title": "Völlig daneben! · iPhone-/Android-App",
+      "description": "Native Gruppen-Spiel-App mit Kategorien, Fragen und Rundenwertung.",
+      "category": "Weitere Apps",
+      "status": "planned",
+      "workstream": "voellig-daneben",
+      "priority": "medium",
+      "scope": "Native Gruppen-Spiel-App mit Kategorien, Fragen und Rundenwertung. Offline-first, ohne Pflichtkonto und ohne Backend. Großzügige Touch-Ziele und DE/EN.",
+      "currentState": "Browser-Prototyp vorhanden; noch kein nativer Build bestätigt.",
+      "nextStep": "Fragenbestand, Spielfluss und lokale Gruppenbedienung definieren.",
+      "milestone": "Native App · nach Browser-Test",
+      "benefit": "Native Gruppen-Spiel-App mit Kategorien, Fragen und Rundenwertung.",
+      "openPoints": "Fragenbestand, Spielfluss und lokale Gruppenbedienung definieren.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-i18n",
+      "title": "Mini-Apps: gemeinsame DE/EN-Sprachumschaltung",
+      "description": "Die Mini-App-Werkstatt und künftige native Apps konsequent zweisprachig anbieten.",
+      "category": "Weitere Apps",
+      "status": "test",
+      "workstream": "studio",
+      "priority": "medium",
+      "scope": "Sprachschalter auf Übersicht und Browser-Demos, Flutter-Sprachlogik in Wer muss?!, persistente Wahl.",
+      "currentState": "Browser-Testseiten und Wer-muss-Flutter-App haben laut GitHub-Dokumentation DE/EN. Native Versionen der übrigen fünf Apps noch nicht umgesetzt.",
+      "nextStep": "Persistenz und Sprachwechsel auf allen sechs Browser-Demos und in Flutter prüfen.",
+      "milestone": "Mehrsprachigkeit · Code vorhanden",
+      "benefit": "Die Mini-App-Werkstatt und künftige native Apps konsequent zweisprachig anbieten.",
+      "openPoints": "Persistenz und Sprachwechsel auf allen sechs Browser-Demos und in Flutter prüfen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-pricing",
+      "title": "Mini-App-Preise und Spielesammlung als Bundle",
+      "description": "Einheitliche Einzelpreise und eine Wer-muss-Spielesammlung prüfen.",
+      "category": "Weitere Apps",
+      "status": "idea",
+      "workstream": "studio",
+      "priority": "medium",
+      "scope": "Preisidee vom 08.11.2026: je Einzel-App 1,99 €, Gesamtbundle 7,99 €. iOS-App-Bundle, bei Android eventuell eigene Sammel-App statt AAB-Bundle als Verkaufsprodukt.",
+      "currentState": "Preisvorschlag in Google Drive; kein finaler Preis, kein Store-Angebot, keine Markteinführung.",
+      "nextStep": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
+      "milestone": "Preis-/Store-Konzept · Idee",
+      "benefit": "Einheitliche Einzelpreise und eine Wer-muss-Spielesammlung prüfen.",
+      "openPoints": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "Mini-App-Ideen – Projektliste",
+          "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
+    },
+    {
+      "id": "mini-ideas-pool",
+      "title": "Weitere App-Ideen aus dem Ideenpool",
+      "description": "Kleine Tennis-, Vereins- und Alltags-Apps als eigenständige spätere Projekte sammeln.",
+      "category": "Weitere Apps",
+      "status": "idea",
+      "workstream": "ideas",
+      "priority": "low",
+      "scope": "Ideensammlung: SchlägerPass, MatchTagebuch, RegelCheck, MatchReady, TrainerTimer, TeamKapitän, PlatzCheck, ClubChallenge, TrainerLog, Wer hat's?, Wer bringt was?, HelferPlan, MaterialPass, KassenRunde, ErsatzBank. TENNILO Umpire wird separat geführt.",
+      "currentState": "Ideen in Drive dokumentiert; noch nicht beauftragt oder terminlich zugesagt.",
+      "nextStep": "Einzelideen erst nach Entscheidung als eigene Roadmap-Aufgaben anlegen, ohne TENNILO-Dubletten.",
+      "milestone": "Ideenpool · nicht beauftragt",
+      "benefit": "Kleine Tennis-, Vereins- und Alltags-Apps als eigenständige spätere Projekte sammeln.",
+      "openPoints": "Einzelideen erst nach Entscheidung als eigene Roadmap-Aufgaben anlegen, ohne TENNILO-Dubletten.",
+      "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
+      "references": [
+        {
+          "title": "App-Ideenpool – Tennis, Vereine und Alltag",
+          "url": "https://docs.google.com/document/d/1DL2-1gqF3syUkLWOqrCJ4p6_3H4E1MeSH3GFGXQMZPw/edit"
+        }
+      ],
+      "origin": "official",
+      "updatedAt": "2026-11-18T13:55:00+01:00",
+      "comments": []
     }
   ],
   "retiredIds": [
