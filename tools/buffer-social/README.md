@@ -109,3 +109,28 @@ freien Buffer-Warteschlangenplätze entwerfen. Bis dahin alle bestehenden Metric
 5. Nach dem Planen in [Buffer Publish](https://publish.buffer.com/) das **automatische** Story-Posting überprüfen. Geplante Veröffentlichung bleibt bis 24.11.2026 offen; erst danach kann der echte Publikationserfolg beurteilt werden.
 
 **Achtung:** Die frei zugängliche Grafik ist bewusst allgemeiner Tennis-Content, kein rein technisches Testmotiv. Sie ist trotzdem nur für einen einmaligen Test vorgesehen. In Metricool bestehende Beiträge nicht ändern.
+
+## Format-Aufteilung ab Dezember 2026 (18.11.2026)
+
+**Ziel:** Feed und Karussells bleiben bei Metricool; Instagram-Stories gehen zu Buffer.
+
+- Tennis-Schiri Dezember: **18 Feed-/Karussell-Beiträge** bei Metricool, **40 Stories** als Metricool-Entwürfe für Buffer.
+- Tennilo Dezember: **7 Feed-Beiträge** bei Metricool, **29 Stories** als Metricool-Entwürfe für Buffer.
+- Tennis-Schiri November: Stories am 20., 22., 25., 27., 29. November zu Buffer; die Buffer-Teststory am 24.11. um 18 Uhr bleibt bestehen.
+- **Ausnahme wegen Metricool-Free-Limit im November:** Tennis-Schiri-Feed-Karussells vom 25., 27. und 29. November werden ebenfalls durch den Buffer-Refiller übernommen.
+- Nach 01.12.2026 werden keine zusätzlichen Feed-Beiträge aus dieser Queue über Buffer erstellt.
+
+### Story-Queue
+
+- Quelldaten und Originale: `story-queue-2026.json` (77 Einträge: 74 Stories + 3 November-Feed-Ausnahmen).
+- Automatischer Refiller: [GitHub Actions](https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/buffer-stories-refill.yml), alle zwei Stunden um Minute 17 (UTC), zusätzlich manuell startbar.
+- Die Queue ist nur aktiv, wenn `QUEUE_ENABLED.txt` nach `strip()` exakt `YES` enthält. Am 18.11.2026 aktiviert.
+- Lädt zuerst die bestehenden geplanten Buffer-Posts, berücksichtigt die Story vom 24.11.2026, plant pro Account höchstens zehn gleichzeitig und prüft jede Bild-URL.
+- Bereits verstrichene Termine werden niemals nachträglich neu geplant.
+- Wenn eine Buffer-API-Buchung fehlschlägt, bricht der Job mit Fehler ab, um die Lücke sichtbar zu machen. **Bei Grün kontrollieren, dass Buffer Automatic anzeigt.**
+- Die Migration wurde aus den aktuellen Metricool-Bild-URLs und Captions erstellt; kein Entfernen von Originalgrafiken notwendig.
+- Der Google-Kalender enthält weiterhin die Veröffentlichungszeiten. Vor dem endgültigen Wechsel der Veranstaltungslinks zu Buffer bitte erste Queue-Läufe prüfen.
+
+**Offen bis zum ersten erfolgreichen Queue-Lauf:** Prüfen, dass die offiziellen Bild-Direktlinks von Metricool durch Buffer heruntergeladen werden können. Ein grüner GitHub-Verbindungstest vom 17.11.2026 bestätigt die API, aber nicht jede einzelne Story. Der Status ist daher `Queue aktiviert / Transfer noch zu verifizieren`, nicht `alle Posts in Buffer`.
+
+Die bestehende individuelle `buffer-social.yml` bleibt als Einzeltest-Workflow erhalten.
