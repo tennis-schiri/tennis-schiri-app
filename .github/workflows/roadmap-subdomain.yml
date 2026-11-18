@@ -99,6 +99,7 @@ jobs:
           php tests/roadmap.php
           php tests/roadmap-storage.php
           php tests/roadmap-portal-delete.php
+          node --test roadmap-site/product-sections.test.mjs
           php -r 'define("TENNILO_ROADMAP_INTERNAL_SEED",true); $s=require "roadmap-site/dist/roadmap-seed.php"; if(count($s["items"])<50){exit(1);} echo "Board: ".count($s["items"])." Eintraege\n";'
           grep -Fq 'TENNILO Umpire' roadmap-site/dist/strategie.php
           grep -Fq 'Tischtennis' roadmap-site/dist/strategie.php
