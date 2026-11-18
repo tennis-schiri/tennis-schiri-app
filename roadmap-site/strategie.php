@@ -12,7 +12,11 @@ header("Content-Security-Policy: default-src 'self'; style-src 'self'; img-src '
 <html lang="de">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#071625">
-<title>Gesamtplanung · TENNILO Roadmap</title><link rel="icon" href="./assets/tennilo-logo-dark.png" type="image/png">
+<title>Gesamtplanung · TENNILO Roadmap</title>
+<link rel="icon" href="./favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="./favicon-192.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=2">
 <link rel="stylesheet" href="./assets/extra.css?v=1"></head>
 <body class="strategy-body">
 <header class="rm-site-header"><div class="rm-site-nav">
