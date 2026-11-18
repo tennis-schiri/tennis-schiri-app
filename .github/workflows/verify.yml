@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'roadmap-site/**'
       - 'tests/**'
       - 'backend/**'
       - '.github/workflows/verify.yml'
@@ -43,6 +44,7 @@ jobs:
           node --test roadmap-site/product-sections.test.mjs
           node --check roadmap-site/roadmap.js
           node --check roadmap-site/regenerate-seed.mjs
+          node --test roadmap-site/product-sections.test.mjs roadmap-site/daily-review.test.mjs
       - name: Alle App- und Live-Tests ausführen
         run: node --test tests/*.test.mjs
       - name: PHP-Kontomodell auf Syntax und Rollen testen
