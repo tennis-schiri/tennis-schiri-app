@@ -1,89 +1,99 @@
 # TENNILO – gemeinsame Roadmap auf roadmap.tennilo.de
 
-Eigenständiges, **passwortgeschütztes** Roadmap-Portal für TENNILO Tournament, Score, Umpire, Business und gemeinsame Plattformfunktionen.
+Eigenständiges Roadmap-Portal mit **persönlichem Login statt ALL-INKL-Verzeichnisschutz**, für TENNILO Tournament, Score, Umpire, Business und Plattformthemen.
 
-## Bereits im Repository vorbereitet
+## Bedienkonzept
 
-- Eigene Einstiegsseite mit Original-TENNILO-Logos und Links zur Tournament- und Score-Demo.
-- Interaktives Roadmap-Board mit 50 Themen (33 bestehende Tournament-Einträge und 17 zusätzliche Produkt-/Plattformthemen); Status, Suche, Prioritäten, Produktfilter und Detailansichten.
-- Vollständige 16-teilige Roadmap aus Google Drive als geschützte Seite `strategie.php`.
-- Bestehende Nutzerverwaltung übernommen: Eigentümerkonto, Rollen `viewer` und `commenter`, Kommentare, persönliche Einladungen mit einmalig gültigem Link für sieben Tage sowie Sperrung.
-- PHP-Seed statt direkt öffentlich abrufbarer `roadmap-seed.json`. API und Seiten verweigern ungeschützte HTTP-Anfragen.
-- Separates **manuelles** GitHub-Actions-Deployment, unabhängig von der Tournament-App.
+1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 50 initialen Themen, Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+3. `strategie.php` zeigt alle 16 Kapitel der Gesamtplanung – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
+4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
+5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
 
-Der GitHub-Push veröffentlicht **keine Website**. Es gibt lediglich einen Workflow-Registrierungslauf ohne FTPS.
+**Keine Browser-Basic-Auth aktivieren.** Die ursprüngliche Roadmap der Turnier-App bleibt unberührt, bis die neue Subdomain vollständig abgenommen ist.
 
-## 1. Domain schützen – vor jedem Upload
+## Hosting: ALL-INKL
 
-Die Subdomain `roadmap.tennilo.de` muss auf ein **eigenes** Hosting-Verzeichnis zeigen. Im ALL-INKL-KAS den **Verzeichnisschutz / HTTP Basic Auth für dieses komplette Verzeichnis** einschalten und HTTPS aktivieren. Ein Aufruf ohne Anmeldung von `https://roadmap.tennilo.de/` muss mit HTTP **401 Unauthorized** antworten. Sonst stoppt der neue Workflow vor dem FTPS-Upload.
+- Eigene Subdomain `roadmap.tennilo.de` im separaten Verzeichnis.
+- HTTPS muss funktionieren (gültiges Zertifikat).
+- PHP **8.2 oder neuer**; Sessions und Dateizugriffe aktiv.
+- Der FTP-Benutzer muss **im Webverzeichnis der Subdomain starten**. `FTP_REMOTE_DIR` wird nicht benötigt.
+- **Kein Verzeichnisschutz auf dem öffentlichen Roadmap-Verzeichnis**. Der Zugriff wird durch die serverseitige Benutzeranmeldung gesteuert.
 
-Wichtig: Der Basic-Verzeichnisschutz ist eine äußere Zugangsschranke. Die Roadmap selbst hat zusätzlich **persönliche Konten** und verschiedene Rollen. Ein persönlicher Einladungslink ersetzt **nicht** das allgemeine Verzeichnispasswort. Für eingeladene Personen ist beides nötig.
+### Privater dauerhafter Speicher – weiterhin erforderlich
 
-## 2. Dauerhaften privaten Speicher vorbereiten
+Die Passwörter sind als `password_hash` gespeichert, Tokens als Hash. Benutzer, Kommentare, Rollen und manuelle Änderungen liegen ausschließlich in der privaten `state.json`, nicht in GitHub.
 
-Der PHP-Dienst verlangt den privaten Ordner `../tennilo-roadmap-private`, ausgehend vom Webroot der Subdomain:
+Dafür muss ein schreibbarer Ordner `../tennilo-roadmap-private` **außerhalb des gesamten öffentlich erreichbaren Webroots** existieren. Anforderungen:
+- Verzeichnisrechte **0700** (ALL-INKL WebFTP/KAS);
+- `.htaccess` mit exakt `Require all denied` **in diesem privaten Ordner**, nicht auf der Roadmap-Website;
+- keine öffentliche URL und kein Symlink auf den privaten Speicher.
 
-- **außerhalb** des gesamten öffentlich erreichbaren Webverzeichnisses;
-- Verzeichnisrechte **0700** und schreibbar für den PHP-Webserver;
-- eine Datei `.htaccess` mit **exakt** dem Inhalt `Require all denied` im privaten Ordner;
-- keine öffentliche Symlink-Verbindung in den Speicher;
-- nicht in GitHub oder per Website-Workflow hochladen.
+Das ist **nicht** der abgelehnte Verzeichnisschutz der Website, sondern eine zusätzliche Absicherung der privaten Daten. Fehlt der sichere Speicher, verweigert die API den Betrieb statt offen zu starten.
 
-Der Dienst verweigert seinen Betrieb (HTTP 503), wenn der private Speicher nicht sicher vorhanden ist. Falls der Hosting-Account es erfordert, kann `TENNILO_ROADMAP_STORAGE_DIR` als serverseitige **absolute** Verzeichnisangabe gesetzt werden. GitHub Secrets allein ändern **keine** PHP-Umgebungsvariablen auf dem Webserver.
+Wenn ALL-INKL einen eigenen absoluten Speicherpfad anbietet, kann `TENNILO_ROADMAP_STORAGE_DIR` serverseitig darauf gesetzt werden. Eine GitHub-Actions-Variable setzt diesen Wert **nicht** auf dem PHP-Server.
 
-### Bestehende Nutzer und Kommentare
+### Bestehende Daten übernehmen
 
-Die frühere Roadmap im Tournament-Projekt speichert redaktionelle Änderungen, persönliche Accounts, Einladungen und Kommentare serverseitig in `state.json`, **nicht** in GitHub. Vor dem Umzug eine Sicherung davon anfertigen. Wenn alte und neue Subdomain auf dasselbe zulässige private `../tennilo-roadmap-private` zeigen, können sie die bestehenden Daten gemeinsam verwenden. Wenn es unterschiedliche private Ordner sind, die alte `state.json` ausschließlich per ALL-INKL WebFTP/Dateimanager **privat in den neuen Speicher kopieren** – vor dem ersten Login, nach Backup und **ohne die Quelldatei zu löschen**. Keinesfalls `state.json` im öffentlichen Webroot oder GitHub speichern.
+Vor dem Umzug der alten Roadmap den privaten `state.json`-Stand sichern. Bei gemeinsamer privater Speicherstruktur kann die neue Domain dieselben Daten verwenden. Andernfalls `state.json` außerhalb des Webroots in den privaten Zielordner kopieren, **bevor** erstmals neue Nutzer angemeldet werden. Der alte Stand bleibt als Backup erhalten; niemals eine echte `state.json` auf einen öffentlichen FTP-Webpfad, ins Repo oder in eine Demo kopieren.
 
-Nach dem Umzug Login, Rollen, bestehende Kommentare und Einladungen kontrollieren, bevor neue Personen eingeladen werden. Die Roadmap-API hat keine Verbindung zum noch nicht produktiven allgemeinen TENNILO-Kontosystem.
+Bestehende Konten haben Vorrang. Die beim Deployment hinterlegten Admin-Zugangsdaten werden **nur beim ersten Einrichten eines noch nicht vorhandenen Eigentümerkontos** verwendet; sie überschreiben keine bestehenden Konten, Kommentare oder Zugänge. Eine spätere Änderung des GitHub-Secrets ändert daher nicht automatisch das Konto-Passwort. Dafür nach Login die Kontofunktion nutzen.
 
-## 3. GitHub Secrets setzen
+## GitHub Secrets: fünf Werte
 
 Repository: `tennis-schiri/tennis-schiri-app`
 
-Unter `Settings → Secrets and variables → Actions → New repository secret` diese **drei** Repository-Secrets anlegen:
+https://github.com/tennis-schiri/tennis-schiri-app/settings/secrets/actions
 
 | Secret | Wert |
 | --- | --- |
-| `ROADMAP_FTP_HOST` | FTP-Host aus ALL-INKL, **ohne** `ftp://` |
-| `ROADMAP_FTP_USER` | FTP-Benutzer nur für die neue Roadmap-Subdomain |
-| `ROADMAP_FTP_PASSWORD` | zugehöriges FTP-Passwort |
+| `ROADMAP_FTP_HOST` | FTP-Host von ALL-INKL, ohne `ftp://` |
+| `ROADMAP_FTP_USER` | separater FTP-Nutzer, der im Roadmap-Verzeichnis startet |
+| `ROADMAP_FTP_PASSWORD` | FTP-Kennwort |
+| `ROADMAP_ADMIN_USERNAME` | selbst gewählter Admin-Benutzername, 3–40 Zeichen: a–z, Zahlen, Punkt, Bindestrich, Unterstrich |
+| `ROADMAP_ADMIN_PASSWORD` | starkes Admin-Passwort, mindestens 16 Zeichen (16–72 Bytes) |
 
-**Keine Zugangsdaten in Chat, README, Code, Google Drive oder GitHub Issues schreiben.** Es wird kein `FTP_REMOTE_DIR` benötigt: der verwendete FTP-Benutzer muss direkt im Verzeichnis von `roadmap.tennilo.de` starten. Bestehende `FTP_*`-Secrets der Tournament-App bleiben unverändert.
+Das Admin-Passwort wird im CI zu einem Passwort-Hash verarbeitet und **niemals im Repository** gespeichert oder im Actions-Log ausgegeben. `roadmap-initial-admin.php` wird erst beim manuell gestarteten Workflow aus den Secrets erzeugt und nur als ausführbares, nicht als Text auslieferbares PHP auf den Server übertragen. Direkter Zugriff antwortet mit HTTP 404.
 
-Secrets: https://github.com/tennis-schiri/tennis-schiri-app/settings/secrets/actions
+**Secrets ausschließlich in GitHub eingeben; nicht im Chat mitteilen.**
 
-## 4. Manuell veröffentlichen
+## Veröffentlichung: manuell
 
-**Direkter Actions-Link:**
+**Direkter GitHub-Actions-Link:**
 https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/roadmap-subdomain.yml
 
-Dort `Run workflow → main → Run workflow` auswählen. Nur bei manuellem Start prüft der Workflow PHP und JavaScript, bereitet die **originalen Markenlogos** aus dem öffentlichen TENNILO-Website-Repository vor, prüft HTTP 401 und lädt anschließend ausschließlich 15 freigegebene Roadmap-Dateien hoch.
+Auf `Run workflow → main → Run workflow` klicken. Push auf `main` registriert den Workflow lediglich, lädt nichts live hoch.
 
-Keine `.htaccess` oder private Serverdateien werden angerührt.
+Der manuelle Workflow:
+- übernimmt die **Original-TENNILO-Logos** aus dem Website-Repository;
+- kombiniert 33 bisherige Tournament-Themen und 17 Produkt-/Plattform-Ergänzungen;
+- generiert die geschützte Seed-PHP-Datei und die initiale Admin-Konfiguration;
+- prüft Syntax, bestehende Roadmap-Tests und HTTPS;
+- überträgt nur die **17** ausdrücklich freigegebenen Dateien per FTPS, ohne zu löschen, ohne `.htaccess` zu ersetzen und ohne die Tournament-App zu verändern;
+- prüft **nach** dem Upload live: Gast-API muss null Inhalte zurückgeben, `strategie.php` ohne Anmeldung auf Login umleiten und die Seed-PHP-Datei 404 liefern.
 
-Falls ALL-INKL trotz `index.html` noch seine Standardseite anzeigt, einen alten `index.htm`-Platzhalter nur im neuen Subdomain-Verzeichnis prüfen/entfernen und die Domain direkt über `/index.php` testen. Kein automatisches Veröffentlichen und kein Löschen fremder Dateien.
+Ein erfolgreiches GitHub-Protokoll ist kein Ersatz für den persönlichen Test von Login, Einladung, Kommentaren und Sicherungen im echten Browser.
 
-## 5. Inhaltspflege
+## Demos
 
-- Bestehende Tournament-Themen: `site/roadmap-seed.json`
-- Ergänzungen für Score, Umpire, Business und Plattform: `roadmap-site/additions.json`
-- Zusammenführung beim Upload: `roadmap-site/regenerate-seed.mjs`
-- Vollständiges Strategie-Original: `roadmap-site/strategie-source.txt`; daraus wurde `roadmap-site/strategie.php` erstellt. Änderungen an der Google-Drive-Roadmap später in beiden Quellen nachführen.
-- Interaktives Board: `roadmap-site/roadmap.js`; neue Seiten und Design: `roadmap-site/index.php`, `roadmap-site/extra.css`.
-- PHP-Einladungs-/Zugangslogik: `roadmap-site/roadmap-api.php` und `roadmap-site/roadmap-lib.php`; Servercode aus dem bewährten Tournament-Roadmap-Modul übernommen.
-
-Achtung: Seed-Merge soll vorhandene Kommentare und manuelle Statusänderungen nicht überschreiben. Zentrale Roadmap künftig nur auf dieser neuen Domain weiterpflegen. Der ältere Tournament-Roadmap-Bereich bleibt bis zum geprüften Umzug bestehen.
-
-## 6. Produkt-Demos
-
-- Tournament: https://app.tennis-schiri.de/index.html (separater Testseiten-Zugang möglich)
-- Score: https://score.tennilo.de/ (Testadresse, ggf. noch nicht öffentlich)
-- Umpire: Der Roadmap-Bereich ist vorbereitet. Solange die Umpire-Demo nicht zuverlässig veröffentlicht ist, zeigt die neue Website bewusst keinen aktiven Demo-Link.
+- TENNILO Tournament: https://app.tennis-schiri.de/index.html
+- TENNILO Score: https://score.tennilo.de/
+- Umpire: Demo-Link erst nach bestätigter Veröffentlichung eintragen.
 - Business: Konzeptphase.
 
-Eine neu vergebene Roadmap-Einladung gewährt **keinen automatischen Zugriff** auf andere geschützte Demos. Das ist getrennt zu verwalten.
+Die Demo-Links werden **nach dem Login** im Roadmap-Portal angezeigt. Ein Roadmap-Konto vergibt keinen automatischen Zugang zu separat geschützten Demos.
 
-## Sicherheits- und Freigabegrenzen
+## Projektdateien
 
-Diese Änderung liegt im GitHub-Repository, ist aber vor dem erfolgreichen manuellen Workflow **nicht live**. Da die Domain und deren Verzeichnisschutz nicht mit der GitHub-Verbindung verwaltet werden können, muss die Serverkonfiguration bei ALL-INKL vor dem Upload bestätigt werden. Ein erfolgreicher GitHub-Build beweist noch nicht, dass auf dem echten Hosting PHP-Basic-Auth, Dateirechte, bestehende Konten und Speicherung funktionieren. Diese Funktionen direkt auf dem Server nachtesten.
+- `roadmap-site/index.php`: Website-Einstieg, HTTPS, sichere Header
+- `roadmap-site/roadmap.js`: Login und interaktives Roadmap-Board
+- `roadmap-site/roadmap-api.php`: persönliche Anmeldung, Einladungslinks, Rechte und geschützte Roadmap-Daten
+- `roadmap-site/roadmap-session-guard.php`: Prüfung einer gültigen Sitzung für die Strategie
+- `roadmap-site/strategie.php`: geschützte vollständige Planung
+- `roadmap-site/roadmap-lib.php`: Datenmodell, Speicherung und Sicherheitsprüfungen
+- `roadmap-site/regenerate-seed.mjs`: kombiniert `site/roadmap-seed.json` und `roadmap-site/additions.json`
+- `roadmap-site/make-admin-config.php`: erstellt Admin-Hash ausschließlich in GitHub Actions
+- `roadmap-site/extra.css`: Login- und Portalgestaltung
+- `.github/workflows/roadmap-subdomain.yml`: manueller FTPS-Upload
+
+**Hinweis zur Vertraulichkeit:** Dieses Repository ist öffentlich. Auch wenn die **Website selbst** erst nach Login Einträge ausgibt, liegt ein Teil der Roadmap-Fachplanung weiterhin als Quelltext im öffentlichen Repository. Falls auch die Planungsinhalte selbst vertraulich sein müssen, gehört die Quelle in ein privates Repository. Der Login allein versteckt GitHub-Dateien nicht.
