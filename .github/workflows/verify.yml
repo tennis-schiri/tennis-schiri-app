@@ -40,6 +40,7 @@ jobs:
           php -l roadmap-site/roadmap-api.php
           php -l roadmap-site/strategie.php
           php tests/roadmap-portal-delete.php
+          node --test roadmap-site/product-sections.test.mjs
           node --check roadmap-site/roadmap.js
           node --check roadmap-site/regenerate-seed.mjs
       - name: Alle App- und Live-Tests ausführen
