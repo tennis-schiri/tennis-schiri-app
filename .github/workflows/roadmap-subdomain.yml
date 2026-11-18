@@ -113,6 +113,7 @@ jobs:
             assets/tennilo-logo-dark.png
             assets/tennilo-tournament-cutout.png
             assets/tennilo-score-cutout.png
+            assets/tennilo-score-cutout-dark.png
             assets/tennilo-umpire-cutout.png
           )
           for relative in "${files[@]}"; do
