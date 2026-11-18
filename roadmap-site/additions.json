@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-11-18",
+  "source": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit",
+  "items": [
+    {
+      "id": "score-native",
+      "title": "Score: native iPhone-/Apple-Watch-App",
+      "description": "Funktions- und Designumfang der Web-Demo auf die echten Apple-Geräte übertragen.",
+      "category": "TENNILO Score",
+      "status": "progress",
+      "priority": "high",
+      "milestone": "Testversion 1.0",
+      "nextStep": "Vollständige Demo-Funktionen in Xcode umsetzen und auf realen Geräten prüfen.",
+      "benefit": "Tenniszählung am Handgelenk und Spielstand am iPhone, ohne eine abgespeckte Bedienoberfläche.",
+      "scope": "Einzel, Doppel, Mixed; flexible Zählweisen und Tiebreaks; Aufschlagwahl; Punkte und UNDO; Aufgabe; Verlauf; Statistiken; Archiv; Scoreboard und DE/EN.",
+      "currentState": "Die Web-Demo ist die Funktionsreferenz. Ein erstes natives Xcode-Grundgerüst ist auf iPhone und Watch gestartet, aber noch nicht funktionsgleich.",
+      "openPoints": "Native UI, Regelparität und Synchronisierung anhand echter Matchfälle testen.",
+      "doneWhen": "Alle verbindlichen Demo-Funktionen lassen sich auf den Geräten zuverlässig bedienen.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-watch-sync",
+      "title": "Score: zuverlässige Watch-/iPhone-Synchronisierung",
+      "description": "Spielstand bidirektional übertragen und nach Unterbrechungen sicher zusammenführen.",
+      "category": "TENNILO Score",
+      "status": "progress",
+      "priority": "high",
+      "milestone": "Vor Beta-Test",
+      "nextStep": "WatchConnectivity prüfen; Wiederverbindung und Konfliktfälle mit echten Geräten testen.",
+      "benefit": "Punkte auf der Uhr zählen und jederzeit den korrekten Stand am iPhone sehen.",
+      "scope": "Geteiltes Match-Ereignisprotokoll, Zustandsabfrage beim Watch-Start, Übertragungsbestätigung, Retry, Akku-/Netzausfall und Wiederverbindung.",
+      "currentState": "Der erste Praxistest zeigte eine Warteanzeige trotz laufendem Match. Ein Synchronisierungs-Fix ist vorbereitet, aber auf Geräten noch nicht bestätigt.",
+      "openPoints": "Doppelte Punkte, verspätete Ereignisse und parallel bearbeitete Matches verhindern.",
+      "doneWhen": "Ein durchgehendes Match mit Verbindungsabbrüchen ergibt auf beiden Geräten denselben Stand.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-offline",
+      "title": "Score: Offline-Matches und Archiv",
+      "description": "Matches auf dem Gerät dauerhaft sichern und nach App-Neustart fortsetzen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Native Testversion",
+      "nextStep": "Web-Demo-Speicherung für iOS und watchOS mit Wiederherstellung übertragen.",
+      "benefit": "Keine verlorenen Matches auf dem Platz, auch bei fehlender Verbindung.",
+      "scope": "Laufendes Match lokal speichern, Verlauf und UNDO erhalten, beendete Matches archivieren, Backups und Datenmigration berücksichtigen.",
+      "currentState": "In der Web-Demo existiert lokale Speicherung über IndexedDB. Für native Geräte noch zu übertragen.",
+      "openPoints": "Speicherausfall, App-Neustart und Offline-Szenarien testen.",
+      "doneWhen": "Ein Match bleibt auf beiden Geräten auch nach Neustart konsistent erhalten.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-match-logic",
+      "title": "Score: Tenniszählweisen und Doppel-/Mixed-Regeln",
+      "description": "Alle Matchvarianten und Sonderfälle der Demo zuverlässig nativ abbilden.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Testversion 1.0",
+      "nextStep": "Regeltests für Doppel-Aufschlag, Tiebreak und Aufgabe übernehmen.",
+      "benefit": "Regelkonformer Spielstand ohne manuelle Nachberechnung.",
+      "scope": "Einzel, Doppel, Mixed; Satz-/Match-Tiebreaks; No-Ad/andere konfigurierbare Zählweisen; Aufschlagreihenfolge; Spielerzuordnung im Doppel; Aufgabe.",
+      "currentState": "Die Web-Demo modelliert die Regelvarianten; Native-App noch nicht vollständig umgesetzt.",
+      "openPoints": "Sonderfälle und rückwirkende Korrekturen fachlich prüfen.",
+      "doneWhen": "Alle definierten Matchkonfigurationen bestehen automatische und praktische Tests.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-beta-bad-saarow",
+      "title": "Score: Beta-Test in Bad Saarow",
+      "description": "Praxistest beim LK-Turnier am 27. Dezember 2026 mit Apple Watch.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "27.12.2026",
+      "nextStep": "Stabile App auf Testgeräten installieren und vor Turnierbeginn echte Testmatches durchspielen.",
+      "benefit": "Reale Rückmeldungen zur Bedienbarkeit unter Turnierbedingungen.",
+      "scope": "Test mit Apple Watch; Erfassung, UNDO, Aufschlaganzeige, Ausfallsicherheit, Akkulaufzeit und Feedback protokollieren.",
+      "currentState": "Als exklusiver Beta-Test vorgesehen; keine Zusage einer marktreifen Veröffentlichung.",
+      "openPoints": "Fehlerfreie Installation, Sync und vollständiger Matchablauf sind Voraussetzungen.",
+      "doneWhen": "Ein Testmatch lässt sich vor Ort ohne Datenverlust erfassen.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-android",
+      "title": "Score: Android und Wear OS",
+      "description": "Nach iOS/watchOS auch Android-Smartphones und kompatible Uhren unterstützen.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach Apple-Beta",
+      "nextStep": "Plattformstrategie und gemeinsame Regel-Engine festlegen.",
+      "benefit": "Die App ist später nicht auf Apple-Nutzer begrenzt.",
+      "scope": "Android-Oberfläche, Wear-OS-Uhr, Offline-Logik, Datenmodell und plattformübergreifende Tests.",
+      "currentState": "Geplant für später; aktuell liegt der Fokus auf Apple.",
+      "openPoints": "Gerätevielfalt, technische Architektur und Wartungskosten bestimmen.",
+      "doneWhen": "Ein definiertes Android-Testgerät absolviert dieselben Matchfälle wie iOS.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-tabletennis",
+      "title": "Score: Tischtennis ergänzen",
+      "description": "Tischtennis als weitere Sportart in TENNILO Score vormerken.",
+      "category": "TENNILO Score",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Später",
+      "nextStep": "Nach stabiler Tennisversion eigene Tischtennis-Regellogik spezifizieren.",
+      "benefit": "TENNILO Score kann später über Tennis hinaus eingesetzt werden.",
+      "scope": "11-Punkte-Sätze, zwei Punkte Vorsprung, Aufschlagwechsel, Seitenwechsel, korrekte Doppel-Aufschlagreihenfolge, passende Anzeige und Tests.",
+      "currentState": "Ausdrücklich als Roadmap-Idee aufgenommen; noch nicht entwickelt.",
+      "openPoints": "Eigene Regel-Engine statt lediglich Texte und Farben umzuschalten.",
+      "doneWhen": "Regelfälle und Gerätetests für Einzel und Doppel sind bestanden.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "score-release-2027",
+      "title": "Score: Marktstart vorbereiten",
+      "description": "TestFlight, App Store, Datenschutz, Produktqualität und Store-Materialien planen.",
+      "category": "TENNILO Score",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Frühjahr 2027 (Ziel)",
+      "nextStep": "Erst nach stabilen Praxistests über Veröffentlichung entscheiden.",
+      "benefit": "Eine belastbare Veröffentlichung statt eines vorzeitigen Starts.",
+      "scope": "App-Review, mehrsprachige Store-Texte, Screenshots, Fehlerberichte, rechtliche Informationen und ggf. Lizenzmodell.",
+      "currentState": "Kommunikationsziel „Coming Spring 2027“; kein verbindlicher Release-Termin.",
+      "openPoints": "Kostenpflichtiger Apple-Developer-Account erst für Verteilung und Store nötig.",
+      "doneWhen": "Abnahmekriterien sind erfüllt und Veröffentlichung explizit freigegeben.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "umpire-basic-pro",
+      "title": "Umpire: modularer Basic-/Pro-Modus",
+      "description": "Schiedsrichter-App mit einfacher Punkteingabe und professionellem Cockpit.",
+      "category": "TENNILO Umpire",
+      "status": "progress",
+      "priority": "medium",
+      "milestone": "Konzept / U0.1",
+      "nextStep": "Bedienkonzept und Regelbasis auf realen Endgeräten testen.",
+      "benefit": "Hobby- und Turnierschiedsrichter nutzen eine zur Aufgabe passende Oberfläche.",
+      "scope": "Basic: große Punkttasten, Score, Aufschlag, UNDO. Pro: Scorecard, Timer, Regelereignisse und Schnellzugriffe. Wechsel ohne Matchverlust.",
+      "currentState": "Eine frühe technische Grundversion U0.1 ist angelegt; Basic-/Pro-Ansicht und einfaches Einzel-Scoring sind vorhanden.",
+      "openPoints": "Mobile und iPad-Layouts, zuverlässige Regel-Engine und Korrekturen fehlen noch.",
+      "doneWhen": "Beide Modi bedienen denselben Matchzustand ohne Verlust.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Umpire – Konzept",
+          "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
+        }
+      ]
+    },
+    {
+      "id": "umpire-scorecard",
+      "title": "Umpire: digitale Schiedsrichter-Scorecard",
+      "description": "Chronologische Punktfolge, Aufschlag und Korrekturen regelgerecht erfassen.",
+      "category": "TENNILO Umpire",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Prototyp",
+      "nextStep": "Erste ausdruckbare Scorecard und Korrekturmodell umsetzen.",
+      "benefit": "Offizielle Dokumentation und spätere Spielberichte ermöglichen.",
+      "scope": "Punktfolge, Aufschlag, Spiele, Sätze, Korrekturprotokoll, Ergebnisfreigabe, Export und PDF.",
+      "currentState": "Als Fachkonzept dokumentiert; Prototyp noch offen.",
+      "openPoints": "Genaue Scorecard-Notation und Wettbewerbsvarianten festlegen.",
+      "doneWhen": "Ein Matchbericht ist vollständig und nachvollziehbar.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Umpire – Konzept",
+          "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
+        }
+      ]
+    },
+    {
+      "id": "umpire-officiating",
+      "title": "Umpire: Zeitkontrollen und Regelereignisse",
+      "description": "Unterbrechungen, Zeitstrafen und andere offizielle Matchereignisse erfassen.",
+      "category": "TENNILO Umpire",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Späterer Ausbau",
+      "nextStep": "Regelwerk, Ereignisarten und Schutz gegen Fehlbedienung definieren.",
+      "benefit": "Schiedsrichter behalten Abläufe und Fristen im Blick.",
+      "scope": "Einspiel- und Matchuhr, Shot-Clock, Seitenwechsel, Code/Time Violations, medizinische Pause, Aufgabe, Disqualifikation und Notizen.",
+      "currentState": "Ideen und mögliche Module beschrieben; keine geprüfte Vollumsetzung.",
+      "openPoints": "Wettbewerbsregelwerke und Zeitvorgaben sind konfigurierbar auszulegen.",
+      "doneWhen": "Ereignisse sind korrekt protokolliert und im Bericht auffindbar.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Umpire – Konzept",
+          "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
+        }
+      ]
+    },
+    {
+      "id": "umpire-screens",
+      "title": "Umpire: externe Scoreboards und Displays",
+      "description": "Spielstand auf TV, Browser, Livestream und geeigneten LED-Geräten ausgeben.",
+      "category": "TENNILO Umpire",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Anzeigenmodule",
+      "nextStep": "Zuerst einen lesenden Classic-Modus bauen, weitere Layouts später.",
+      "benefit": "Zuschauer sehen die aktuelle Anzeige unabhängig vom Schiedsrichtergerät.",
+      "scope": "Classic, Broadcast, Club-Branding und Stream Overlay; später Hardware über dokumentierte Protokolle.",
+      "currentState": "Konzept beschrieben; echte Zweitgeräte-Synchronisierung noch nicht fertig.",
+      "openPoints": "Sichere Ausgabekanäle und protokollabhängige Hardware-Kompatibilität.",
+      "doneWhen": "Mehrere Anzeigen erhalten denselben Matchstand ohne Schreibrechte.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Umpire – Konzept",
+          "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
+        }
+      ]
+    },
+    {
+      "id": "umpire-integration",
+      "title": "Umpire: Tournament-Anbindung",
+      "description": "Match übernehmen und bestätigtes Ergebnis an Tournament zurückmelden.",
+      "category": "TENNILO Umpire",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Schnittstelle später",
+      "nextStep": "Gemeinsame Matchstruktur und Rechte definieren.",
+      "benefit": "Keine doppelte Eingabe von Namen und Ergebnissen.",
+      "scope": "Turnier-, Platz-, Match-Daten importieren, offiziell bestätigtes Ergebnis zurückgeben; Offline-Modus bleibt eigenständig.",
+      "currentState": "Architekturidee; noch keine zuverlässige Live-Schnittstelle.",
+      "openPoints": "Identität des führenden Matchstands und Korrekturhoheit klären.",
+      "doneWhen": "Übertragung und Rückmeldung funktionieren nach nachvollziehbarer Freigabe.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "TENNILO Umpire – Konzept",
+          "url": "https://docs.google.com/document/d/1HiYIjCtF2FK7cK4bPEXf4nZIaq9AdMjKb9uFRS79ZW0/edit"
+        }
+      ]
+    },
+    {
+      "id": "business-resorts",
+      "title": "TENNILO Business für Hotels und Reiseveranstalter",
+      "description": "Turnierorganisation für Resorts, Hotels, Ferienclubs und Tennisreiseanbieter.",
+      "category": "TENNILO Business",
+      "status": "idea",
+      "priority": "medium",
+      "milestone": "Nach stabilem Tournament-MVP",
+      "nextStep": "Mit einem Veranstalter konkreten Pilotbedarf prüfen.",
+      "benefit": "Schnelle Freizeitturniere vor Ort mit mehreren Trainer- und Standortrollen.",
+      "scope": "Mehrsprachigkeit, QR-Anmeldung, Standorte, gemeinsame Vorlagen, optionale Hotelgestaltung, lokale Anzeige und Rechte.",
+      "currentState": "Strategische Erweiterung der Tournament-Plattform, keine separate App beschlossen.",
+      "openPoints": "Pilotpartner, Lizenzmodell, Offline-Szenarien und Datenschutz.",
+      "doneWhen": "Pilot belegt regelmäßige Nutzung und wirtschaftlichen Bedarf.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "plattform-matchmodell",
+      "title": "Gemeinsame Match- und Scoring-Basis",
+      "description": "Schnittstellen zwischen Tournament, Score und Umpire langfristig einheitlich halten.",
+      "category": "TENNILO Plattform",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Architektur",
+      "nextStep": "Gemeinsames Ereignismodell, Datenhoheit und Export-Schema definieren.",
+      "benefit": "Weniger Doppelarbeit und zuverlässige Ergebnisübergabe.",
+      "scope": "Versionierte Tenniszählung, Matchereignisse, Korrekturen, sichere Synchronisierung und klare Produktgrenzen.",
+      "currentState": "Einzelne App-Projekte haben eigene Prototypen und Datenhaltung.",
+      "openPoints": "Nicht alle Geräte und Wettbewerbe sind identisch; Kompatibilität prüfen.",
+      "doneWhen": "Testbare Schnittstellen ohne Zwang zur dauerhaften Onlineverbindung.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "plattform-accounts",
+      "title": "TENNILO: Konten, Datenschutz und Sicherheit",
+      "description": "Personenbezogene Daten und Einladungsrechte in allen Produkten belastbar absichern.",
+      "category": "TENNILO Plattform",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "Vor Produktivstart",
+      "nextStep": "Rechte, Backup und Datensicherheitskonzept produktweise prüfen.",
+      "benefit": "Verlässlicher geschützter Betrieb für Turniere, Matches und Roadmap.",
+      "scope": "Persönliche Zugänge, Sitzungen, Passwortschutz, Backups, Rollen sowie Datenaufbewahrung und Wiederherstellung.",
+      "currentState": "Roadmap-Personalkonten existieren im GitHub-Code; allgemeines SaaS-Backend noch nicht produktiv.",
+      "openPoints": "Webhosting, private Speicherverzeichnisse und Freigabe vor Einladungen prüfen.",
+      "doneWhen": "Kein öffentliches Lesen oder Bearbeiten ohne vorgesehene Berechtigung.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    },
+    {
+      "id": "plattform-sprachen",
+      "title": "Alle TENNILO-Produkte auf Deutsch und Englisch",
+      "description": "Übergreifende Standards für Sprachumschaltung und Übersetzungsqualität.",
+      "category": "TENNILO Plattform",
+      "status": "planned",
+      "priority": "medium",
+      "milestone": "Produktstandard",
+      "nextStep": "Deutsche und englische Ansichten je Produkt konsequent prüfen.",
+      "benefit": "Einheitliche Bedienung auch für internationale Tennisnutzer.",
+      "scope": "Handy-, Watch-, Turnier- und Schiedsrichteransichten, Fehlermeldungen, Berichte und rechtliche Texte.",
+      "currentState": "Sprachumschaltung ist für die Score-Demo vorbereitet; weitere Produkte produktweise prüfen.",
+      "openPoints": "Übersetzungen für Regeln und Sportbegriffe fachlich abgleichen.",
+      "doneWhen": "Beide Sprachen sind ohne nicht übersetzte Dialoge durchgängig nutzbar.",
+      "updatedAt": "2026-11-18T09:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": [
+        {
+          "title": "Gemeinsame TENNILO-Roadmap",
+          "url": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit"
+        }
+      ]
+    }
+  ]
+}
