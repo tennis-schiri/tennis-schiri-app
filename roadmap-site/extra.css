@@ -1,0 +1,98 @@
+/* TENNILO – eigenständiges Roadmap-Portal, Markenbilder unverändert */
+:root{--rm-ink:#0a1828;--rm-mint:#bdf45c;--rm-sky:#81d6ee;--rm-gold:#eeb77b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9f3fd;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.rm-site-header{background:#071421;border-bottom:1px solid #284154;position:relative;z-index:12}
+.rm-site-nav{max-width:1600px;margin:auto;padding:12px clamp(18px,3.2vw,48px);display:flex;gap:28px;align-items:center;justify-content:space-between}
+.rm-wordmark{display:flex;gap:12px;align-items:center;flex:none;color:#f0faff!important;text-decoration:none}
+.rm-wordmark img{width:139px;height:44px;object-fit:contain;display:block;max-width:42vw}
+.rm-wordmark>span{font-size:11px;font-weight:900;letter-spacing:.19em;color:var(--rm-mint);border-left:1px solid #44556a;padding-left:14px}
+.rm-topnav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rm-topnav a{color:#b2c7d7;text-decoration:none;border-radius:10px;padding:10px 13px;font-size:13px;font-weight:750}
+.rm-topnav a.current,.rm-topnav a:hover{background:#193248;color:#eaf8ff}
+.rm-private-mark{font-size:10px;letter-spacing:.12em;font-weight:900;color:#a1b9cc;white-space:nowrap}
+.rm-private-mark span{color:var(--rm-mint)}
+.rm-project-intro{max-width:1560px;margin:0 auto;padding:44px clamp(18px,3.2vw,48px) 25px}
+.rm-project-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:20px}
+.rm-kicker{font-weight:900;letter-spacing:.16em;color:var(--rm-mint);font-size:10px}
+.rm-project-heading h2{font-size:clamp(25px,3.6vw,43px);letter-spacing:-.052em;color:#f5f8ff;margin:9px 0 0}
+.rm-project-heading p{max-width:510px;font-size:13px;line-height:1.6;color:#9cb6ca;margin:0}
+.rm-demo-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.rm-demo-card{min-width:0;padding:21px 20px;border:1px solid #304b61;border-radius:17px;background:linear-gradient(155deg,#152b3c,#0b1d2e);display:flex;flex-direction:column;min-height:204px;gap:12px}
+.rm-demo-card.demo-tournament{border-top:3px solid #c1fa67}
+.rm-demo-card.demo-score{border-top:3px solid #73d9f4}
+.rm-demo-card.demo-umpire{border-top:3px solid #ffa56f}
+.rm-demo-card.demo-business{border-top:3px solid #b4aacb}
+.rm-demo-label{height:51px;display:flex;align-items:center}
+.rm-demo-label img{width:min(200px,100%);height:48px;object-fit:contain;object-position:left center}
+.rm-demo-card p{color:#acc0d2;font-size:13px;line-height:1.5;flex:1}
+.rm-demo-card a,.rm-demo-upcoming{display:inline-flex;gap:8px;align-items:center;justify-content:space-between;text-decoration:none;font-size:12px;font-weight:850;color:#c1fa67}
+.rm-demo-card a:hover{text-decoration:underline;text-underline-offset:3px}
+.rm-demo-upcoming{color:#93a7b8}
+.rm-demo-word{font-size:19px;font-weight:900;letter-spacing:-.03em;color:white;gap:5px}
+.rm-demo-word strong{font-weight:650;color:#c2c3e7}
+.standalone-roadmap .rm-container{padding-top:22px}
+.standalone-roadmap .rm-hero{background:linear-gradient(120deg,#113348 0%,#102638 48%,#0b1a29 100%);border:1px solid #3f6170;box-shadow:0 24px 55px #010c1936;min-height:245px}
+.standalone-roadmap .rm-hero h1{font-size:clamp(32px,5vw,65px)}
+.standalone-roadmap .rm-hero h1 em{color:var(--rm-mint)}
+.standalone-roadmap .rm-hero-kicker{color:var(--rm-sky)}
+.standalone-roadmap .rm-hero p{color:#b3cfda}
+.standalone-roadmap .rm-hero-decoration span{border-color:#bdf45c55}
+.standalone-roadmap .rm-back{color:#bad0d9}
+.standalone-roadmap .rm-top{padding:0 2px}
+.standalone-roadmap .rm-access{color:#c6d7e3}
+.standalone-roadmap .rm-product-filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;padding:3px 0 20px;margin-top:25px}
+.standalone-roadmap .rm-product-filters button{background:#132b3d;color:#b8d0de;border:1px solid #325165;white-space:nowrap;border-radius:999px;padding:11px 17px;font:800 12px/1.2 system-ui;cursor:pointer}
+.standalone-roadmap .rm-product-filters button.selected{background:var(--rm-mint);color:#17322c;border-color:var(--rm-mint)}
+.standalone-roadmap .rm-product-filters button:hover:not(.selected){background:#224155}
+.standalone-roadmap .rm-summary{margin-top:18px}
+.standalone-roadmap .rm-overview-stat{background:#10263a;border-color:#294657}
+.standalone-roadmap .rm-overview-stat strong{color:#eff9ff}
+.standalone-roadmap .rm-overview-stat span{color:#8caebe}
+.standalone-roadmap .rm-overview-stat small{color:#96aebb}
+.standalone-roadmap .rm-progress{background:#294454}
+.standalone-roadmap .rm-progress span{background:var(--rm-mint)}
+.standalone-roadmap .rm-control-title h2{color:#f0f7ff}
+.standalone-roadmap .rm-control-title p{color:#aec2d1}
+.standalone-roadmap .rm-filter-bar label{color:#9ab5c9}
+.standalone-roadmap .rm-view-switch{background:#17354c}
+.standalone-roadmap .rm-view-switch button{color:#a3bece}
+.standalone-roadmap .rm-view-switch button.active{background:#294a5f;color:white}
+.standalone-roadmap .rm-column{background:#102639}
+.standalone-roadmap .rm-column-header h3{color:#edf5fc}
+.standalone-roadmap .rm-column-header p{color:#8faebf}
+.standalone-roadmap .rm-column-header b{background:#1e4355;color:#e8faff}
+.standalone-roadmap .rm-card{background:#fafffc}
+.standalone-roadmap .rm-foot{color:#aec5d4}
+.standalone-roadmap .rm-foot p{color:#afc6d4}
+.standalone-roadmap .rm-foot strong{color:#e6f4fe}
+.rm-site-footer{border-top:1px solid #274254;padding:27px 30px;text-align:center;color:#8ea8bb;font-size:12px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
+.rm-site-footer p{margin:0;color:inherit}
+.rm-site-footer a{color:#c5efb1;text-decoration:none}
+.rm-site-footer a:hover{text-decoration:underline}
+/* Full-plan page */
+.strategy-body{min-height:100vh}
+.strategy-hero{max-width:1600px;margin:auto;padding:70px clamp(20px,4vw,55px) 45px}
+.strategy-hero .eyebrow{color:#bcf45c;font-size:11px;font-weight:900;letter-spacing:.16em}
+.strategy-hero h1{font-size:clamp(42px,6.5vw,80px);letter-spacing:-.07em;line-height:1.05;margin:18px 0}
+.strategy-hero p{max-width:800px;line-height:1.65;color:#b1c6d7;font-size:15px}
+.strategy-hero .strategy-historic{border-left:3px solid #d8ad79;padding:12px 17px;background:#102739;font-size:13px;border-radius:0 10px 10px 0}
+.strategy-layout{max-width:1600px;margin:auto;padding:0 clamp(20px,4vw,55px) 85px;display:grid;grid-template-columns:minmax(230px,290px) minmax(0,1fr);gap:33px;align-items:start}
+.strategy-toc{position:sticky;top:24px;max-height:calc(100vh - 45px);overflow-y:auto;padding:25px;background:#11283a;border:1px solid #345067;border-radius:16px;display:grid;gap:10px}
+.strategy-toc strong{color:#c7f17c;font-size:12px;letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px}
+.strategy-toc a{color:#acc4d3;text-decoration:none;font-size:12px;line-height:1.4;padding:3px 0}
+.strategy-toc a:hover{color:#fff}
+.strategy-content{display:grid;gap:21px}
+.strategy-section{scroll-margin-top:30px;border-radius:18px;border:1px solid #2b4558;background:#102438;padding:clamp(25px,4vw,45px);min-width:0}
+.strategy-section h2{font-size:clamp(23px,3vw,33px);line-height:1.18;letter-spacing:-.045em;margin:0 0 25px;color:#f3faff}
+.strategy-section h3{font-size:17px;margin:25px 0 10px;color:#bdf45c}
+.strategy-section p{color:#bacbd9;line-height:1.74;font-size:14px;margin:0 0 15px;overflow-wrap:anywhere;white-space:pre-wrap}
+.strategy-section ul{padding-left:22px;margin:0 0 20px}
+.strategy-section li{color:#bad1e0;font-size:14px;line-height:1.65;margin:8px 0;overflow-wrap:anywhere}
+.strategy-footer{text-align:center;padding:30px;color:#88a7bb}
+.strategy-footer a{color:#bdf45c}
+@media(max-width:1050px){.rm-private-mark{display:none}.rm-demo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.rm-site-nav{align-items:flex-start;flex-wrap:wrap;gap:9px}.rm-topnav{width:100%;gap:5px}.rm-topnav a{font-size:11px;padding:9px}.rm-project-heading{display:block}.rm-project-heading p{margin-top:14px}.strategy-layout{display:block}.strategy-toc{position:static;max-height:210px;margin-bottom:20px}.strategy-hero{padding-top:35px}}
+@media(max-width:480px){.rm-demo-grid{grid-template-columns:1fr}.rm-demo-card{min-height:155px}.rm-project-intro{padding-top:24px}.rm-project-heading h2{font-size:27px}.rm-site-footer{justify-content:center}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
