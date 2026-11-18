@@ -1,11 +1,11 @@
 # TENNILO – gemeinsame Roadmap auf roadmap.tennilo.de
 
-Geschütztes Roadmap-Portal mit persönlichem Login für TENNILO Tournament, Score, Umpire, Business, Plattformthemen **und die eigenständige Wer-muss-Mini-App-Familie**. Mini-Apps gehören nicht zur TENNILO-Marke; nur die Planung läuft gemeinsam.
+Geschütztes Roadmap-Portal mit persönlichem Login für TENNILO Tournament, Score, Umpire, Business, Plattformthemen **und JUXILO als eigenständige Dachmarke für sechs Spaß-Apps**. JUXILO gehört nicht zur TENNILO-Marke; Wer muss?! ist eines der sechs Spiele, die bisherige Wer-muss-Testzentrale besteht weiter.
 
 ## Bedienkonzept
 
 1. `https://roadmap.tennilo.de` zeigt das TENNILO-Login: **Benutzername + Passwort** (ohne Browser-Verzeichnisdialog).
-2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 96 initialen Themen (darunter 23 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
+2. Nach Anmeldung: produktübergreifendes Roadmap-Board mit 97 initialen Themen (darunter 23 detaillierte Score-Aufgaben), Suche, Kanban-/Listenansicht, Prioritäten, Meilensteinen, Kommentaren und Demo-Links.
 3. `strategie.php` zeigt alle 18 Kapitel der Gesamtplanung (17 TENNILO-Kapitel plus eigenständige Mini-App-Ergänzung) – **nur mit gültiger Sitzung**; Gäste werden auf das Login weitergeleitet.
 4. Projektleitung kann Benutzer einladen und sperren: einmalige Einladungslinks, sieben Tage gültig; eingeladene Personen legen eigenen Benutzernamen und eigenes Passwort fest. Rollen: nur lesen oder kommentieren.
 5. Gäste bekommen serverseitig **keine Roadmap-Einträge**, keine Kommentare und keine Benutzerdaten. Die API gibt ihnen lediglich das für den Login notwendige CSRF-Token und die Sitzungsangabe zurück.
@@ -68,7 +68,7 @@ Auf `Run workflow → main → Run workflow` klicken. Push auf `main` registrier
 
 Der manuelle Workflow:
 - übernimmt die **Original-TENNILO-Logos** aus dem Website-Repository;
-- kombiniert 33 bisherige Tournament-Themen und 63 zusätzliche Aufgaben einschließlich 16 eigenständiger Mini-App-Themen (einschließlich 23 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
+- kombiniert 33 bisherige Tournament-Themen und 64 zusätzliche Aufgaben einschließlich 17 JUXILO-/Mini-App-Themen (einschließlich 23 detaillierter Score-Aufgaben, drei Web-Demo-Meilensteinen, dem ersten realen Gerätetest vom 17.11.2026 sowie Padel, Pickleball und Beach Tennis);
 - generiert die geschützte Seed-PHP-Datei und die initiale Admin-Konfiguration;
 - prüft Syntax, bestehende Roadmap-Tests und HTTPS;
 - überträgt nur die **17** ausdrücklich freigegebenen Dateien per FTPS, ohne zu löschen, ohne `.htaccess` zu ersetzen und ohne die Tournament-App zu verändern;
@@ -131,9 +131,9 @@ Der Filter **Alle Projekte** zeigt die sechs Produktbereiche mit der Anzahl der 
 
 Tests: `node --test roadmap-site/product-sections.test.mjs` ist sowohl in der manuellen Subdomain-Auslieferung als auch im unabhängigen Code-Prüfworkflow aktiviert. Ein Deployment erfolgt weiterhin ausschließlich manuell.
 
-## Unabhängige Wer-muss-Mini-Apps – eigenes Branding
+## JUXILO – Dachmarke für die sechs unabhängigen Spaß-Apps
 
-Die Roadmap enthält nun **16 Aufgaben** für die unabhängige Mini-App-Werkstatt. Für jede der sechs Apps werden **Browser-Prototyp** und **native iPhone-/Android-App** getrennt betrachtet, ohne einen Browser-Prototyp als Store-App zu bezeichnen:
+Die Roadmap enthält nun **17 Aufgaben** für JUXILO und seine sechs unabhängigen Spaß-Apps. Für jede der sechs Apps werden **Browser-Prototyp** und **native iPhone-/Android-App** getrennt betrachtet, ohne einen Browser-Prototyp als Store-App zu bezeichnen:
 
 1. Wer muss?! (Flutter-Grundgerüst in Entwicklung)
 2. Punktlandung!
@@ -142,7 +142,7 @@ Die Roadmap enthält nun **16 Aufgaben** für die unabhängige Mini-App-Werkstat
 5. Nur noch einmal!
 6. Völlig daneben!
 
-Hinzu kommen gemeinsame Browser-Werkstatt, DE/EN, unverbindliche Preis-/Bundleidee (Einzelpreis 1,99 €, Bundle 7,99 €) und der getrennte App-Ideenpool. Die Idee „TENNILO Umpire“ aus dem Pool bleibt ausschließlich im bestehenden TENNILO-Bereich, nicht als Dublette in den Mini-Apps.
+Hinzu kommen JUXILO-Dachmarke/JX04-Logo-Set, die gemeinsame Browser-Werkstatt, DE/EN, eine unverbindliche Preis-/Bundleidee (Einzelpreis 1,99 €, JUXILO-Sechser-Bundle 7,99 €) und der getrennte App-Ideenpool. Die Idee „TENNILO Umpire“ aus dem Pool bleibt ausschließlich im bestehenden TENNILO-Bereich, nicht als Dublette in den Mini-Apps.
 
 **Quellen:**
 - https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit
@@ -153,6 +153,18 @@ Die Roadmap benutzt die **freigegebenen Original-Icons WM04b, PL05, FC05, NK05, 
 
 Die tatsächliche veröffentlichte Browser-Demo-Ziel-URL ist **nicht durch die GitHub-Quelldateien verifiziert**. Deshalb verlinkt die Roadmap-Startseite zunächst auf das GitHub-Demo-Verzeichnis und behauptet keinen erfolgreichen Website-Upload. Manuelle Wer-muss-Uploads laufen weiterhin separat über https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-test.yml.
 
-Die Projekt-Übersicht zeigt unter `Alle Projekte` auch **Wer muss?! & Co.** mit acht farbigen Themenbereichen; App-Karten und Listen erhalten die zum jeweiligen Original-Icon passende Akzentfarbe. Die Editier-, Kommentar- und Löschfunktion samt serverseitiger Authentifizierung bleibt unverändert. Die gemeinsame Roadmap kann nun maximal 250 offizielle Seeds enthalten (bisher 100), damit weitere App-Ideen hinzukommen können, ohne bestehende Einträge zu entfernen.
+Die Projekt-Übersicht zeigt unter `Alle Projekte` nun **JUXILO** mit acht farbigen Themenbereichen; App-Karten und Listen erhalten die zum jeweiligen Original-Icon passende Akzentfarbe. Die Editier-, Kommentar- und Löschfunktion samt serverseitiger Authentifizierung bleibt unverändert. Die gemeinsame Roadmap kann nun maximal 250 offizielle Seeds enthalten (bisher 100), damit weitere App-Ideen hinzukommen können, ohne bestehende Einträge zu entfernen.
 
 **Täglicher GitHub-Abgleich:** Der Workflow `roadmap-site/daily-review.mjs` bezieht künftig auch `tennis-schiri/wer-muss-app` ein. Er protokolliert nur beobachtbare Codeänderungen und führt keine automatische Statusfreigabe und **keinen FTP-Live-Upload** durch. Die Roadmap bleibt nur über den ausdrücklich manuellen Upload auf der Subdomain veröffentlichbar.
+
+### JUXILO-Markenführung / JX04
+
+- **JUXILO ist vorläufig ausschließlich der Oberbegriff** für die sechs ausgewählten Spaß-Apps, keine zusätzliche siebte App.
+- **Wer muss?!** bleibt der Name des ursprünglichen Multitouch-Spiels und die bestehende Wer-muss-Website vorerst die Testzentrale. Die Website selbst, ihre Domain und der Repository-Name werden durch diese Roadmap-Änderung ausdrücklich **nicht** umbenannt.
+- Das freigegebene **JX04-Vektor-Set** liegt unter https://drive.google.com/drive/folders/1xwhvnokNzuSBnsYHh0yYYXMCKi85pM0G.
+- Zwei tatsächliche Originalvektoren aus diesem Drive-Set liegen in `roadmap-site/juxilo-jx04-logo-white.svg` (weiß auf dunklem Hintergrund) und `roadmap-site/juxilo-jx04-j-icon.svg` (freigestelltes J-Maskottchen); der manuelle Roadmap-Workflow kopiert sie nach `dist/assets/`.
+- Dachmarken-Farben des JX04-Brandguides: **Purpur #53006D**, **Pink #FF00A8**, **Orange #FF8A00**, **Gelb #FFC700**, **Blau #00B3FF**. Die sechs Einzel-App-Logos und deren eigene Akzentfarben bleiben erhalten.
+- Die JX04-SVGs sind eine Vektorneuzeichnung des bestehenden freigegebenen Entwurfs; vor verbindlicher Marken- oder Druckverwendung ist eine optische Abnahme vorgesehen.
+- Bestehende IDs (`mini-*`), Kategorien (`Weitere Apps`), Benutzerkonten, Sitzungen, Kommentare und Papierkorb werden unverändert weitergeführt. Neu ist lediglich der offizielle Seed-Eintrag `juxilo-brand-jx04`.
+
+**Live-Upload bleibt manuell:** https://github.com/tennis-schiri/tennis-schiri-app/actions/workflows/roadmap-subdomain.yml – `reset_admin_login=false` beibehalten.
