@@ -138,3 +138,8 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
 .rm-score-streams button:focus-visible{outline:2px solid #bdf45c;outline-offset:3px}
 @media(max-width:1000px){.rm-score-streams{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.rm-score-overview{margin:14px 14px 0;padding:18px 14px}.rm-score-streams{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Roadmap-Administration: Löschen nur über den geschützten Papierkorb */
+.rm-detail-admin{display:flex;flex-wrap:wrap;gap:10px}
+.rm-detail-admin .rm-delete-item{border-color:#9b5a64!important;color:#ffd9de!important}
+.rm-detail-admin .rm-delete-item:hover{background:#542a35!important;color:#fff!important}
