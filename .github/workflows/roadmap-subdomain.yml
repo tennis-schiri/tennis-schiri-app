@@ -89,7 +89,10 @@ jobs:
         run: |
           set -euo pipefail
           php -r 'if (PHP_VERSION_ID < 80200) { fwrite(STDERR, "PHP 8.2 oder neuer erforderlich.\n"); exit(1); }'
+          php -l roadmap-site/make-admin-config.php
+          php -l roadmap-site/verify-account-state.php
           for file in roadmap-site/dist/*.php; do php -l "$file"; done
+          php roadmap-site/verify-account-state.php
           node --check roadmap-site/dist/assets/roadmap.js
           node --check roadmap-site/regenerate-seed.mjs
           php tests/roadmap.php
