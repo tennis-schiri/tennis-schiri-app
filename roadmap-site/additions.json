@@ -1299,11 +1299,11 @@
       "workstream": "studio",
       "priority": "high",
       "scope": "JUXILO als übergeordnete Marke darstellen, ohne die bestehende Wer-muss-Domain, FTP-Struktur, Testseiten oder App-Namen umzubenennen. Sechs Browser-Prototypen unter /apps/<slug>/, Original-Logos, Navigation, Neustart/Startseite und rechtliche Seiten bleiben bestehen.",
-      "currentState": "Die gemeinsame Website und alle sechs Test-Unterseiten liegen im Repository tennis-schiri/wer-muss-app; JUXILO ist derzeit nur als Oberbegriff der Spaß-Apps beschlossen. Noch keine Umstellung der Website auf JUXILO nachgewiesen.",
-      "nextStep": "Separaten Markenauftritt der Wer-muss-Testzentrale unter JUXILO entwerfen und abnehmen, bevor die Website selbst geändert wird; Browser-Demos auf echten Geräten prüfen.",
+      "currentState": "Die gemeinsame Website und sechs Browser-Testseiten liegen im Repository tennis-schiri/wer-muss-app. Der JUXILO-JX04-Markenauftritt ist im GitHub-Code der Testzentrale umgesetzt (u. a. Commit 249775a); Wer muss?! bleibt eine eigenständige App. Ob der neue Stand öffentlich live bereitgestellt wurde oder auf echten iPhone-/Android-Geräten funktioniert, ist nicht bestätigt.",
+      "nextStep": "JUXILO-Design und WM04b-nahe Einzel-App-Demos im Browser auf echten iPhone-/Android-Geräten prüfen; FTPS-Ziel und öffentliche Live-Version getrennt vom GitHub-Code verifizieren. Keine Umbenennung bestehender URLs voraussetzen.",
       "milestone": "Gemeinsame Browser-Werkstatt",
       "benefit": "Die sechs Spaß-Apps gehören künftig zur Dachmarke JUXILO; die bereits bestehende Wer-muss-Website bündelt ihre Browser-Tests vorerst weiterhin.",
-      "openPoints": "Separaten Markenauftritt der Wer-muss-Testzentrale unter JUXILO entwerfen und abnehmen, bevor die Website selbst geändert wird; Browser-Demos auf echten Geräten prüfen.",
+      "openPoints": "JUXILO-Design und WM04b-nahe Einzel-App-Demos im Browser auf echten iPhone-/Android-Geräten prüfen; FTPS-Ziel und öffentliche Live-Version getrennt vom GitHub-Code verifizieren. Keine Umbenennung bestehender URLs voraussetzen.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
         {
@@ -1704,11 +1704,11 @@
       "workstream": "studio",
       "milestone": "Dachmarke beschlossen · JX04-Logo-Set vorhanden",
       "scope": "Markenarchitektur definieren: JUXILO = Dachmarke, darunter Wer muss?!, Punktlandung!, Fingerchaos, Nicht kleckern!, Nur noch einmal! und Völlig daneben! Vorhandene Einzel-App-Icons und ihre Namen bleiben unverändert. Das bereits erstellte JX04-Set (Weißlogo, J-Maskottchen, Varianten und Farbpalette) als Entwurfsgrundlage für die UI nutzen.",
-      "currentState": "JUXILO ist als vorläufige Dachmarke der sechs Spaß-Apps festgelegt. Das JX04-Vektorset liegt in Google Drive. Website und Repositories heißen noch Wer muss?!; weder Rebranding noch App-Store-Start ist damit erfolgt.",
-      "nextStep": "Markenauftritt für App-Übersicht und später die Produktseiten abgestimmt umsetzen. JX04-Vektordateien vor verbindlichem Marken-/Druckeinsatz final optisch abnehmen.",
+      "currentState": "JUXILO ist als vorläufige Dachmarke für genau sechs eigenständige Spaß-Apps beschlossen. Das JX04-Vektorset liegt in Google Drive; JX04-Dateien, JUXILO-Startseite, Navigation und Branding der sechs Browser-Demos sind inzwischen im Repository tennis-schiri/wer-muss-app als Code vorhanden (u. a. Commits 887d127, 249775a, c7bb11c). Die bestehende Repository-/Domainstruktur und der Einzel-App-Name Wer muss?! bleiben erhalten. Live-Veröffentlichung, Store-Freigabe und echte Gerätetests sind nicht nachgewiesen.",
+      "nextStep": "JX04-Vektoren für endgültigen Markeneinsatz optisch abnehmen; Browser-Demos auf echten iPhone-/Android-Geräten testen und öffentlichen Live-Stand separat verifizieren. Keine Store-Veröffentlichung oder Domain-Umbenennung aus Code-Commits ableiten.",
       "doneWhen": "JUXILO wird als Dachmarke verwendet, alle sechs Einzel-Apps sind korrekt zugeordnet, Original-Logos bleiben erhalten und keine bestehende URL wird unabsichtlich geändert.",
       "benefit": "Eine klare, gemeinsame Identität für die sechs eigenständigen Spaß-Apps ohne Verwechslung mit TENNILO oder Wer muss?! als Einzel-App.",
-      "openPoints": "JX04-Vektorneuzeichnung vor endgültigem Markeneinsatz visuell abnehmen; Wer-muss-Website erst nach separatem Beschluss umgestalten.",
+      "openPoints": "Visuelle Endabnahme des JX04-Sets, echte Browser-Gerätetests und gesonderter Nachweis einer Live-Bereitstellung stehen aus.",
       "references": [
         {
           "title": "JUXILO JX04 – Vektor- und Transparenzset",
