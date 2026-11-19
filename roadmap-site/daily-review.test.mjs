@@ -6,8 +6,9 @@ test('Roadmap enthält eindeutige IDs und weitere vier Sportarten',()=>{
   const {all,ids}=parseRoadmap();
   assert.equal(ids.size,all.length);
   for(const id of ['score-padel','score-pickleball','score-beach-tennis','score-tabletennis'])assert.ok(ids.has(id),id);
-  assert.ok(all.length>=96);
-  assert.equal(all.filter(x=>x.category==='Weitere Apps').length,16);
+  assert.ok(all.length>=97);
+  assert.ok(all.filter(x=>x.category==='Weitere Apps').length>=17);
+  assert.ok(ids.has('juxilo-brand-jx04'),'JUXILO-Dachmarkenaufgabe vorhanden');
 });
 test('Nur explizite, existierende RM-Zuordnungen sind verbindlich',()=>{
   const ids=new Set(['score-detail-01','score-detail-17']);
@@ -20,9 +21,9 @@ test('Änderungen an Roadmap zählen nicht als Tournament-App-Fortschritt',()=>{
   assert.equal(isRoadmapOnlyCommit([{filename:'site/app.js'},{filename:'roadmap-site/additions.json'}]),false);
 });
 test('Tagesbericht zählt Code-Änderungen, erklärt aber fehlende Freigabe',()=>{
-  const body=renderReport([{source:{name:'TENNILO Score'},commits:[{sha:'abcdef12345',title:'feat: change',url:'https://github.com/example/commit/abcdef',when:'2026-11-18T00:00:00Z',taskIds:[]}],truncated:false}],{total:96,score:38,miniapps:16},'2026-11-18T08:00:00Z','2026-11-17T00:00:00Z');
-  assert.match(body,/96/);
-  assert.match(body,/Mini-App-Themen/);
+  const body=renderReport([{source:{name:'TENNILO Score'},commits:[{sha:'abcdef12345',title:'feat: change',url:'https://github.com/example/commit/abcdef',when:'2026-11-18T00:00:00Z',taskIds:[]}],truncated:false}],{total:97,score:38,miniapps:17},'2026-11-18T08:00:00Z','2026-11-17T00:00:00Z');
+  assert.match(body,/97/);
+  assert.match(body,/JUXILO-\/Mini-App-Themen/);
   assert.match(body,/TENNILO Score/);
   assert.match(body,/keine Roadmap-Status/);
   assert.match(body,/manuellen TENNILO-Roadmap-Upload/);
