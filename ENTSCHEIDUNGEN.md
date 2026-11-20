@@ -94,7 +94,7 @@
 
 ## Ideen, **noch keine Entscheidungen**
 
-- Preisgestaltung, Lizenzmodell, Verkauf über tennis-schiri.de
+- Technische Zahlungsabwicklung, konkrete Paketgrenzen und Verkaufskanal für TENNILO Tournament (vorläufige Preisziele siehe E-044)
 - Eigene TENNILO-Domain als primäre App-Adresse
 - React/PWA-Umstellung und Offline-Unterstützung
 - Hostingarchitektur der endgültigen Benutzerkonten
@@ -236,7 +236,7 @@
 - **Sicherheit:** Passwort-Hashing über PHP `password_hash`, zufällige Tokens (256 Bit), Speicherung ausschließlich als SHA-256-Hash, ablaufende Sessions/Einladungen, E-Mail-Eindeutigkeit, Fremdschlüssel und nur ein aktueller Lizenzdatensatz je Verein. Der letzte aktive Vereinsbesitzer darf später nur in einer serverseitig abgesicherten Transaktion mit Ersatz entfernt werden.
 - **Hosting:** PHP/PDO und MariaDB/MySQL als Ziel auf ALL-INKL, **konkrete Zugangsdaten/Serverfähigkeit vor Installation prüfen**. Neue Backend-Dateien liegen ausschließlich im Repo-Verzeichnis `backend/` außerhalb des öffentlich ausgelieferten `site/`; die vorhandene FTPS-Action ist absichtlich nicht erweitert.
 - **Technische Tests:** PHP-Unit-/Rollenprüfungen, SQL-Strukturregression und echter MariaDB-Integrationstest in temporärer GitHub-Actions-Datenbank; dort niemals Produktiv-Credentials oder echte Kundendaten verwenden.
-- **Preis- und Zahlungsentscheidung ausdrücklich offen:** Bisherige Zahlen 14,90 € pro Turnier und 99 €/Jahr sind Ideenvorschläge, **keine verbindlichen Preise**. Zunächst kein Online-Nenngeld: Turnierteilnehmer zahlen beim Verein weiterhin bar. Softwarelizenz-Zahlungen an TENNILO werden später getrennt verarbeitet.
+- **Historischer Preisstand vom 05.11.2026 (überholt durch E-044 vom 20.11.2026):** 14,90 € pro Turnier und 99 €/Jahr waren unverbindliche frühe Ideenvorschläge. Die neuen vorläufigen Preisziele stehen in E-044. Zunächst kein Online-Nenngeld: Turnierteilnehmer zahlen beim Verein weiterhin bar. Softwarelizenz-Zahlungen an TENNILO werden später getrennt verarbeitet.
 - **Nächster Schritt B0.2:** Server-API für Registrierung mit bestätigter E-Mail, Login/Logout/Passwort-Reset, sichere Sitzungen, Vereine anlegen/erste Besitzerrolle atomar und weitere Organisatoren per Einladungslink. Vor echten Nutzern Datenschutz, Backups/Restore, Rechte-/CSRF-/Rate-Limit-Tests und Produktionskonfiguration sicherstellen.
 
 ## E-027 · B0.2: Registrierung und Vereine als gesperrte, testbare API (2026-11-05)
@@ -359,3 +359,17 @@
 
 
 **E-043 – Individuelle Platzwahl und gezielte Live-Endrunde im Doppelturnier (07.11.2026):** Plätze werden ab jetzt pro Play-off-Match und nicht nur automatisch bei der ersten Setzung vergeben. Die Turnierleitung kann für jede Runde, auch für noch nicht vollständig besetzte Halbfinal-/Finalspiele, aus den tatsächlich eingerichteten Plätzen wählen. Platzzuweisungen sind unabhängig vom Sieger und bleiben bei der Fortschreibung des Turnierbaums und Ergebnisänderungen erhalten. Eine gezielt gewählte Endrunde wird über `liveDisplay.mode='finals'` und validierten `stage` gespeichert; der Monitor zeigt »Viertelfinale«, »Halbfinale«, »Finale« oder »Spiel um Platz 3« gut sichtbar in Überschrift und Phasenlabel. Ohne Auswahl bleibt die automatische Phasenfindung aktiv. Keine automatische App-Veröffentlichung beim GitHub-Push.
+
+
+## E-044 · TENNILO Tournament – mittleres Lizenzpreis-Zielmodell (20.11.2026)
+
+- **Anlass:** Zwischen dem frühen Vorschlag 79 €/Jahr und der späteren Marktpreiseinschätzung von 199 €/Jahr wurde bewusst ein moderater Mittelweg gewählt.
+- **Entscheidung für die weitere Produktplanung (vorläufige Zielpreise, inkl. MwSt.):**
+  - **Einzelturnier:** **29 €** pro tatsächlich freigeschalteter Veranstaltung, ohne Jahresbindung.
+  - **Vereinslizenz:** **149 € / Jahr** als Hauptprodukt für regelmäßig veranstaltende Tennisvereine.
+  - **Professional:** **249 € / Jahr** als späteres Ziel für besonders aktive Veranstalter mit zusätzlichen Mehrbenutzer-/Veranstalter- und ggf. Integrationsfunktionen.
+- **Begründung:** Die Jahreshürde für kleine Tennisvereine geringer halten als bei 199 €, aber den Wert eines spezialisierten Turniermanagements nicht mit dem frühen 79-€-Ansatz unterpreisen. Die Einzelturnieroption erleichtert gelegentliche Nutzung; bei sechs Einzelturnieren (6 × 29 € = 174 €) wäre die Vereinslizenz günstiger.
+- **Abgrenzung:** Für kostenlose Tests/Demos keine Gebühr; einzelne Funktionen, Turnierlimits, Vereinsrollen, Integrationen und Zahlungsmodalitäten der kostenpflichtigen Stufen sind **noch festzulegen**. Professional setzt entsprechende tatsächlich entwickelte Funktionen voraus und darf vorher nicht als erhältlich beworben werden.
+- **Release-Schutz:** Dies ist **noch keine aktive Preisliste im Produkt**, keine Store-Konfiguration, kein Online-Bezahlvorgang und keine Freigabe für echte Kundenregistrierung. Vor Vermarktung sind tragfähiges Backend, Sicherheit, Datenschutz, verlässliche Speicherung, Support sowie Praxistests erforderlich.
+- **Validierung:** Preisbereitschaft zunächst mit echten Veranstaltern/Vereinen und Betatests prüfen; nach den ersten zahlenden Pilotkunden die Preisstruktur bei Bedarf anpassen. Preisangaben sind Richtwerte für Planung, nicht unveränderliche Endpreise.
+- **Trennung von Nenngeld:** Die Plattformlizenz ist unabhängig von den Nenngeldern, die Veranstalter bei ihren Teilnehmern erheben und derzeit bar verwalten.
