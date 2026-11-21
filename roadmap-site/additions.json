@@ -1299,11 +1299,11 @@
       "workstream": "studio",
       "priority": "high",
       "scope": "JUXILO als übergeordnete Marke darstellen, ohne die bestehende Wer-muss-Domain, FTP-Struktur, Testseiten oder App-Namen umzubenennen. Sechs Browser-Prototypen unter /apps/<slug>/, Original-Logos, Navigation, Neustart/Startseite und rechtliche Seiten bleiben bestehen.",
-      "currentState": "Die sechs eigenständigen Browser-Demos und der JUXILO-JX04-Markenauftritt liegen im GitHub-Code von tennis-schiri/wer-muss-app. Seit 20.11.2026 sind alle sechs Demoansichten zusätzlich in Smartphone-Rahmen umgesetzt (Commits f3cfab1 bis 7aac2d1; Wer muss?! mit Multitouch-/Vollbildoption). Die separate zweisprachige JUXILO-Coming-soon-Seite samt Rechtstexten ist als Code vorbereitet (Commits 49cc822, 5ba99a0); ebenso die Verlagerung der Demo-FTPS-Konfiguration auf demo.juxilo.de (Commit 04147a3). Keine dieser Codeänderungen belegt einen erfolgten Upload, echte iPhone-/Android-Gerätetests oder Store-Veröffentlichung.",
-      "nextStep": "Sechs Browser-Demos samt Smartphone-Darstellung, Wer-muss-Multitouch und DE/EN auf echten iPhone-/Android-Geräten prüfen. Die getrennten manuellen FTPS-Ziele juxilo.de und demo.juxilo.de sowie tatsächlich veröffentlichte Inhalte unabhängig vom Code kontrollieren; keine Live-Bereitstellung voraussetzen.",
+      "currentState": "Die sechs eigenständigen Browser-Demos und der JUXILO-JX04-Markenauftritt liegen im GitHub-Code von tennis-schiri/wer-muss-app. Seit 20.11.2026 sind alle sechs Demoansichten zusätzlich in Smartphone-Rahmen umgesetzt (Commits f3cfab1 bis 7aac2d1; Wer muss?! mit Multitouch-/Vollbildoption). Die separate zweisprachige JUXILO-Coming-soon-Seite samt Rechtstexten ist als Code vorbereitet (Commits 49cc822, 5ba99a0); ebenso die Verlagerung der Demo-FTPS-Konfiguration auf demo.juxilo.de (Commit 04147a3). Keine dieser Codeänderungen belegt einen erfolgten Upload, echte iPhone-/Android-Gerätetests oder Store-Veröffentlichung. Seit 20.11.2026 lösen die beiden FTPS-Workflows bei Änderungen an site/ beziehungsweise demo/ auf main zusätzlich automatisch Uploadversuche aus (Commits 0bc6345, 7b7915e); dies ist eine Änderung der Deployment-Konfiguration, kein Beleg für erfolgreiche Live-Auslieferung.",
+      "nextStep": "Neue automatische Push-Deployments für site/ und demo/ prüfen: GitHub-Actions-Ergebnisse, Zielverzeichnisse und tatsächlich ausgelieferte Inhalte getrennt verifizieren. Keine weiteren Uploads durch diesen Roadmap-Abgleich auslösen. Sechs Browser-Demos samt Smartphone-Darstellung, Wer-muss-Multitouch und DE/EN auf echten iPhone-/Android-Geräten prüfen. Die getrennten manuellen FTPS-Ziele juxilo.de und demo.juxilo.de sowie tatsächlich veröffentlichte Inhalte unabhängig vom Code kontrollieren; keine Live-Bereitstellung voraussetzen.",
       "milestone": "Gemeinsame Browser-Werkstatt",
       "benefit": "Die sechs Spaß-Apps gehören künftig zur Dachmarke JUXILO; die bereits bestehende Wer-muss-Website bündelt ihre Browser-Tests vorerst weiterhin.",
-      "openPoints": "Sechs Browser-Demos samt Smartphone-Darstellung, Wer-muss-Multitouch und DE/EN auf echten iPhone-/Android-Geräten prüfen. Die getrennten manuellen FTPS-Ziele juxilo.de und demo.juxilo.de sowie tatsächlich veröffentlichte Inhalte unabhängig vom Code kontrollieren; keine Live-Bereitstellung voraussetzen.",
+      "openPoints": "Automatische Push-Deployments und getrennte Live-Stände von juxilo.de und demo.juxilo.de verifizieren; Browser-Gerätetests stehen aus.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
         {
@@ -1646,22 +1646,26 @@
     },
     {
       "id": "mini-pricing",
-      "title": "JUXILO – Einzelpreise und Sechser-Bundle",
-      "description": "Eine gemeinsame JUXILO-Spielesammlung aus sechs eigenständigen Spaß-Apps mit einheitlicher Preisidee prüfen.",
+      "title": "JUXILO – kostenlose Apps mit optionaler Werbefrei-Schaltung",
+      "description": "Beschlossenes Zielmodell vom 20.11.2026: sechs eigenständige, vollständig kostenlos spielbare native Apps; dezente Werbung nur außerhalb aktiver Spielrunden und optionaler einmaliger Werbefrei-Kauf.",
       "category": "Weitere Apps",
       "status": "idea",
       "workstream": "studio",
       "priority": "medium",
-      "scope": "Preisidee vom 08.11.2026: je Einzel-App 1,99 €, Gesamtbundle 7,99 €. iOS-App-Bundle, bei Android eventuell eigene Sammel-App statt AAB-Bundle als Verkaufsprodukt.",
-      "currentState": "Preisvorschlag vom 08.11.2026: 1,99 € je App und 7,99 € für die komplette Sammlung; keine freigegebenen Store-Preise oder Store-Listings. JUXILO ist die Dachmarke, kein siebtes Spiel.",
-      "nextStep": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
-      "milestone": "Preis-/Store-Konzept · Idee",
+      "scope": "Alle sechs nativen iPhone-/Android-Apps kostenlos und ohne gesperrte Spielmodi anbieten. Geplant sind dezente Banner nur in Menüs/Start- und geeigneten Ergebnisansichten sowie ein freiwilliger einmaliger Werbefrei-In-App-Kauf zum vorläufigen Zielpreis 2,99 € je App. Keine Abos, Pflichtvideos oder Registrierung; Offline-Spiel möglich. Browser-Demos bleiben werbefrei. Der frühere Vorschlag von 1,99 € je App und 7,99 € als Bundle vom 08.11.2026 ist überholt; ein gemeinsames Bundle/JUXILO-Pass ist derzeit nicht beschlossen.",
+      "currentState": "Produktentscheidung vom 20.11.2026 im Repository tennis-schiri/wer-muss-app dokumentiert (Commit cac3c685; README und JUXILO_MONETARISIERUNG.md). Werbung, Datenschutz-Einwilligung, Store-Käufe und Kaufwiederherstellung sind technisch noch nicht implementiert. Keine Store-Listings oder Veröffentlichung bestätigt. Wer muss?! bleibt eine einzelne App; JUXILO ist nur die Dachmarke.",
+      "nextStep": "Altersgruppe, Store-/Datenschutzanforderungen und Werbeplatzierung prüfen; anschließend Anzeigen-SDK und nicht verbrauchbaren Werbefrei-Kauf implementieren, Sandbox- und echte iPhone-/Android-Gerätetests durchführen. Vorher keine Monetarisierungsfunktionen als verfügbar darstellen.",
+      "milestone": "Kostenloses Werbemodell beschlossen · technische Umsetzung offen",
       "benefit": "Eine gemeinsame JUXILO-Spielesammlung aus sechs eigenständigen Spaß-Apps mit einheitlicher Preisidee prüfen.",
-      "openPoints": "Plattformregeln, Kosten und die tatsächliche Bundle-Umsetzung vor Store-Start bestätigen.",
+      "openPoints": "Vorläufigen Werbefrei-Zielpreis 2,99 € validieren; DSGVO/Einwilligung, Store-Compliance, Offline-Betrieb und Kaufwiederherstellung testen. Kein Bundle beschlossen.",
       "doneWhen": "Funktion auf echten Zielgeräten geprüft und die für diesen Meilenstein vereinbarten Tests abgeschlossen.",
       "references": [
         {
-          "title": "Mini-App-Ideen – Projektliste",
+          "title": "JUXILO – Monetarisierung und Release-Regeln (20.11.2026)",
+          "url": "https://github.com/tennis-schiri/wer-muss-app/blob/main/JUXILO_MONETARISIERUNG.md"
+        },
+        {
+          "title": "Mini-App-Ideen – historische Preisidee 08.11.2026",
           "url": "https://docs.google.com/document/d/1NY3IQP2YhwsWlteDGy4c7LjiNTNsY8Tjkx4TNWb6H1E/edit"
         }
       ],
@@ -1704,11 +1708,11 @@
       "workstream": "studio",
       "milestone": "Dachmarke beschlossen · JX04-Logo-Set vorhanden",
       "scope": "Markenarchitektur definieren: JUXILO = Dachmarke, darunter Wer muss?!, Punktlandung!, Fingerchaos, Nicht kleckern!, Nur noch einmal! und Völlig daneben! Vorhandene Einzel-App-Icons und ihre Namen bleiben unverändert. Das bereits erstellte JX04-Set (Weißlogo, J-Maskottchen, Varianten und Farbpalette) als Entwurfsgrundlage für die UI nutzen.",
-      "currentState": "JUXILO ist vorläufige Dachmarke für genau sechs eigenständige Spaß-Apps; Wer muss?! bleibt eine Einzel-App. Das JX04-Vektor-/PNG-Set liegt im Drive (SVG-Pfadkonturen als angenäherte Neuzeichnung, optische Endabnahme offen). Im Repository tennis-schiri/wer-muss-app sind JX04-Branding, sechs Browser-Demos und seit 20.11.2026 eine separate zweisprachige Coming-soon-Seite für juxilo.de als Code vorhanden (u. a. Commits 249775a, 49cc822, 439700d). Ein manueller FTPS-Workflow für die eigenständige Teaser-Seite und die Vorbereitung der separaten Demo-Domain demo.juxilo.de sind im Code enthalten (Commits a9fa8f7, 04147a3). Eine tatsächliche Live-Bereitstellung, native Store-Freigabe oder erfolgreiche Gerätetests sind nicht belegt.",
+      "currentState": "JUXILO ist vorläufige Dachmarke für genau sechs eigenständige Spaß-Apps; Wer muss?! bleibt eine Einzel-App. Das JX04-Vektor-/PNG-Set liegt im Drive (SVG-Pfadkonturen als angenäherte Neuzeichnung, optische Endabnahme offen). Im Repository tennis-schiri/wer-muss-app sind JX04-Branding, sechs Browser-Demos und seit 20.11.2026 eine separate zweisprachige Coming-soon-Seite für juxilo.de als Code vorhanden (u. a. Commits 249775a, 49cc822, 439700d). Ein manueller FTPS-Workflow für die eigenständige Teaser-Seite und die Vorbereitung der separaten Demo-Domain demo.juxilo.de sind im Code enthalten (Commits a9fa8f7, 04147a3). Eine tatsächliche Live-Bereitstellung, native Store-Freigabe oder erfolgreiche Gerätetests sind nicht belegt. Am 20.11.2026 wurden automatische Push-Trigger für die separaten Site-/Demo-FTPS-Workflows ergänzt (Commits 0bc6345 und 7b7915e); erfolgreiche Auslieferung ist dadurch nicht belegt.",
       "nextStep": "JX04-Logoformen vor finaler Marken-/Drucknutzung optisch abnehmen; getrennte Live-Stände von juxilo.de und demo.juxilo.de nach manueller Freigabe prüfen, sechs Browser-Demos auf echten iPhone-/Android-Geräten testen. Keine Domainmigration oder App-Store-Freigabe aus GitHub-Code ableiten.",
       "doneWhen": "JUXILO wird als Dachmarke verwendet, alle sechs Einzel-Apps sind korrekt zugeordnet, Original-Logos bleiben erhalten und keine bestehende URL wird unabsichtlich geändert.",
       "benefit": "Eine klare, gemeinsame Identität für die sechs eigenständigen Spaß-Apps ohne Verwechslung mit TENNILO oder Wer muss?! als Einzel-App.",
-      "openPoints": "JX04-Endabnahme, Browser-Gerätetests und gesonderte Bestätigung der zwei Live-Ziele stehen aus.",
+      "openPoints": "JX04-Endabnahme, Browser-Gerätetests sowie Prüfung der neuen automatischen Deploy-Workflows und beider tatsächlichen Live-Stände stehen aus.",
       "references": [
         {
           "title": "JUXILO JX04 – Vektor- und Transparenzset",
