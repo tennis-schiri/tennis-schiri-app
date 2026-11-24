@@ -1,5 +1,5 @@
 ﻿TENNILO – Gemeinsame Produkt-Roadmap
-Tournament · Score · Umpire · Business | Aktualisiert: 18.11.2026
+Tournament · Score · Umpire · Business · ClubDisplay | Aktualisiert: 24.11.2026
 Arbeitsdokument – strategische Vorschläge, keine verbindlich beschlossenen Funktionen oder Veröffentlichungstermine. Technischer Projektstatus und verbindliche Entscheidungen bleiben im GitHub-Repository dokumentiert.
 1. Vision und Positionierung
 TENNILO soll eine einfach bedienbare, browserbasierte Plattform für Tennisvereine, Freizeitturniere und freie Veranstalter werden. Leitgedanke: „Weniger Orga. Mehr Tennis.“ Kernfokus: gesellige Vereins- und Hobbyturniere sowie klassische Einzel-, Doppel- und Mixedturniere.
@@ -91,6 +91,7 @@ Produktlinien und Rolle:
 • TENNILO Score: Match-Punktzählung auf iPhone/Apple Watch, perspektivisch Android/Wear OS, mit Offline-Betrieb, Match-Archiv, Statistiken und externer Spielstandsanzeige.
 • TENNILO Umpire: modulares Schiedsrichter-Cockpit (Basic/Pro), digitale Scorecard, Zeit- und Regelereignisse sowie Ausgabe an Zuschaueranzeigen und kompatible externe Scoreboards.
 • TENNILO Business: spätere Erweiterung von Tournament für Hotels, Resorts und Tennisreiseveranstalter; keine eigenständige App als Grundannahme.
+• TENNILO ClubDisplay (Arbeitstitel ClubDisplay): zunächst ausschließlich für den NTC 93 als Pilotverein entwickeln und im Clubhaus erproben. Browserbasierter Touchscreen mit Platzbuchung, automatischen Terminen und Heimspielen, Werbung und zentraler Verwaltung. Eine spätere Öffnung für weitere Vereine sowie eine mobile ClubApp mit gemeinsamer Datenbasis sind Perspektiven, keine aktuellen Entwicklungs- oder Veröffentlichungszusagen.
 • Weitere Sportarten: Tischtennis ausdrücklich als geplante Erweiterung von TENNILO Score aufnehmen; noch kein zugesagter Entwicklungs- oder Veröffentlichungstermin.
 
 
