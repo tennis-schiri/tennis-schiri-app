@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-18",
+  "updated": "2026-11-24",
   "source": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit",
   "items": [
     {
@@ -1726,6 +1726,26 @@
       "origin": "official",
       "updatedAt": "2026-11-18T15:53:00+01:00",
       "comments": []
+    },
+    {
+      "id": "clubdisplay-ntc-pilot",
+      "title": "ClubDisplay – NTC-Pilot und ClubApp-Perspektive",
+      "description": "Interaktive Clubhaus-Web-App zunächst ausschließlich für den NTC 93 entwickeln; ClubDisplay bereits als geplante TENNILO-Produktlinie führen.",
+      "category": "TENNILO Plattform",
+      "status": "planned",
+      "priority": "medium",
+      "workstream": "integration",
+      "milestone": "NTC-Pilot · Sommersaison 2027 (Ziel)",
+      "nextStep": "Buchungssystem-Schnittstelle, nuLiga-Datenübernahme und vorhandenen Touchscreen prüfen; Pilotumfang festlegen.",
+      "benefit": "Platzbuchung und Vereinsinformationen zentral bereitstellen und manuelle Datenpflege reduzieren.",
+      "scope": "Browser im Vollbild unter Windows 11, Touchbedienung, Platzbuchung, automatische Vereinstermine und Heimspiele, Sponsorenwerbung, Infomodus und zentrale Administration. Mobile ClubApp und weitere Vereine erst perspektivisch.",
+      "currentState": "Projektidee und NTC-Pilot beschlossen; noch keine Implementierung oder Veröffentlichung.",
+      "openPoints": "Schnittstellenzugang, zulässige Datenübernahme, Datenschutz, Hosting, Repository, technische Architektur und spätere Produktfreigabe.",
+      "doneWhen": "Der NTC kann ClubDisplay zuverlässig im Clubhaus einsetzen; eine spätere Freigabe für andere Vereine bleibt eine gesonderte Entscheidung.",
+      "updatedAt": "2026-11-24T17:00:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "references": []
     }
   ],
   "retiredIds": [
