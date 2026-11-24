@@ -33,6 +33,21 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Aktuelles TENNILO-Branding abrufen
+        uses: actions/checkout@v4
+        with:
+          repository: tennis-schiri/tennilo-website
+          ref: main
+          path: tennilo-brand-source
+          persist-credentials: false
+
+      - name: Korrigiertes Tournament-Logo bereitstellen
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet 'Pillow>=10,<13'
+          (cd tennilo-brand-source && python3 scripts/prepare_transparent_logos.py)
+          cp tennilo-brand-source/public/assets/tennilo-tournament-cutout.png site/assets/tennilo-tournament-logo.png
+
       - name: Node.js fuer Auslosungstests vorbereiten
         uses: actions/setup-node@v7
         with:
