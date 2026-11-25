@@ -154,6 +154,23 @@ test('JUXILO ist Dachmarke, kein siebtes Spiel – und die Originalvektoren werd
   }
 });
 
-test('ClubDisplay ist eigenständiges Produkt mit vier Bereichen',()=>{ const own=items.filter(x=>ui.productOf(x)==='clubdisplay'); assert.equal(own.length,4); assert.equal(new Set(own.map(x=>ui.productStream(x))).size,4); });
+test('ClubDisplay ist eigenständiges Produkt mit vier Entwicklungsbereichen und allen vorgesehenen Themen',()=>{
+  const own=items.filter(x=>ui.productOf(x)==='clubdisplay');
+  const expected={
+    'clubdisplay-ntc-pilot':'pilot',
+    'clubdisplay-market':'release',
+    'clubdisplay-hosting':'platform',
+    'clubdisplay-booking':'booking',
+    'clubdisplay-managed':'platform',
+    'clubdisplay-sources':'platform',
+    'clubdisplay-operations':'platform'
+  };
+  for(const [id,stream] of Object.entries(expected)){
+    const matches=own.filter(x=>x.id===id);
+    assert.equal(matches.length,1,id+' muss genau einmal vorhanden sein');
+    assert.equal(ui.productStream(matches[0]),stream,id+' hat einen falschen Entwicklungsbereich');
+  }
+  assert.deepEqual([...new Set(own.map(x=>ui.productStream(x)))].sort(),['booking','pilot','platform','release']);
+});
 
 test('ClubDisplay-Original-Logo erscheint in Projektübersicht und Detailansicht und wird ausgeliefert',()=>{ui.setItems(items);ui.setProduct('all');assert.match(ui.overview(),/rm-clubdisplay-project-logo[^>]+clubdisplay\.png/);ui.setProduct('clubdisplay');assert.match(ui.overview(),/rm-clubdisplay-brand[^]*?clubdisplay\.png/);const workflow=fs.readFileSync(path.join(root,'.github/workflows/roadmap-subdomain.yml'),'utf8');assert.ok(workflow.includes('assets/clubdisplay.png'));});
