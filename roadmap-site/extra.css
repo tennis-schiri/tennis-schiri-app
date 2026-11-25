@@ -268,3 +268,8 @@ body.standalone-roadmap,body.strategy-body{margin:0;background:#071421;color:#e9
   .rm-juxilo-brand span{font-size:10px}
   .rm-demo-card.demo-juxilo .rm-juxilo-demo-label img{width:132px;height:96px}
 }
+
+.rm-demo-card.demo-clubdisplay{border-top:3px solid #c8f16d}
+.standalone-roadmap .rm-project-card.rm-project-clubdisplay{background:#10283c;border-top:3px solid #c8f16d;color:#fff}
+.standalone-roadmap .rm-project-card.rm-project-clubdisplay strong{color:#fff}
+.standalone-roadmap .rm-project-card.rm-project-clubdisplay span{color:#d9e5ee}
