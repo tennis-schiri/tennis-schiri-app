@@ -11,10 +11,10 @@ const STATUS=[
   {key:"online",title:"Auf Testseite",hint:"Bereits auf der geschützten Testseite",short:"Online (Test)"}
 ];
 const PRIORITY={high:"Hoch",medium:"Mittel",low:"Niedrig"};
-const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO Business","TENNILO Plattform","Weitere Apps"];
+const CATEGORIES=["Turnierformate","Turnierbetrieb","Live & Anzeige","Plattform & Zugang","Produkt & Bedienung","Tests & Qualität","TENNILO Score","TENNILO Umpire","TENNILO ClubDisplay","TENNILO Business","TENNILO Plattform","Weitere Apps"];
 let state={items:[],session:{role:"guest",label:"Gast",csrf:""},
   bootstrapAvailable:false,storagePersistent:false,members:[],deletedItems:[],offline:false};
-const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["business","Business"],["platform","Übergreifend"],["miniapps","JUXILO"]];
+const PRODUCTS=[["all","Alle Projekte"],["tournament","Tournament"],["score","Score"],["umpire","Umpire"],["clubdisplay","ClubDisplay"],["business","Business"],["platform","Übergreifend"],["miniapps","JUXILO"]];
 const PRODUCT_STREAMS={
   tournament:[["formats","Turnierformate"],["operations","Turnierbetrieb"],["live","Live & Anzeige"],
     ["ux","Produkt & Bedienung"],["access","Plattform & Zugang"],["quality","Tests & Qualität"]],
@@ -22,6 +22,7 @@ const PRODUCT_STREAMS={
     ["release","Beta & Veröffentlichung"],["sports","Weitere Sportarten"],["platform","Plattform & Schnittstellen"]],
   umpire:[["concept","Bedienkonzept"],["scoring","Scorecard & Zählung"],["rules","Regeln & Zeitkontrollen"],
     ["display","Anzeigen & Scoreboards"],["integration","Schnittstellen"]],
+  clubdisplay:[["pilot","NTC-Pilot & Infomodus"],["booking","Buchung & Live-Belegung"],["platform","Hosting & Vereinskonfiguration"],["release","Produkt & Vermarktung"]],
   business:[["offers","Angebot & Zielgruppen"],["booking","Plattform & Buchungen"],["pilot","Pilotpartner & Tests"]],
   platform:[["data","Daten & Matchmodell"],["security","Konten & Sicherheit"],
     ["standards","Sprachen & Standards"],["integration","Integrationen"]],
@@ -34,6 +35,7 @@ const PRODUCT_OVERVIEWS={
   tournament:"Turnierformate, Turnierbetrieb, Live-Anzeige und Plattformaufbau getrennt verfolgen.",
   score:"Web-Demo, native Apps und Gerätetests getrennt bewerten. Ein Commit ist kein bestandener Gerätetest.",
   umpire:"Bedienkonzept, digitale Scorecard, Regelkontrollen und externe Anzeigen getrennt planen.",
+  clubdisplay:"NTC-Pilot, digitale Vereinsinfos, Buchungsanbindung, Hosting und Markteinführung getrennt verfolgen.",
   business:"Angebote, mögliche Buchungsfunktionen und spätere Pilotpartner unterscheiden.",
   platform:"Gemeinsame Matchdaten, Nutzerkonten und Produktstandards projektübergreifend verfolgen.",
   miniapps:"JUXILO ist die Dachmarke für sechs eigenständige Spaß-Apps – darunter Wer muss?!. Browser-Prototypen, native Apps und weitere Ideen werden getrennt geführt; die Wer-muss-Testzentrale bleibt vorerst bestehen."
@@ -55,6 +57,7 @@ const ROADMAP_REVIEW_URL="https://github.com/tennis-schiri/tennis-schiri-app/iss
 function productOf(item){
  if(item.category==="TENNILO Score")return "score";
  if(item.category==="TENNILO Umpire")return "umpire";
+ if(item.category==="TENNILO ClubDisplay"||item.id==="clubdisplay-ntc-pilot")return "clubdisplay";
  if(item.category==="TENNILO Business")return "business";
  if(item.category==="TENNILO Plattform")return "platform";
  if(item.category==="Weitere Apps")return "miniapps";
@@ -233,7 +236,7 @@ function render(){
       '<button class="btn ghost small" data-action="trash">Papierkorb ('+(state.deletedItems?.length||0)+')</button>':'')+'</div></div>'+
     '<section class="rm-hero"><div><div class="rm-hero-kicker">TENNILO / GEMEINSAME PRODUKT-ROADMAP</div>'+
     '<h1>Alle Projekte. <em>Eine Roadmap.</em></h1>'+
-    '<p>TENNILO mit Tournament, Score, Umpire und Business – und JUXILO als eigenständige Dachmarke für sechs Spaß-Apps einschließlich Wer muss?!. Eine gemeinsame Roadmap, zwei Markenwelten.</p>'+
+    '<p>TENNILO mit Tournament, Score, Umpire, ClubDisplay und Business – und JUXILO als eigenständige Dachmarke für sechs Spaß-Apps einschließlich Wer muss?!. Eine gemeinsame Roadmap, zwei Markenwelten.</p>'+
     '<div class="rm-hero-actions">'+(canComment()?
       '<button class="btn rm-lime" data-action="idea">+ Neue Idee einreichen</button>':
       '<button class="btn rm-lime" data-action="login">Anmelden und mitmachen</button>')+
