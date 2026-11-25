@@ -13,6 +13,7 @@ const sources=[
   {repo:'tennis-schiri/tennis-schiri-app',name:'TENNILO Tournament'},
   {repo:'tennis-schiri/tennilo-score',name:'TENNILO Score'},
   {repo:'tennilo-umpire/umpire-app',name:'TENNILO Umpire'},
+  {repo:'tennis-schiri/tennilo-clubdisplay',name:'TENNILO ClubDisplay'},
   {repo:'tennis-schiri/tennilo-website',name:'TENNILO Website'},
   {repo:'tennis-schiri/wer-muss-app',name:'JUXILO – Wer muss?! & Mini-Apps'},
 ];
