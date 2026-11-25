@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-07",
+  "updated": "2026-11-25",
   "source": "TENNILO Projektstatus, geplante hierarchische Zählweisen und konkrete Google-Drive-Regelvorlagen. Technischer Stand und vorgeschlagene Formate sind getrennt.",
   "items": [
     {
@@ -726,6 +726,78 @@
       "openPoints": "Bei der Freigabe 2/4/8/16 mit realer Browserbedienung und alten JSON-Sicherungen testen. Besonders PO-Zonen während laufender Vorrunde, nicht teilnehmende Spitzenteams, 16er-Achtelfinale, kleinere Endrunden, Anzeige auf zweitem Gerät und Smartphones. Keine Änderung des bestehenden Passwortschutzes.",
       "doneWhen": "Die gesetzte Endrunde ist inklusive individueller Spielplatzwahl und gezielter Live-Rundenauswahl im Browser nutzbar; Endrundenplätze bleiben bei Ergebnisfortschritt und Backup erhalten und die aktuelle Runde wird auf dem lokalen/externen Monitor eindeutig angezeigt.",
       "references": []
+    },
+    {
+      "id": "clubdisplay-pilot",
+      "title": "ClubDisplay – Infomodus und NTC-Pilot",
+      "description": "Vereinsinfos, Mannschaftsbegrüßung, Gastronomie, Sponsoren, Wetter und interaktives Terminal.",
+      "category": "Live & Anzeige",
+      "status": "progress",
+      "priority": "high",
+      "milestone": "ClubDisplay 1.1",
+      "nextStep": "Kiosk-Dauerbetrieb, Datenaktualisierung und Bedienung am Zielgerät testen.",
+      "updatedAt": "2026-11-25T17:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Digitale Vereinskommunikation und Vorbereitung eines verlässlichen Vereinsprodukts.",
+      "scope": "Vereinsinfos, Mannschaftsbegrüßung, Gastronomie, Sponsoren, Wetter und interaktives Terminal.",
+      "currentState": "Funktionsfähige Demo und Pilot vorhanden; Dauerbetrieb noch zu prüfen.",
+      "openPoints": "Kiosk-Dauerbetrieb, Datenaktualisierung und Bedienung am Zielgerät testen.",
+      "doneWhen": "Die beschriebenen Funktionen und Voraussetzungen sind überprüft und der jeweilige Schritt ist dokumentiert."
+    },
+    {
+      "id": "clubdisplay-market",
+      "title": "ClubDisplay – Produktseite und Vermarktung",
+      "description": "Preisplanung, Produktdatenblatt, Hosting-Voraussetzungen und Website-Präsentation.",
+      "category": "Live & Anzeige",
+      "status": "test",
+      "priority": "high",
+      "milestone": "ClubDisplay 1.1",
+      "nextStep": "Live-Uploads prüfen, PDF im Drive ablegen und Preise nach Pilotphase finalisieren.",
+      "updatedAt": "2026-11-25T17:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Digitale Vereinskommunikation und Vorbereitung eines verlässlichen Vereinsprodukts.",
+      "scope": "Preisplanung, Produktdatenblatt, Hosting-Voraussetzungen und Website-Präsentation.",
+      "currentState": "Produktseiten und überarbeitete Präsentationen auf tennilo.de, wiedeck.de und tennis-schiri.de im GitHub-Code; Live-Uploads nicht bestätigt.",
+      "openPoints": "Live-Uploads prüfen, PDF im Drive ablegen und Preise nach Pilotphase finalisieren.",
+      "doneWhen": "Die beschriebenen Funktionen und Voraussetzungen sind überprüft und der jeweilige Schritt ist dokumentiert."
+    },
+    {
+      "id": "clubdisplay-hosting",
+      "title": "ClubDisplay – Hosting und Vereinskonfiguration",
+      "description": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
+      "category": "Live & Anzeige",
+      "status": "planned",
+      "priority": "high",
+      "milestone": "ClubDisplay 1.1",
+      "nextStep": "Wartung, Datenschutz, Backup und Einrichtung weiterer Vereine validieren.",
+      "updatedAt": "2026-11-25T17:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Digitale Vereinskommunikation und Vorbereitung eines verlässlichen Vereinsprodukts.",
+      "scope": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
+      "currentState": "Technische Voraussetzungen dokumentiert; standardisierte Einrichtung noch offen.",
+      "openPoints": "Wartung, Datenschutz, Backup und Einrichtung weiterer Vereine validieren.",
+      "doneWhen": "Die beschriebenen Funktionen und Voraussetzungen sind überprüft und der jeweilige Schritt ist dokumentiert."
+    },
+    {
+      "id": "clubdisplay-booking",
+      "title": "ClubDisplay – Buchung und Live-Belegung",
+      "description": "Anbindung kompatibler Buchungssysteme und geschützter Terminalzugriff.",
+      "category": "Live & Anzeige",
+      "status": "progress",
+      "priority": "high",
+      "milestone": "ClubDisplay 1.1",
+      "nextStep": "API-Freigabe, Datenschutz und Live-Belegung im Pilotbetrieb prüfen.",
+      "updatedAt": "2026-11-25T17:30:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "benefit": "Digitale Vereinskommunikation und Vorbereitung eines verlässlichen Vereinsprodukts.",
+      "scope": "Anbindung kompatibler Buchungssysteme und geschützter Terminalzugriff.",
+      "currentState": "Anbindung vorbereitet; echte eBuSy-Belegung und Freigaben noch offen.",
+      "openPoints": "API-Freigabe, Datenschutz und Live-Belegung im Pilotbetrieb prüfen.",
+      "doneWhen": "Die beschriebenen Funktionen und Voraussetzungen sind überprüft und der jeweilige Schritt ist dokumentiert."
     }
   ]
 }
