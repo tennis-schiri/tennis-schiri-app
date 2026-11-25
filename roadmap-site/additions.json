@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "source": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit",
   "items": [
     {
@@ -1729,23 +1729,36 @@
     },
     {
       "id": "clubdisplay-ntc-pilot",
-      "title": "ClubDisplay – NTC-Pilot und ClubApp-Perspektive",
-      "description": "Interaktive Clubhaus-Web-App zunächst ausschließlich für den NTC 93 entwickeln; ClubDisplay bereits als geplante TENNILO-Produktlinie führen.",
+      "title": "ClubDisplay – NTC-Pilot und Markteinführung",
+      "description": "Browserbasierte digitale Infotafel und interaktives Vereinsterminal für Tennisvereine.",
       "category": "TENNILO Plattform",
-      "status": "planned",
-      "priority": "medium",
+      "status": "progress",
+      "priority": "high",
       "workstream": "integration",
-      "milestone": "NTC-Pilot · Sommersaison 2027 (Ziel)",
-      "nextStep": "Buchungssystem-Schnittstelle, nuLiga-Datenübernahme und vorhandenen Touchscreen prüfen; Pilotumfang festlegen.",
+      "milestone": "Sommersaison 2027 · Pilot / Markteinführung nach Abnahme",
+      "nextStep": "eBuSy-Freigabe und Datenschutz/Terminalabsicherung klären; API-Adapter implementieren, Vereinskonfiguration vereinheitlichen und Dauerbetrieb auf Zielhardware abnehmen. Pilotinteressenten gewinnen.",
       "benefit": "Platzbuchung und Vereinsinformationen zentral bereitstellen und manuelle Datenpflege reduzieren.",
-      "scope": "Browser im Vollbild unter Windows 11, Touchbedienung, Platzbuchung, automatische Vereinstermine und Heimspiele, Sponsorenwerbung, Infomodus und zentrale Administration. Mobile ClubApp und weitere Vereine erst perspektivisch.",
-      "currentState": "Projektidee und NTC-Pilot beschlossen; noch keine Implementierung oder Veröffentlichung.",
-      "openPoints": "Schnittstellenzugang, zulässige Datenübernahme, Datenschutz, Hosting, Repository, technische Architektur und spätere Produktfreigabe.",
-      "doneWhen": "Der NTC kann ClubDisplay zuverlässig im Clubhaus einsetzen; eine spätere Freigabe für andere Vereine bleibt eine gesonderte Entscheidung.",
-      "updatedAt": "2026-11-24T17:00:00+01:00",
+      "scope": "INFO: 19 €/Monat oder 190 €/Jahr, Einrichtung 149 €; INTERACTIVE: 39 €/Monat oder 390 €/Jahr, Einrichtung 299 € nach Freigabe; weitere Displays 9 €/Monat oder 90 €/Jahr. Unverbindliche Zielpreise. Hardware/Fremdlizenzen separat.",
+      "currentState": "Stand 25.11.2026: NTC-Pilot und TENNILO-Demo online; Infomodus, Mannschaften/Heimspielbegrüßung, Termine, Wetter, News, Sponsoren, Gastronomie und vorbereitete namentliche Platzbelegung vorhanden. v0.4.33 korrigiert Restaurant-Höhenanpassung; visueller Test ausstehend. Echte eBuSy-Belegung noch nicht integriert. Produktdatenblatt und unverbindliche Preisplanung erstellt.",
+      "openPoints": "Kommerzielle Schnittstellenrechte, Zuordnung Buchungen/Plätze, Datenschutz, Multi-Vereins-Konfiguration und Support/Vertrag; Preisannahmen validieren.",
+      "doneWhen": "Dauerbetrieb am NTC-Zielgerät, zuverlässige freigegebene Datenanbindung, sichere Einrichtung für einen zweiten Verein sowie dokumentierte Support- und Lizenzbedingungen.",
+      "updatedAt": "2026-11-25",
       "origin": "official",
       "comments": [],
-      "references": []
+      "references": [
+        {
+          "title": "Produktdatenblatt & Preisplanung",
+          "url": "https://tennilo.de/clubdisplay/"
+        },
+        {
+          "title": "TENNILO Demo",
+          "url": "https://clubdisplay.tennilo.de/"
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/tennis-schiri/tennilo-clubdisplay"
+        }
+      ]
     }
   ],
   "retiredIds": [
