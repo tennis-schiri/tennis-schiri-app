@@ -1791,13 +1791,13 @@
       "id": "clubdisplay-hosting",
       "title": "Hosting und Vereinskonfiguration",
       "workstream": "platform",
-      "status": "planned",
+      "status": "progress",
       "description": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
-      "currentState": "Voraussetzungen dokumentiert; standardisierte Einrichtung offen.",
-      "nextStep": "Wartung, Backups, Datenschutz und Einrichtung eines zweiten Vereins prüfen.",
+      "currentState": "Admin 0.5.0: geschützte Vereinsprofilverwaltung mit SQLite, Modulen, Lizenztyp, Sprache, Akzentfarbe und Folienwechsel im GitHub-Code. NTC und Demo als Entwürfe; keine Verbindung zu Live-Displays.",
+      "nextStep": "Privaten Speicher und Admin-Passwort als Secrets konfigurieren; Admin-Deployment, Login und dritten Testverein prüfen. Danach Konfiguration mit Display verbinden.",
       "benefit": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
       "scope": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
-      "openPoints": "Wartung, Backups, Datenschutz und Einrichtung eines zweiten Vereins prüfen.",
+      "openPoints": "Privaten Speicher und Admin-Passwort als Secrets konfigurieren; Admin-Deployment, Login und dritten Testverein prüfen. Danach Konfiguration mit Display verbinden. Logo-/Medienverwaltung, Datenquellen, Monitoring, Backups und Vereinszugänge folgen.",
       "doneWhen": "Die beschriebenen Voraussetzungen und Funktionen sind geprüft und dokumentiert."
     },
     {
