@@ -155,3 +155,5 @@ test('JUXILO ist Dachmarke, kein siebtes Spiel – und die Originalvektoren werd
 });
 
 test('ClubDisplay ist eigenständiges Produkt mit vier Bereichen',()=>{ const own=items.filter(x=>ui.productOf(x)==='clubdisplay'); assert.equal(own.length,4); assert.equal(new Set(own.map(x=>ui.productStream(x))).size,4); });
+
+test('ClubDisplay-Original-Logo erscheint in Projektübersicht und Detailansicht und wird ausgeliefert',()=>{ui.setItems(items);ui.setProduct('all');assert.match(ui.overview(),/rm-clubdisplay-project-logo[^>]+clubdisplay\.png/);ui.setProduct('clubdisplay');assert.match(ui.overview(),/rm-clubdisplay-brand[^]*?clubdisplay\.png/);const workflow=fs.readFileSync(path.join(root,'.github/workflows/roadmap-subdomain.yml'),'utf8');assert.ok(workflow.includes('assets/clubdisplay.png'));});
