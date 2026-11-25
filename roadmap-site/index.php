@@ -26,8 +26,8 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=2">
   <link rel="stylesheet" href="./assets/styles.css?v=1">
   <link rel="stylesheet" href="./assets/roadmap.css?v=1">
-  <link rel="stylesheet" href="./assets/extra.css?v=7">
-  <script type="module" src="./assets/roadmap.js?v=6"></script>
+  <link rel="stylesheet" href="./assets/extra.css?v=8">
+  <script type="module" src="./assets/roadmap.js?v=7"></script>
 </head>
 <body class="roadmap-body standalone-roadmap">
   <header class="rm-site-header">
@@ -66,6 +66,12 @@ header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-sr
         <div class="rm-demo-label"><img src="./assets/tennilo-umpire-cutout.png" alt="TENNILO Umpire" loading="lazy"></div>
         <p>Das modulare Cockpit für Schiedsrichter und Scoreboards.</p>
         <span class="rm-demo-upcoming">Demo in Vorbereitung</span>
+      </article>
+      <article class="rm-demo-card demo-clubdisplay">
+        <div class="rm-demo-label"><img src="./assets/clubdisplay.png" alt="TENNILO ClubDisplay" loading="lazy"></div>
+        <p>Digitale Infotafel und interaktives Vereinsterminal.</p>
+        <a href="https://clubdisplay.tennilo.de/" target="_blank" rel="noopener noreferrer">ClubDisplay-Demo öffnen ↗</a>
+        <a href="https://tennilo.de/clubdisplay/" target="_blank" rel="noopener noreferrer">Produktseite ↗</a>
       </article>
       <article class="rm-demo-card demo-business">
         <div class="rm-demo-label rm-demo-word">TENNILO <strong>Business</strong></div>
