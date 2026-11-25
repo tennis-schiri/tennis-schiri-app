@@ -43,8 +43,8 @@ const htmlEscape=value=>String(value).replace(/[&<>"']/g,char=>({
 }[char]));
 
 test('Alle Projektfamilien einschließlich unabhängiger Mini-Apps haben eigene Entwicklungsbereiche',()=>{
-  assert.deepEqual(Array.from(ui.PRODUCTS.map(x=>x[0])),['all','tournament','score','umpire','business','platform','miniapps']);
-  for(const key of ['tournament','score','umpire','business','platform','miniapps']){
+  assert.deepEqual(Array.from(ui.PRODUCTS.map(x=>x[0])),['all','tournament','score','umpire','clubdisplay','business','platform','miniapps']);
+  for(const key of ['tournament','score','umpire','clubdisplay','business','platform','miniapps']){
     assert.ok(ui.PRODUCT_STREAMS[key]?.length>=3,key);
   }
 });
@@ -153,3 +153,5 @@ test('JUXILO ist Dachmarke, kein siebtes Spiel – und die Originalvektoren werd
     assert.ok(workflow.includes('assets/'+logo),'Live-Upload mit '+logo);
   }
 });
+
+test('ClubDisplay ist eigenständiges Produkt mit vier Bereichen',()=>{ const own=items.filter(x=>ui.productOf(x)==='clubdisplay'); assert.equal(own.length,4); assert.equal(new Set(own.map(x=>ui.productStream(x))).size,4); });
