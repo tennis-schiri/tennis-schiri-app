@@ -9,8 +9,11 @@ on:
         default: false
         type: boolean
   push:
+    branches: [main]
     paths:
       - '.github/workflows/roadmap-subdomain.yml'
+      - 'roadmap-site/**'
+      - 'tests/roadmap*'
 
 permissions:
   contents: read
@@ -22,14 +25,14 @@ concurrency:
 jobs:
   register:
     name: Workflow registrieren – kein Upload
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[deploy-live]')
     runs-on: ubuntu-24.04
     steps:
       - run: echo 'Workflow ist eingerichtet. Kein automatischer Live-Upload.'
 
   deploy:
     name: Passwortgeschützte Roadmap per FTPS veröffentlichen
-    if: github.event_name == 'workflow_dispatch'
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-live]'))) && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
