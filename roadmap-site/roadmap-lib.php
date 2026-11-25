@@ -35,7 +35,7 @@ function rm_references(mixed $raw): array {
 const RM_CATEGORIES = [
     'Turnierformate', 'Turnierbetrieb', 'Live & Anzeige',
     'Plattform & Zugang', 'Produkt & Bedienung', 'Tests & Qualität',
-    'TENNILO Score', 'TENNILO Umpire', 'TENNILO Business', 'TENNILO Plattform', 'Weitere Apps'
+    'TENNILO Score', 'TENNILO Umpire', 'TENNILO ClubDisplay', 'TENNILO Business', 'TENNILO Plattform', 'Weitere Apps'
 ];
 
 function rm_error(int $code, string $message): never {
@@ -122,6 +122,11 @@ function rm_merge(array $saved, array $seed, array $retiredIds = []): array {
                      $item[$field] === $prior[$id][$field]))
                     $item[$field] = $next;
             }
+        }
+        // Einmalige strukturelle Migration des bisherigen ClubDisplay-Pilotpunkts.
+        if ($id === 'clubdisplay-ntc-pilot' && ($item['category'] ?? '') === 'TENNILO Plattform') {
+            $item['category'] = 'TENNILO ClubDisplay';
+            if (($item['workstream'] ?? '') === 'integration') $item['workstream'] = 'pilot';
         }
         // Alte Seed-Prioritäten ohne Umbenennung der redaktionellen Priorität.
         $oldPriorities = ['hoch'=>'high','mittel'=>'medium','niedrig'=>'low'];
