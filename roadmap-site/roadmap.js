@@ -126,7 +126,7 @@ function productOverview(){
       '<div class="rm-product-streams rm-project-streams">'+PRODUCTS.filter(([id])=>id!=="all").map(([id,label])=>{
         const items=state.items.filter(x=>productOf(x)===id);
         const active=items.filter(x=>x.status==="progress"||x.status==="test").length;
-        return '<button type="button" class="rm-project-card rm-project-'+esc(id)+'" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+(id==="miniapps"?'<img class="rm-mini-icon rm-juxilo-project-icon" src="./assets/juxilo-jx04-j-icon.svg" alt="" loading="lazy">' :'')+
+        return '<button type="button" class="rm-project-card rm-project-'+esc(id)+'" data-action="product" data-product="'+id+'" aria-label="'+esc(label)+': '+items.length+' Themen öffnen">'+(id==="miniapps"?'<img class="rm-mini-icon rm-juxilo-project-icon" src="./assets/juxilo-jx04-j-icon.svg" alt="" loading="lazy">' :id==="clubdisplay"?'<img class="rm-clubdisplay-project-logo" src="./assets/clubdisplay.png" alt="TENNILO ClubDisplay" loading="lazy" decoding="async">':'')+
           '<strong>'+esc(label)+'</strong><span>'+items.length+' Themen · '+active+' in Arbeit/Prüfung</span></button>';
       }).join('')+'</div></section>';
   }
@@ -134,7 +134,7 @@ function productOverview(){
   const name=PRODUCTS.find(([id])=>id===product)?.[1]||product;
   return '<section class="rm-product-overview'+(product==="miniapps"?' rm-mini-overview':'')+'" aria-label="'+esc(name)+'-Entwicklungsbereiche">'+
     '<div class="rm-product-overview-heading"><div>'+
-      (product==="miniapps"?'<div class="rm-juxilo-brand"><img src="./assets/juxilo-jx04-logo-white.svg" alt="JUXILO – JX04" loading="lazy" decoding="async"><span>Dachmarke für sechs Spaß-Apps</span></div>':'')+
+      (product==="miniapps"?'<div class="rm-juxilo-brand"><img src="./assets/juxilo-jx04-logo-white.svg" alt="JUXILO – JX04" loading="lazy" decoding="async"><span>Dachmarke für sechs Spaß-Apps</span></div>':product==="clubdisplay"?'<div class="rm-clubdisplay-brand"><img src="./assets/clubdisplay.png" alt="TENNILO ClubDisplay" loading="lazy" decoding="async"></div>':'')+
       '<h2>'+esc(name)+': Entwicklung nach Bereichen</h2><p>'+
       esc(PRODUCT_OVERVIEWS[product]||"Entwicklung nach Themenbereichen")+'</p></div>'+
     '<a href="'+ROADMAP_REVIEW_URL+'" target="_blank" rel="noopener noreferrer">Täglichen GitHub-Abgleich ansehen</a></div>'+
