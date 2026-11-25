@@ -1773,11 +1773,11 @@
       "workstream": "release",
       "status": "test",
       "description": "Produktdatenblatt, Preise und Website-Integration.",
-      "currentState": "Produktseiten vorhanden; Präsentationen auf drei Websites überarbeitet, Live-Uploads nicht bestätigt.",
-      "nextStep": "Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
+      "currentState": "Produktseiten vorhanden; Präsentationen auf drei Websites überarbeitet, Live-Uploads nicht bestätigt. Demo v0.4.34: direkter Produktseiten-Link im Kopfbereich (DE/EN), nur TENNILO-Demo; Live-Prüfung offen.",
+      "nextStep": "Produktseiten-Link in beiden Sprachen und NTC-Abgrenzung nach Deployment prüfen. Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
       "benefit": "Produktdatenblatt, Preise und Website-Integration.",
       "scope": "Produktdatenblatt, Preise und Website-Integration.",
-      "openPoints": "Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
+      "openPoints": "Produktseiten-Link in beiden Sprachen und NTC-Abgrenzung nach Deployment prüfen. Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
       "doneWhen": "Die beschriebenen Voraussetzungen und Funktionen sind geprüft und dokumentiert."
     },
     {
