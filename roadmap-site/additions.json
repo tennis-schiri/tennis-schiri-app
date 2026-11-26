@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "source": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit",
   "items": [
     {
@@ -1736,10 +1736,10 @@
       "priority": "high",
       "workstream": "pilot",
       "milestone": "Sommersaison 2027 · Pilot / Markteinführung nach Abnahme",
-      "nextStep": "eBuSy-Freigabe und Datenschutz/Terminalabsicherung klären; API-Adapter implementieren, Vereinskonfiguration vereinheitlichen und Dauerbetrieb auf Zielhardware abnehmen. Pilotinteressenten gewinnen.",
+      "nextStep": "Dauerbetrieb und Saisonstart abnehmen; verwaltete Kundendisplays auf PLUS-Zielumfang bringen; BASIC ohne Touch und mit Backend-Sprache separat prüfen.",
       "benefit": "Platzbuchung und Vereinsinformationen zentral bereitstellen und manuelle Datenpflege reduzieren.",
-      "scope": "BASIC: 19 €/Monat oder 190 €/Jahr, Einrichtung 149 €; PLUS: 39 €/Monat oder 390 €/Jahr, Einrichtung 299 € nach Freigabe; weitere Displays 9 €/Monat oder 90 €/Jahr. Unverbindliche Zielpreise. Hardware/Fremdlizenzen separat.",
-      "currentState": "Stand 25.11.2026: NTC-Pilot und TENNILO-Demo online; Infomodus, Mannschaften/Heimspielbegrüßung, Termine, Wetter, News, Sponsoren, Gastronomie und vorbereitete namentliche Platzbelegung vorhanden. v0.4.33 korrigiert Restaurant-Höhenanpassung; visueller Test ausstehend. Echte eBuSy-Belegung noch nicht integriert. Produktdatenblatt und unverbindliche Preisplanung erstellt.",
+      "scope": "NTC als PLUS-Referenzverein. BASIC: 19 €/Monat, 190 €/Jahr, Einrichtung 149 €; PLUS: 39 €/Monat, 390 €/Jahr, Einrichtung 299 €; Zusatzdisplay 9 €/Monat, 90 €/Jahr. Unverbindliche Zielpreise. Vereinseigenes Hosting Standard, betreutes Hosting separat.",
+      "currentState": "26.11.2026: NTC-Pilot im realen Betrieb; eBuSy-Live-Belegung, Kiosk-Autostart und AutoUpdate durch Nutzer bestätigt. SmartDisplay mit Wettereffekten, Advent und Vereinsgeburtstag entwickelt. Saisonbelastungstest noch offen.",
       "openPoints": "Kommerzielle Schnittstellenrechte, Zuordnung Buchungen/Plätze, Datenschutz, Multi-Vereins-Konfiguration und Support/Vertrag; Preisannahmen validieren.",
       "doneWhen": "Dauerbetrieb am NTC-Zielgerät, zuverlässige freigegebene Datenanbindung, sichere Einrichtung für einen zweiten Verein sowie dokumentierte Support- und Lizenzbedingungen.",
       "updatedAt": "2026-11-25",
@@ -1773,10 +1773,10 @@
       "workstream": "release",
       "status": "test",
       "description": "Produktdatenblatt, Preise und Website-Integration.",
-      "currentState": "Produktseiten vorhanden; Präsentationen auf drei Websites überarbeitet, Live-Uploads nicht bestätigt. Demo v0.4.34: direkter Produktseiten-Link im Kopfbereich (DE/EN), nur TENNILO-Demo; Live-Prüfung offen. Produktvarianten verbindlich benannt: BASIC (19 €/Monat, 190 €/Jahr, Einrichtung 149 €) und PLUS (39 €/Monat, 390 €/Jahr, Einrichtung 299 €). Zusatzdisplay 9 €/Monat bzw. 90 €/Jahr; Preise weiterhin unverbindlich bis zum Marktstart.",
-      "nextStep": "Produktseiten-Link in beiden Sprachen und NTC-Abgrenzung nach Deployment prüfen. Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
+      "currentState": "Paketdefinition am 26.11.2026 abgestimmt. Vollständiger DE/EN-Funktionsvergleich auf TENNILO-Produktseite und Kurzfassungen auf Tennis-Schiri und wiedeck.de im Quellstand angepasst; Live-Veröffentlichung prüfen. Unverbindliche Preise unverändert.",
+      "nextStep": "Produktdatenblatt aktualisieren, Webseiten und Lizenzregeln abnehmen; Pilotumfang und noch fehlende verwaltete Funktionen transparent darstellen.",
       "benefit": "Produktdatenblatt, Preise und Website-Integration.",
-      "scope": "Produktdatenblatt, Preise und Website-Integration.",
+      "scope": "BASIC: automatische Infotafel, Branding, Backend-Sprache, Punktspiele/Ergebnisse, Kalender, News, aktuelles Wetter, Sponsoren, Gastronomie/Normalzeiten und zentrale Verwaltung. PLUS zusätzlich Touch, Sprachwechsel, Wetterdetails/Radar/Effekte, SmartDisplay, Live-Belegung/Buchung nach Freigabe, Spielpartnerbörse, Newsletter/PDF, Community-QRs und Gastro-Sonderzeiten/Angebote.",
       "openPoints": "Produktseiten-Link in beiden Sprachen und NTC-Abgrenzung nach Deployment prüfen. Live-Uploads und Layout prüfen, PDF in Drive ablegen, Preise nach Pilotphase validieren.",
       "doneWhen": "Die beschriebenen Voraussetzungen und Funktionen sind geprüft und dokumentiert."
     },
@@ -1796,7 +1796,7 @@
       "currentState": "Admin 0.5.5 auf ALL-INKL erfolgreich veröffentlicht (Run 45671980278): getrennte Logins, Profile, Vereinsinhalte und Medien; geschützter SQLite-Speicher. Admin 0.5.6–0.6.2: strukturierte Gastronomie, verwalteter Player und Betriebskomponenten implementiert. Eigenständige Qualitätsprüfung ohne Live-Upload; Regression 45673429960 und Adaptertests 45673940068 erfolgreich. Live-Upload 0.6.2 und reale Kundenabnahme noch ausstehend.",
       "nextStep": "Aktuellen Admin-Release nach vollständiger QA manuell veröffentlichen. NTC-Testgerät koppeln, geschützte Konfiguration und Dauerbetrieb prüfen.",
       "benefit": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
-      "scope": "Betreutes Hosting, HTTPS, getrennte Vereinskonfiguration und optionales Eigenhosting.",
+      "scope": "Vereinseigenes Hosting als Standard, betreutes TENNILO-Hosting separat nach Angebot. HTTPS und getrennte Vereinskonfiguration.",
       "openPoints": "Live-Abnahme, Hosting-/GD-/cURL-Prüfung auf Zielsystem, Backup-Cron und Restore, kommerzielle Verträge und Anbieterfreigaben. Bestehende Pilot-Displays bleiben bis zur Abnahme unverändert.",
       "doneWhen": "Die beschriebenen Voraussetzungen und Funktionen sind geprüft und dokumentiert."
     },
@@ -1813,8 +1813,8 @@
       "workstream": "booking",
       "status": "progress",
       "description": "Kompatible Buchungssysteme und abgesicherter Terminalzugriff.",
-      "currentState": "Bestehender NTC-eBuSy-Terminaleinstieg bleibt erhalten. Verwalteter PLUS-Player kann nach Betreiberfreigabe einen externen eBuSy-Lite-Terminallink öffnen; BASIC und Vorschau ohne Buchung. Keine allgemeine Live-Belegungs-API.",
-      "nextStep": "Anbieterfreigabe, konkrete Terminal-/API-Lizenz und Datenschutz prüfen; anschließend echte Live-Belegung und Buchungsfluss am Zielgerät abnehmen.",
+      "currentState": "NTC: eBuSy-Live-Belegung mit Namen, Buchungsart und Punktspielplatzzuordnung im Pilot; Nutzer bestätigt Betrieb. Verwalteter PLUS-Player kann freigegebenes externes eBuSy-Terminal öffnen; BASIC ohne Buchung und Live-Belegung. Keine allgemeine API-Integration für Kunden.",
+      "nextStep": "Verwaltete PLUS-Live-Belegung und Terminal je Anbieter integrieren und abnehmen; Zugriffsschutz und zulässige Datenanzeige sicherstellen.",
       "benefit": "Kompatible Buchungssysteme und abgesicherter Terminalzugriff.",
       "scope": "Kompatible Buchungssysteme und abgesicherter Terminalzugriff.",
       "openPoints": "API-Zugriff und Testdaten, Datenschutzfreigabe, Live-Belegungsanzeige, Fehler-/Offlinefälle und Buchungsabschluss.",
@@ -1835,8 +1835,8 @@
       "workstream": "platform",
       "status": "test",
       "description": "Geräteprofile, Vorschau, individuelle Zugangsschlüssel, sichere Snapshot-Auslieferung, letzter Kontakt und Sperre. Individuelle Modulauswahl und -reihenfolge, Begrüßung, Anzeigezeit pro Modul und gezielte Zuordnung redaktioneller Inhalte und Bilder je Bildschirm.",
-      "currentState": "Implementiert in Admin 0.6.0–0.6.2. HTTP-Integrationstests für Kopplung, Mandantengrenzen und Widerruf bestanden; Browserprüfung ergänzt. Admin 0.6.3: zusätzliche Displays erhalten individuelle Begrüßung, Modulreihenfolge und Anzeigezeiten; Inhalte können explizit ausgewählten Bildschirmen zugeordnet werden, einschließlich serverseitiger Bildzugriffskontrolle.",
-      "nextStep": "Admin 0.6.3 nach erfolgreicher Qualitätsprüfung live veröffentlichen; zwei unterschiedlich konfigurierte Displays im selben Verein abnehmen.",
+      "currentState": "Gerätekopplung, Profile und Fernkonfiguration implementiert. Neue BASIC-Grenzen im Quellstand: serverseitige Modul-/Snapshotprüfung, keine Spielpartnerbörse/Buchung, passive Anzeige ohne Steuerung, aktuelle Temperatur im Header und reguläre Gastrozeiten. PLUS-Pilot und verwalteter Player bleiben getrennt.",
+      "nextStep": "QA und Admin-Deployment prüfen. Verwalteten PLUS-Player mit Touch-Navigation, Sprachwechsel, vollständigem Wetter, SmartDisplay, Newsletter/Community und AutoUpdate auf Zielumfang bringen. Zwei unterschiedlich konfigurierte Displays abnehmen.",
       "openPoints": "Keine automatische Umstellung des NTC-Piloten; automatische externe Feeds und strukturierte Gastronomie werden je Modul gesteuert. Betriebssystem-Fernzugriff und Hardwaremonitoring nicht enthalten.",
       "doneWhen": "Zwei Geräte desselben Vereins koppeln, unterschiedliche Inhalte, Bilder, Begrüßungen und Folienabläufe prüfen, sperren und im Dauerbetrieb abnehmen."
     },
@@ -1876,7 +1876,7 @@
       "status": "test",
       "description": "Geräte-Heartbeat, Vertrags- und Bildschirmkontingent, interne Abrechnung/CSV, Änderungsprotokoll, SQLite-Backup und CLI-Sicherung.",
       "currentState": "Backendfunktionen implementiert, automatisierte Regression und Browserprüfung eingerichtet.",
-      "nextStep": "Live-Abnahme, täglichen Host-Cron, externe verschlüsselte Sicherung und Wiederherstellung verifizieren.",
+      "nextStep": "BASIC/PLUS-Lizenzgrenzen und passive BASIC-Profile testen, verwaltetes AutoUpdate ergänzen, Host-Cron, verschlüsselte Sicherung und Wiederherstellung verifizieren.",
       "openPoints": "Keine automatische Rechnungsstellung, kein Zahlungsdienst, kein OS-Fernzugriff; Supportprozess und Datenschutz/AVV vor Verkauf.",
       "doneWhen": "Betriebs-, Backup-, Wiederherstellungs- und Vertragsprozesse dokumentiert und praktisch geprüft."
     }
