@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-26",
+  "updated": "2026-11-27",
   "source": "https://docs.google.com/document/d/1y8yR9EewOl5O17LAgrXKxYHABYe46IfQ-Zt1qRNvbY0/edit",
   "items": [
     {
@@ -1879,6 +1879,60 @@
       "nextStep": "BASIC/PLUS-Lizenzgrenzen und passive BASIC-Profile testen, verwaltetes AutoUpdate ergänzen, Host-Cron, verschlüsselte Sicherung und Wiederherstellung verifizieren.",
       "openPoints": "Keine automatische Rechnungsstellung, kein Zahlungsdienst, kein OS-Fernzugriff; Supportprozess und Datenschutz/AVV vor Verkauf.",
       "doneWhen": "Betriebs-, Backup-, Wiederherstellungs- und Vertragsprozesse dokumentiert und praktisch geprüft."
+    },
+    {
+      "category": "TENNILO ClubDisplay",
+      "status": "idea",
+      "priority": "low",
+      "milestone": "Zurückgestellt · nach Pilotphase, ohne Termin",
+      "updatedAt": "2026-11-27T13:07:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "id": "clubdisplay-ebusy-member-pin",
+      "title": "Mitgliederanmeldung mit eBuSy-PIN",
+      "workstream": "booking",
+      "description": "Mitgliederfunktionen und Spielpartnerbörse über Vorname, Nachname und bestehenden persönlichen eBuSy-PIN absichern.",
+      "benefit": "Kein zusätzliches Konto, keine sichtbaren IDs und keine manuelle Listenpflege.",
+      "scope": "Automatische datensparsame Namenszuordnung, eindeutige Identität, serverseitige PIN-Prüfung, aktuelle Mitgliedschaft, altersabhängige Freigabe und sichere Sitzungen; Integration in Spielpartnerbörse erst nach Abnahme.",
+      "currentState": "27.11.2026: Geschützter NTC-Einzelnachweis erfolgreich. Personen-ID-Abfrage, Name, PIN und Altersgruppe bestätigt; richtiger PIN ohne erneute ID-Eingabe akzeptiert, falscher PIN abgelehnt. v0.5.18 enthält einen Sammelimport und einen Entwurf zur Modul-/Mitgliedschaftsprüfung, noch nicht praktisch abgenommen. Keine produktive Mitgliederanmeldung. Auf Nutzerwunsch zurückgestellt.",
+      "nextStep": "Erst bei erneuter Priorisierung mit eBuSy eine offizielle automatisierte, PIN-freie Namenszuordnung bzw. Namenssuche, zulässige PIN-Verifikation und aktuelle Mitgliedschaft klären; keine weiteren Zwischenlösungen oder manuellen CSV-Importe als regulären Betriebsprozess.",
+      "openPoints": "Anbieterfreigabe, Namensgleichheit, zuverlässige Mitgliedsprüfung ohne manuelle Listenpflege, Jugendschutz, Rate-Limits, Datenschutz und Sitzungsende. Keine PIN-Speicherung, keine vollständigen Personenlisten mit PINs abrufen.",
+      "doneWhen": "Mitglieder melden sich ohne ID und Zusatzkonto mit Namen und PIN an; Mitgliedsstatus und altersabhängige Rechte sind zuverlässig geprüft; keine manuelle Listenpflege; alle Sicherheits- und Praxistests bestanden.",
+      "references": [
+        {
+          "title": "ClubDisplay – Quellcode",
+          "url": "https://github.com/tennis-schiri/tennilo-clubdisplay"
+        },
+        {
+          "title": "eBuSy-API-Dokumentation",
+          "url": "https://cd-ebusy.ntc93.de/doc/api/index"
+        }
+      ]
+    },
+    {
+      "category": "TENNILO ClubDisplay",
+      "status": "idea",
+      "priority": "low",
+      "milestone": "Zurückgestellt · nach Pilotphase, ohne Termin",
+      "updatedAt": "2026-11-27T13:07:00+01:00",
+      "origin": "official",
+      "comments": [],
+      "id": "clubdisplay-nuscore-integration",
+      "title": "nuScore 2.0 – Punktspielergebnisse am ClubDisplay",
+      "workstream": "booking",
+      "description": "Offizielle nuScore-Ergebniserfassung am Touchscreen im Clubhaus direkt innerhalb von ClubDisplay.",
+      "benefit": "Mannschaften können Ergebnisse am gemeinsamen Terminal erfassen, ohne zusätzliches Gerät oder separate Browserfenster.",
+      "scope": "Offizielle Web-Anwendung im selben Display; keine internen nuLiga-APIs; Test mehrerer Mannschaften und sicherer Rückkehr zu ClubDisplay, ohne gespeicherte Spielberichte zu verlieren.",
+      "currentState": "27.11.2026: Experimenteller Demo-Dialog im NTC-Piloten implementiert (v0.5.9–0.5.11). Separater Browseraufruf auf Nutzerwunsch entfernt. Simulierte Browserprüfung erfolgreich; tatsächliche Demo-Adresse, Einbettbarkeit und Persistenz nicht verifiziert. Auf Nutzerwunsch zurückgestellt.",
+      "nextStep": "Bei erneuter Priorisierung offizielle nuScore-2.0-Demo-Adresse und zulässige Einbettung mit Anbieter klären; anschließend mit Test-Gamecodes mehrere Spielberichte und Wechsel zwischen ClubDisplay und nuScore praktisch prüfen.",
+      "openPoints": "Verifizierte Demo und Anbieterfreigabe, iframe-/Browser-Speicherverhalten, Touch-Bedienung, Mannschaftswechsel, PIN-/Gamecode-Schutz, Sitzungsende und Fehlerfälle. Keine separaten Tabs/Fenster; keine echten Zugangsdaten im unbestätigten Test.",
+      "doneWhen": "Offizielle Ergebniserfassung funktioniert innerhalb derselben ClubDisplay-Oberfläche, mehrere Mannschaften können ihre eigenen Berichte sicher weiterbearbeiten, gespeicherte Eingaben bleiben beim Wechsel erhalten und Ergebnisübermittlung ist abgenommen.",
+      "references": [
+        {
+          "title": "ClubDisplay – Quellcode",
+          "url": "https://github.com/tennis-schiri/tennilo-clubdisplay"
+        }
+      ]
     }
   ],
   "retiredIds": [

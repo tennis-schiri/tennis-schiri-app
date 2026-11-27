@@ -163,7 +163,9 @@ test('ClubDisplay ist eigenständiges Produkt mit vier Entwicklungsbereichen und
     'clubdisplay-booking':'booking',
     'clubdisplay-managed':'platform',
     'clubdisplay-sources':'platform',
-    'clubdisplay-operations':'platform'
+    'clubdisplay-operations':'platform',
+    'clubdisplay-ebusy-member-pin':'booking',
+    'clubdisplay-nuscore-integration':'booking'
   };
   for(const [id,stream] of Object.entries(expected)){
     const matches=own.filter(x=>x.id===id);
@@ -174,3 +176,11 @@ test('ClubDisplay ist eigenständiges Produkt mit vier Entwicklungsbereichen und
 });
 
 test('ClubDisplay-Original-Logo erscheint in Projektübersicht und Detailansicht und wird ausgeliefert',()=>{ui.setItems(items);ui.setProduct('all');assert.match(ui.overview(),/rm-clubdisplay-project-logo[^>]+clubdisplay\.png/);ui.setProduct('clubdisplay');assert.match(ui.overview(),/rm-clubdisplay-brand[^]*?clubdisplay\.png/);const workflow=fs.readFileSync(path.join(root,'.github/workflows/roadmap-subdomain.yml'),'utf8');assert.ok(workflow.includes('assets/clubdisplay.png'));});
+
+
+test('eBuSy-PIN und nuScore sind zurückgestellte ClubDisplay-Themen ohne Termin',()=>{
+  for(const id of ['clubdisplay-ebusy-member-pin','clubdisplay-nuscore-integration']){
+    const item=items.find(x=>x.id===id);
+    assert.equal(item.status,'idea');assert.equal(item.priority,'low');assert.match(item.milestone,/Zurückgestellt/);assert.match(item.currentState,/zurückgestellt/);
+  }
+});
